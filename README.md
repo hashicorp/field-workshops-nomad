@@ -4,7 +4,7 @@ All HashiCorp field workshops focused on Nomad should be placed in this reposito
 * [field-workshops-terraform](https://github.com/hashicorp/field-workshops-terraform)
 * [field-workshops-vault](https://github.com/hashicorp/field-workshops-terraform)
 
-Additionally, field workshops focused on more than one HashiCorp solution can be found in the [field-workshops-hashistack]()
+Additionally, field workshops focused on more than one HashiCorp solution can be found in the [field-workshops-hashistack](https://github.com/hashicorp/field-workshops-hashistack) repository.
 
 ## Slides
 The slides for these workshops should be created using [Remark](https://remarkjs.com) and should be placed under the [slides](./slides) directory. This directory is organized by cloud and then by workshop.  If a workshop targets a single cloud, its slides should be placed in a directory under that cloud's directory (aws, azure, or gcp). If a workshop can be used with multiple clouds, its slides should be placed in a directory under the [slides/multi-cloud](./slides/multi-cloud) directory.
