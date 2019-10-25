@@ -1,5 +1,5 @@
 name: introduction-to-sentinel
-class: title
+class: title, shelf, no-footer, fullbleed
 count: false
 
 # Introduction to Sentinel

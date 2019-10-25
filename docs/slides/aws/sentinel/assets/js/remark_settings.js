@@ -5,7 +5,7 @@ remark.macros.scale = function (percentage) {
 
 // Place all of your files here
 sourceUrls = [
-  'index.md'
+  'sentinel.md'
   ]
 
 var xmlhttp = new XMLHttpRequest();
