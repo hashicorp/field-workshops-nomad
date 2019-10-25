@@ -1,5 +1,5 @@
 name: Workshop-Template-Guide
-class: title, shelf, no-footer, fullbleed
+class: title, no-footer
 count: false
 
 # Introduction to Sentinel
