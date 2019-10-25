@@ -1,6 +1,5 @@
 name: Workshop-Template-Guide
 class: title, shelf, no-footer, fullbleed
-background-image: url(assets/bkgs/HashiCorp-Title-bkg.jpeg)
 count: false
 
 # Introduction to Sentinel
