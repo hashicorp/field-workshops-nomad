@@ -47,9 +47,9 @@ name:workshop-slides
 # Viewing Workshop Slides
 #### You can view workshop slides with URLs like these:
 * https://hashicorp.github.io/field-workshops-nomad/index.html
-* https://hashicorp.github.io/field-workshops-nomad/slides/aws/sentinel/index.html
-* https://hashicorp.github.io/field-workshops-nomad/slides/aws/sentinel/sentinel-1.html
-* https://hashicorp.github.io/field-workshops-nomad/slides/aws/sentinel/sentinel-2.html
+* https://hashicorp.github.io/field-workshops-nomad/slides/aws/nomad-oss/index.html
+* https://hashicorp.github.io/field-workshops-nomad/slides/aws/nomad-oss/nomad-1.html
+* https://hashicorp.github.io/field-workshops-nomad/slides/aws/nomad-oss/nomad-2.html
 
 ???
 The workshop slides are written in Remark.js.
