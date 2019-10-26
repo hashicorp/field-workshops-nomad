@@ -13,6 +13,29 @@ Please do **NOT** place any slides or any other content directly inside the [doc
 
 All of the slides will be available for students to view in their web browsers under https://hashicorp.github.io/field-workshops-nomad/slides.  Each workshop should give the full link to that workshop's slides in one of its first few slides.
 
+When creating slides for a new workshop, you will need to do the following:
+1. Create a new workshop directory under the appropriate directory as discussed above.
+1. Copy all contents from the [docs/assets](./docs/assets) directory into your new directory.
+1. Copy [docs/index.html](./docs/index.html) to your new directory.
+1. If you want to create a single part slide show, then create a file in your directory called `index.md` and add all your slides to it.
+1. If you want to create a multi-part slide show, then do the following:
+  1. Create multiple files such as `nomad-1.md`, `nomad-2.md`, and `nomad-3.md` with corresponding HTML files such as `nomad-1.html`, `nomad-2.html`, and `nomad-3.html`.
+  1. In each of the HTML files, replace `index.md` with the name of the corresponding MD file in the `sourceURLs` list. For instance, use `nomad-1.md` in `nomad-1.html`.
+  1. Replace `index.md` in the `sourceURLs` list of your workshop's copy of `index.html` with a comma-delimited list of your MD file names. So, with the 3 MD files listed above, you would specify `sourceURLs` like this:
+  ```
+  sourceUrls = [
+    'nomad-1.md',
+    'nomad-2.md',
+    'nomad-3.md'
+  ]
+  ```
+
+If you create a single-part slide show, users will access your slide show at `https://hashicorp.github.io/field-workshops-nomad/slides/<cloud>/<directory>/index.html` but they can leave off `index.html`.
+
+If you create a multi-part slide show, users will access each part of your slide show at URLs like these:
+* https://hashicorp.github.io/field-workshops-nomad/slides/aws/nomad-oss/nomad-1.html
+* https://hashicorp.github.io/field-workshops-nomad/slides/aws/nomad-oss/nomad-2.html
+
 ## Instructor Guides
 The instructor guides for these workshops should be created as Markdown files and should be placed in the [instructor-guides](./instructor-guides) directory and have names like `<cloud>_<workshop_name>_INSTRUCTOR_GUIDE.md` where `<cloud>` is the cloud the workshop targets and `<workshop_name>` is the name of the workshop. But if the workshop is intended for use with multiple clouds, `<cloud>` should be omitted.
 
