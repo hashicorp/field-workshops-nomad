@@ -17,9 +17,10 @@ When creating slides for a new workshop, you will need to do the following:
 1. Create a new workshop directory under the appropriate directory as discussed above.
 1. Copy [docs/index.html](./docs/index.html) to your new workshop's directory. (But don't create a sub-directory called `docs` under it.)
 1. Create an `assets` directory under your new workshop's directory.
-1. Copy all contents from the [docs/assets](./docs/assets) directory into the assets directory of your new workshop's directory.
+1. Copy all contents from the [docs/assets](./docs/assets) directory into the assets directory of your new workshop's directory. (You should end up with `bkgs`, `css`, `fonts`, and `js` directories directly under your `assets` directory.)
 1. If you want to create a single part slide show, then create a file in your directory called `index.md` and add all your slides to it.
-1. You can copy content from [docs/index.md](./docs/index.md) to get started with a title slide and a few regular slides. Note that the speaker notes in that file have some useful pointers for creating Remark slide shows.
+    1. You can copy content from [docs/index.md](./docs/index.md) to get started with a title slide and a few regular slides.
+    1. Note that the speaker notes in that file have some useful pointers for creating Remark slide shows.
 1. If you want to create a multi-part slide show, then do the following:
    1. Create multiple files such as `nomad-1.md`, `nomad-2.md`, and `nomad-3.md` with corresponding HTML files such as `nomad-1.html`, `nomad-2.html`, and `nomad-3.html` that should be copies of `index.html`.
    1. In each of the HTML files, replace `index.md` with the name of the corresponding MD file in the `sourceURLs` list. For instance, use `nomad-1.md` in `nomad-1.html`.
