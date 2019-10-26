@@ -23,7 +23,7 @@ When creating slides for a new workshop, you will need to do the following:
     1. Note that the speaker notes in that file have some useful pointers for creating Remark slide shows.
 1. If you want to create a multi-part slide show, then do the following:
    1. Create multiple files such as `nomad-1.md`, `nomad-2.md`, and `nomad-3.md` with corresponding HTML files such as `nomad-1.html`, `nomad-2.html`, and `nomad-3.html` that should be copies of `index.html`.
-   1. In each of the HTML files, replace `index.md` with the name of the corresponding MD file in the `sourceURLs` list. For instance, use `nomad-1.md` in `nomad-1.html`.
+   1. In each of the new HTML files, replace `index.md` with the name of the corresponding MD file in the `sourceURLs` list. For instance, use `nomad-1.md` in `nomad-1.html`.
    1. Replace `index.md` in the `sourceURLs` list of your workshop's copy of `index.html` with a comma-delimited list of your MD file names. So, with the 3 MD files listed above, you would specify `sourceURLs` like this:
    ```
    sourceUrls = [
