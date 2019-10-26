@@ -15,7 +15,7 @@ All of the slides will be available for students to view in their web browsers u
 
 When creating slides for a new workshop, you will need to do the following:
 1. Create a new workshop directory under the appropriate directory as discussed above.
-1. Copy [docs/index.html](./docs/index.html) to your new workshop's directory.
+1. Copy [docs/index.html](./docs/index.html) to your new workshop's directory. (But don't create a sub-directory called `docs` under it.)
 1. Create an `assets` directory under your new workshop's directory.
 1. Copy all contents from the [docs/assets](./docs/assets) directory into the assets directory of your new workshop's directory.
 1. If you want to create a single part slide show, then create a file in your directory called `index.md` and add all your slides to it.
