@@ -15,9 +15,11 @@ All of the slides will be available for students to view in their web browsers u
 
 When creating slides for a new workshop, you will need to do the following:
 1. Create a new workshop directory under the appropriate directory as discussed above.
-1. Copy all contents from the [docs/assets](./docs/assets) directory into your new directory.
-1. Copy [docs/index.html](./docs/index.html) to your new directory.
+1. Create an `assets` directory under your new workshop's directory.
+1. Copy all contents from the [docs/assets](./docs/assets) directory into the assets directory of your new workshop's directory.
+1. Copy [docs/index.html](./docs/index.html) to your new workshop's directory.
 1. If you want to create a single part slide show, then create a file in your directory called `index.md` and add all your slides to it.
+1. You can copy content from [docs/index.md](./docs/index.md) to get started with a title slide and a few regular slides. Note that the speaker notes in that file have some useful pointers for creating Remark slide shows.
 1. If you want to create a multi-part slide show, then do the following:
   1. Create multiple files such as `nomad-1.md`, `nomad-2.md`, and `nomad-3.md` with corresponding HTML files such as `nomad-1.html`, `nomad-2.html`, and `nomad-3.html`.
   1. In each of the HTML files, replace `index.md` with the name of the corresponding MD file in the `sourceURLs` list. For instance, use `nomad-1.md` in `nomad-1.html`.
@@ -30,9 +32,9 @@ When creating slides for a new workshop, you will need to do the following:
   ]
   ```
 
-If you create a single-part slide show, users will access your slide show at `https://hashicorp.github.io/field-workshops-nomad/slides/<cloud>/<directory>/index.html` but they can leave off `index.html`.
+Whether you create a single-part or multi-part slide show, users will be able to access all of your slides with a URL like `https://hashicorp.github.io/field-workshops-nomad/slides/aws/nomad-oss/index.html`, but they can leave off `index.html`.
 
-If you create a multi-part slide show, users will access each part of your slide show at URLs like these:
+If you create a multi-part slide show, users will also be able to access each part of your slide show separately at URLs like these:
 * https://hashicorp.github.io/field-workshops-nomad/slides/aws/nomad-oss/nomad-1.html
 * https://hashicorp.github.io/field-workshops-nomad/slides/aws/nomad-oss/nomad-2.html
 
