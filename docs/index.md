@@ -1,57 +1,63 @@
-name: Workshop-Template-Guide
+name: nomad-field-workshops-index
 class: title, shelf, no-footer, fullbleed
 background-image: url(assets/bkgs/HashiCorp-Title-bkg.jpeg)
 count: false
 
-# Introduction to Sentinel
-## Roger Berlind: Sentinel Technical Specialist, Hashicorp
+
+# Nomad Field Workshops
+## A repository for Nomad field workshops
+
+???
+This is a title slide of a Remark.js slide show.
+
+Use standard Markdown in this and all other slides.
+
+Use `???` for speaker notes.
+
+Use `---` to start a new slide.
+
+You can change the background to whatever you like but the corporate template is provided.
+
+You make a slide a title slide by including `class: title`.
 
 ---
-name: agenda
-# Agenda
+name: nomad-workshops
+# Nomad Workshops
+### This repository will contain Nomad workshops.
+* They will be organized by cloud.
+* Workshops for each cloud will be organized by type:
+  1. Nomad OSS
+  1. Nomad Enterprise
 
-1. What is Sentinel?
-2. How is Sentinel used in Terraform Cloud?
-3. Writing and Testing Sentinel Policies
-4. Managing Policy Sets and Policies
+???
+This is a regular slide of a Remark.js slide show.
 
----
-name: what-is-sentinel
-# What is Sentinel?
+Give it a name with the `name` tag.
 
-* Sentinel implements governance policies as code in the same way that Terraform implements infrastructure as code.
-* It uses its own language with sophisticated conditional logic.
-* It is embedded in HashiCorp's enterprise products.
-* It includes a simulator for testing policies.
+Use a single `#` for the first line to set the slide's title.
 
----
-name: how-is-sentinel-used-in-tfc
-# How is Sentinel used in Terraform Cloud
+Use `##`, `###`, `###`, etc. for the slide's text with more hash signs giving smaller text.
 
-* Sentinel policy checks are run between the plan and apply steps of TFC runs.
-* Only authorized users can override policies that have violations.
-* Terraform extends Sentinel with several Terraform-specific imports.
-* Mocks can be generated for testing with the Sentinel Simulator.
+You can also use `*` for bulleted lists and `1.` for numbered lists.
+
+You can also indent one kind of list under another as done in this slide.  To make bulleted lists use smaller text, indent them more.
 
 ---
-name: writing-testing-policies
-# Writing and Testing Sentinel Policies
+name:workshop-slides
+# Viewing Workshop Slides
+#### You can view workshop slides with URLs like these:
+* https://hashicorp.github.io/field-workshops-nomad/index.html
+* https://hashicorp.github.io/field-workshops-nomad/slides/aws/sentinel/index.html
+* https://hashicorp.github.io/field-workshops-nomad/slides/aws/sentinel/sentinel-1.html
+* https://hashicorp.github.io/field-workshops-nomad/slides/aws/sentinel/sentinel-2.html
 
-* Here is the 8 step methodology for writing and testing Sentinel policies in Terraform:
-  1. Step 1
-  2. Step 2
-  3. Step 3
-  4. Step 4
-  5. Step 5
-  6. Step 6
-  7. Step 7
-  8. Step 8
-* For more details, see this [guide](https://www.hashicorp.com/resources/writing-and-testing-sentinel-policies-for-terraform).
+???
+The workshop slides are written in Remark.js.
 
----
-name: managing-policy-sets
-# Manging Policy Sets and Policies
+They are published with GitHub Pages.
 
-* Policy Sets contain policies
-* They can be stored in VCS repositories.
-* Changes are automatically propagated to Terraform Cloud.
+Use your arrow keys to navigate between slides.
+
+You can view and hide speaker notes by pressing `P`.
+
+You can open a cloned view of the slide show in a new browser window by pressing `C`.
