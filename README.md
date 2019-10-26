@@ -32,7 +32,7 @@ When creating slides for a new workshop, you will need to do the following:
   ]
   ```
 
-Whether you create a single-part or multi-part slide show, users will be able to access all of your slides with a URL like `https://hashicorp.github.io/field-workshops-nomad/slides/aws/nomad-oss/index.html`, but they can leave off `index.html`.
+Whether you create a single-part or multi-part slide show, users will be able to access all of your slides with a URL like https://hashicorp.github.io/field-workshops-nomad/slides/aws/nomad-oss/index.html, but they can leave off `index.html`.
 
 If you create a multi-part slide show, users will also be able to access each part of your slide show separately at URLs like these:
 * https://hashicorp.github.io/field-workshops-nomad/slides/aws/nomad-oss/nomad-1.html
