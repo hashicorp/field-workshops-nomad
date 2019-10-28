@@ -7,7 +7,7 @@ count: false
 # Nomad Field Workshops
 ## A repository for Nomad field workshops
 
-![:scale 100%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
+![:scale 20%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
 
 ???
 This is a title slide of a Remark.js slide show.
