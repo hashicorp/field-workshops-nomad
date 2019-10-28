@@ -13,12 +13,19 @@ This is a title slide for the skeleton of a first part of a Nomad OSS workshop.
 
 ---
 name: nomad-logo
-# This is the Nomad logo
+class: col-3
+# This is the Nomad logo (using 3 `<img>` tags) 
 
-It was included with an HTML `<img>` tag.
+<p>
+  <img style="width:200px;height:200px;" src="https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png">
+</p>
 
-<p align="center">
-  <img style="width:100px;height:100px;" src="https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png">
+<p>
+  <img style="width:200px;height:200px;" src="https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png">
+</p>
+
+<p>
+  <img style="width:200px;height:200px;" src="https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png">
 </p>
 
 ???
