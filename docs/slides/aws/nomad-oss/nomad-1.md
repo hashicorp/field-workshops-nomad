@@ -38,12 +38,18 @@ This is our agenda slide.
 
 ---
 name: what-is-nomad
+class: col-2
 # What is Nomad?
 
 * Nomad is a flexible workload orchestrator.
 * It supports containerized and legacy applications.
 * It uses a declarative syntax for specifying workloads.
 * It uses bin packing to efficiently schedule jobs and optimize resource utilization.
+
+Here is some more content.
+And some more
+* bullet 1
+* bullet 2
 
 ???
 This is a regular slide with content
