@@ -15,7 +15,7 @@ This is a title slide for the skeleton of a first part of a Nomad OSS workshop.
 name: nomad-logo
 # This is the Nomad logo
 
-It was included with an HTML `img` tag
+It was included with an HTML `<img>` tag inside a `<p align="center">`.
 
 <p align="center">
   <img width="300" height="300" src="https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png">
