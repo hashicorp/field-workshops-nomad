@@ -15,7 +15,7 @@ This is a title slide for the skeleton of a first part of a Nomad OSS workshop.
 ---
 name: nomad-logo
 class: col-3
-# This is the Nomad logo (using 3 `<img>` tags)
+# This is the Nomad logo (using 3 img tags)
 
 <p>
   <img style="width:200px;height:200px;" src="https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png">
