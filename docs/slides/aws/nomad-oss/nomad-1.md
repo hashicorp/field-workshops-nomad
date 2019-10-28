@@ -6,6 +6,7 @@ count: false
 # Nomad OSS Workshop
 ## Part 1
 ### This is part 1 of the Nomad OSS Workshop.
+
 ![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
 
 ???
