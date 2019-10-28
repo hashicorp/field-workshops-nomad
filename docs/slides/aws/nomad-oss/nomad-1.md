@@ -6,7 +6,7 @@ count: false
 # Nomad OSS Workshop
 ## Part 1
 
-![:scale 20%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
+![alt text :scale 20%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png "Nomad")
 
 ???
 This is a title slide for the skeleton of a first part of a Nomad OSS workshop.
