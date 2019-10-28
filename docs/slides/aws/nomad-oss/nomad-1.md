@@ -12,22 +12,9 @@ count: false
 This is a title slide for the skeleton of a first part of a Nomad OSS workshop.
 
 ---
-name: footer-layout
-layout: true
-
-.footer[
-- Copyright © 2019 HashiCorp
-- ![:scale 100%](https://hashicorp.github.io/field-workshops-assets/assets/logos/HashiCorp_Icon_Black.svg)
-]
-
-???
-This is a layout slide that adds a footer with HashiCorp copyright statement and icon
-
----
 name: nomad-logo
 class: col-3
 # This is the Nomad logo (using 3 img tags)
-
 <p>
   <img style="width:200px;height:200px;" src="https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png">
 </p>
@@ -44,6 +31,14 @@ class: col-3
 This slide has the Nomad logo.
 
 ---
+layout: true
+
+.footer[
+- Copyright © 2019 HashiCorp
+- ![:scale 100%](https://hashicorp.github.io/field-workshops-assets/assets/logos/HashiCorp_Icon_Black.svg)
+]
+
+---
 name: agenda
 # Agenda
 
@@ -58,6 +53,7 @@ This is our agenda slide.
 ---
 name: what-is-nomad
 class: col-2
+layout: false
 # What is Nomad?
 
 * Nomad is a flexible workload orchestrator.
