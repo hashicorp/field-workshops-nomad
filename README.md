@@ -11,13 +11,11 @@ The slides for these workshops should be created using [Remark](https://remarkjs
 
 Please do **NOT** place any slides or any other content directly inside the [docs](./docs) directory.
 
-All of the slides will be available for students to view in their web browsers under https://hashicorp.github.io/field-workshops-nomad/slides.  Each workshop should give the full link to that workshop's slides in one of its first few slides.
+Standard assets (logos, backgrounds, css, fonts, and js) used by workshop slides are contained in a separate repository, [field-workshops-assets](https://github.com/hashicorp/field-workshops-assets).
 
 When creating slides for a new workshop, you will need to do the following:
 1. Create a new workshop directory under the appropriate directory as discussed above.
 1. Copy [docs/index.html](./docs/index.html) to your new workshop's directory. (But don't create a sub-directory called `docs` under it.)
-1. Create an `assets` directory under your new workshop's directory.
-1. Copy all contents from the [docs/assets](./docs/assets) directory into the assets directory of your new workshop's directory. (You should end up with `bkgs`, `css`, `fonts`, and `js` directories directly under your `assets` directory.)
 1. If you want to create a single part slide show, then create a file in your directory called `index.md` and add all your slides to it.
     1. You can copy content from [docs/index.md](./docs/index.md) to get started with a title slide and a few regular slides.
     1. Note that the speaker notes in that file have some useful pointers for creating Remark slide shows.
@@ -38,6 +36,8 @@ Whether you create a single-part or multi-part slide show, users will be able to
 If you create a multi-part slide show, users will also be able to access each part of your slide show separately at URLs like these:
 * https://hashicorp.github.io/field-workshops-nomad/slides/aws/nomad-oss/nomad-1.html
 * https://hashicorp.github.io/field-workshops-nomad/slides/aws/nomad-oss/nomad-2.html
+
+Each workshop should give the full link (or links) to that workshop's slides in one of its first few slides.
 
 ## Instructor Guides
 The instructor guides for these workshops should be created as Markdown files and should be placed in the [instructor-guides](./instructor-guides) directory and have names like `<cloud>_<workshop_name>_INSTRUCTOR_GUIDE.md` where `<cloud>` is the cloud the workshop targets and `<workshop_name>` is the name of the workshop. But if the workshop is intended for use with multiple clouds, `<cloud>` should be omitted.
