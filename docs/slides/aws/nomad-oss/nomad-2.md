@@ -13,9 +13,12 @@ This is a title slide for the skeleton of a second part of a Nomad OSS workshop.
 
 ---
 name: nomad-logo
-# This is the Nomad logo
+class:col-3
+# This is the Nomad logo (3 times via Markdown)
 
-It was included with Markdown.
+![:scale 30%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
+
+![:scale 30%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
 
 ![:scale 30%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
 
