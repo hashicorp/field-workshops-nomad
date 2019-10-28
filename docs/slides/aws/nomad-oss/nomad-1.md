@@ -47,6 +47,7 @@ class: col-2
 * It uses bin packing to efficiently schedule jobs and optimize resource utilization.
 
 Here is some more content.
+
 And some more
 * bullet 1
 * bullet 2
