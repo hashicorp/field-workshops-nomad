@@ -5,8 +5,8 @@ count: false
 
 # Nomad OSS Workshop
 ## Part 2
-
-This is part 2 of the Nomad OSS Workshop.
+### This is part 2 of the Nomad OSS Workshop.
+![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
 
 ???
 This is a title slide for the skeleton of a second part of a Nomad OSS workshop.
