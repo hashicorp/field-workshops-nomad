@@ -3,21 +3,34 @@
 
 <head>
   <title>Nomad OSS Workshop</title>
+
+  <style type="text/css">
+   .remark-container {
+     background-color: #00BC7F;
+   }
+  </style>
+
+  <!--
+  HashiCorp Colors
+  Vagrant    #1563FF
+  Packer     #00ACFF
+  Terraform  #623CE4
+  Vault      #000000
+  Nomad      #00BC7F
+  Consul     #CA2171
+  -->
+
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-
-  <link REL="stylesheet" TYPE="text/css" HREF="assets/css/adirondack.css"></style>
-  <link REL="stylesheet" TYPE="text/css" HREF="assets/css/apron.css"></style>
-  <link REL="stylesheet" TYPE="text/css" HREF="assets/css/descartes.css"></style>
-  <link REL="stylesheet" TYPE="text/css" HREF="assets/css/monobloc.css"></style>
-  <link REL="stylesheet" TYPE="text/css" HREF="assets/css/tachyons.min.css"></style>
+  <link REL="stylesheet" TYPE="text/css" HREF="https://github.com/hashicorp/field-workshops-assets/blob/master/assets/css/adirondack.css">
+  <link REL="stylesheet" TYPE="text/css" HREF="https://github.com/hashicorp/field-workshops-assets/blob/master/assets/css/apron.css">
+  <link REL="stylesheet" TYPE="text/css" HREF="https://github.com/hashicorp/field-workshops-assets/blob/master/assets/css/descartes.css">
+  <link REL="stylesheet" TYPE="text/css" HREF="https://github.com/hashicorp/field-workshops-assets/blob/master/assets/css/hashicorp.css">
+  <link REL="stylesheet" TYPE="text/css" HREF="https://github.com/hashicorp/field-workshops-assets/blob/master/assets/css/all.css">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="assets/js/link.js"></script>
-  <script src="assets/js/auto-render.min.js"></script>
-  <script src="assets/js/abcjs_basic_5.6.3-min.js"></script>
-  <script src="assets/js/story.js"></script>
-
+  <script src="https://github.com/hashicorp/field-workshops-assets/blob/master/assets/js/link.js"></script>
+  <script src="https://github.com/hashicorp/field-workshops-assets/blob/master/assets/js/story.js"></script>
 
 </head>
 
@@ -33,7 +46,7 @@
       sourceUrls = [
         'nomad-1.md',
         'nomad-2.md'
-        ]
+      ]
 
       var xmlhttp = new XMLHttpRequest();
 
@@ -54,7 +67,6 @@
 
       var slideshow = remark.create({
         ratio: '16:9',
-        highlightStyle: 'tomorrow-night-bright',
         highlightLines: 'true',
         source: source
       });
