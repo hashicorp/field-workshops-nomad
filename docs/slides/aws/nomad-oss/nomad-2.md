@@ -16,11 +16,11 @@ name: nomad-logo
 class:col-3
 # This is the Nomad logo (3 times via Markdown)
 
-![:scale 30%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
+![:scale 40%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
 
-![:scale 30%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
+![:scale 40%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
 
-![:scale 30%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
+![:scale 40%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
 
 
 ???
