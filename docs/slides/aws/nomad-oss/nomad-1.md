@@ -12,6 +12,19 @@ This is part 1 of the Nomad OSS Workshop
 This is a title slide for the skeleton of a first part of a Nomad OSS workshop.
 
 ---
+name: nomad-logo
+# This is the Nomad logo
+
+It was included with an HTML `img` tag
+
+<p align="center">
+  <img width="300" height="300" src="https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png">
+</p>
+
+???
+This slide has the Nomad logo.
+
+---
 name: agenda
 # Agenda
 

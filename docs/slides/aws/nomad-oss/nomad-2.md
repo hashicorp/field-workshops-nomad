@@ -6,14 +6,22 @@ count: false
 # Nomad OSS Workshop
 ## Part 2
 
-This is part 2 of the Nomad OSS Workshop
-
-<p align="center">
-  <img width="200" height="200" src="https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png">
-</p>
+This is part 2 of the Nomad OSS Workshop.
 
 ???
 This is a title slide for the skeleton of a second part of a Nomad OSS workshop.
+
+---
+name: nomad-logo
+# This is the Nomad logo
+
+It was included with Markdown.
+
+![:scale 30%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
+
+
+???
+This slide has the Nomad logo.
 
 ---
 name: key-features
