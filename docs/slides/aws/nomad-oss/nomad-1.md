@@ -13,16 +13,10 @@ This is a title slide for the skeleton of a first part of a Nomad OSS workshop.
 
 ---
 name: nomad-logo
-class: col-2
 # This is the Nomad logo
 
-It was included with an HTML `<img>` tag inside a `<p align="center">` using width and height specifications.
+It was included with an HTML `<img>` tag.
 
-<p align="center">
-  <img width="100" height="100" src="https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png">
-</p>
-
-This one uses style instead of width and height
 <p align="center">
   <img style="width:100px;height:100px;" src="https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png">
 </p>
