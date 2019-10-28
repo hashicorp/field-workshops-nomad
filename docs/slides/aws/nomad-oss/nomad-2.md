@@ -6,11 +6,9 @@ count: false
 # Nomad OSS Workshop
 ## Part 2
 
-Some text
-
-![alt text :scale 20%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png "Nomad")
-
-
+<p align="center">
+  <img width="200" height="200" src="https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png">
+</p>
 
 ???
 This is a title slide for the skeleton of a second part of a Nomad OSS workshop.
