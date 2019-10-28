@@ -18,7 +18,7 @@ name: nomad-logo
 It was included with an HTML `<img>` tag inside a `<p align="center">`.
 
 <p align="center">
-  <img width="300" height="300" src="https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png">
+  <img width="200" height="200" src="https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png">
 </p>
 
 ???
