@@ -12,6 +12,13 @@ count: false
 This is a title slide for the skeleton of a first part of a Nomad OSS workshop.
 
 ---
+name: footer-layout
+layout: true
+
+.footer[
+- Copyright © 2019 HashiCorp
+]
+
 name: nomad-logo
 class: col-3
 # This is the Nomad logo (using 3 img tags)
