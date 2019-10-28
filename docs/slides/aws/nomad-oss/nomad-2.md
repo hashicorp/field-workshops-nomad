@@ -1,10 +1,14 @@
 name: nomad-oss-workshop-part-2
 class: title, shelf, no-footer, fullbleed
-background-image: url(../../../assets/bkgs/HashiCorp-Title-bkg.jpeg)
+background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/bkgs/HashiCorp-Title-bkg.jpeg)
 count: false
 
 # Nomad OSS Workshop
 ## Part 2
+
+![:scale 30%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
+
+
 
 ???
 This is a title slide for the skeleton of a second part of a Nomad OSS workshop.

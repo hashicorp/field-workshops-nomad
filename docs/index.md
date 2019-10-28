@@ -1,11 +1,13 @@
 name: nomad-field-workshops-index
 class: title, shelf, no-footer, fullbleed
-background-image: url(assets/bkgs/HashiCorp-Title-bkg.jpeg)
+background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/bkgs/HashiCorp-Title-bkg.jpeg)
 count: false
 
 
 # Nomad Field Workshops
 ## A repository for Nomad field workshops
+
+![:scale 100%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
 
 ???
 This is a title slide of a Remark.js slide show.
