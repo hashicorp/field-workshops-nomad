@@ -17,8 +17,13 @@ layout: true
 
 .footer[
 - Copyright © 2019 HashiCorp
+- ![logo](https://hashicorp.github.io/field-workshops-assets/assets/logos/HashiCorp_Icon_Black.svg)
 ]
 
+???
+This is a layout slide that adds a footer with HashiCorp copyright statement and icon
+
+---
 name: nomad-logo
 class: col-3
 # This is the Nomad logo (using 3 img tags)
