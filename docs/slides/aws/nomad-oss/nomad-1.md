@@ -6,11 +6,7 @@ count: false
 # Nomad OSS Workshop
 ## Part 1
 
-This is part 2 of the Nomad OSS Workshop
-
-<p align="center">
-  <img width="200" height="200" src="https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png">
-</p>
+This is part 1 of the Nomad OSS Workshop
 
 ???
 This is a title slide for the skeleton of a first part of a Nomad OSS workshop.
