@@ -6,6 +6,8 @@ count: false
 # Nomad OSS Workshop
 ## Part 1
 
+Some text
+
 ![alt text :scale 20%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png "Nomad")
 
 ???
