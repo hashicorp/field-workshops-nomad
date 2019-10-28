@@ -1,11 +1,11 @@
-name: nomad-field-workshops-index
+name: nomad-field-workshops-slides
 class: title, shelf, no-footer, fullbleed
 background-image: url(assets/bkgs/HashiCorp-Title-bkg.jpeg)
 count: false
 
 
-# Nomad Field Workshops
-## A repository for Nomad field workshops
+# Nomad Field Workshops Slides
+## Slides for Nomad field workshops
 
 ???
 This is a title slide of a Remark.js slide show.
@@ -21,9 +21,9 @@ You can change the background to whatever you like but the corporate template is
 You make a slide a title slide by including `class: title`.
 
 ---
-name: nomad-workshops
-# Nomad Workshops
-### This repository contains Nomad workshops.
+name: nomad-workshops-slides
+# Nomad Workshops Slides
+### This directory contains slides for Nomad workshops.
 * They are organized by cloud.
 * Workshops for each cloud are organized by type:
   1. Nomad OSS
