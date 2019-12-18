@@ -1,0 +1,112 @@
+slug: nomad-basics
+id: zzdva5ydzqbv
+type: track
+title: Nomad Basics
+teaser: Learn how to run the Nomad agent, run basic commands, and run Nomad jobs.
+description: |-
+  Nomad is a flexible workload orchestrator that enables an organization to easily deploy and manage any containerized or legacy application using a single, unified workflow. Nomad can run a diverse workload of Docker, non-containerized, microservice, and batch applications.
+
+  Nomad enables developers to use declarative infrastructure-as-code for deploying applications. Nomad uses bin packing to efficiently schedule jobs and optimize for resource utilization. Nomad is supported on macOS, Windows, and Linux.
+
+  This track will introduce you to the open source version of Nomad, starting with the Nomad CLI and running a Nomad dev agent.
+icon: https://storage.googleapis.com/instruqt-hashicorp-tracks/logo/nomad.png
+tags:
+- nomad
+- basics
+owner: hashicorp
+developers:
+- roger@hashicorp.com
+private: true
+published: true
+challenges:
+- slug: nomad-cli
+  id: cpo9hhic9zuu
+  type: challenge
+  title: The Nomad CLI
+  teaser: Explore the Nomad Command Line Interface (CLI).
+  assignment: |-
+    Let's start with some basic Nomad commands, running them in the "Nomad CLI" tab on the left.
+    ```
+    nomad version
+    ```
+    You should see "Nomad v0.10.2".
+
+    You can also see the list of all Nomad CLI commands:
+    ```
+    nomad
+    ```
+    You'll see some common commands followed by other commands.
+
+    You can get help for any Nomad command by adding `-h`, `-help`, or `--help` after it.  Try this"
+    ```
+    nomad run -h
+    ```
+  notes:
+  - type: text
+    contents: |-
+      The open source version of Nomad (Nomad OSS) is a single binary that you can download and run on your laptop or virtual workstation.
+
+      It is written in Go and runs on macOS, Windows, and Linux.
+
+      You can always download the latest version of Nomad OSS here:
+      https://www.nomadproject.io/downloads.html
+  - type: text
+    contents: |-
+      Installing Nomad on your laptop or workstation is easy. You simply download the zip file, unpack it, and place it somewhere in your PATH.
+
+      Check out this tutorial for step-by-step instructions:
+      https://learn.hashicorp.com/nomad/getting-started/install
+
+      We've included Nomad (along with Consul, Vault, and Terraform) in a VM in your Instruqt environment so that you don't need to download or install it.
+  tabs:
+  - title: Nomad CLI
+    type: terminal
+    hostname: nomad-server
+  difficulty: basic
+  timelimit: 300
+- slug: run-nomad-agent
+  id: fcqcho3xfdqh
+  type: challenge
+  title: Run a Dev Mode Nomad Agent
+  teaser: Run a Nomad server in development mode.
+  assignment: |-
+    Nomad relies on a long running agent on every machine in the cluster. The agent can run either in server or client mode.
+
+    We'll start out by running one in development mode. This mode is used to quickly start an agent that is acting as both a client and a server.
+
+    Start the agent in dev mode on the "Nomad Dev Server" tab:
+    ```
+    nomad agent -dev
+    ```
+    This will output some log data and run in the foreground. You'll run the rest of the Nomad commands in this challenge in the "Nomad CLI" tab to avoid intermixing of output from the agent and your commands.
+
+    Let's get the status of the Nomad node (the VM) you are running the agent on:
+    ```
+    nomad node status
+    ```
+
+    This will print information about the node incuding its ID, data center (DC), name, class, drain status, eligibility, and status.
+
+    Verify that the agent is running as a server by getting the list of servers in the local Nomad cluster:
+    ```
+    nomad server members
+    ```
+    You'll see that the local node running at IP 127.0.0.1 on port 4648 is a member of and actually the leader of the cluster and is alive.
+
+    Wrap up this challenge by stopping the Nomad agent by typing `<control>-c` on the "Nomad Dev Server" tab. This should redisplay the "root@nomad-server:~#" prompt on that tab.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will run your first Nomad agent in development mode and explore a few more Nomad CLI commands.
+
+      See https://learn.hashicorp.com/nomad/getting-started/running#starting-the-agent for more on Nomad's development mode.
+  tabs:
+  - title: Nomad Dev Server
+    type: terminal
+    hostname: nomad-server
+  - title: Nomad CLI
+    type: terminal
+    hostname: nomad-server
+  difficulty: basic
+  timelimit: 300
+checksum: "17953273992982093224"

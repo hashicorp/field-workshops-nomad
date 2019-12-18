@@ -1,0 +1,13 @@
+#!/bin/sh -l
+
+sleep 30
+
+# Get the Nomad version
+echo -e "nomad version" >> /root/.bash_history
+nomad version
+
+# Get help for the `nomad run` command
+echo -e "nomad run -h" >> /root/.bash_history
+nomad run -h
+
+exit 0

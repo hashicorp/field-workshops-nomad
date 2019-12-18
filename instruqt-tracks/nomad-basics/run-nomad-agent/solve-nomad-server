@@ -1,0 +1,23 @@
+#!/bin/sh -l
+
+# Run the Nomad agent in Dev mode
+echo -e "nomad agent -dev" >> /root/.bash_history
+nomad agent -dev 2>&1 &
+
+sleep 30
+
+# Get the Nomad node status
+echo -e "nomad node status" >> /root/.bash_history
+nomad node status
+
+# Get the members of the Nomad cluster
+echo -e "nomad server members" >> /root/.bash_history
+nomad server members
+
+# Determine the PID of the Nomad agent
+app_pid=$(ps -ef | grep nomad | sed -n 2p | awk '{print $2}')
+
+# Kill the Nomad agent
+kill -9 ${app_pid}
+
+exit 0

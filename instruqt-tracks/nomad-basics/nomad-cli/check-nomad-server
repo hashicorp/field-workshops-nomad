@@ -1,0 +1,11 @@
+#!/bin/sh -l
+
+set -e
+
+sleep 30
+
+grep -q "nomad version" /root/.bash_history || fail-message "You haven't run 'nomad version' yet."
+
+grep -q "nomad run -h" /root/.bash_history || grep -q "nomad run -help" /root/.bash_history || grep -q "nomad run --help" /root/.bash_history || fail-message "You haven't run 'nomad run -h' yet."
+
+exit 0
