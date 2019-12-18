@@ -2,8 +2,6 @@
 
 set -e
 
-sleep 30
-
 grep -q "nomad agent -dev" /root/.bash_history || fail-message "You haven't started the development mode Nomad agent yet."
 
 grep -q "nomad node status" /root/.bash_history || fail-message "You haven't checked status of your Nomad node yet."

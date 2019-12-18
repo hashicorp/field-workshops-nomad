@@ -1,7 +1,5 @@
 #!/bin/sh -l
 
-sleep 30
-
 # Get the Nomad version
 echo -e "nomad version" >> /root/.bash_history
 nomad version
