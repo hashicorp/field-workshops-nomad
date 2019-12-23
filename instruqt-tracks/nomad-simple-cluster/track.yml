@@ -27,7 +27,7 @@ challenges:
   assignment: |-
     Let's start by looking at the `server.hcl` configuration file on the "Config Files" tab on the left. You'll see that we are calling the server node `server`, configuring the agent as a server, and indicating that we expect one server in the cluster.
 
-    Next, start the Nomad server in the background on the "Nomad Server" tab by running:
+    Next, start the Nomad server in the background on the "Server" tab by running:
     ```
     cd nomad
     nomad agent -config server.hcl > nomad.log 2>&1 &
@@ -37,7 +37,7 @@ challenges:
 
     Back on the "Configuration Files" tab, look at the `client1.hcl` configuration file. It assigns the name `client1` to the first client, configures it as a Nomad client, and tells it to connect to the server using the DNS name assigned to it by the Instruqt track's configuration file, `nomad-server`.
 
-    Now, start the first Nomad client in the background on the "Nomad Client 1" tab by running:
+    Now, start the first Nomad client in the background on the "Client 1" tab by running:
     ```
     cd nomad
     nomad agent -config client1.hcl > nomad.log 2>&1 &
@@ -46,24 +46,24 @@ challenges:
 
     Back on the "Configuration Files" tab, look at the `client2.hcl` configuration file. It is almost the same as `client1.hcl`, but assigns the name of the agent to be `client2` instead of `client1`.
 
-    Now, start the second Nomad client in the background on the "Nomad Client 2" tab by running:
+    Now, start the second Nomad client in the background on the "Client 2" tab by running:
     ```
     cd nomad
     nomad agent -config client2.hcl > nomad.log 2>&1 &
     ```
     You should see a single line like `[1] 2065`, which gives the PID of the second client. As with the server and first client, you can inspect the nomad.log file by running `cat nomad.log`.
 
-    On the "Nomad Server" tab, check the list of Nomad servers in your cluster:
+    On the "Server" tab, check the list of Nomad servers in your cluster:
     ```
     nomad server members
     ```
-    If clicking the Check button at the end of the challenge says you have not done this, you might have run it on one of the other tabs. Please run it again on the "Nomad Server" tab so that it will end up in your .bash_history file on that VM.
+    If clicking the Check button at the end of the challenge says you have not done this, you might have run it on one of the other tabs. Please run it again on the "Server" tab so that it will end up in your .bash_history file on that VM.
 
-    Still on the "Nomad Server" tab, check the list of Nomad nodes (which lists the Nomad clients):
+    Still on the "Server" tab, check the list of Nomad nodes (which lists the Nomad clients):
     ```
     nomad node status
     ```
-    If clicking the Check button at the end of the challenge says you have not done this, you might have run it on one of the other tabs. Please run it again on the "Nomad Server" tab so that it will end up in your .bash_history file on that VM.
+    If clicking the Check button at the end of the challenge says you have not done this, you might have run it on one of the other tabs. Please run it again on the "Server" tab so that it will end up in your .bash_history file on that VM.
 
     You can now inspect the server and clients in the Nomad UI. Of course, you won't see any jobs yet. But you will start one in the next challenge.
   notes:
@@ -75,18 +75,23 @@ challenges:
 
       You can always download the latest version of Nomad OSS here:
       https://www.nomadproject.io/downloads.html
+  - type: text
+    contents: |-
+      We've put all the server and client configuration files on the server1 VM so that you can conveniently see them in a single Instruqt tab.
+
+      However, if you decide to edit either of the client configuration files for any reason, be sure to do so on the client tab that matches the file you change.
   tabs:
   - title: Config Files
     type: code
     hostname: nomad-server
     path: /root/nomad/
-  - title: Nomad Server
+  - title: Server
     type: terminal
     hostname: nomad-server
-  - title: Nomad Client 1
+  - title: Client 1
     type: terminal
     hostname: nomad-client-1
-  - title: Nomad Client 2
+  - title: Client 2
     type: terminal
     hostname: nomad-client-2
   - title: Nomad UI
@@ -95,4 +100,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 1800
-checksum: "3672611092021966794"
+checksum: "15405370895808521007"
