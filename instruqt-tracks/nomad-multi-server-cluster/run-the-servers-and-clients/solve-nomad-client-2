@@ -1,0 +1,9 @@
+#!/bin/bash -l
+
+cd nomad
+
+# Run the Nomad agent
+echo -e "nomad agent -config client2.hcl > nomad.log 2>&1 &" >> /root/.bash_history
+nomad agent -config client2.hcl > nomad.log 2>&1 &
+
+exit 0

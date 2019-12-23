@@ -1,0 +1,127 @@
+slug: nomad-multi-server-cluster
+id: ygythoighyka
+type: track
+title: Nomad Multi-Server Cluster
+teaser: Learn how to run and monitor jobs in a Nomad cluster with three servers and
+  two clients.
+description: |-
+  Nomad is a flexible workload orchestrator that enables an organization to easily deploy and manage any containerized or legacy application using a single, unified workflow. Nomad can run a diverse workload of Docker, non-containerized, microservice, and batch applications.
+
+  This track will show you how to run and monitor Nomad jobs in a Nomad cluster with three servers and two clients.
+
+  Before running this track, we suggest you run the [Nomad Basics](https://instruqt.com/hashicorp/tracks/nomad-basics) and [Nomad Simple Cluster](https://instruqt.com/hashicorp/tracks/nomad-simple-cluster) tracks.
+icon: https://storage.googleapis.com/instruqt-hashicorp-tracks/logo/nomad.png
+tags:
+- nomad
+- cluster
+owner: hashicorp
+developers:
+- roger@hashicorp.com
+private: true
+published: true
+challenges:
+- slug: run-the-servers-and-clients
+  id: 7kmuc2a1yqge
+  type: challenge
+  title: Run the Nomad Servers and Clients
+  teaser: Configure and run three Nomad servers and 2 Nomad clients.
+  assignment: |-
+    Let's start by looking at the `server1.hcl` configuration file on the "Config Files" tab on the left. You'll see that we are calling this server node `server1`, configuring the agent as a server, and indicating that we expect three servers in the cluster with the `bootstrap_expect` setting.
+
+    Next, start server1 in the background on the "Server 1" tab by running:
+    ```
+    cd nomad
+    nomad agent -config server1.hcl > nomad.log 2>&1 &
+    ```
+    You should see a single line like `[1] 2174`, which gives the PID of the Nomad server.
+
+    We suggest you also tail the nomad.log file by running `tail -f nomad.log`. This will show many messages including one that says "Nomad agent started!". It will also show some error messages saying "No cluster leader". That is expected at this point because we have not yet strated 3 servers.
+
+    Repeat the above steps for server2 on the "Server 2" tab, but specify `server2.hcl` as the configuration file:
+    ```
+    cd nomad
+    nomad agent -config server2.hcl > nomad.log 2>&1 &
+    ```
+
+    At this point, if you are still tailing the nomad.log for server1, you should see a message like "nomad: serf: EventMemberJoin: server2.global".
+
+    Repeat the above steps for server3 on the "Server 3" tab, but specify `server3.hcl` as the configuration file:
+    ```
+    cd nomad
+    nomad agent -config server3.hcl > nomad.log 2>&1 &
+    ```
+
+    At this point, if you are still tailing the nomad.log for server1, you should see messages indicating that server3 joined the cluster and that server1 has been elected the cluster's leader.
+
+    To double-check that all 3 servers have joined the cluster, run this command on the "Server 3" tab:
+    ```
+    nomad server members
+    ```
+    You should see output listing all 3 server nodes, all 3 of which should be considered "alive". server1 should be considered the leader of the cluster.
+
+    If clicking the Check button at the end of the challenge says you have not done this, you might have run it on one of the other tabs. Please run it again on the "Server 3" tab so that it will end up in your .bash_history file on the nomad-server-3 VM.
+
+    Next, run the first Nomad client on the "Client 1" tab:
+    ```
+    cd nomad
+    nomad agent -config client1.hcl > nomad.log 2>&1 &
+    ```
+    You should see a single line like `[1] 2241`, which gives the PID of the first client. You can inspect the nomad.log file by running `cat nomad.log`. This will show many messages including one that says "Nomad agent started!"
+
+    Repeat the previous commands for the second Nomad client on the "Client 2" tab, but specify `client2.hcl` as the configuration file:
+    ```
+    cd nomad
+    nomad agent -config client2.hcl > nomad.log 2>&1 &
+    ```
+    You should see a single line like `[1] 2065`, which gives the PID of the second client. As with the first client, you can inspect the nomad.log file by running `cat nomad.log`.
+
+    Check the status of the Nomad client nodes on the "Server 3" tab:
+    ```
+    nomad node status
+    ```
+    You should see two client nodes. (The command only shows client nodes, so the servers are not listed.)
+
+    If clicking the Check button at the end of the challenge says you have not done this, you might have run it on one of the other tabs. Please run it again on the "Server 3" tab so that it will end up in your .bash_history file on the nomad-server-3 VM.
+
+    You can now inspect the servers and clients in the Nomad UI. You might initially see a "Server Error" message in the UI saying that "A server error prevented data from being sent to the client".  Just click on the "Go to Clients" button. You should then see the UI and can inspect the servers and clients that you started. Of course, you won't see any jobs yet. You will start one in the next challenge.
+  notes:
+  - type: text
+    contents: |-
+      The open source version of Nomad (Nomad OSS) is a single binary that you can download and run on your laptop or virtual workstation.
+
+      It can run as a server or as a client. In this track, you'll run three servers and two clients and then run and monitor a job on them.
+
+      You can always download the latest version of Nomad OSS here:
+      https://www.nomadproject.io/downloads.html
+  - type: text
+    contents: |-
+      We've put all the server and client configuration files on the server1 VM so that you can conveniently see them in a single Instruqt tab.
+
+      However, if you decide to edit any of the configuration files for any reason, be sure to do so on the tab that matches the file you change.
+  tabs:
+  - title: Config Files
+    type: code
+    hostname: nomad-server-1
+    path: /root/nomad/
+  - title: Server 1
+    type: terminal
+    hostname: nomad-server-1
+  - title: Server 2
+    type: terminal
+    hostname: nomad-server-2
+  - title: Server 3
+    type: terminal
+    hostname: nomad-server-3
+  - title: Client 1
+    type: terminal
+    hostname: nomad-client-1
+  - title: Client 2
+    type: terminal
+    hostname: nomad-client-2
+  - title: Nomad UI
+    type: service
+    hostname: nomad-server-1
+    port: 4646
+  difficulty: basic
+  timelimit: 1800
+checksum: "10889798124694405897"
