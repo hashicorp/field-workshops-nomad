@@ -5,7 +5,7 @@ mkdir nomad
 # Write Nomad Client 1 Config
 cat <<-EOF > /root/nomad/client1.hcl
 # Setup data dir
-data_dir = "/tmp/client1"
+data_dir = "/tmp/nomad/client1"
 
 # Give the agent a unique name. Defaults to hostname
 name = "client1"
