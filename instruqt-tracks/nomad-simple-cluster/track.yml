@@ -69,7 +69,7 @@ challenges:
 
     If clicking the Check button at the end of the challenge says you have not done this, you might have run it on one of the other tabs. Please run it again on the "Server" tab so that it will end up in your .bash_history file on that VM.
 
-    You can now inspect the server and clients in the Nomad UI. Of course, you won't see any jobs yet. But you will start one in the next challenge.
+    You can now inspect the server and clients in the Nomad UI. You might initially see a "Server Error" message in the UI saying that "A server error prevented data from being sent to the client".  Just click on the "Go to Clients" button. You should then see the UI and can inspect the server and clients that you started. Of course, you won't see any jobs yet. You will start one in the next challenge.
   notes:
   - type: text
     contents: |-
@@ -104,4 +104,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 1800
-checksum: "17921063165336059152"
+checksum: "13552389966349286811"
