@@ -127,7 +127,7 @@ challenges:
 
       Really!
   tabs:
-  - title: Config Files
+  - title: Job Spec
     type: code
     hostname: nomad-server
     path: /root/nomad/
@@ -146,4 +146,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 1800
-checksum: "14803396625393113034"
+checksum: "14532542461214579711"
