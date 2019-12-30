@@ -15,6 +15,7 @@ tags:
 - cluster
 owner: hashicorp
 developers:
+- marc@hashicorp.com
 - roger@hashicorp.com
 private: true
 published: true
@@ -104,4 +105,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 1800
-checksum: "606883206609071407"
+checksum: "10243411399142677003"
