@@ -105,4 +105,45 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 1800
-checksum: "10243411399142677003"
+- slug: run-first-job
+  id: gpvvzswsnxfg
+  type: challenge
+  title: Run Your First Nomad Job
+  teaser: Initialize a new Nomad job specification file and run the job.
+  assignment: |-
+    In this challenge, you will initialize a new Nomad job and then run
+    it.
+
+    First, you should do X.
+  notes:
+  - type: text
+    contents: |-
+      Nomad is awesome.
+
+      Really!
+  - type: text
+    contents: |-
+      Nomad is awesome.
+
+      Really!
+  tabs:
+  - title: Config Files
+    type: code
+    hostname: nomad-server
+    path: /root/nomad/
+  - title: Server
+    type: terminal
+    hostname: nomad-server
+  - title: Client 1
+    type: terminal
+    hostname: nomad-client-1
+  - title: Client 2
+    type: terminal
+    hostname: nomad-client-2
+  - title: Nomad UI
+    type: service
+    hostname: nomad-server
+    port: 4646
+  difficulty: basic
+  timelimit: 1800
+checksum: "14803396625393113034"
