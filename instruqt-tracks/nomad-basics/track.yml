@@ -8,7 +8,7 @@ description: |-
 
   Nomad enables developers to use declarative infrastructure-as-code for deploying applications. Nomad uses bin packing to efficiently schedule jobs and optimize for resource utilization. Nomad is supported on macOS, Windows, and Linux.
 
-  This track will introduce you to the open source version of Nomad, starting with the Nomad CLI and running a Nomad dev agent.
+  This track will introduce you to the open source version of Nomad. You will learn how to run some basic Nomad CLI commands, run a "dev" agent, initialize a simple Nomad job, and use the CLI, UI, and HTTP API to run, check the status of, and stop the job.
 icon: https://storage.googleapis.com/instruqt-hashicorp-tracks/logo/nomad.png
 tags:
 - nomad
@@ -57,7 +57,7 @@ challenges:
       Check out this tutorial for step-by-step instructions:
       https://learn.hashicorp.com/nomad/getting-started/install
 
-      We've included Nomad (along with Consul, Vault, and Terraform) in a VM in your Instruqt environment so that you don't need to download or install it.
+      We've included Nomad in a VM in your Instruqt environment so that you don't need to download or install it.
   tabs:
   - title: Nomad CLI
     type: terminal
@@ -76,9 +76,11 @@ challenges:
 
     Start the agent in dev mode on the "Nomad Dev Server" tab:
     ```
-    nomad agent -dev
+    nomad agent -dev -bind=0.0.0.0 &
     ```
-    This will output some log data and run in the foreground. You'll run the rest of the Nomad commands in this challenge in the "Nomad CLI" tab to avoid intermixing of output from the agent and your commands.
+    Running the above command will output some log data and run in the background (because of the `&`). We included the `-bind=0.0.0.0` argument so that the Nomad UI can connect to the agent in the Instruqt environment.
+
+    You'll run the rest of the Nomad commands in this challenge in the "Nomad CLI" tab to avoid intermixing of output from the agent and your commands.
 
     Let's get the status of the Nomad node (the VM) you are running the agent on:
     ```
@@ -91,9 +93,9 @@ challenges:
     ```
     nomad server members
     ```
-    You'll see that the local node running at IP 127.0.0.1 on port 4648 is a member of and actually the leader of the cluster and is alive.
+    You'll see that the nomad-server node is a member of and actually the leader of the cluster and is alive.
 
-    Wrap up this challenge by stopping the Nomad agent by typing `<control>-c` on the "Nomad Dev Server" tab. This should redisplay the "root@nomad-server:~#" prompt on that tab.
+    In the next challenge, you will initialize and run your first Nomad job.
   notes:
   - type: text
     contents: |-
@@ -107,6 +109,10 @@ challenges:
   - title: Nomad CLI
     type: terminal
     hostname: nomad-server
+  - title: Nomad UI
+    type: service
+    hostname: nomad-server
+    port: 4646
   difficulty: basic
-  timelimit: 300
-checksum: "4651894266511639192"
+  timelimit: 900
+checksum: "14979668234276358729"
