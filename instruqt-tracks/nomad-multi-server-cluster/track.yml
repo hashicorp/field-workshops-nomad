@@ -3,11 +3,11 @@ id: ygythoighyka
 type: track
 title: Nomad Multi-Server Cluster
 teaser: Learn how to run and monitor jobs in a Nomad cluster with three servers and
-  two clients. Also learn how to integrate Nomad with Consul and Vault.
+  two clients.
 description: |-
   Nomad is a flexible workload orchestrator that enables an organization to easily deploy and manage any containerized or legacy application using a single, unified workflow. Nomad can run a diverse workload of Docker, non-containerized, microservice, and batch applications.
 
-  This track will show you how to run and monitor Nomad jobs in a Nomad cluster with three servers and two clients. It will also show you how easy it is to integrate Nomad with Consul and Vault.
+  This track will show you how to run and monitor Nomad jobs in a Nomad cluster with three servers and two clients. You will first use Nomad's manual clustering and then use automatic clustering with Consul.
 
   Before running this track, we suggest you run the [Nomad Basics](https://instruqt.com/hashicorp/tracks/nomad-basics) and [Nomad Simple Cluster](https://instruqt.com/hashicorp/tracks/nomad-simple-cluster) tracks.
 icon: https://storage.googleapis.com/instruqt-hashicorp-tracks/logo/nomad.png
@@ -88,12 +88,11 @@ challenges:
   notes:
   - type: text
     contents: |-
-      The open source version of Nomad (Nomad OSS) is a single binary that you can download and run on your laptop or virtual workstation.
+      In this track, you'll run three Nomad servers and two clients and then run and monitor a job on them.
 
-      It can run as a server or as a client. In this track, you'll run three servers and two clients and then run and monitor a job on them.
+      You'll first connect the Nomad cluster using manual clustering. You will then use Consul to enable automatic clustering.
 
-      You can always download the latest version of Nomad OSS here:
-      https://www.nomadproject.io/downloads.html
+      You'll also see how easy it is to register Nomad tasks as Consul services.
   - type: text
     contents: |-
       We've put all the server and client configuration files on the server1 VM so that you can conveniently see them in a single Instruqt tab.
@@ -125,4 +124,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 1800
-checksum: "5475502341015375"
+checksum: "8250577365779236062"
