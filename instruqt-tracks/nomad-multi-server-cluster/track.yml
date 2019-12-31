@@ -3,11 +3,11 @@ id: ygythoighyka
 type: track
 title: Nomad Multi-Server Cluster
 teaser: Learn how to run and monitor jobs in a Nomad cluster with three servers and
-  two clients.
+  two clients. Also learn how to integrate Nomad with Consul and Vault.
 description: |-
   Nomad is a flexible workload orchestrator that enables an organization to easily deploy and manage any containerized or legacy application using a single, unified workflow. Nomad can run a diverse workload of Docker, non-containerized, microservice, and batch applications.
 
-  This track will show you how to run and monitor Nomad jobs in a Nomad cluster with three servers and two clients.
+  This track will show you how to run and monitor Nomad jobs in a Nomad cluster with three servers and two clients. It will also show you how easy it is to integrate Nomad with Consul and Vault.
 
   Before running this track, we suggest you run the [Nomad Basics](https://instruqt.com/hashicorp/tracks/nomad-basics) and [Nomad Simple Cluster](https://instruqt.com/hashicorp/tracks/nomad-simple-cluster) tracks.
 icon: https://storage.googleapis.com/instruqt-hashicorp-tracks/logo/nomad.png
@@ -16,6 +16,7 @@ tags:
 - cluster
 owner: hashicorp
 developers:
+- pgryzan@hashicorp.com
 - roger@hashicorp.com
 private: true
 published: true
@@ -124,4 +125,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 1800
-checksum: "8322657695780471332"
+checksum: "5475502341015375"
