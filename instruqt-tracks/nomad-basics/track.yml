@@ -54,9 +54,6 @@ challenges:
     contents: |-
       Installing Nomad on your laptop or workstation is easy. You simply download the zip file, unpack it, and place it somewhere in your PATH.
 
-      Check out this tutorial for step-by-step instructions:
-      https://learn.hashicorp.com/nomad/getting-started/install
-
       We've included Nomad in a VM in your Instruqt environment so that you don't need to download or install it.
   tabs:
   - title: Nomad CLI
@@ -95,7 +92,7 @@ challenges:
     ```
     You'll see that the nomad-server node is a member of and actually the leader of the cluster and is alive.
 
-    In the next challenge, you will initialize and run your first Nomad job.
+    In the next challenge, you will run your first Nomad job.
   notes:
   - type: text
     contents: |-
@@ -115,4 +112,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 900
-checksum: "14979668234276358729"
+checksum: "3286553141020644020"
