@@ -84,7 +84,7 @@ challenges:
     nomad node status
     ```
 
-    This will print information about the node incuding its ID, data center (DC), name, class, drain status, eligibility, and status.
+    This will print information about the node including its ID, data center (DC), name, class, drain status, eligibility, and status.
 
     Verify that the agent is running as a server by getting the list of servers in the local Nomad cluster:
     ```
