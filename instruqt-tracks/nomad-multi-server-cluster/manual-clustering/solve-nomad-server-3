@@ -3,8 +3,8 @@
 cd nomad
 
 # Run the Nomad server
-echo -e "nomad agent -config server3.hcl > nomad.log 2>&1 &" >> /root/.bash_history
-nomad agent -config server3.hcl > nomad.log 2>&1 &
+echo -e "nomad agent -config nomad-server3.hcl > nomad.log 2>&1 &" >> /root/.bash_history
+nomad agent -config nomad-server3.hcl > nomad.log 2>&1 &
 
 # Check the Nomad cluster members
 echo -e "nomad server members" >> /root/.bash_history

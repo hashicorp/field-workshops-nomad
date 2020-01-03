@@ -1,0 +1,7 @@
+#!/bin/bash -l
+
+set -e
+
+grep -q "nomad agent -config nomad-server1.hcl > nomad.log 2>&1 &" /root/.bash_history || fail-message "You haven't run your first Nomad server yet."
+
+exit 0

@@ -1,0 +1,39 @@
+#!/bin/bash -l
+
+pkill nomad
+rm -fr /tmp/nomad
+
+# Write Nomad Server 3 Config
+cat <<-EOF > /root/nomad/nomad-server3.hcl
+# Setup data dir
+data_dir = "/tmp/nomad/server3"
+
+# Give the agent a unique name.
+name = "server3"
+
+# Enable the server
+server {
+  enabled = true
+  bootstrap_expect = 3
+}
+EOF
+
+# Write Consul Server 3 Config
+cat <<-EOF > /root/nomad/consul-server3.json
+{
+  "server": true,
+  "ui": true,
+  "log_level": "INFO",
+  "data_dir": "/tmp/consul/server3",
+  "node_name": "server3",
+  "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
+  "client_addr": "{{ GetInterfaceIP \"ens4\" }}",
+  "bootstrap_expect": 3,
+  "retry_join": [
+    "nomad-server-1",
+    "nomad-server-2"
+  ]
+}
+EOF
+
+exit 0

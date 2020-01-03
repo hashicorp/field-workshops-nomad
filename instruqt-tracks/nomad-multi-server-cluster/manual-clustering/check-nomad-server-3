@@ -2,7 +2,7 @@
 
 set -e
 
-grep -q "nomad agent -config server3.hcl > nomad.log 2>&1 &" /root/.bash_history || fail-message "You haven't run your third Nomad server yet."
+grep -q "nomad agent -config nomad-server3.hcl > nomad.log 2>&1 &" /root/.bash_history || fail-message "You haven't run your third Nomad server yet."
 
 grep -q "nomad server members" /root/.bash_history || fail-message "You haven't checked the members of your Nomad cluster yet. Please do this on the Server 3 tab."
 
