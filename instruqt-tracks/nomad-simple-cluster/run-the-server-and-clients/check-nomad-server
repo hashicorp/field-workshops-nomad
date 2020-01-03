@@ -8,4 +8,6 @@ grep -q "nomad server members" /root/.bash_history || fail-message "You haven't 
 
 grep -q "nomad node status" /root/.bash_history || fail-message "You haven't checked the staus of your Nomad nodes (clients) yet."
 
+grep -q "nomad job init -short" /root/.bash_history || fail-message "Please create the sample Nomad Job specification file first."
+
 exit 0
