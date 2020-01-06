@@ -1,10 +1,10 @@
-name: nomad-concepts
+name: nomad-chapter-2-title
 class: title, shelf, no-footer, fullbleed
 background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/bkgs/HashiCorp-Title-bkg.jpeg)
 count: false
 
-# HashiCorp Nomad
-## Concepts and Architecture
+# Chapter 2
+## Nomad Concepts and Architecture
 
 ![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
 
@@ -15,36 +15,21 @@ Nomad is a highly advanced service scheduler and manager.  Within this slide dec
 layout: true
 
 .footer[
-- Copyright © 2019 HashiCorp
+- Copyright © 2020 HashiCorp
 - ![:scale 100%](https://hashicorp.github.io/field-workshops-assets/assets/logos/HashiCorp_Icon_Black.svg)
 ]
 
 ---
-exclude: true
+name: chapter-2-topics
+# Chapter 2 Topics
 
-name: slides-link
-# The Slide Show
-## You can follow along on your own computer at this link:
-### tbd
-
-???
-Here is a link to the slides so you can follow along, but please don't look ahead!
-
-Hidden:  Custom diagrams can be found at Lucidchart
-https://www.lucidchart.com/documents/edit/6cf954c6-16e9-4827-9d74-98417ba74444/0_0?beaconFlowId=D0003F1058D413A2
-
----
-exclude: true
-
-name:  Section Prerequisites
-# Prerequisites
-This deck assumes the following of the audience:
-* Familiarity with Nomad Scheduler
-* Familiarity working with HashiCorp Configuration Language
-* A general understanding of container operations is recommended
+1. Key Nomad Concepts
+2. Nomad Architecture
+3. Nomad Scheduling
+4. Nomad Integrations
 
 ???
-This slide deck focuses on the concepts and architecture of Nomad.  Therefore the audience should have some basic understanding of the Nomad applications.
+* This is our chapter topics slide.
 
 ---
 name:  What Is Nomad
