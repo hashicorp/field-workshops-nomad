@@ -50,7 +50,10 @@
 
       var xmlhttp = new XMLHttpRequest();
 
-      var source = ""
+      var source = [
+      'nomad_concepts_arch.md',
+      'Nomad_Preemption.md'
+      ]
 
       for (var i = 0; i < sourceUrls.length; i++) {
         xmlhttp.open('GET', sourceUrls[i], false);
