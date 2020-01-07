@@ -113,4 +113,65 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 900
-checksum: "8229804449223521540"
+- slug: run-first-job
+  id: 6zskkbhblc43
+  type: challenge
+  title: Run Your First Nomad Job
+  teaser: Run your first Nomad job with the Nomad CLI and UI.
+  assignment: |-
+    In this challenge, you'll run your first Nomad job using a Nomad job specification file that has been provided.
+
+    You'll first start and stop it with the Nomad CLI. You'll then do the same with the Nomad UI.
+
+    First, inspect the job specification file, `redis.nomad`:
+    ```
+    cat redis.nomad
+    ```
+
+
+    In the next challenge, you will run the same job and check its status using the Nomad HTTP API.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you'll run your first Nomad job using a Nomad job specification file that has been provided.
+
+      See https://learn.hashicorp.com/nomad/getting-started/jobs for more on running Nomad jobs.
+  tabs:
+  - title: Nomad CLI
+    type: terminal
+    hostname: nomad-server
+  - title: Nomad UI
+    type: service
+    hostname: nomad-server
+    port: 4646
+  difficulty: basic
+  timelimit: 900
+- slug: use-nomad-http-api
+  id: drttknux1ay7
+  type: challenge
+  title: Use Nomad's HTTP API
+  teaser: Run and stop a job with Nomad's HTTP API.
+  assignment: |-
+    In this challenge, you'll run the same Nomad job using Nomad's HTTP API.
+
+    First, run the job:
+    ```
+
+    ```
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you'll run the same Nomad job using Nomad's HTTP API.
+
+      See https://www.nomadproject.io/api/jobs.html for more on running Nomad jobs with Nomad's HTTP API.
+  tabs:
+  - title: Nomad CLI
+    type: terminal
+    hostname: nomad-server
+  - title: Nomad UI
+    type: service
+    hostname: nomad-server
+    port: 4646
+  difficulty: basic
+  timelimit: 900
+checksum: "6815951466291975167"

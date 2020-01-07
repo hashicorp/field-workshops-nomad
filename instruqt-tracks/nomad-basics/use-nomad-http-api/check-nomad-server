@@ -1,0 +1,13 @@
+#!/bin/bash -l
+
+set -e
+
+# Check that payload.json was generated
+
+# Check that job was started with HTTP API
+
+# Check that job status was checked with HTTP API
+
+# Check that job was stopped with HTTP aPI
+
+exit 0

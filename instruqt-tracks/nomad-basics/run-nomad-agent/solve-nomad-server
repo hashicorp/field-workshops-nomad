@@ -12,10 +12,4 @@ nomad node status
 echo -e "nomad server members" >> /root/.bash_history
 nomad server members
 
-# Determine the PID of the Nomad agent
-app_pid=$(ps -ef | grep nomad | sed -n 2p | awk '{print $2}')
-
-# Kill the Nomad agent
-kill -9 ${app_pid}
-
 exit 0

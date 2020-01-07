@@ -1,0 +1,15 @@
+#!/bin/bash -l
+
+# Inspect the job specification file
+echo -e "cat redis.nomad" >> /root/.bash_history
+cat redis.nomad
+
+# Run the Job
+echo -e "nomad job run redis.nomad" >> /root/.bash_history
+nomad job run redis.nomad
+
+# Check the job status with the CLI
+
+# Stop the job with the CLI
+
+exit 0

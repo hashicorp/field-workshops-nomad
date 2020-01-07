@@ -1,0 +1,11 @@
+#!/bin/bash -l
+
+# Generate the payload.json file
+
+# Run the job with the HTTP API
+
+# Get the Nomad node status with HTTP API
+
+# Stop the job with the HTTP API
+
+exit 0
