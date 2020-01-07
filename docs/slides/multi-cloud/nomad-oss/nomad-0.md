@@ -72,7 +72,7 @@ name: instruqt-tracks
     1. https://instruqt.com/hashicorp/tracks/nomad-basics
     1. https://instruqt.com/hashicorp/tracks/nomad-simple-cluster
     1. https://instruqt.com/hashicorp/tracks/nomad-multi-server-cluster
-    1. https://instruqt.com/hashicorp/tracks/nomad-security
+    1. https://instruqt.com/hashicorp/tracks/nomad-acls
 
 ???
 * Links to the Instruqt tracks used in this workshop
