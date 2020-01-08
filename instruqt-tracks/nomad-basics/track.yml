@@ -36,7 +36,7 @@ challenges:
     ```
     You'll see some common commands followed by other commands.
 
-    You can get help for any Nomad command by adding `-h`, `-help`, or `--help` after it.  Try this"
+    You can get help for any Nomad command by adding `-h`, `-help`, or `--help` after it.  Try this:
     ```
     nomad run -h
     ```
