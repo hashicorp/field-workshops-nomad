@@ -534,18 +534,39 @@ background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/
 count: false
 
 # Chapter 7 - Section 4
-## Vault PKI Secrets Engine
+## Vault PKI Secrets Engine Integration
 
 ![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
 
 ???
 
 ---
-name: nomad-chapter-7-template
-# Template.
+name: nomad-chapter-7-vault-pki-1
+# Vault PKI Secrets Engine Integration
 .small[
-PLACEHOLDER
+Securing your nomad nodes with TLS certificates is an important part of managing your cluster.
 
+To increase the level of security that TLS provides you need to: 
+* Have a short TTL for each certificate.
+* Regularly rotate these certificates.
+
+In previous slides we discussed what is needed to accomplish this. This can take a long time with many manual steps.
+]
+???
+
+---
+name: nomad-chapter-7-vault-pki-2
+# Vault PKI Secrets Engine Integration
+.small[
+When your clusters and regions start growing in number this process will become lengthy.
+It will also lead to mistakes creaping in.
+Nomad can make use of Consul Template to integrate with Vaul't PKI engine.
+
+This will allow for:
+* Automatic Generation of dynamic certificates for each node.
+* Automatic renewal of these certificates for each node.
+* A unique relativly short TTL certificate per node.
+* Automatic certificate rotation by Nomad.
 ]
 ???
 
