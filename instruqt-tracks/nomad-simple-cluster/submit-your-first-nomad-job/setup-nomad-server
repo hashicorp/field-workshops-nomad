@@ -50,5 +50,7 @@ client {
 EOF
 
 cd /root/nomad
+nomad job init -short
+
 
 exit 0

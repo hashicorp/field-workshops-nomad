@@ -1,9 +1,19 @@
 #!/bin/bash -l
 
-cd nomad
+# Run the Nomad server
+echo -e "nomad agent -config server.hcl > nomad.log 2>&1 &" >> /root/.bash_history
+nomad agent -config server.hcl > nomad.log 2>&1 &
+
+# Check the Nomad cluster members
+echo -e "nomad server members" >> /root/.bash_history
+nomad server members
 
 # Check the Nomad nodes
-#echo -e "nomad node status" >> /root/.bash_history
-#nomad node status
+echo -e "nomad node status" >> /root/.bash_history
+nomad node status
+
+# Create a new
+echo -e "nomad job init -short" >> /root/.bash_history
+nomad job init -short
 
 exit 0

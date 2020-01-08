@@ -244,32 +244,30 @@ challenges:
   title: Modifying a Job
   teaser: Change the resources in an existing job deployment
   assignment: |-
-    ## Modify the jobspec file (example.nomad)
-    Let's edit the example.nomad file to update the count and set it to 3. Between the `group` and `task` stanza:
-    ```
-    group "cache" {
-      task "redis" {
-    ```
-    Insert a line by adding `count = 3` property to increase the number of deployed redis tasks from 1 to 3.
+      ## Modify the jobspec file (example.nomad)
+      Let's edit the example.nomad file to update the count and set it to 3. Between the `group` and `task` stanza:
+      ```
+      group "cache" {
+        task "redis" {
+      ```
+      Insert a line by adding `count = 3` property to increase the number of deployed redis tasks from 1 to 3.
 
-    ## Run a Plan on the new updates
-    Once you have finished modifying the job specification, use the plan command to invoke a dry-run of the scheduler to see what would happen if you ran the updated job:
-    ```
-    nomad plan example.nomad
-    ```
-    We can see that the scheduler detected the change in count and informs us that it will cause 2 new instances to be created. The in-place update that will occur is to push the update job specification to the existing allocation and will not cause any service interruption. We can then run the job with the run command the plan emitted.
-    ## Run the Job to apply the updates
-    After running the plan, check if the dry-run is successful to see if there's enough resources for the changes. If it completes, then we're ready to apply the updates!
-    ```
-    nomad run -check-index <replace this with check-index number> example.nomad
-    ```
-    By using the `nomad run` command with the `check-index` option from the previous plan output, we can see that additional allocations of 2 as intended.
-    Review the UI tab to watch the additional allocations as they get deployed.
+      ## Run a Plan on the new updates
+      Once you have finished modifying the job specification, use the plan command to invoke a dry-run of the scheduler to see what would happen if you ran the updated job:
+      ```
+      nomad plan example.nomad
+      ```
+      We can see that the scheduler detected the change in count and informs us that it will cause 2 new instances to be created. The in-place update that will occur is to push the update job specification to the existing allocation and will not cause any service interruption. We can then run the job with the run command the plan emitted.
+      ## Run the Job to apply the updates
+      After running the plan, check if the dry-run is successful to see if there's enough resources for the changes. If it completes, then we're ready to apply the updates!
+      ```
+      nomad run -check-index <replace this with check-index number> example.nomad
+      ```
+      By using the `nomad run` command with the `check-index` option from the previous plan output, we can see that additional allocations
   notes:
   - type: text
-    contents: The definition of a job is not static, and is meant to be updated over
-      time. You may update a job to change the docker container, to update the application
-      version, or to change the count of a task group to scale with load.
+    contents: |-
+      The definition of a job is not static, and is meant to be updated over time. You may update a job to change the docker container, to update the application version, or to change the count of a task group to scale with load.
   tabs:
   - title: Config Files
     type: code
@@ -291,24 +289,12 @@ challenges:
   title: Stopping a Job
   teaser: Stop a running job and clean-up deployed
   assignment: |-
-    ## Stopping a Job
-    To stop the job `example.nomad` and de-allocate all the redis docker instances, run the following command:
-    ```
-    nomad job stop example
-    ```
+    The assignment the participant needs to complete in order to proceed.
 
-    To verify that the job has completely stopped, run:
-    ```
-    nomad status example
-    ```
-    Inspect the following properties:
-    1. Check that the Status attribute is marked as `dead (stopped)`
-    2. Under the Allocations section, verify that the all allocations are in the `stop` state under the Desired column
+    You can use any GitHub flavoured markdown.
   notes:
   - type: text
-    contents: The final step in a job lifecycle is stopping the job. This is done
-      with the stop command that creates an evaluation which is used to stop all the
-      existing allocations.
+    contents: Replace this text with your own text
   tabs:
   - title: Config Files
     type: code
@@ -324,4 +310,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 300
-checksum: "10613640928058290482"
+checksum: "13905452458109407450"

@@ -14,4 +14,8 @@ nomad server members
 echo -e "nomad node status" >> /root/.bash_history
 nomad node status
 
+# Create a new
+echo -e "nomad job init -short" >> /root/.bash_history
+nomad job init -short
+
 exit 0

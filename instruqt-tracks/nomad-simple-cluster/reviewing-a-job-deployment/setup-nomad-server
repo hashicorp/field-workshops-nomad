@@ -49,6 +49,11 @@ client {
 }
 EOF
 
+# Initialize the sample job file (example.nomad)
 cd /root/nomad
+nomad job init -short
+
+# submit sample job file (example.nomad)
+nomad run example.nomad
 
 exit 0
