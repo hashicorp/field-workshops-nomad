@@ -10,6 +10,7 @@ curl --data @payload.json http://localhost:4646/v1/jobs
 
 # Get the Nomad node status with HTTP API
 echo -e "curl http://localhost:4646/v1/job/redis/summary" >> /root/.bash_history
+curl http://localhost:4646/v1/job/redis/summary
 
 # Stop the job with the HTTP API
 echo -e "curl --request DELETE http://localhost:4646/v1/job/redis" >> /root/.bash_history

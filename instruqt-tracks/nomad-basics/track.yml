@@ -4,9 +4,7 @@ type: track
 title: Nomad Basics
 teaser: Learn how to run the Nomad agent, run basic commands, and run Nomad jobs.
 description: |-
-  Nomad is a flexible workload orchestrator that enables an organization to easily deploy and manage any containerized or legacy application using a single, unified workflow. Nomad can run a diverse workload of Docker, non-containerized, microservice, and batch applications.
-
-  Nomad enables developers to use declarative infrastructure-as-code for deploying applications. Nomad uses bin packing to efficiently schedule jobs and optimize for resource utilization. Nomad is supported on macOS, Windows, and Linux.
+  Nomad is a flexible workload orchestrator that enables an organization to easily deploy and manage any containerized or legacy application using a single, unified workflow.
 
   This track will introduce you to the open source version of Nomad. You will learn how to run some basic Nomad CLI commands, run a "dev" agent, initialize a simple Nomad job, and use the CLI, UI, and HTTP API to run, check the status of, and stop the job.
 icon: https://storage.googleapis.com/instruqt-hashicorp-tracks/logo/nomad.png
@@ -134,39 +132,43 @@ challenges:
     ```
     nomad job run redis.nomad
     ```
-    As a result, you'll see the lifecycle of the Evaluation, and that the state of the Evaluation has moved from 'pending' to 'complete.'
+    As a result, you'll see the lifecycle of the evaluation, that an allocation  was created on the node, and that the state of the evaluation has moved from "pending" to "complete".
 
     Next view the status of the Redis job:
     ```
     nomad status
     ```
-    The command returns a high level view of the status of the redis job, most importantly it's status and date submitted.
+    The command returns a high level view of the status of the redis job, most importantly it's status, "running", and date submitted.
 
     Now that the job is running, and you're able to view the status, stop the job:
     ```
     nomad job stop redis
     ```
-    Again, you'll see the progress of the job Evaluation as the job is stopped.
+    Again, you'll see the progress of the job evaluation as the job is stopped.
 
     View the status of the redis job again, identifying that the job has stopped:
     ```
     nomad status
     ```
+    The status is now "dead (stopped)".
 
-    Next, we'll run through a similar process utilizing the Nomad User Interface.  Click on the tab labeled 'Nomad UI'.
+    Next, we'll run through a similar process utilizing the Nomad User Interface (UI).  Click on the "Nomad UI" tab. (If it looks scrunched up, either make your browser window wider or click the rectangular icon above the "Nomad UI" tab to temporarily hide the assignment. Clicking that icon again will unhide the assignment.)
 
-    Within the User Interface, select the `redis` job.  Within the Job Overview secton, click the red 'Start' button.  Nomad will ask for confirmation, and please confirm by clicking 'Yes, Start.'
+    Within the Nomad UI, select the "redis" job.  On the "Job Overview" tab, click the red "Start" button.  Nomad will ask for confirmation; confirm by clicking the "Yes, Start" button.
 
-    In the User Interface, observe that the job is running.  Return to the Nomad CLI tab, and check on the job status:
+    In the UI, observe that the job is started and that there is one healthy allocation as desired.
+
+    Return to the Nomad CLI tab, and check on the job status:
     ```
     nomad status
     ```
+    Observe that the CLI shows the job status is "running".
 
-    Observe that within the CLI, the job status is 'running'.
+    Back in the Nomad UI, click the red "Stop" button, thereby stopping the job.  Once again, the Nomad UI will request confirmation; confirm by clicking the "Yes, Stop" button.
 
-    Back to the Nomad UI tab, click the red 'Stop' button, thereby stopping the job.  Once again, the Nomad UI will request confirmation.  Please confirm by clicking 'Yes, Stop.'
+    Within the Nomad UI, validate that the job has stopped.  This is indicated by the fact that the number of running jobs is 0.
 
-    Within the Nomad UI, validate that the job has stopped.  Return to the Nomad CLI tab, and confirm that a status of 'stopped' is also reflected in the CLI:
+    Return to the Nomad CLI tab, and confirm that the status of "dead (stopped)"" is also reflected in the CLI:
     ```
     nomad status
     ```
@@ -196,38 +198,40 @@ challenges:
   assignment: |-
     In this challenge, you'll run the same Nomad job using Nomad's HTTP API.
 
-    First, create the job json payload using the `redis.nomad` file.  Click on the 'Nomad CLI' tab and execute the following:
+    First, generate a JSON representation of the job from the redis.nomad file that can be sent to the HTTP API. Execute the following on the "Nomad CLI" tab:
     ```
     nomad job run -output redis.nomad > payload.json
     ```
 
-    Run the following command to post the payload file to Nomad, registering the job.  For more information regarding creating jobs using the API, refer to https://www.nomadproject.io/api/jobs.html#create-job
+    Run the following `curl` command against the Nomad server's HTTP API to create the job from the payload.json file. We use the `jq` program to make the response easier to read.
     ```
     curl --data @payload.json http://localhost:4646/v1/jobs | jq
     ```
+    The JSON data returned will include a job index, and evaluation ID, and other information.
 
-    The json data returned will include a job index, and evaluation ID, and other information.
+    For more information regarding creating jobs using Nomad's HTTP API, refer to https://www.nomadproject.io/api/jobs.html#create-job
 
-    With the job running, we can use the Nomad API to query the job details.  For more information regarding querying jobs using the API, refer to https://www.nomadproject.io/api/jobs.html#read-job-summary)
+    With the job running, we can use Nomad's HTTP API to query the job status:
     ```
     curl http://localhost:4646/v1/job/redis/summary | jq
     ```
+    Note that the JSON response includes the job ID ("redis") and counts for the numbers of allocations failed, started, running, etc.
 
-    Note that in the json response, the job ID, Namespace, and counts for number of jobs failed, started, running, etc., are all displayed.
+    For more information regarding querying jobs using the API, refer to https://www.nomadproject.io/api/jobs.html#read-job-summary)
 
-    Now that we have our job running, let's use the API to stop the job.  For more information regarding stopping a job using the API, refer to https://www.nomadproject.io/api/jobs.html#stop-a-job.
+    Finally, let's use the HTTP API to stop the job:
     ```
     curl --request DELETE http://localhost:4646/v1/job/redis | jq
     ```
+    The JSON data returned will include a job index, and evaluation ID, and other information.
 
-    The json data returned will include a job index, and evaluation ID, and other information.
+    For more information regarding stopping a job using the API, refer to https://www.nomadproject.io/api/jobs.html#stop-a-job.
 
-    To ensure the job has been properly terminated, query the job summary again:
+    To ensure that the job has been properly terminated, query the job summary API again:
     ```
     curl http://localhost:4646/v1/job/redis/summary | jq
     ```
-
-    The result should show that no jobs are currently running, and the number of complete jobs has increased.
+    The JSON response should show that no jobs are currently running and that the number of complete jobs has increased by 1.
   notes:
   - type: text
     contents: |-
@@ -244,4 +248,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 900
-checksum: "13623272872679080052"
+checksum: "6429745948083148324"
