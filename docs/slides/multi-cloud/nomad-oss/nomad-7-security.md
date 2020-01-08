@@ -158,11 +158,11 @@ name: nomad-chapter-7-ACL-overview-1
 # Access Control Overview
 
 .small[
-* Nomad provides an optional Access Control List (ACL) system.
-    * Controls access to data and APIs. 
-    * Capability-based
-    * Relies on tokens associated with policies
-    * Similar to the design of AWS IAM.
+Nomad provides an optional Access Control List (ACL) system.
+* Controls access to data and APIs. 
+* Capability-based
+* Relies on tokens associated with policies
+* Similar to the design of AWS IAM.
 ]
 
 ???
@@ -346,6 +346,7 @@ A management token is granted all capabilities, while client tokens are granted 
 
 ---
 name: nomad-chapter-7-ACL-capabilities-3
+class: table
 # ACL Capabilities and Scope.
 
 ACL Rules Available for Policies:
@@ -387,12 +388,12 @@ name: nomad-chapter-7-ACL-multi-region-configuration-2
 # Multi-Region Configuration.
 .small[
 Nomad depends on an "Authorative Region" when ACLS are enabled
-* Authoritive Region Source of Truth:
+* Authoritive Region Source of Truth For:
   * ACL Policies
   * Global ACL tokens.
 * All Regions Replicate ACL policies and Global ACL tokens
   * Central policy administration.
-  * local policy enforcement
+  * Local policy enforcement
 
 ]
 ???
@@ -416,10 +417,114 @@ count: false
 ???
 
 ---
-name: nomad-chapter-7-template
-# Template.
-PLACEHOLDER
+name: chapter-7-tls-topics
+# Securing Nomad with TLS Topics
 
+1. Nomad TLS Overview
+2. Certificates
+3. Configuration
+
+???
+* This is our topics slide.
+
+---
+name: nomad-chapter-7-TLS-overview-1
+# Nomad TLS Overview
+
+.small[
+Securing Nomad's cluster communication is not only important for security but can even ease operations by preventing mistakes and misconfigurations. Nomad optionally uses mutual TLS (mTLS) for all HTTP and RPC communication.
+]
+
+---
+name: nomad-chapter-7-TLS-overview-2
+# Nomad TLS Overview
+
+.small[
+Nomad's use of mTLS provides the following properties:
+* Prevent unauthorized Nomad access
+* Prevent observing or tampering with Nomad communication
+* Prevent client/server role or region misconfigurations
+* Prevent other services from masquerading as Nomad agents
+]
+
+???
+
+---
+name: nomad-chapter-7-TLS-overview-3
+# Nomad TLS Overview
+.small[
+Nomad's of mTLS has the benefit that it prevents Region misconfiguration. 
+
+**It Verifies if:**
+* The node is in the expected Region.
+* The node is configured for the role.
+
+It prevents other services with access to certificates from the same CA from impersonating Nomad agents.
+]
+
+???
+Preventing region misconfigurations is a property of Nomad's mTLS not commonly found in the TLS implementations on the public Internet. While most uses of TLS verify the identity of the server you are connecting to based on a domain name such as example.com, Nomad verifies the node you are connecting to is in the expected region and configured for the expected role (e.g. client.us-west.nomad). This also prevents other services who may have access to certificates signed by the same private CA from masquerading as Nomad agents. If certificates were identified based on hostname/IP then any other service on a host could masquerade as a Nomad agent.
+
+---
+name: nomad-chapter-7-TLS-certificates-1
+# Certificates
+## Certificate Requirements
+.small[
+* Certificates signed by a **Private** CA
+* All certifricates signed by the same CA
+
+]
+???
+
+---
+name: nomad-chapter-7-TLS-certificates-2
+# Certificates
+## Node Certificates
+.small[
+Nomad hosts are ephemeral so creating a certificate for each hostname has no security benefit.
+To provide the security needed certificztes must be signed with their region and role.
+
+e.g.
+* `client.global.nomad` client node for global region
+* `server.us-west.nomad` server node for us-west region
+
+]
+???
+
+---
+name: nomad-chapter-7-TLS-certificates-3
+# Certificates
+## Node Certificates
+.small[
+Adding `localhost` and `127.0.0.1` as subject alternate names (SANs) will allow tools like curl to communicte with the Nomad HTTP API endpoints from the same host.
+
+Adding the DNS resolvable hostname as a SAN will allow remote HTTP requests from third party tools.
+]
+???
+
+---
+name: nomad-chapter-7-TLS-certificates-4
+class: col-2
+# Configuration
+.small[
+Adding TLS configuration to the server and client configurations.
+* Copy the CA, Certificate and keyfile to the server
+* Edit the config hcl file and add the `tls` block.
+```json
+tls {
+  http = true
+  rpc  = true
+
+  ca_file   = "nomad-ca.pem"
+  cert_file = "server.pem"
+  key_file  = "server-key.pem"
+
+  verify_server_hostname = true
+  verify_https_client    = true
+}
+```
+
+]
 ???
 
 ---
@@ -438,8 +543,10 @@ count: false
 ---
 name: nomad-chapter-7-template
 # Template.
+.small[
 PLACEHOLDER
 
+]
 ???
 
 ---
