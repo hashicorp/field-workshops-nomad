@@ -2,7 +2,7 @@
 
 # Run the Nomad agent in Dev mode
 echo -e "nomad agent -dev" >> /root/.bash_history
-nomad agent > nomad.log -dev 2>&1 &
+nomad agent > nomad.log -dev -bind=0.0.0.0 2>&1 &
 
 # Get the Nomad node status
 echo -e "nomad node status" >> /root/.bash_history

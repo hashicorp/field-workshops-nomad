@@ -9,7 +9,11 @@ echo -e "nomad job run redis.nomad" >> /root/.bash_history
 nomad job run redis.nomad
 
 # Check the job status with the CLI
+echo -e "nomad job run redis.nomad" >> /root/.bash_history
+nomad status
 
 # Stop the job with the CLI
+echo -e "nomad job run redis.nomad" >> /root/.bash_history
+nomad job stop redis
 
 exit 0

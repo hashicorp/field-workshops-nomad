@@ -2,7 +2,7 @@
 
 set -e
 
-grep -q "nomad agent -dev -bind=0.0.0.0 &" /root/.bash_history || fail-message "You haven't started the development mode Nomad agent yet or forgot to bind it to 0.0.0.0 and run it in the background."
+grep -q "nomad agent -dev -bind=0.0.0.0 &" /root/.bash_history || fail-message "You haven't started the development mode Nomad agent yet"
 
 grep -q "nomad node status" /root/.bash_history || fail-message "You haven't checked status of your Nomad node yet."
 
