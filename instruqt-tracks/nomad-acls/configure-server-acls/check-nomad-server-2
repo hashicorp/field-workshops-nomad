@@ -6,4 +6,6 @@ grep -q "acl" /etc/nomad.d/server2.hcl || fail-message "Have you created the acl
 
 grep -q "enabled = true" /etc/nomad.d/server2.hcl || fail-message "You have not enabled acl in the server1.hcl file yet."
 
+grep -q "authoritative_region" /etc/nomad.d/server2.hcl || fail-message "You have not enabled authoritative_region in the server1.hcl file yet."
+
 exit 0
