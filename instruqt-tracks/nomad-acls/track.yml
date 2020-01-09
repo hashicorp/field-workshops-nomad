@@ -90,17 +90,17 @@ challenges:
 
     Let's start by configiuring ACLs in our Nomad Servers first.
 
-    To do this we need to enable acl in the acl stanza of each server file. Go to each `Server Config` tab and add the following section to the end of the file, below the server stanza.
+    To do this we need to enable acl in the acl stanza of each server file. Go to each "Server Config" tab and add the following section to the end of the file, below the server stanza.
     ```
     acl {
       enabled = true
     }
     ```
-    In a multi-region configuration you will need to add the ```authoritative_region``` configuration to the server stanza. Since we only have one region this is not strictly nessesary. We will however make the change to make it clear how it should look.
+    In a multi-region configuration you will need to add the "authoritative_region" configuration to the server stanza. Since we only have one region this is not strictly nessesary. We will however make the change to make it clear how it should look.
 
     Lets add this configuration now.
 
-    For each server open the `Server Config` tab and edit the server stanza to look like this.
+    For each server open the "Server Config" tab and edit the server stanza to look like this.
 
     ```
     server {
@@ -115,18 +115,19 @@ challenges:
     ```
     systemctl restart nomad
     ```
-    If you run the ``` nomad server members ``` command in the `Server 1` Tab what is the result?
+    If you run the ``` nomad server members ``` command in the "Server 1" Tab what is the result?
 
     If everything is configured correctly you will get an access denied error.
-    This is the expected behavior as Nomad ACLs is `Deny by default`. We will be fixing this in a later challenge.
+    This is the expected behavior as Nomad ACLs is "Deny by default". We will be fixing this in a later challenge.
 
     In the next challenge, you will configure the nomad client servers for utilizing ACLs.
   notes:
   - type: text
     contents: |-
       In this challenge, you will configure the Nomad Servers for utilizing ACLs.
-
-      In the second challenge, you will configure the Nomad Clients for utilizing ACLs.
+  - type: text
+      contents: |-
+      In the next challenge, you will configure the Nomad Clients for utilizing ACLs.
   tabs:
   - title: Server 1 Config
     type: code
@@ -179,19 +180,19 @@ challenges:
     ```
     After you have restarted the Nomad Agents we need to make sure that they have joined the cluster again.
 
-    If you run the following command in the `Server1` tab.
+    If you run the following command in the "Server1" tab.
     ```
     nomad node status
     ```
     You will see the same error that we recieved when we tried to check the server status earlier.
 
     In the next challemge we will bootstrap the cluster ACL API and create our first management token
-
   notes:
   - type: text
     contents: |-
       In this challenge, you will configure the Nomad Clients for utilizing ACLs.
-
+  - type: text
+      contents: |-
       In the next challenge, you will bootstrap the Nomad Cluster ACLs.
   tabs:
   - title: Server 1
@@ -218,62 +219,137 @@ challenges:
   difficulty: basic
   timelimit: 1800
 - slug: bootstrap-acls
+  id: agli9we12h2m
   type: challenge
   title: Bootstrap Nomad ACLs
   teaser: Bootstrap Nomad ACLs.
   assignment: |-
-    Now that we have the servers using ACLs we need to configure the Clients to use them as well.
+    Now that we have the servers and Clients using ACLs we need to bootstrap the ACL system.
 
-    Let's configiure ACLs in our Nomad Clients.
+    Let's get started.
 
-    We need to enable acl in the acl stanza of each server file. Go to each node config tab and add the following section to the end of the file, below the server stanza.
+    To enable the API we need to run the ```nomad acl bootstrap``` command. This will create the inital management token for us to use to setup ACL in general.
+    This token information should be kept in a safe place as it has "FULL UNRESTRICTED" access to your cluster.
+
+    Let us ACL bootstrap the cluster.
+
+    Open the "Server 1" tab and run the following.
+
     ```
-    acl {
-      enabled = true
+    cd nomad
+    nomad acl bootstrap > acl_token.txt
+    ```
+
+    This will bootstrap the cluster ACL API and export the bootstrap credentials into a file called `acl_token.txt` we will be using that to continue the challenge.
+
+    We now need to enable the anonymous policy so that we can interact with the cluster using the nomad cli.
+    To do this we need to export the `Secret ID` of our token as an environemnt variable called `NOMAD_TOKEN` and then use `curl` to create the policy.
+
+    Open the "Server 1 Edit" tab and you will see two files:
+      * anonymous.json
+      * acl_token.txt
+
+    Open the anonymous.json file.
+    It should look like this.
+    ```
+    {
+      "Name": "anonymous",
+      "Description": "Allow read-only access for anonymous requests",
+      "Rules": "
+        namespace \"default\" {
+          policy = \"read\"
+        }
+        agent {
+          policy = \"read\"
+        }
+        node {
+          policy = \"read\"
+        }
+      "
     }
-    ```
-    That is all that needs to be done.
 
-    Now we need to restart the nomad clients one at a time. Complete the following steps for each server.
     ```
-    systemctl restart nomad
-    ```
-    After we have restarted the servers we need to make that they have joined the cluster again.
 
-    Run the following command to make sure.
+    As you can see this policy allows read access to three rules
+    * namespace
+    * agent
+    * node
+
+    We now need to apply this policy to the cluster.
+    To do this we will need to create an `Authenticated` connection to the server that allows us to install policies.
+
+    Lets do that.
+
+    Open the acl_token.txt file
+    The file should look something like this.
+    ```
+    Accessor ID  = 6fa2c331-a156-9238-ed2d-fed666518934
+    Secret ID    = 187abe9e-abb5-a917-5176-99d7eb642b44
+    Name         = Bootstrap Token
+    Type         = management
+    Global       = true
+    Policies     = n/a
+    Create Time  = 2020-01-09 17:58:06.854257747 +0000 UTC
+    Create Index = 29
+    Modify Index = 29
+    ```
+    Copy the ``Secret ID` token.
+
+    Open the `Server1` console tab and enter the following and hit return.
+    ``` export NOMAD_TOKEN="PLACE_YOUR_SECURE_ID_HERE```
+
+    We now need to install the policy.
+
+    Run this command in the `Server 1` console tab.
+
+    ```curl --request POST --data @payload.json -H "X-Nomad-Token: $NOMAD_TOKEN" https://localhost:4646/v1/acl/policy/anonymous```
+
+    To verify that the policy has been applied, run the following command to make sure.
+    ```
+    curl https://localhost:4646/v1/jobs
+    ```
+    It should have an error.
+
+    Now we should be able to run our command from before.
+
+    Check the state of the servers.
     ```
     nomad server members
     ```
-    You will see an error as by default Nomad ACL is in a deny state which denies all access.
+    You should see the 3 servers that are all alive. One of the servers will be a leader.
 
-    To enable us to query the API again to see the status of our cluster we need to allow access for our client to the API.
+    Check the node status.
+    ```
+    nomad node  status
+    ```
+    You should see the 2 client servers.
 
-    Enabling the
-
-    You should see 3 servers that are all alive. There should be a new leader since we restarted Server 1.
-
-    In the next challenge, you wil see how the Nomad ACLs restrict what different users can do in Nomad.
+    In the next challenge, you will see how the Nomad ACLs restrict what different users can do in Nomad.
   notes:
   - type: text
     contents: |-
-      In this challenge, you will configure the Nomad Clients for utilizing ACLs.
-
-      In the third and final challenge, you will see how the ACLs restrict what different users can do in Nomad.
+      In this challenge, you will bootstrap the cluster to utilize ACLs.
+      The ACL system uses a whitelist or default-deny model. This means by default no permissions are granted. For clients making requests without ACL tokens, we may want to grant some basic level of access.
+  - type: text
+      contents: |-
+      In the final challenge, you will see how the ACLs restrict what different users can do in Nomad.
   tabs:
+  - title: Server 1 Edit
+    type: code
+    hostname: nomad-server-1
+    path: /root/
   - title: Server 1
     type: terminal
     hostname: nomad-server-1
-  - title: Client 1 Config
-    type: code
-    hostname: nomad-client-1
-    path: /etc/nomad.d/client1.hcl
+  - title: Server 2
+    type: terminal
+    hostname: nomad-server-2
+  - title: Server 3
+    type: terminal
+    hostname: nomad-server-3
   - title: Client 1
     type: terminal
     hostname: nomad-client-1
-  - title: Client 2 Config
-    type: code
-    hostname: nomad-client-2
-    path: /etc/nomad.d/client2.hcl
   - title: Client 2
     type: terminal
     hostname: nomad-client-2
@@ -326,4 +402,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 1800
-checksum: "9347072234268902856"
+checksum: "12015942460176170913"
