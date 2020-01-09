@@ -126,7 +126,7 @@ challenges:
     contents: |-
       In this challenge, you will configure the Nomad Servers for utilizing ACLs.
   - type: text
-      contents: |-
+    contents: |-
       In the next challenge, you will configure the Nomad Clients for utilizing ACLs.
   tabs:
   - title: Server 1 Config
@@ -192,7 +192,7 @@ challenges:
     contents: |-
       In this challenge, you will configure the Nomad Clients for utilizing ACLs.
   - type: text
-      contents: |-
+    contents: |-
       In the next challenge, you will bootstrap the Nomad Cluster ACLs.
   tabs:
   - title: Server 1
@@ -331,7 +331,7 @@ challenges:
       In this challenge, you will bootstrap the cluster to utilize ACLs.
       The ACL system uses a whitelist or default-deny model. This means by default no permissions are granted. For clients making requests without ACL tokens, we may want to grant some basic level of access.
   - type: text
-      contents: |-
+    contents: |-
       In the final challenge, you will see how the ACLs restrict what different users can do in Nomad.
   tabs:
   - title: Server 1 Edit
