@@ -19,7 +19,7 @@ client {
 }
 EOF
 
-# Create a syslog config file 
+# Create a syslog config file
 cat <<-EOF > /etc/rsyslog.d/30-nomad.conf
 if \$programname == 'nomad' or \$syslogtag == 'nomad' then /var/log/nomad/nomad.log
 & stop
