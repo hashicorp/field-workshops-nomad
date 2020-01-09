@@ -1,0 +1,9 @@
+#!/bin/bash -l
+
+set -e
+
+grep -q "acl" /root/nomad/server3.hcl || fail-message "Have you created the acl stanza in the server1.hcl file?."
+
+grep -q "enabled = true" /root/nomad/server3.hcl || fail-message "You have not enabled acl in the server1.hcl file yet."
+
+exit 0
