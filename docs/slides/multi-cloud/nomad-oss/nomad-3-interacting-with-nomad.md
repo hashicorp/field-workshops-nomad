@@ -150,7 +150,7 @@ name: lab-challenge-3.3
 
 ---
 name: lab-challenge-3.4
-# Lab Challenge 3.4: Use Nomad's HTTP API
+# 👩‍💻 Lab Challenge 3.4: Use Nomad's HTTP API
 
 * In this challenge, you'll use Nomad's HTTP API to do what you did in the previous challenge.
 * Instructions:
