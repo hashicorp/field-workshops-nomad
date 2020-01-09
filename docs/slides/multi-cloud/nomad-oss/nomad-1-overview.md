@@ -32,4 +32,4 @@ name: chapter-1-topics
 
 
 ???
-* This is our chapter topics slide.
+* This is our upcoming chapter topics slide.
