@@ -38,12 +38,13 @@ name: Declaring Jobs and Their Target Datacenters
 
 .smaller[
 - [Nomad Jobs](https://www.nomadproject.io/docs/job-specification) are the primary configuration that users interact with when using Nomad.
-- Nomad models infrastructure as regions and datacenters. 
-- Regions may contain multiple datacenters. 
-- Servers are assigned to a specific region, managing state and making scheduling decisions within that region. 
+- Nomad models infrastructure as regions and datacenters.
+- Regions may contain multiple datacenters.
+- Servers are assigned to a specific region, managing state and making scheduling decisions within that region.
 ]
-<br>
+
 ```go
+
 *job "example" {
 * datacenters = ["dc1"]
   group "cache" {
@@ -61,18 +62,20 @@ name: Declaring Jobs and Their Target Datacenters
 ---
 class: compact, col-2
 name: Declaring Tasks, Task Groups, and Task Drivers
-### Declaring Task Groups
+# Declaring Task Groups
 
 .smaller[
 - The [group stanza](https://www.nomadproject.io/docs/job-specification/group.html) defines a series of tasks that should be co-located on the same Nomad client.
 - Any task within a group will be placed on the same client.
+- But note that multiple instances of a task group can be placed.
 ]
 <br>
 <br>
 <br>
 <br>
-<br>
+
 ```go
+
 job "example" {
   datacenters = ["dc1"]
 *  group "cache" {
@@ -85,7 +88,7 @@ job "example" {
 *     config {
 *     }
 *   }
-  }
+* }
 }
 ```
 
@@ -106,9 +109,9 @@ job "example" {
    group "cache" {
 *    task "redis" {
 *      driver = "docker"
-*     config {
-*     }
-    }
+*      config {
+*      }
+*    }
   }
 }
 ```
@@ -121,8 +124,8 @@ class: compact, col-2
 name: Declaring Tasks, Task Groups, and Task Drivers
 ### Declaring Task Drivers
 .smaller[
--   [Task drivers](https://www.nomadproject.io/docs/drivers) are used by Nomad clients to execute a task and provide resource isolation.
-    -  Task driver resource isolation is intended to provide a degree of separation of Nomad client CPU / memory / storage between tasks.
+-   [Task Drivers](https://www.nomadproject.io/docs/drivers) are used by Nomad clients to execute a task and provide resource isolation.
+    -  Task driver resource isolation is intended to provide a degree of separation of Nomad client CPU, memory, and storage between tasks.
     -  Resource isolation effectiveness is dependent upon individual task driver implementations and underlying client operating systems.
 ]
 <br>
@@ -151,7 +154,7 @@ class: compact, col-2
 name: Declaring Tasks, Task Groups, and Task Drivers
 ### HashiCorp Task Drivers
 .smaller[
-- There are 5 HashiCorp developed and maintained Task Drivers
+- There are 5 task drivers developed and maintained by HashiCorp
   - [Docker Driver](https://www.nomadproject.io/docs/drivers/docker.html)
   - [Isolated Fork/Exec Driver](https://www.nomadproject.io/docs/drivers/exec.html)
   - [Java Driver](https://www.nomadproject.io/docs/drivers/java.html)
@@ -160,7 +163,7 @@ name: Declaring Tasks, Task Groups, and Task Drivers
 <br>
 
 ###  Community Task Drivers
-- There are 5 OSS Community supported Task Drivers
+- There are 5 open source community supported task drivers
   - [LXC Driver Driver](https://www.nomadproject.io/docs/drivers/external/lxc.html)
   - [Singularity Driver](https://www.nomadproject.io/docs/drivers/external/singularity.html)
   - [Jail Task Driver](https://www.nomadproject.io/docs/drivers/external/jail-task-driver.html)
@@ -175,13 +178,14 @@ name: Declaring Tasks, Task Groups, and Task Drivers
 class: compact, col-2
 name: Specifying Required Resources and Networks
 # Specifying Required Resources
-- The [resources stanza](https://www.nomadproject.io/docs/job-specification/resources.html) describes the requirements a task needs to execute. 
+- The [resources stanza](https://www.nomadproject.io/docs/job-specification/resources.html) describes the requirements a task needs to execute.
   - Resource requirements include memory, network, CPU, and device.
+  - Tasks will only be scheduled to client nodes that satisfy its resource requirements.
 
-<br>
-<br>
 
 ```go
+
+
 job "example" {
   datacenters = ["dc1"]
   group "cache" {
@@ -191,10 +195,10 @@ job "example" {
 *       cpu    = 500
 *       memory = 256
 *       network {
-          mbits = 100
-          port  "db"  {}
-        }
-      }
+*         mbits = 100
+*         port  "db"  {}
+*       }
+*     }
     }
 ```
 
@@ -205,15 +209,16 @@ job "example" {
 class: compact, col-2
 name: Specifying Required Resources and Networks
 # Specifying Networking
-- The [network stanza](https://www.nomadproject.io/docs/job-specification/network.html) specifies the networking requirements for the task. 
+- The [network stanza](https://www.nomadproject.io/docs/job-specification/network.html) specifies the networking requirements for the task.
   - Bandwidth
-  - Port allocations
+  - Port Allocations
 
 <br>
 <br>
 <br>
 
 ```go
+
 job "example" {
   datacenters = ["dc1"]
   group "cache" {
@@ -235,35 +240,36 @@ job "example" {
 
 ---
 class: compact, col-2
-name: Specifying Required Resources and Networks 
+name: Specifying Required Resources and Networks
 # Specifying Port Mapping
 .smaller[
 - Nomad supports [Dynamic Ports](https://www.nomadproject.io/docs/job-specification/network.html#dynamic-ports), [Static Ports](https://www.nomadproject.io/docs/job-specification/network.html#static-ports), and [Mapped Ports](https://www.nomadproject.io/docs/job-specification/network.html#mapped-ports).
+
+* In this example, Redis is listening on port 6379 inside the Docker container.
+* Nomad will dynamically select a port and map requests sent to it to port 6379 inside the container.
 ]
-    In this example for the Docker driver, the service is listening on port 6379 inside the Redis container. The driver will automatically map the dynamic port to this service.
-<br>
-<br>
-<br>
-<br>
+
 <br>
 <br>
 
 ```go
+
+
 job "example" {
   datacenters = ["dc1"]
   group "cache" {
     task "redis" {
-        driver = "docker"
-*       config {
-*           port_map = {
-*           db = 6379
-*           }
+      driver = "docker"
+      config {
+*       port_map = {
+*         db = 6379
 *       }
-*       resources {
-*           network {
-*           port "db" {}
-*           }
-        # ...
+      }
+      resources {
+        network {
+*         port "db" {}
+        }
+      }
 ```
 
 ???
@@ -274,7 +280,7 @@ class: compact, col-2
 name: Specifying Required Resources and Networks
 # Specifying Bridged Networks
 .smaller[
--  When the network stanza is defined at the group level with [bridge as the networking mode](https://www.nomadproject.io/docs/job-specification/network.html#bridge-mode), all tasks in the task group share the same network namespace.
+-  When the network stanza is defined at the group level with [bridge](https://www.nomadproject.io/docs/job-specification/network.html#bridge-mode) as the networking mode, all tasks in the task group share the same network namespace.
 -  Tasks running within a network namespace are not visible to applications outside the namespace on the same host.
 ]
 
@@ -283,33 +289,34 @@ name: Specifying Required Resources and Networks
 <br>
 
 ```go
+
 job "example" {
   datacenters = ["dc1"]
   group "cache" {
     task "redis" {
       driver = "docker"
-      resources {
-        cpu    = 500
-        memory = 256
-        network {
-*       mode = "bridge"
-*           port "http" {
-*           static = 9002
-*           to     = 9002
-*           }
-        }
+    }
+    network {
+*     mode = "bridge"
+*       port "http" {
+*         static = 9002
+*         to     = 9002
+*       }
+*     }
+    }
+  }
 ```
 
 ???
 * good time to throw in consul ;)
- 
+
 ---
 class: compact, col-2
 name: Registering Tasks as Consul Services
 # Registering Tasks as Consul Services
 .smaller[
 - The [service stanza](https://www.nomadproject.io/docs/job-specification/service.html) instructs Nomad to register the service with Consul for Service Discovery.
-- We can define tags, health checks, ports, and [several other attributes](https://www.nomadproject.io/docs/job-specification/service.html#service-parameters).
+- We can define tags, health checks, ports, and [several other parameters](https://www.nomadproject.io/docs/job-specification/service.html#service-parameters).
 ]
 <br>
 <br>
@@ -321,6 +328,7 @@ name: Registering Tasks as Consul Services
 <br>
 <br>
 ```go
+
 job "example" {
   datacenters = ["dc1"]
   group "cache" {
@@ -334,8 +342,23 @@ job "example" {
 *           interval = "10s"
 *           timeout  = "2s"
 *         }
-        # ...
+*       }
+*     }
 ```
 
 ???
 * for sure now talk about consul
+
+---
+name: nomad-5-Summary
+# 📝 Chapter 5 Summary
+
+* In this chapter, you learned some of the most important aspects of Nomad job specification:
+  * Jobs and their target datacenters
+  * Task groups, tasks, and task drivers
+  * Required resources
+  * Networking and port mapping
+  * Registering tasks as Consul services
+
+???
+* What we learned in this chapter
