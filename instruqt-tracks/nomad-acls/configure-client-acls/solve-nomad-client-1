@@ -1,3 +1,13 @@
 #!/bin/bash -l
 
+# Check the ACL Enabled
+cat <<EOF >> /root/nomad/client1.hcl
+
+# ACL Enabled
+
+acl {
+    enabled = true
+}
+EOF
+
 exit 0
