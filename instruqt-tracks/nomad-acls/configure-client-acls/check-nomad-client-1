@@ -2,8 +2,8 @@
 
 set -e
 
-grep -q "acl" /root/nomad/client1.hcl || fail-message "Have you created the acl stanza in the client1.hcl file?."
+grep -q "acl" /etc/nomad.d/client1.hcl || fail-message "Have you created the acl stanza in the client1.hcl file?."
 
-grep -q "enabled = true" /root/nomad/client1.hcl || fail-message "You have not enabled acl in the client1.hcl file yet."
+grep -q "enabled = true" /etc/nomad.d/client1.hcl || fail-message "You have not enabled acl in the client1.hcl file yet."
 
 exit 0
