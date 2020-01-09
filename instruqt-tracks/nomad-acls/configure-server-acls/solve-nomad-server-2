@@ -1,7 +1,7 @@
 #!/bin/bash -l
 
 # Check the ACL Enabled
-cat <<EOF >> /root/nomad/server2.hcl
+cat <<EOF >> /etc/nomad.d/server2.hcl
 
 # ACL Enabled
 
@@ -11,6 +11,6 @@ acl {
 EOF
 
 # Check Authoritive region
-ex -s -c '13i|  authoritative_region = "global"' -c x /root/nomad/server2.hcl
+ex -s -c '13i|  authoritative_region = "global"' -c x /etc/nomad.d/server2.hcl
 
 exit 0

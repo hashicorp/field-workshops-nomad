@@ -16,8 +16,8 @@ tags:
 - acls
 owner: hashicorp
 developers:
-- roger@hashicorp.com
 - lhaig@hashicorp.com
+- roger@hashicorp.com
 private: true
 published: true
 challenges:
@@ -160,6 +160,7 @@ challenges:
   difficulty: basic
   timelimit: 1800
 - slug: configure-client-acls
+  id: ncufcvo3ycxz
   type: challenge
   title: Configure Nomad Client ACLs
   teaser: Configure Nomad Client ACLs.
@@ -259,4 +260,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 1800
-checksum: "14990926761729431491"
+checksum: "4496953691593459505"
