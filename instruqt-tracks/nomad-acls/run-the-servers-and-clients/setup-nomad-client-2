@@ -1,9 +1,11 @@
 #!/bin/bash -l
 
-mkdir nomad
+# Create config directory
+mkdir -p /etc/nomad.d
+chmod a+w /etc/nomad.d
 
-# Write Nomad Client 2 Config
-cat <<-EOF > /root/nomad/client2.hcl
+# Write Server main config file
+cat <<-EOF > /etc/nomad.d/client2.hcl
 # Setup data dir
 data_dir = "/tmp/nomad/client2"
 
@@ -17,8 +19,55 @@ client {
 }
 EOF
 
-# Run client2
-cd nomad
-nomad agent -config client2.hcl > nomad.log 2>&1 &
+# Create a syslog config file 
+cat <<-EOF > /etc/rsyslog.d/30-nomad.conf
+if \$programname == 'nomad' or \$syslogtag == 'nomad' then /var/log/nomad/nomad.log
+& stop
+EOF
+
+#restart syslog
+systemctl restart rsyslog
+
+# Setup Nomad for systemctl
+cat <<-EOF > /etc/systemd/system/nomad.service
+[Unit]
+Description=Nomad
+Documentation=https://nomadproject.io/docs/
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+ExecReload=/bin/kill -HUP $MAINPID
+ExecStart=/usr/local/bin/nomad agent -config /etc/nomad.d
+KillMode=process
+KillSignal=SIGINT
+LimitNOFILE=infinity
+LimitNPROC=infinity
+Restart=on-failure
+RestartSec=2
+StartLimitBurst=3
+TasksMax=infinity
+
+# make sure log directory exists and owned by syslog
+PermissionsStartOnly=true
+ExecStartPre=/bin/mkdir -p /var/log/nomad
+ExecStartPre=/usr/bin/touch /var/log/nomad/nomad.log
+ExecStartPre=/bin/chown -R syslog:adm /var/log/nomad
+ExecStartPre=/bin/chmod -R 755 /var/log/nomad
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=nomad
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Enable the service
+systemctl enable nomad
+systemctl start nomad
+
+# Configure Nomad Autocomplete
+nomad -autocomplete-install
+complete -C /usr/local/bin/nomad nomad
 
 exit 0
