@@ -336,3 +336,6 @@ job "example" {
 *         }
         # ...
 ```
+
+???
+* for sure now talk about consul
