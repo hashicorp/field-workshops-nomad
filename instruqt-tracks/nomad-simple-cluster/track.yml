@@ -4,7 +4,7 @@ type: track
 title: Nomad Simple Cluster
 teaser: Learn how to run a simple Nomad cluster with one server and two clients.
 description: |-
-  Nomad is a flexible workload orchestrator that enables an organization to easily deploy and manage any containerized or legacy application using a single, unified workflow. Nomad can run a diverse workload of Docker, non-containerized, microservice, and batch applications.
+  Nomad is a flexible workload orchestrator that enables an organization to easily deploy and manage any containerized or legacy application using a single, unified workflow.
 
   This track will show you how to run a simple Nomad cluster with one server and two clients. It will also show you how to run a Nomad job and check the status of the nodes and the job.
 
@@ -33,8 +33,7 @@ challenges:
     cd nomad
     nomad agent -config server.hcl > nomad.log 2>&1 &
     ```
-    You should see a single line like `[1] 2174`, which gives the PID of the Nomad server. If you want, you can inspect the nomad.log file by running `cat nomad.log`. This will show
-    many messages including one that says "Nomad agent started!"
+    You should see a single line like `[1] 2174`, which gives the PID of the Nomad server. If you want, you can inspect the nomad.log file by running `cat nomad.log`. This will show many messages including one that says "Nomad agent started!"
 
     Back on the "Configuration Files" tab, look at the `client1.hcl` configuration file. It assigns the name `client1` to the first client, configures it as a Nomad client, and tells it to connect to the server using the DNS name assigned to it by the Instruqt track's configuration file, `nomad-server`.
 
@@ -70,13 +69,17 @@ challenges:
 
     If clicking the Check button at the end of the challenge says you have not done this, you might have run it on one of the other tabs. Please run it again on the "Server" tab so that it will end up in your .bash_history file on that VM.
 
-    You can now inspect the server and clients in the Nomad UI. You might initially see a "Server Error" message in the UI saying that "A server error prevented data from being sent to the client".  Just click on the "Go to Clients" button. You should then see the UI and can inspect the server and clients that you started. Of course, you won't see any jobs yet. You will start one in the next challenge.
+    You can now inspect the server and clients in the Nomad UI. You might initially see a "Server Error" message in the UI saying that "A server error prevented data from being sent to the client".  Just click on the "Go to Clients" button. You should then see the UI and can inspect the server and clients that you started.
+
+    Of course, you won't see any jobs yet. You will start one in the next challenge.
+
+    If the Nomad UI is scrunched up, you can make your browser window wider.  You could also click the rectangular icon to the right of the Nomad UI tab to hide the challenge assignment.  click it again to redisplay the challenge.
   notes:
   - type: text
     contents: |-
       The open source version of Nomad (Nomad OSS) is a single binary that you can download and run on your laptop or virtual workstation.
 
-      It can run as a server or as a client. In this track, you'll run one server and two clients and then launch a job to them.
+      It can run as a server or as a client. In this track, you'll run one server and two clients and then run a job on them.
 
       You can always download the latest version of Nomad OSS here:
       https://www.nomadproject.io/downloads.html
@@ -104,42 +107,50 @@ challenges:
     hostname: nomad-server
     port: 4646
   difficulty: basic
-  timelimit: 1800
-- slug: run-first-job
-  id: gpvvzswsnxfg
+  timelimit: 600
+- slug: create-first-job-spec
+  id: tfmp6ig1fzb1
   type: challenge
   title: Create Your First Nomad Job
-  teaser: Initialize a new Nomad job specification file to define the resources.
+  teaser: Create a new sample Nomad job specification file.
   assignment: |-
-    ## Create New Job File
-    In this challenge, you will initialize a new Nomad job and then run it. First, run the following init command under the Server Window to generate the sample job specification file called example.nomad:
+    In this challenge, you will initialize a new Nomad job and then run it.
 
+    First, run the following command on the "Server" tab to generate the sample job specification file called example.nomad:
     ```
     cd nomad
     nomad job init -short
     ```
 
-    This will generate a short or minimal job specification for our challenge. You may also run the this without the `-short` option to have a complete job spec that includes the comments for each section.
+    This will generate a minimal job specification file for our challenge. You may also run the this without the `-short` option to have a complete job specification that includes the comments for each section.
 
-    ## Review the newly created file
-    Click on the Job Spec directory and review the newly created example.nomad. The init file creates a sample specification to deploy a simple redis docker image\nthat demonstrates some common configurations for tasks, task groups, runtime constraints, and resource allocation.
+    Click on the "Job Spec" tab and review the newly created example.nomad file.
 
-    The job specification is specified in HCL, which aims to strike a balance between human readable and editable, and machine-friendly.
+    The `init` command creates a sample job specification that deploys a Redis Docker image and demonstrates the use of task groups, tasks, Nomad's Docker driver, resource requirements, and the mapping of ports dynamically selected by Nomad to static ports used inside the redis Docker container.
+
+    The job specification is written in HCL, which aims to strike a balance between being human readable, editable, and machine-friendly.
+
+    We can see that the job is called "example", that it has a single task group called "cache", and that this task group has a single task called "redis" that uses the Docker driver to launch a standard redis image. We can also see that 500 MHz of CPU capacity and 256 MB of memory are required by the task and that a port called "db" dynamically generated by Nomad is mapped to port 6379 inside the Docker container.
+
+    If you look at the Jobs section of the Nomad UI, you will not yet see the new job. It will show up in the next challenge when you run it for the first time.
   notes:
   - type: text
-    contents: The Nomad job specification (or "jobspec" for short) defines the schema
-      for Nomad jobs. Nomad jobs are specified in HCL, which aims to strike a balance
-      between human readable and editable, and machine-friendly.
+    contents: |-
+      In this challenge, you will generate and examine a Nomad job specification which defines the schema for Nomad jobs, telling Nomad what to do when it runs a job.
+
+      Nomad jobs are specified in HCL, which aims to strike a balance between being human readable, editable, and machine-friendly.
+
+      See https://www.nomadproject.io/docs/job-specification/index.html for more details.
   - type: text
-    contents: The Nomad job specification allows operators to specify a schema for
-      all aspects of running the job. This includes tasks, images, deployment strategy,
-      resources, priorities, constraints, service registrations, secrets, and other
-      information required to deploy the workload.
+    contents: |-
+      The Nomad job specification allows operators to specify a schema for all aspects of running the job.
+
+      This includes task groups, tasks, drivers, Docker images, deployment strategy, resources, priorities, constraints, service registrations, secrets, and other information required to deploy the workloads included in the job.
   tabs:
   - title: Job Spec
     type: code
     hostname: nomad-server
-    path: /root/nomad/
+    path: /root/nomad/example.nomad
   - title: Server
     type: terminal
     hostname: nomad-server
@@ -148,151 +159,126 @@ challenges:
     hostname: nomad-server
     port: 4646
   difficulty: basic
-  timelimit: 1800
-- slug: submit-your-first-nomad-job
-  id: ice2jakx6ja1
+  timelimit: 300
+- slug: run-your-first-job
+  id: zstyej0kzykz
   type: challenge
-  title: Submit Your First Nomad Job
-  teaser: Plan and Sumbit an sample Nomad Job
+  title: Run and Monitor Your First Nomad Job
+  teaser: Run and monitor the status of your first Nomad job
   assignment: |-
-    To get started, we are going to use the example file example.nomad which you can see open in the editor window.  In this example job file, we have declared a single task 'redis' which is using the Docker driver to run the task.
-    The primary way you interact with Nomad is with the run command. The run command takes a job file and registers it with Nomad. This is used both to register new jobs and to update existing jobs.
+    ## Run the Job
+    To get started, you will use the `example.nomad` job specification file that you created in the previous challenge. You can review it again on the "Job Spec" tab.
 
-    We can register our example job now:
+    Recall that this job declares a single task, "redis" which uses Nomad's Docker driver to run the task.
+
+    Nomad jobs are planned with the `nomad job plan` command and run with the `nomad job run` command. The latter command is used both to register new jobs and to update existing jobs. In both cases, the job is sbumitted to a Nomad server which then schedules it on an available Nomad node.
+
+    It is common to skip planning a job the first time you run it since there is no risk of breaking what is not yet running.
+
+    Run the job with these commands on the "Server" tab:
     ```
     cd nomad
     nomad run example.nomad
     ```
-  notes:
-  - type: text
-    contents: In Nomad, the description of the job and all its requirements are maintained
-      in a single file called the "job file". This job file resides locally on disk
-      and it is highly recommended that you check job files into source control.
-  - type: text
-    contents: 'The general flow for submitting a job in Nomad is: 1. Author a job
-      file according to the job specification 2. Plan and review changes with a Nomad
-      server and 3. Submit the job file to a Nomad server'
-  tabs:
-  - title: Config Files
-    type: code
-    hostname: nomad-server
-    path: /root/nomad/
-  - title: Server
-    type: terminal
-    hostname: nomad-server
-  - title: Nomad UI
-    type: service
-    hostname: nomad-server
-    port: 4646
-  difficulty: basic
-  timelimit: 300
-- slug: reviewing-a-job-deployment
-  id: 6fl6jt4czeqc
-  type: challenge
-  title: Reviewing a Job Deployment
-  teaser: Inspect and Evaluate a Job Deployment
-  assignment: |-
-    After a job is submitted, you can query the status of that job using the job status command:
+    You will see a response from the Nomad server indicating that an evaluation has been created and that an allocation has been submitted to one of the client nodes. You will also see a message indicating that the evaluation has been completed.
 
+    ## Monitor the Job
+    A successful job submission is not an indication of a successfully-running job. A successful job submission means that the Nomad server was able to issue the proper scheduling commands; it does not indicate the job is actually running.
+
+    So, let's check the status of the job we just ran on the "Server" tab:
     ```
-    cd nomad
     nomad job status example
     ```
+    This will show the ID of the job ("example"), the Status ("running"), the datacenters it is running in, and some other high-level information.  It will then show a summary of the job's task groups, indicating how many are queued, started, running, failed, completed, and lost.
 
-    ```
-    nomad job status -evals example
-    ```
+    This is followed by information about the latest deployment of the job and by information about the job's allocations. You should see that one allocation is running.
 
-    `nomad eval status <Evaluation ID>`
+    Next, get more information about the evaluation by running:<br>
+    `nomad eval status <EvaluationID>`<br>
+    on the "Server" tab where <EvaluationID\> is the ID of the evaluation displayed when you ran the job. (You can but don't need to wrap the evaluation ID in quotes.)
 
-    `nomad alloc-status <Allocation ID>`
-    ```
+    Now, get more information about the allocation by running:<br>
+    `nomad alloc status <AllocationID>`<br>
+    where <AllocationID\> is the ID of the allocation returned when you ran the job. This will give you information about the "redis" task that was run including its IP and port and its recent events.
 
-    ```
-    nomad logs <Evaluation ID> redis
-    ```
+    Finally, you should look at the logs for the task of an allocation. Do this for the "redis" task by running:<br>
+    `nomad alloc logs <AllocationID> redis`<br>
+    where <AllocationID\> is the same allocation ID you used for the last command.  You will see the complete logs from the Redis Docker container that was launched.
 
+    We encourage you to also look at the status of the job and its allocation and the task log in the Nomad UI.  To do this, click on the "example" job, scroll down, select the allocation, scroll down, click "redis", and select the "Logs" tab.
 
-    Here we can see that the result of our evaluation was the creation of a single task running in
-    its own allocation.
+    You can also look at deployment details on the "Deployments" tab, inspect allocations on the "Allocations" tab, and see evaluation details on the "Evaluations" tab.
+
+    In the next challenge, you will modify the example job specification to increase the task group count and run multiple instances of the Redis container.
   notes:
   - type: text
     contents: |-
-      A successful job submission is not an indication of a successfully-running
-      job. This is the nature of a highly-optimistic scheduler. A successful job submission
-      means the server was able to issue the proper scheduling commands. It does not
-      indicate the job is actually running. To verify the job is running, we need
-      to inspect its state.
+      In this challenge, you will run the job that you created in the previous challenge. You will then monitor the status of the job, its evaluation, and its single allocation.
+
+      The general flow for submitting a Nomad job is:
+
+      1. Create and edit a job specification file.
+      2. Optionally run the `nomad job plan` command to run the Nomad scheduler in a dry-run mode to see what would happen if you really ran it.
+      3. Submit the job to the Nomad servers with the `nomad job run` command.
+  - type: text
+    contents: |-
+      You can learn more about the `nomad job` commands under https://www.nomadproject.io/docs/commands/job.html.
+
+      You can learn about Nomad's Docker driver under https://www.nomadproject.io/docs/drivers/docker.html.
   tabs:
-  - title: Config Files
+  - title: Job Spec
     type: code
     hostname: nomad-server
-    path: /root/nomad/
+    path: /root/nomad/example.nomad
   - title: Server
     type: terminal
     hostname: nomad-server
-    path: /root/nomad/
   - title: Nomad UI
     type: service
     hostname: nomad-server
     port: 4646
   difficulty: basic
-  timelimit: 300
+  timelimit: 900
 - slug: modifying-a-job
   id: qfn6u9nh1mrj
   type: challenge
-  title: Modifying a Job
-  teaser: Change the resources in an existing job deployment
+  title: Modify a Job to Run More Instances
+  teaser: Modify an existing job to run more instances of its task group.
   assignment: |-
-    ## Modify the jobspec file (example.nomad)
-    Let's edit the example.nomad file to update the count and set it to 3. Between the `group` and `task` stanza:
+    Since your Redis database has been getting a lot of traffic, you've decided to run more instances of it to handle the load.
+
+    Let's edit the example.nomad file on the "Job Spec" tab to update the `count` of the job's task group, setting it to 3. Do this  between the `group` and `task` stanzas so that you end up with:
     ```
     group "cache" {
+     count = 3
       task "redis" {
     ```
-    Insert a line by adding `count = 3` property to increase the number of deployed redis tasks from 1 to 3.
+    Once you have finished modifying the job specification, click the disk icon above the file to save it.
 
-    ## Run a Plan on the new updates
-    Once you have finished modifying the job specification, use the plan command to invoke a dry-run of the scheduler to see what would happen if you ran the updated job:
+    Change to the nomad directory on the "Server" tab before planning and running your modified job:
+    ```
+    cd nomad
+    ```
+
+    Next, use the `nomad job plan` command to invoke a dry-run of the Nomad scheduler to see what would happen if you ran the updated job:
     ```
     nomad plan example.nomad
     ```
-    We can see that the scheduler detected the change in count and informs us that it will cause 2 new instances to be created. The in-place update that will occur is to push the update job specification to the existing allocation and will not cause any service interruption. We can then run the job with the run command the plan emitted.
-    ## Run the Job to apply the updates
+    You will see that the scheduler detected the change in count and informs us that it will cause 2 new allocations to be created. The in-place update that will occur pushes the update of the job specification to the existing allocation but will not cause any service interruption.
+
     After running the plan, check if the dry-run is successful to see if there's enough resources for the changes. If it completes, then we're ready to apply the updates!
-    ```
-    nomad run -check-index <replace this with check-index number> example.nomad
-    ```
-    By using the `nomad run` command with the `check-index` option from the previous plan output, we can see that additional allocations of 2 as intended.
-    Review the UI tab to watch the additional allocations as they get deployed.
-  notes:
-  - type: text
-    contents: The definition of a job is not static, and is meant to be updated over
-      time. You may update a job to change the docker container, to update the application
-      version, or to change the count of a task group to scale with load.
-  tabs:
-  - title: Config Files
-    type: code
-    hostname: nomad-server
-    path: /root/nomad/
-  - title: Server
-    type: terminal
-    hostname: nomad-server
-  - title: Nomad UI
-    type: service
-    hostname: nomad-server
-    path: /root/nomad/
-    port: 4646
-  difficulty: basic
-  timelimit: 300
-- slug: stopping-a-job
-  id: rmve1ekxvtej
-  type: challenge
-  title: Stopping a Job
-  teaser: Stop a running job and clean-up deployed
-  assignment: |-
-    ## Stopping a Job
-    To stop the job `example.nomad` and de-allocate all the redis docker instances, run the following command:
+
+    Do that by running the following:<br>
+    `nomad run -check-index <job_modify_index> example.nomad`<br>
+    where <job_modify_index\> is the job modify index returned by the `nomad job plan` command.
+
+    By using the `nomad run` command with the `check-index` option and the job modify index from the previous plan output, we guarantee that running the job will do exactly what the plan showed.
+
+    After running the job, we can see that 2 additional allocations were created as desired.
+
+    Look at the job in the Nomad UI tab to verify that the additional allocations were deployed. You should see 3 allocations in the "Running" status. Also look at both clients in the Nomad UI and verify that one of them has 2 allocations and that the other has 1 allocation.
+
+    To stop the job and de-allocate all the redis docker containers, run the following command on the "Server" tab:
     ```
     nomad job stop example
     ```
@@ -302,26 +288,30 @@ challenges:
     nomad status example
     ```
     Inspect the following properties:
-    1. Check that the Status attribute is marked as `dead (stopped)`
-    2. Under the Allocations section, verify that the all allocations are in the `stop` state under the Desired column
+
+    1. Check that the Status attribute of the job is marked as "dead (stopped)".
+    2. Under the Allocations section, verify that all three allocations are have the "complete" status.
+
+    <br>
+    Congratulations on finishing the Nomad Basics track!
   notes:
   - type: text
-    contents: The final step in a job lifecycle is stopping the job. This is done
-      with the stop command that creates an evaluation which is used to stop all the
-      existing allocations.
+    contents: |-
+      The definition of a job is not static, and is meant to be updated over time. You may update a job to change a docker image or tag, to update ane application version, or to change the count of a task group to support higher load.
+
+      In this challenge, you will increase the `count` of the example job's task group. You will first run the `nomad job plan` command to do a dry run and then run the `nomad job run` commmand with the `-check-index` argument and the job modify index returned by the `plan` command.
   tabs:
-  - title: Config Files
+  - title: Job Spec
     type: code
     hostname: nomad-server
-    path: /root/nomad/
+    path: /root/nomad/example.nomad
   - title: Server
     type: terminal
     hostname: nomad-server
-    path: /root/nomad/
   - title: Nomad UI
     type: service
     hostname: nomad-server
     port: 4646
   difficulty: basic
-  timelimit: 300
-checksum: "10613640928058290482"
+  timelimit: 900
+checksum: "12917623363565048465"
