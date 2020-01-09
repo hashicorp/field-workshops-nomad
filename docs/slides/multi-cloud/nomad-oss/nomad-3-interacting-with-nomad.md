@@ -164,12 +164,12 @@ name: lab-challenge-3.4
 * You're going to use Nomad to perform some basic operations on that job file.
 
 ---
-name: lab-challenge-3-Summary
-# 📝 Section 3 Lab Summary
+name: chapter-3-Summary
+# 📝 Chapter 3 Summary
 
 In this section you were able to...
 * Become familiar with the Nomad Interfaces (CLI/UI/API)
-* Create, stop, and manage Nomad jobs
+* Create, stop, and manage simple Nomad jobs
 
 ???
 * You've already started using some core Nomad features
