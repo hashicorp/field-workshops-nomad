@@ -5,12 +5,12 @@ mkdir -p /etc/nomad.d
 chmod a+w /etc/nomad.d
 
 # Write Server main config file
-cat <<-EOF > /etc/nomad.d/server1.hcl
+cat <<-EOF > /etc/nomad.d/server3.hcl
 # Setup data dir
-data_dir = "/tmp/nomad/server1"
+data_dir = "/tmp/nomad/server3"
 
 # Give the agent a unique name. Defaults to hostname
-name = "server1"
+name = "server3"
 
 # Enable the server
 server {
@@ -18,6 +18,9 @@ server {
 
   # Self-elect, should be 3 or 5 for production
   bootstrap_expect = 3
+  server_join {
+    retry_join = ["nomad-server-1"]
+  }
 }
 EOF
 

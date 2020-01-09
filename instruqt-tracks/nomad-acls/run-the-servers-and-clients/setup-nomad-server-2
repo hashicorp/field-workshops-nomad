@@ -18,6 +18,9 @@ server {
 
   # Self-elect, should be 3 or 5 for production
   bootstrap_expect = 3
+  server_join {
+    retry_join = ["nomad-server-1"]
+  }
 }
 EOF
 

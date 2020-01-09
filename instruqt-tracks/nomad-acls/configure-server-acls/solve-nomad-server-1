@@ -11,6 +11,6 @@ acl {
 EOF
 
 # Check Authoritive region
-ex -s -c '13i|  authoritative_region = "global"' -c x /root/nomad/server1.hcl
+ex -s -c '10i|  authoritative_region = "global"' -c x /root/nomad/server1.hcl
 
 exit 0
