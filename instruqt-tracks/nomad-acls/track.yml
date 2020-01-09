@@ -216,8 +216,7 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 1800
-
-  - slug: use-acls
+- slug: use-acls
   id: 2dzqorlvompb
   type: challenge
   title: Use Nomad ACLs
