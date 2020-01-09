@@ -115,7 +115,11 @@ challenges:
     ```
     systemctl restart nomad
     ```
-    If you run the ``` nomad server members ``` command in the "Server 1" Tab what is the result?
+    If you run the
+    ```
+    nomad server members
+    ```
+    command in the "Server 1" Tab what is the result?
 
     If everything is configured correctly you will get an access denied error.
     This is the expected behavior as Nomad ACLs is "Deny by default". We will be fixing this in a later challenge.
@@ -123,11 +127,11 @@ challenges:
     In the next challenge, you will configure the nomad client servers for utilizing ACLs.
   notes:
   - type: text
-    contents: |-
-      In this challenge, you will configure the Nomad Servers for utilizing ACLs.
+    contents: In this challenge, you will configure the Nomad Servers for utilizing
+      ACLs.
   - type: text
-    contents: |-
-      In the next challenge, you will configure the Nomad Clients for utilizing ACLs.
+    contents: In the next challenge, you will configure the Nomad Clients for utilizing
+      ACLs.
   tabs:
   - title: Server 1 Config
     type: code
@@ -189,11 +193,10 @@ challenges:
     In the next challemge we will bootstrap the cluster ACL API and create our first management token
   notes:
   - type: text
-    contents: |-
-      In this challenge, you will configure the Nomad Clients for utilizing ACLs.
+    contents: In this challenge, you will configure the Nomad Clients for utilizing
+      ACLs.
   - type: text
-    contents: |-
-      In the next challenge, you will bootstrap the Nomad Cluster ACLs.
+    contents: In the next challenge, you will bootstrap the Nomad Cluster ACLs.
   tabs:
   - title: Server 1
     type: terminal
@@ -228,7 +231,7 @@ challenges:
 
     Let's get started.
 
-    To enable the API we need to run the ```nomad acl bootstrap``` command. This will create the inital management token for us to use to setup ACL in general.
+    To enable the API we need to run the "nomad bootstrap" command. This will create the inital management token for us to use to setup ACL in general.
     This token information should be kept in a safe place as it has "FULL UNRESTRICTED" access to your cluster.
 
     Let us ACL bootstrap the cluster.
@@ -240,10 +243,10 @@ challenges:
     nomad acl bootstrap > acl_token.txt
     ```
 
-    This will bootstrap the cluster ACL API and export the bootstrap credentials into a file called `acl_token.txt` we will be using that to continue the challenge.
+    This will bootstrap the cluster ACL API and export the bootstrap credentials into a file called "acl_token.txt" we will be using that to continue the challenge.
 
     We now need to enable the anonymous policy so that we can interact with the cluster using the nomad cli.
-    To do this we need to export the `Secret ID` of our token as an environemnt variable called `NOMAD_TOKEN` and then use `curl` to create the policy.
+    To do this we need to export the "Secret ID" of our token as an environemnt variable called "NOMAD_TOKEN" and then use "curl" to create the policy.
 
     Open the "Server 1 Edit" tab and you will see two files:
       * anonymous.json
@@ -276,7 +279,7 @@ challenges:
     * node
 
     We now need to apply this policy to the cluster.
-    To do this we will need to create an `Authenticated` connection to the server that allows us to install policies.
+    To do this we will need to create an "Authenticated" connection to the server that allows us to install policies.
 
     Lets do that.
 
@@ -293,20 +296,24 @@ challenges:
     Create Index = 29
     Modify Index = 29
     ```
-    Copy the ``Secret ID` token.
+    Copy the "Secret ID" token.
 
-    Open the `Server1` console tab and enter the following and hit return.
-    ``` export NOMAD_TOKEN="PLACE_YOUR_SECURE_ID_HERE```
+    Open the "Server1" console tab and enter the following and hit return.
+    ```
+    export NOMAD_TOKEN="PLACE_YOUR_SECURE_ID_HERE"
+    ```
 
     We now need to install the policy.
 
-    Run this command in the `Server 1` console tab.
+    Run this command in the "Server 1" console tab.
 
-    ```curl --request POST --data @payload.json -H "X-Nomad-Token: $NOMAD_TOKEN" https://localhost:4646/v1/acl/policy/anonymous```
+    ```
+    curl --request POST --data @anonymous.json -H "X-Nomad-Token: $NOMAD_TOKEN" http://localhost:4646/v1/acl/policy/anonymous
+    ```
 
     To verify that the policy has been applied, run the following command to make sure.
     ```
-    curl https://localhost:4646/v1/jobs
+    curl http://localhost:4646/v1/jobs
     ```
     It should have an error.
 
@@ -329,15 +336,16 @@ challenges:
   - type: text
     contents: |-
       In this challenge, you will bootstrap the cluster to utilize ACLs.
+
       The ACL system uses a whitelist or default-deny model. This means by default no permissions are granted. For clients making requests without ACL tokens, we may want to grant some basic level of access.
   - type: text
-    contents: |-
-      In the final challenge, you will see how the ACLs restrict what different users can do in Nomad.
+    contents: In the final challenge, you will see how the ACLs restrict what different
+      users can do in Nomad.
   tabs:
   - title: Server 1 Edit
     type: code
     hostname: nomad-server-1
-    path: /root/
+    path: /root/nomad/
   - title: Server 1
     type: terminal
     hostname: nomad-server-1
@@ -402,4 +410,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 1800
-checksum: "12015942460176170913"
+checksum: "903074497234935892"
