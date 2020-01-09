@@ -1,7 +1,0 @@
-#!/bin/bash -l
-
-set -e
-
-grep -q "nomad agent -config client2.hcl > nomad.log 2>&1 &" /root/.bash_history || fail-message "You haven't run your second Nomad client yet."
-
-exit 0

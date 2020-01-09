@@ -1,0 +1,17 @@
+#!/bin/bash -l
+
+set -e
+
+# Check that `cat redis.nomad` was run
+grep -q "cat redis.nomad" /root/.bash_history || fail-message "You haven't looked at the redis configuration file"
+
+# Check that Nomad job was run
+grep -q "nomad job run redis.nomad" /root/.bash_history || fail-message "You haven't run the redis.nomad job yet."
+
+# Check that Nomad job status was checked with CLI
+grep -q "nomad status" /root/.bash_history || fail-message "You must check the status of the Nomad job."
+
+# Check that Nomad job was stopped with CLI
+grep -q "nomad job stop redis" /root/.bash_history || fail-message "You must stop the redis job before continuing"
+
+exit 0

@@ -1,0 +1,20 @@
+#!/bin/bash -l
+
+mkdir nomad
+
+# Write Nomad Client 2 Config
+cat <<-EOF > /root/nomad/nomad-client2.hcl
+# Setup data dir
+data_dir = "/tmp/nomad/client2"
+
+# Give the agent a unique name.
+name = "client2"
+
+# Enable the client
+client {
+    enabled = true
+    servers = ["nomad-server-1"]
+}
+EOF
+
+exit 0

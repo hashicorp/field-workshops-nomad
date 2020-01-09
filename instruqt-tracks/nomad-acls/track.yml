@@ -1,0 +1,167 @@
+slug: nomad-acls
+id: vlqq3najdjpp
+type: track
+title: Nomad Access Control Lists (ACLs)
+teaser: Learn how to control access to Nomad with Access Control Lists (ACLs).
+description: |-
+  Nomad is a flexible workload orchestrator that enables an organization to easily deploy and manage any containerized or legacy application using a single, unified workflow. Nomad can run a diverse workload of Docker, non-containerized, microservice, and batch applications.
+
+  This track will show you how to control access to Nomad with Access Control Lists (ACLs).
+
+  Before running this track, we suggest you run the [Nomad Basics](https://instruqt.com/hashicorp/tracks/nomad-basics), [Nomad Simple Cluster](https://instruqt.com/hashicorp/tracks/nomad-simple-cluster), and [Nomad Multi-Server Cluster](https://instruqt.com/hashicorp/tracks/nomad-multi-server-cluster) tracks.
+icon: https://storage.googleapis.com/instruqt-hashicorp-tracks/logo/nomad.png
+tags:
+- nomad
+- security
+- acls
+owner: hashicorp
+developers:
+- roger@hashicorp.com
+private: true
+published: true
+challenges:
+- slug: run-the-servers-and-clients
+  id: 5efmxtpkfxlm
+  type: challenge
+  title: Run the Nomad Servers and Clients
+  teaser: Configure and run three Nomad servers and 2 Nomad clients.
+  assignment: |-
+    Before we begin securing our Nomad cluster, lets verify that all 3 servers and both clients are running. Check the servers with this command on the "Server 1" tab:
+    ```
+    nomad server members
+    ```
+    You should see 3 servers that are all alive. server1 should be the leader.
+
+    Then check the client nodes with this command on the "Server 1" tab:
+    ```
+    nomad node status
+    ```
+    You should see two client nodes.
+
+    In the next challenge, you will configure ACLs for the Nomad cluster.
+  notes:
+  - type: text
+    contents: |-
+      In this track, you'll learn how to control access to Nomad with Access Control Lists (ACLs).
+
+      The first challenge will run 3 Nomad servers and 2 Nomad clients for you. All you'll need to do is check that they are running.
+
+      In the second and third challenges, you will configure and then use Nomad ACLs.
+  - type: text
+    contents: |-
+      We've already started a cluster with three servers and two clients for you.
+
+      We've put all the server and client configuration files on the server1 VM so that you can conveniently see them in a single Instruqt tab. However, if you decide to edit any of the configuration files for any reason, be sure to do so on the tab that matches the file you change.
+  tabs:
+  - title: Config Files
+    type: code
+    hostname: nomad-server-1
+    path: /root/nomad/
+  - title: Server 1
+    type: terminal
+    hostname: nomad-server-1
+  - title: Server 2
+    type: terminal
+    hostname: nomad-server-2
+  - title: Server 3
+    type: terminal
+    hostname: nomad-server-3
+  - title: Client 1
+    type: terminal
+    hostname: nomad-client-1
+  - title: Client 2
+    type: terminal
+    hostname: nomad-client-2
+  - title: Nomad UI
+    type: service
+    hostname: nomad-server-1
+    port: 4646
+  difficulty: basic
+  timelimit: 1800
+- slug: configure-acls
+  id: rfb3dvxmxuyp
+  type: challenge
+  title: Configure Nomad ACLs
+  teaser: Configure Nomad ACLs.
+  assignment: |-
+    Let's start by configiuring ACLs in our Nomad cluster.
+
+    First, do the following ...
+
+    In the next challenge, you wil see how the Nomad ACLs restrict what different users can do in Nomad.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will configure the Nomad ACLs.
+
+      In the third and final challenge, you will see how the ACLs restrict what different users can do in Nomad.
+  tabs:
+  - title: Config Files
+    type: code
+    hostname: nomad-server-1
+    path: /root/nomad/
+  - title: Server 1
+    type: terminal
+    hostname: nomad-server-1
+  - title: Server 2
+    type: terminal
+    hostname: nomad-server-2
+  - title: Server 3
+    type: terminal
+    hostname: nomad-server-3
+  - title: Client 1
+    type: terminal
+    hostname: nomad-client-1
+  - title: Client 2
+    type: terminal
+    hostname: nomad-client-2
+  - title: Nomad UI
+    type: service
+    hostname: nomad-server-1
+    port: 4646
+  difficulty: basic
+  timelimit: 1800
+- slug: use-acls
+  id: 2dzqorlvompb
+  type: challenge
+  title: Use Nomad ACLs
+  teaser: See how Nomad ACLs restrict what different users can do in Nomad.
+  assignment: |-
+    Now, let's see the Nomad ACLs in action.
+
+    First, do the following ...
+
+    Congratulations on finishing the Nomad ACLs track!
+  notes:
+  - type: text
+    contents: |-
+      In this final challenge, you will see how the ACLs restrict what different users can do in Nomad.
+
+      Blah Blah
+  tabs:
+  - title: Config Files
+    type: code
+    hostname: nomad-server-1
+    path: /root/nomad/
+  - title: Server 1
+    type: terminal
+    hostname: nomad-server-1
+  - title: Server 2
+    type: terminal
+    hostname: nomad-server-2
+  - title: Server 3
+    type: terminal
+    hostname: nomad-server-3
+  - title: Client 1
+    type: terminal
+    hostname: nomad-client-1
+  - title: Client 2
+    type: terminal
+    hostname: nomad-client-2
+  - title: Nomad UI
+    type: service
+    hostname: nomad-server-1
+    port: 4646
+  difficulty: basic
+  timelimit: 1800
+checksum: "14990926761729431491"

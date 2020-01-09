@@ -1,0 +1,23 @@
+#!/bin/bash -l
+
+mkdir nomad
+
+# Write Nomad Server Config
+cat <<-EOF > /root/nomad/nomad-server3.hcl
+# Setup data dir
+data_dir = "/tmp/nomad/server3"
+
+# Give the agent a unique name.
+name = "server3"
+
+# Enable the server
+server {
+  enabled = true
+  bootstrap_expect = 3
+  server_join {
+    retry_join = ["nomad-server-1"]
+  }
+}
+EOF
+
+exit 0
