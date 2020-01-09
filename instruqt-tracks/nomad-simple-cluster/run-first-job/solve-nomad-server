@@ -1,9 +1,0 @@
-#!/bin/bash -l
-
-cd nomad
-
-# Check the Nomad nodes
-#echo -e "nomad node status" >> /root/.bash_history
-#nomad node status
-
-exit 0

@@ -1,7 +1,0 @@
-#!/bin/bash -l
-
-set -e
-
-#grep -q "nomad node status" /root/.bash_history || fail-message "You haven't checked the staus of your Nomad nodes (clients) yet."
-
-exit 0

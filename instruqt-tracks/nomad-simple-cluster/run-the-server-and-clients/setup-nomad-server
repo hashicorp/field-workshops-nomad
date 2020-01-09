@@ -49,4 +49,6 @@ client {
 }
 EOF
 
+cd /root/nomad
+
 exit 0
