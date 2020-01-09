@@ -17,6 +17,7 @@ tags:
 owner: hashicorp
 developers:
 - roger@hashicorp.com
+- lhaig@hashicorp.com
 private: true
 published: true
 challenges:
@@ -78,15 +79,107 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 1800
-- slug: configure-acls
+- slug: configure-server-acls
   id: rfb3dvxmxuyp
   type: challenge
-  title: Configure Nomad ACLs
-  teaser: Configure Nomad ACLs.
+  title: Configure Nomad Server ACLs
+  teaser: Configure Nomad Server ACLs.
   assignment: |-
-    Let's start by configiuring ACLs in our Nomad cluster.
+    The APIs needed to manage policies and tokens are not enabled until ACLs are enabled.
+    We need to enable the ACL configuration for our cluster
 
-    First, do the following ...
+    Let's start by configiuring ACLs in our Nomad Servers first.
+
+    To do this we need to enable acl in the acl stanza of each server file. Go to each `Server Config` tab and add the following section to the end of the file, below the server stanza.
+    ```
+    acl {
+      enabled = true
+    }
+    ```
+    In a multi-region configuration you will need to add the ```authoritative_region``` configuration to the server stanza. Since we only have one region this is not strictly nessesary. We will however make the change to make it clear how it should look.
+    
+    Lets add this configuration now. 
+    
+    For each server open the `Server Config` tab and edit the server stanza to look like this.
+
+    ```
+    server {
+      enabled = true
+
+      # Self-elect, should be 3 or 5 for production
+      bootstrap_expect = 3
+      authoritative_region = "global"
+    }
+    ```
+    Now we need to restart the nomad servers one at a time. Complete the following steps for each server.
+    ``` 
+    systemctl restart nomad
+    ```
+    After we have restarted the servers we need to make that they have joined the cluster again.
+   
+    Run the following command to make sure.
+    ```
+    nomad server members
+    ```
+    You will see an error as by default Nomad ACL is in a deny state which denies all access.
+    You should see 3 servers that are all alive. There should be a new leader since we restarted Server 1.
+
+    In the next challenge, you will configure the nomad client servers for using ACLs.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will configure the Nomad Servers for utilizing ACLs.
+
+      In the second challenge, you will configure the Nomad Clients for utilizing ACLs.
+  tabs:
+  - title: Server 1 Config
+    type: code
+    hostname: nomad-server-1
+    path: /etc/nomad.d/server1.hcl
+  - title: Server 1
+    type: terminal
+    hostname: nomad-server-1
+  - title: Server 2 Config
+    type: code
+    hostname: nomad-server-2
+    path: /etc/nomad.d/server2.hcl
+  - title: Server 2
+    type: terminal
+    hostname: nomad-server-2
+  - title: Server 3 Config
+    type: code
+    hostname: nomad-server-3
+    path: /etc/nomad.d/server3.hcl
+  - title: Server 3
+    type: terminal
+    hostname: nomad-server-3
+  - title: Nomad UI
+    type: service
+    hostname: nomad-server-1
+    port: 4646
+  difficulty: basic
+  timelimit: 1800
+- slug: configure-client-acls
+  type: challenge
+  title: Configure Nomad Client ACLs
+  teaser: Configure Nomad Client ACLs.
+  assignment: |-
+    Now that we have the servers using ACLs we need to configure the Clients to use them as well.
+
+    Let's configiure ACLs in our Nomad Clients.
+
+    We need to enable acl in the acl stanza of each server file. Go to each node config tab and add the following section to the end of the file, below the server stanza.
+    ```
+    acl {
+      enabled = true
+    }
+    ```
+    That is all that needs to be done.
+
+    Now we need to restart the nomad clients one at a time. Complete the following steps for each server.
+    ``` 
+    systemctl restart nomad
+    ```
 
     In the next challenge, you wil see how the Nomad ACLs restrict what different users can do in Nomad.
   notes:
@@ -96,22 +189,24 @@ challenges:
 
       In the third and final challenge, you will see how the ACLs restrict what different users can do in Nomad.
   tabs:
-  - title: Config Files
+  - title: Server 1 Config
     type: code
     hostname: nomad-server-1
-    path: /root/nomad/
+    path: /etc/nomad.d/server1.hcl
   - title: Server 1
     type: terminal
     hostname: nomad-server-1
-  - title: Server 2
-    type: terminal
-    hostname: nomad-server-2
-  - title: Server 3
-    type: terminal
-    hostname: nomad-server-3
+  - title: Client 1 Config
+    type: code
+    hostname: nomad-client-1
+    path: /etc/nomad.d/client1.hcl
   - title: Client 1
     type: terminal
     hostname: nomad-client-1
+  - title: Client 2 Config
+    type: code
+    hostname: nomad-client-2
+    path: /etc/nomad.d/client2.hcl
   - title: Client 2
     type: terminal
     hostname: nomad-client-2
@@ -121,7 +216,8 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 1800
-- slug: use-acls
+
+  - slug: use-acls
   id: 2dzqorlvompb
   type: challenge
   title: Use Nomad ACLs
