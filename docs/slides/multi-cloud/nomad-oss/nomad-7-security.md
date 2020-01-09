@@ -1,4 +1,4 @@
-name: nomad-chapter-7-title
+Authoritativename: nomad-chapter-7-title
 class: title, shelf, no-footer, fullbleed
 background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/bkgs/HashiCorp-Title-bkg.jpeg)
 count: false
@@ -26,7 +26,7 @@ name: chapter-7-topics
 1. Encryption Overview
 2. Nomad Access Control Lists (ACLs)
 3. Securing Nomad Clusters with TLS
-4. Vault PKI Secrets Engine
+4. Using Vault's PKI Secrets Engine with Nomad
 5. Hands on LAB Nomad ACLs
 
 ???
@@ -38,8 +38,7 @@ class: title, shelf, no-footer, fullbleed
 background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/bkgs/HashiCorp-Title-bkg.jpeg)
 count: false
 
-# Chapter 7 - Section 1
-## Nomad Security Overview
+# Nomad Encryption Overview
 
 ![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
 
@@ -53,15 +52,15 @@ There are two separate encryption systems for Nomad:
 * Gossip Traffic Encryption.
 * HTTP and RPC Encryption.
 
-Enabling encryption of all its network traffic.
+Together, these encrypt all of Nomad's network traffic.
 
 ???
 
 ---
-name: omad-chapter-7-encryption-gossip-1
-# Nomad Gossip Traffic Encryption
+name: nomad-chapter-7-encryption-gossip-1
+# Gossip Traffic Encryption
 
-.smaller[Gossip encryption is enabled by providing an encryption key when starting the server with the `encrypt` parameter or stored in the server configuration file of every server in the region.
+.smaller[Gossip encryption is enabled by providing an encryption key when starting all servers in a region with the `-encrypt` parameter or storing the key in each server's configuration file.
 
 The key must be 16 bytes and base64 encoded. Generate a key using the `nomad operator keygen` command.]
 
@@ -74,28 +73,21 @@ cg8StVXbQJ0gPvMd9o7yrg==
 
 ---
 name: nomad-chapter-7-encryption-http-rpc-1
-# Nomad HTTP and RPC Encryption with TLS
+# HTTP and RPC Encryption with TLS
 
 .smaller[* TLS is used to verify the authenticity of servers and clients.
 * All servers and clients should have signed key pairs configured.
 * Server authenticity can be enforced using:
- * `verify_server_hostname = true` in the **tls** configuration stanza.]
-
----
-name: nomad-chapter-7-encryption-http-rpc-2
-# Nomad HTTP and RPC Encryption with TLS
-
-.smaller[* The setting `verify_server_hostname` enforces hostname verification for outbound connections.
+ * `verify_server_hostname = true` in the **tls** configuration stanza.
 * All servers must have a valid certificate for:
-  * `server.<region>.nomad`.
-  * `localhost` ( for the local cli to validate the name).
-* TLS is used to secure the RPC calls between agents.]
-
-???
+   * `server.<region>.nomad`.
+   * `localhost` ( for the local cli to validate the name).
+ * TLS is used to secure the RPC calls between agents.
+ ]
 
 ---
 name: nomad-chapter-7-encryption-configuring-the-cli
-# Nomad Configuring The Command Line Tool
+# Configuring The Command Line Tool
 
 .smaller[* By default HTTPS does not validate client certificates
   * No need for clients to have access to private keys
@@ -113,7 +105,7 @@ export NOMAD_CACERT=/path/to/ca.pem
 
 ---
 name: nomad-chapter-7-encryption-network-isolation-tls-1
-# Nomad Network Isolation with TLS
+# Network Isolation with TLS
 
 .smaller[To isolate Nomad agents on a network with TLS enable:
 * `verify_https_client`.
@@ -123,7 +115,7 @@ Agents will:
 * Require client certificates for all incoming HTTPS connections.
 * Verify proper names on all other certificates.
 
-Consul will not attempt to health check agents with **`verify_https_client`** set as it is unable to use client certificates.]
+Consul will not attempt to health check agents with **`verify_https_client`** set.]
 
 ???
 
@@ -133,33 +125,19 @@ class: title, shelf, no-footer, fullbleed
 background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/bkgs/HashiCorp-Title-bkg.jpeg)
 count: false
 
-# Chapter 7 - Section 2
-## Nomad Access Control Lists (ACL)
+# Nomad Access Control Lists (ACL)
 
 ![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
 
 ???
 
 ---
-name: chapter-7-acls-topics
-# Access Control List Topics
-
-1. ACL Overview
-2. The ACL System
-3. ACL Policies
-4. ACL Tokens
-5. ACL Capabilities.
-
-???
-* This is our topics slide.
-
----
 name: nomad-chapter-7-ACL-overview-1
-# Access Control Overview
+# Access Control List (ACL) Overview
 
 .small[
 Nomad provides an optional Access Control List (ACL) system.
-* Controls access to data and APIs. 
+* Controls access to data and APIs.
 * Capability-based
 * Relies on tokens associated with policies
 * Similar to the design of AWS IAM.
@@ -174,7 +152,7 @@ name: nomad-chapter-7-ACL-system-overview-2
 .small[
 The ACL system is designed to be:
 * Easy to use
-* Fast to enforce 
+* Fast to enforce
 * Provide administrative insight.
 ]
 
@@ -182,12 +160,15 @@ The ACL system is designed to be:
 name: nomad-chapter-7-ACL-system-overview-3
 class: col-2
 # The ACL System
+
 .small[
 Three major components to the ACL system:
 * ACL Policies
 * ACL Tokens
 * ACL Capabilities
 ]
+
+<br>
 .center[![:scale 100%](images/acl-overview.jpg)]
 
 ???
@@ -196,6 +177,7 @@ Three major components to the ACL system:
 name: nomad-chapter-7-ACL-policies-1
 class: col-2
 # ACL Policies
+
 .small[
 An ACL policy is a named set of rules.
 
@@ -203,7 +185,11 @@ Each policy must have:
 * A unique name
 * A rule set.
 * A description (Optional)
+]
+<br>
+<br>
 
+.smaller[
 ```json
 {
   "Name": "anonymous",
@@ -217,8 +203,8 @@ Each policy must have:
     }
     node {
         policy = \"read\"
-    }
-  "}
+    }"
+}
 ```
 ]
 
@@ -226,42 +212,29 @@ Each policy must have:
 name: nomad-chapter-7-ACL-policies-2
 class: col-2
 # ACL Policies
-.left-column[
+
 .small[
 * Default = Deny/Whitelist.
 * No permissions by default.
 * Policies allow a set of capabilities or actions.
-]]
+]
 
-.right-column[
 .small[
-**For Example:**
-
-a "readonly" policy might only grant the ability to list and inspect running jobs, but not to submit new ones.
-]]
+* For Example: a "readonly" policy might only grant the ability to list and inspect running jobs, but not to submit new ones.
+]
 ???
 
 ---
 name: nomad-chapter-7-ACL-policies-3
 # ACL Policies
 .small[
-## Standard Tokens
-* A client ACL token can be associated with multiple policies.
-* A request is allowed if any of the associated policies grant the capability.
+* A special `anonymous` policy can be defined for **anonymous** requests.
+  * Defines capabilities for **anonymous** requests.
+  * By default there is no `anonymous` policy
 
-## Management tokens 
-* Cannot be associated with policies.
-* They are granted all capabilities.
-]
----
-name: nomad-chapter-7-ACL-policies-4
-# ACL Policies
-.small[
-A special `anonymous` policy can be defined for **anonymous** requests.
-* Defines capabilities for **anonymous** requests.
-* By default there is no `anonymous` policy
+* An anonymous request is a request made to Nomad without the `X-Nomad-Token` header specified.
 
-An anonymous request is a request made to Nomad without the `X-Nomad-Token` header specified.
+* The Nomad UI uses the anonymous policy unless an ACL is set for it.
 
 ]
 
@@ -269,21 +242,30 @@ An anonymous request is a request made to Nomad without the `X-Nomad-Token` head
 The special `anonymous` policy can be defined to grant capabilities to requests which are made anonymously. An anonymous request is a request made to Nomad without the `X-Nomad-Token` header specified. This can be used to allow anonymous users to list jobs and view their status, while requiring authenticated requests to submit new jobs or modify existing jobs. By default, there is no `anonymous` policy set meaning all anonymous requests are denied.
 
 ---
-name: nomad-chapter-7-ACL-tokens-1
-class: col-2
+name: nomad-chapter-7-ACL-tokens-0
 # ACL Tokens
 .small[
-.left-column[
-## Tokens Role
-* Authenticate Requests
-* Authorize Actions
+## Standard Tokens
+* A client ACL token can be associated with multiple policies.
+* A request is allowed if any of the associated policies grant the capability.
+
+## Management tokens
+* Cannot be associated with policies.
+* They are granted all capabilities.
 ]
-.right-column[
-## Contains
-* Accessor ID
-* Secret ID
-* Name (Optional)
-]]
+???
+
+---
+name: nomad-chapter-7-ACL-tokens-1
+# ACL Tokens
+
+* ACLs perform the following roles:
+  * Authenticate Requests
+  * Authorize Actions
+* Each ACL token contains these items:
+  * Accessor ID
+  * Secret ID
+  * Name (Optional)
 
 ???
 ACL tokens are used to authenticate requests and determine if the caller is authorized to perform an action. Each ACL token has a public Accessor ID which is used to identify the token, a Secret ID which is used to make requests to Nomad, and an optional human readable name. All client type tokens are associated with one or more policies, and can perform an action if any associated policy allows it. Tokens can be associated with policies which do not exist, which are the equivalent of granting no capabilities. The management type tokens cannot be associated with policies, but can perform any action.
@@ -306,37 +288,33 @@ When ACL tokens are created, they can be optionally marked as Global. This cause
 ---
 name: nomad-chapter-7-ACL-tokens-3
 # ACL Tokens
-* Tokens created locally by default.
-  * Not replicated to other regions.
-* If `"Global": True`
-  * Created in the Authoritive region.
-  * Replicated to **all** other regions.
-* Local tokens unable to request cross-region.
+* Tokens are created locally by default.
+  * They are not replicated to other regions.
+* If `"Global": True` is set:
+  * They are created in the authoritative region.
+  * They are replicated to **all** other regions.
+* Local tokens cannot make cross-region requests.
 
 ???
 When ACL tokens are created, they can be optionally marked as Global. This causes them to be created in the authoritative region and replicated to all other regions. Otherwise, tokens are created locally in the region the request was made and not replicated. Local tokens cannot be used for cross-region requests since they are not replicated between regions.
 
 ---
 name: nomad-chapter-7-ACL-capabilities-1
-class: col-2
-# ACL Capabilities.
-.small[
-.left-column[
-ACL Capabilities are the set of actions that can be performed on a Nomad cluster.
-]
-.right-column[
-* List Jobs
-* Submitting Jobs
-* Querying Nodes
-* etc.
-]
-]
+# ACL Capabilities
+
+* ACL Capabilities are the set of actions that can be performed on a Nomad cluster.
+  * List Jobs
+  * Submit Jobs
+  * Query Nodes
+  * etc.
+
+
 ???
 Capabilities are the set of actions that can be performed. This includes listing jobs, submitting jobs, querying nodes, etc.
 
 ---
 name: nomad-chapter-7-ACL-capabilities-2
-# ACL Capabilities.
+# ACL Capabilities
 .small[
 * Client tokens are granted capabilities with ACL Policies.
 * Management tokens are granted **ALL** capabilities
@@ -347,9 +325,10 @@ A management token is granted all capabilities, while client tokens are granted 
 ---
 name: nomad-chapter-7-ACL-capabilities-3
 class: table
-# ACL Capabilities and Scope.
+# ACL Capabilities and Scope
 
 ACL Rules Available for Policies:
+
 .smaller[
 Policy | Scope
 ------- | -------------------
@@ -368,12 +347,12 @@ name: nomad-chapter-7-ACL-multi-region-configuration-1
 # Multi-Region Configuration.
 .small[
 Nomad supports multi-datacenter and multi-region configurations.
-* Single-Region Multi-datacenter Configuration.
-  * Servers in a region replicate state.
+* Single-Region, Multi-datacenter Configuration.
+  * Servers in the region replicate state.
 * Multi-Region Configuration
-  * Set of servers per region.
-  * Regions operate independantly
-  * Regions loosely coupled
+  * One set of servers for each region.
+  * Regions operate independantly.
+  * Regions are loosely coupled.
 
 ]
 ???
@@ -387,12 +366,12 @@ Global ACL tokens are used to allow cross region requests. Standard ACL tokens a
 name: nomad-chapter-7-ACL-multi-region-configuration-2
 # Multi-Region Configuration.
 .small[
-Nomad depends on an "Authorative Region" when ACLS are enabled
-* Authoritive Region Source of Truth For:
+Nomad depends on an "Authoritative Region" when ACLs are enabled
+* Authoritative Region is the Source of Truth For:
   * ACL Policies
-  * Global ACL tokens.
-* All Regions Replicate ACL policies and Global ACL tokens
-  * Central policy administration.
+  * Global ACL tokens
+* All Regions Replicate ACL Policies and Global ACL Tokens
+  * Central policy administration
   * Local policy enforcement
 
 ]
@@ -409,42 +388,30 @@ class: title, shelf, no-footer, fullbleed
 background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/bkgs/HashiCorp-Title-bkg.jpeg)
 count: false
 
-# Chapter 7 - Section 3
-## Securing Nomad Clusters with TLS
+# Securing Nomad Clusters with TLS
 
 ![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
 
 ???
 
 ---
-name: chapter-7-tls-topics
-# Securing Nomad with TLS Topics
-
-1. Nomad TLS Overview
-2. Certificates
-3. Configuration
-
-???
-* This is our topics slide.
-
----
 name: nomad-chapter-7-TLS-overview-1
 # Nomad TLS Overview
 
-.small[
-Securing Nomad's cluster communication is not only important for security but can even ease operations by preventing mistakes and misconfigurations. Nomad optionally uses mutual TLS (mTLS) for all HTTP and RPC communication.
-]
+* Securing Nomad's cluster communication is not only important for security but can even ease operations by preventing mistakes and misconfigurations.
+* Nomad optionally uses mutual TLS (mTLS) for all HTTP and RPC communication.
+
 
 ---
 name: nomad-chapter-7-TLS-overview-2
 # Nomad TLS Overview
 
 .small[
-Nomad's use of mTLS provides the following properties:
-* Prevent unauthorized Nomad access
-* Prevent observing or tampering with Nomad communication
-* Prevent client/server role or region misconfigurations
-* Prevent other services from masquerading as Nomad agents
+Nomad's use of mTLS provides the following benefits:
+* Prevents unauthorized Nomad access
+* Prevents observing or tampering with Nomad communication
+* Prevents client/server role or region misconfigurations
+* Prevents other services from masquerading as Nomad agents
 ]
 
 ???
@@ -453,9 +420,9 @@ Nomad's use of mTLS provides the following properties:
 name: nomad-chapter-7-TLS-overview-3
 # Nomad TLS Overview
 .small[
-Nomad's of mTLS has the benefit that it prevents Region misconfiguration. 
+Nomad's use of mTLS has the benefit that it prevents region misconfiguration.
 
-**It Verifies if:**
+**It Verifies that:**
 * The node is in the expected Region.
 * The node is configured for the role.
 
@@ -468,49 +435,45 @@ Preventing region misconfigurations is a property of Nomad's mTLS not commonly f
 ---
 name: nomad-chapter-7-TLS-certificates-1
 # Certificates
-## Certificate Requirements
-.small[
-* Certificates signed by a **Private** CA
-* All certifricates signed by the same CA
 
-]
+* Certificate Requirements:
+  * Certificates must be signed by a **Private** CA.
+  * All certificates must be signed by the same CA.
+
 ???
 
 ---
 name: nomad-chapter-7-TLS-certificates-2
-# Certificates
-## Node Certificates
-.small[
-Nomad hosts are ephemeral so creating a certificate for each hostname has no security benefit.
-To provide the security needed certificztes must be signed with their region and role.
+# Node Certificates
 
-e.g.
-* `client.global.nomad` client node for global region
-* `server.us-west.nomad` server node for us-west region
+* Nomad hosts are ephemeral, so creating a certificate for each hostname has no security benefit.
+* To provide the security needed, certificates must be signed with their region and role:
+  * `client.global.nomad` client node for global region
+  * `server.us-west.nomad` server node for us-west region
 
-]
 ???
 
 ---
 name: nomad-chapter-7-TLS-certificates-3
-# Certificates
-## Node Certificates
-.small[
-Adding `localhost` and `127.0.0.1` as subject alternate names (SANs) will allow tools like curl to communicte with the Nomad HTTP API endpoints from the same host.
+# Node Certificates
 
-Adding the DNS resolvable hostname as a SAN will allow remote HTTP requests from third party tools.
-]
+* Adding `localhost` and `127.0.0.1` as subject alternate names (SANs) will allow tools like curl to communicte with the Nomad HTTP API endpoints from the same host.
+* Adding the DNS resolvable hostname as a SAN will allow remote HTTP requests from third party tools.
+
 ???
 
 ---
 name: nomad-chapter-7-TLS-certificates-4
 class: col-2
-# Configuration
-.small[
-Adding TLS configuration to the server and client configurations.
-* Copy the CA, Certificate and keyfile to the server
+# TLS Configuration
+
+Adding TLS configuration to the server and client configurations:
+* Copy the CA, Certificate and keyfile to the server.
 * Edit the config hcl file and add the `tls` block.
+
+<br>
 ```json
+
 tls {
   http = true
   rpc  = true
@@ -524,7 +487,6 @@ tls {
 }
 ```
 
-]
 ???
 
 ---
@@ -533,8 +495,7 @@ class: title, shelf, no-footer, fullbleed
 background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/bkgs/HashiCorp-Title-bkg.jpeg)
 count: false
 
-# Chapter 7 - Section 4
-## Vault PKI Secrets Engine Integration
+# Using Vault's PKI Secrets Engine with Nomad
 
 ![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
 
@@ -543,39 +504,36 @@ count: false
 ---
 name: nomad-chapter-7-vault-pki-1
 # Vault PKI Secrets Engine Integration
-.small[
-Securing your nomad nodes with TLS certificates is an important part of managing your cluster.
 
-To increase the level of security that TLS provides you need to: 
-* Have a short TTL for each certificate.
-* Regularly rotate these certificates.
+* Securing your Nomad nodes with TLS certificates is an important part of managing your cluster.
 
-In previous slides we discussed what is needed to accomplish this. This can take a long time with many manual steps.
-]
+* To increase the level of security that TLS provides you need to:
+  * Have a short TTL for each certificate.
+  * Regularly rotate these certificates.
+
+* In previous slides, we discussed what is needed to accomplish this. This can take a long time with many manual steps.
+
 ???
 
 ---
 name: nomad-chapter-7-vault-pki-2
 # Vault PKI Secrets Engine Integration
-.small[
-When your clusters and regions start growing in number this process will become lengthy.
-It will also lead to mistakes creaping in.
-Nomad can make use of Consul Template to integrate with Vaul't PKI engine.
+* When your clusters and regions start growing in number, this process becomes cumbersome and will lead to mistakes.
+* Nomad can make use of [Consul Template](https://github.com/hashicorp/consul-template) to integrate with Vault's [PKI secrets engine](https://www.vaultproject.io/docs/secrets/pki/index.html).
+* This allows:
+  * Automatic Generation of dynamic certificates for each node
+  * Automatic renewal of these certificates for each node
+  * A unique relativly short TTL certificate per node
+  * Automatic certificate rotation by Consul Template
 
-This will allow for:
-* Automatic Generation of dynamic certificates for each node.
-* Automatic renewal of these certificates for each node.
-* A unique relativly short TTL certificate per node.
-* Automatic certificate rotation by Nomad.
-]
 ???
 
 ---
 name: nomad-chapter-7-ACL-instruqt-track
 # Instruqt Track for Nomad Security (ACLs)
 
-To get some hands on time with ACLs in Nomad go over to the following track
+To get some hands on time with Nomad ACLs, please explore the following Instruqt track:
 
-<https://instruqt.com/hashicorp/tracks/nomad-acls>
+https://instruqt.com/hashicorp/tracks/nomad-acls
 
 ???
