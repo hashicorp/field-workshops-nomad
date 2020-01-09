@@ -36,7 +36,7 @@ We will be interacting with Nomad using the...
 name: chapter-3-Nomad-CLI
 # The Nomad CLI
 
-* The Vault CLI is a Go application.
+* The Nomad CLI is a Go application.
 * It runs on macOS, Windows, Linux, and other operating systems.
 * You can download the latest version [here](https://www.nomadproject.io/downloads.html).
 
@@ -63,12 +63,12 @@ See this [tutorial](https://www.nomadproject.io/guides/install/index.html) for m
 name: some-cli-commands
 # Some Basic Nomad CLI Commands
 
-* `nomad version` tells you the version of Vault you are running.
+* `nomad version` tells you the version of Nomad you are running.
 * `nomad` by itself will give you a list of many Nomad CLI commands.
   * The list starts with the most common ones.
 
 
-The `-h`, `-help`, and `--help` flags can be added to get help for any Vault CLI command.
+The `-h`, `-help`, and `--help` flags can be added to get help for any Nomad CLI command.
 
 ???
 * If you've ever used any CLI, you can probably get by with these commands for Nomad.
@@ -79,7 +79,7 @@ name: getting-started-with-instruqt
 # Doing Labs with Instruqt
 * [Instruqt](https://instruqt.com/) is the platform used for HashiCorp workshops.
 * Instruqt labs are run in "tracks" that are divided into "challenges".
-* If you've never used Instruqt before, start with this [tutorial](https://instruqt.com/demo-org/tracks/getting-started-with-instruqt).
+* If you've never used Instruqt before, start with this [tutorial](https://instruqt.com/public/tracks/getting-started-with-instruqt).
 * Otherwise, you can skip to the next slide.
 
 ???
@@ -102,7 +102,7 @@ name: lab-challenge-3.1
 # Lab Challenge 3.1: Instructions
 
 * Start the "Nomad Basics" track by clicking the purple "Start" button on the "Nomad CLI" challenge of the track.
-* While the challenge is loading, read the displayed text.
+* While the challenge is loading, read the notes in both screens.
 * Click the green "Start" button to start the "Nomad CLI" challenge.
 * Follow the instructions on the right side of the challenge.
 * After completing all the steps, click the green "Check" button to see if you did everything right.
@@ -115,11 +115,15 @@ name: lab-challenge-3.1
 
 ---
 name: lab-challenge-3.2
-# Lab Challenge 3.2: Running the Nomad Agent in Dev Mode
+# Lab Challenge 3.2: Running a Dev Nomad Agent
 
-* In this lab you'll run your first Nomad agent in "dev" mode
-* You'll query the status of the node
-* You'll query the status fo the Nomad cluster
+* In this challenge, you'll run your first Nomad agent in "dev" mode.
+* You'll query the status of the node and the status of the Nomad cluster.
+* Instructions:
+  * Click the "Run a Dev Mode Nomad Agent" challenge of the "Nomad Basics" track.
+  * Then click the green "Start" button.
+  * Follow the challenge's instructions.
+  * Click the green "Check" button when finished.
 
 ???
 * Just to get started, we need to run the Nomad Agent.  We'll do this in "dev" mode for simplicity
@@ -127,15 +131,17 @@ name: lab-challenge-3.2
 
 ---
 name: lab-challenge-3.3
-# Lab Challenge 3.3: Running Your First Nomad Job
+# Lab Challenge 3.3: Run Your First Nomad Job
 
-* Environment contains a Nomad job file `redis.nomad`
-* Using the Nomad CLI, you will...
-    * Start and Stop the redis job
-    * Observe the job status through transitions
-* Using the Nomad UI, you will...
-    * Start and Stop the redis job
-    * Observe the job status through transitions
+* In this challenge, you'll run your first Nomad job.
+* Using the Nomad CLI and UI, you will ...
+    * Start and Stop the redis job.
+    * Observe the job status through transitions.
+* Instructions:
+    * Click the "Run Your First Nomad Job" challenge of the "Nomad Basics" track.
+    * Then click the green "Start" button.
+    * Follow the challenge's instructions.
+    * Click the green "Check" button when finished.
 
 ???
 * We have a sample job file, called redis.nomad, that you can take a look at
@@ -144,13 +150,14 @@ name: lab-challenge-3.3
 
 ---
 name: lab-challenge-3.4
-# Lab Challenge 3.4: Using Nomad's HTTP API
+# Lab Challenge 3.4: Use Nomad's HTTP API
 
-* Similar process as before, but using API
-* Use nomad to create appropriate JSON file
-* Utilizing the job JSON file, and CURL
-    * Start and Stop the redis job
-    * Observe the job status through transitions
+* In this challenge, you'll use Nomad's HTTP API to do what you did in the previous challenge.
+* Instructions:
+    * Click the "Use Nomad's HTTP API" challenge of the "Nomad Basics" track.
+    * Then click the green "Start" button.
+    * Follow the challenge's instructions.
+    * Click the green "Check" button when finished.
 
 ???
 * We're going to do the same things now, but using the HTTP API instead of the CLI
