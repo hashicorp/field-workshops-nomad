@@ -99,7 +99,7 @@ https://instruqt.com/hashicorp/tracks/nomad-basics.
 
 ---
 name: lab-challenge-3.1
-# Lab Challenge 3.1: Instructions
+# 👩‍💻 Lab Challenge 3.1: Instructions
 
 * Start the "Nomad Basics" track by clicking the purple "Start" button on the "Nomad CLI" challenge of the track.
 * While the challenge is loading, read the notes in both screens.
@@ -115,7 +115,7 @@ name: lab-challenge-3.1
 
 ---
 name: lab-challenge-3.2
-# Lab Challenge 3.2: Running a Dev Nomad Agent
+# 👩‍💻 Lab Challenge 3.2: Running a Dev Nomad Agent
 
 * In this challenge, you'll run your first Nomad agent in "dev" mode.
 * You'll query the status of the node and the status of the Nomad cluster.
@@ -131,7 +131,7 @@ name: lab-challenge-3.2
 
 ---
 name: lab-challenge-3.3
-# Lab Challenge 3.3: Run Your First Nomad Job
+# 👩‍💻 Lab Challenge 3.3: Run Your First Nomad Job
 
 * In this challenge, you'll run your first Nomad job.
 * Using the Nomad CLI and UI, you will ...
@@ -165,7 +165,7 @@ name: lab-challenge-3.4
 
 ---
 name: lab-challenge-3-Summary
-# Section 3 Lab Summary
+# 📝 Section 3 Lab Summary
 
 In this section you were able to...
 * Become familiar with the Nomad Interfaces (CLI/UI/API)
