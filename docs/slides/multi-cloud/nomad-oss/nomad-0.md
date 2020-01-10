@@ -58,8 +58,7 @@ name: workshop-topics
 1. Basic Nomad Job Specification
 1. Nomad Job Specification
 1. Nomad Monitoring and Logging
-1. Running Multi-Server Clusters
-  * Including Integration with Consul
+1. Running Multi-Server Nomad/Consul Clusters
 1. Nomad Security
 
 ???
