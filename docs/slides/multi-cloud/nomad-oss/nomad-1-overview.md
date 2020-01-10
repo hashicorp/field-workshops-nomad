@@ -82,17 +82,43 @@ name: chapter-1-nomad-use-cases
 ---
 name: chapter-1-nomad-oss-features
 # Nomad Open Source Features
-
-1. Nomad Open Source Features
+.smaller[
+* Flexible Task Drivers
+* Device Plugins
+* Apache Spark Integration
+* NVIDIA GPU Support
+* Service/Batch Schedulers
+* Access Control System
+* Web UI
+* Consul & Vault Integration
+* Multi-Upgrade Strategies
+* Multi-Region Federation
+]
 
 ???
-- This is our OSS Features slide.
+- Task drivers like docker, java, exec
+- Device Plugins allow community members to extend Nomad functionality to other drivers and devices
+- Direct Apache Spark Integration for big data processing
+- NVIDIA GPU Support enables compute-intensive workloads employing accelerators like GPUs or TPUs
+- Service and Batch Schedulers enable both short and long-lived workloads
+- ACLs to control access to data and APIs
+- Web UI included out-of-the-box
+- Native integration with other HashiCorp products Consul and Vault
+- Enables upgrade strategies such as blue-green and canary
+- Nomad Clusters can be extended across multiple cloud regions and on-prem datacenters
 
 ---
 name: chapter-1-nomad-enterprise-features
 # Nomad Enterprise Features
-
-1. Nomad Enterprise Features
+.smaller[
+* All Open Source Features
+* Automated Upgrades
+* Enhanced Read Scalability
+* Redundancy Zones
+]
 
 ???
-- This is our Enterprise Features slide.
+- All Open Source Features are included in Enterprise
+- Autopilot Upgrades
+- Servers can act as a non-voting member of the cluster to help provide read scalability
+- Nomad attempts to parition servers according to specified redundancy zone, and will aim to keep one voting server per zone
