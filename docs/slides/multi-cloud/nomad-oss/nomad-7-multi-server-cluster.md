@@ -29,7 +29,7 @@ name: chapter-7-topics
 1. Nomad Multi-Server Cluster Lab
   * Bootstrap a Nomad Cluster Manually
   * Bootstrap a Nomad Cluster with Consul
-  * Run a Job that Registers Tasks with Consul
+  * Run a Job that Registers Tasks with Consul and Secures Their Communication with Consul Connect
 
 
 ???
