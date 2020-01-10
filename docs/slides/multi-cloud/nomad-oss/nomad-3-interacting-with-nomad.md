@@ -21,7 +21,7 @@ layout: true
 
 ---
 name: chapter-3-topics
-# Chapter Topics
+# Chapter 3 Topics
 
 We will be interacting with Nomad using the...
 1. Nomad [CLI](https://www.nomadproject.io/docs/commands/index.html)
