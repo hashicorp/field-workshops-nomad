@@ -109,6 +109,7 @@ name: chapter-1-nomad-oss-features
 
 ---
 name: chapter-1-nomad-enterprise-features
+class: compact, smaller
 # Nomad Enterprise Features
 .smaller[
 * All Open Source Features
