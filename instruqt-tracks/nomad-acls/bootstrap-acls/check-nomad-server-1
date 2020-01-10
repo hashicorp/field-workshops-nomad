@@ -4,7 +4,7 @@ set -e
 
 grep -q "Secret" /root/nomad/acl_token.txt || fail-message "Have you created the bootstrap token file acl_token.txt?."
 
-env | grep -q NOMAD_TOKEN || fail-message "Have you exported your Secret ID in the console"
+grep -q "export NOMAD_TOKEN=" /root/.bash_history || fail-message "Have you exported your Secret ID in the console"
 
 nomad server members | grep -q server1.global || fail-message "Have you applied the anonymous policy yet?"
 

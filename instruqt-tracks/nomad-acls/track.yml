@@ -47,7 +47,7 @@ challenges:
 
       The first challenge will run 3 Nomad servers and 2 Nomad clients for you. All you'll need to do is check that they are running.
 
-      In the second and third challenges, you will configure and then use Nomad ACLs.
+      In the following challenges, you will configure and then use Nomad ACLs.
   - type: text
     contents: |-
       We've already started a cluster with three servers and two clients for you.
@@ -124,7 +124,7 @@ challenges:
     If everything is configured correctly you will get an access denied error.
     This is the expected behavior as Nomad ACLs is "Deny by default". We will be fixing this in a later challenge.
 
-    To make sure the process is running we can runn the following command on each server console tab.
+    To make sure the process is running we can run the following command on each server console tab.
 
     ```
     ps -ef | grep nomad
@@ -444,4 +444,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 1800
-checksum: "6488945212471319344"
+checksum: "13439494581140262406"
