@@ -33,3 +33,18 @@ name: chapter-1-topics
 
 ???
 * This is our upcoming chapter topics slide.
+
+---
+name: chapter-1-nomad-place-in-hashistack
+# Nomad's Place in the HashiStack
+
+1. Nomad's Place in the HashiStack
+1. Nomad's Business Value
+1. What is Nomad?
+1. Nomad Use Cases
+1. Nomad OSS Features
+1. Nomad Enterprise Features
+
+
+???
+* This is our chapter topics slide.
