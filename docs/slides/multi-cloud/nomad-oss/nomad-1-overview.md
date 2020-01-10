@@ -37,20 +37,21 @@ name: chapter-1-topics
 ---
 name: chapter-1-nomad-place-in-hashistack
 # Nomad's Place in the HashiStack
-
-.center[![:scale 100%](images/Nomad_HashiStack_Velocity.png)]
+.center[![:scale 85%](images/Nomad_HashiStack_Velocity.png)]
 
 ???
-* This explains Nomad's role in the HashiStack
+
+* Organizations can use Nomad to run their containerized workloads across any cloud or onprem.
 
 ---
 name: chapter-1-nomad-business-value
 # Nomad's Business Value
-
-1. Nomad's Business Value
+.center[![:scale 85%](images/Nomad_Business_Value.png)]
 
 ???
-* This is our business value slide.
+* Nomad can help lower total cost of ownership via bin packing
+* Nomad can run both containerized and legacy apps (e.g. Java classes and jars)
+* Nomad is easy to operate and run
 
 ---
 name:  chapter1-what-is-nomad
