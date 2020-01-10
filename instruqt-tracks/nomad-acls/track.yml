@@ -124,6 +124,23 @@ challenges:
     If everything is configured correctly you will get an access denied error.
     This is the expected behavior as Nomad ACLs is "Deny by default". We will be fixing this in a later challenge.
 
+    To make sure the process is running we can runn the following command on each server console tab.
+
+    ```
+    ps -ef | grep nomad
+    ```
+
+    The result should be similar to this on each server.
+
+    ```
+    root@nomad-server-1:~# ps -ef | grep nomad
+    root      2203     1  1 10:28 ?        00:01:25 /usr/local/bin/nomad agent -config /etc/nomad.d
+    root      3369  3345  0 12:06 pts/0    00:00:00 grep nomad
+    root@nomad-server-1:~#
+    ```
+
+    This confirms tha the agents are running.
+
     In the next challenge, you will configure the nomad client servers for utilizing ACLs.
   notes:
   - type: text
@@ -182,13 +199,32 @@ challenges:
     ```
     systemctl restart nomad
     ```
-    After you have restarted the Nomad Agents we need to make sure that they have joined the cluster again.
+    After you have restarted the Nomad Agents.
 
-    If you run the following command in the "Server1" tab.
+    Run the following command in the "Server1" tab.
     ```
     nomad node status
     ```
+    What is the result?
+
     You will see the same error that we recieved when we tried to check the server status earlier.
+
+    Run the same command we did in the server challenge on both client node consoles to make sure that the Nomad process is running.
+
+    ```
+    ps -ef | grep nomad
+    ```
+
+    The result should be similar to this on each client.
+
+    ```
+    root@nomad-client-1:~# ps -ef | grep nomad
+    root      2203     1  1 10:28 ?        00:01:25 /usr/local/bin/nomad agent -config /etc/nomad.d
+    root      3369  3345  0 12:06 pts/0    00:00:00 grep nomad
+    root@nomad-client-1:~#
+    ```
+
+    This confirms tha the agents are running.
 
     In the next challemge we will bootstrap the cluster ACL API and create our first management token
   notes:
@@ -298,14 +334,12 @@ challenges:
     ```
     Copy the "Secret ID" token.
 
-    Open the "Server1" console tab and enter the following and hit return.
+    Open the "Server1" console and run **ALL** the next commands in the "Server 1" console tab.
     ```
     export NOMAD_TOKEN="PLACE_YOUR_SECURE_ID_HERE"
     ```
 
     We now need to install the policy.
-
-    Run this command in the "Server 1" console tab.
 
     ```
     curl --request POST --data @anonymous.json -H "X-Nomad-Token: $NOMAD_TOKEN" http://localhost:4646/v1/acl/policy/anonymous
@@ -315,7 +349,7 @@ challenges:
     ```
     curl http://localhost:4646/v1/jobs
     ```
-    It should have an error.
+    It should not give an error.
 
     Now we should be able to run our command from before.
 
@@ -327,7 +361,7 @@ challenges:
 
     Check the node status.
     ```
-    nomad node  status
+    nomad node status
     ```
     You should see the 2 client servers.
 

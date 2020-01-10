@@ -1,3 +1,5 @@
 #!/bin/bash -l
 
+nomad node status
+
 exit 0

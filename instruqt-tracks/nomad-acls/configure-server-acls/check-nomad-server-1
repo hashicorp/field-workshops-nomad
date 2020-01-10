@@ -4,10 +4,12 @@ set -e
 
 grep -q "acl" /etc/nomad.d/server1.hcl || fail-message "Have you created the acl stanza in the server1.hcl file?."
 
-grep -q "enabled = true" /etc/nomad.d/server1.hcl || fail-message "You have not enabled acl in the server1.hcl file yet."
-
 grep -q "authoritative_region" /etc/nomad.d/server1.hcl || fail-message "You have not enabled authoritative_region in the server1.hcl file yet."
 
+grep -q "systemctl restart nomad" /root/.bash_history || fail-message "You haven't restarted your Nomad server1 yet."
+
 grep -q "nomad server members" /root/.bash_history || fail-message "You haven't checked the status of your Nomad servers yet."
+
+grep -q "ps -ef | grep nomad" /root/.bash_history || fail-message "You haven't performed the process check of your Nomad server1 yet."
 
 exit 0

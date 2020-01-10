@@ -10,4 +10,8 @@ acl {
 }
 EOF
 
+systemctl restart nomad
+
+ps -ef | grep nomad
+
 exit 0
