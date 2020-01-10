@@ -113,19 +113,6 @@ client {
 * It also shows the `servers` setting that tells the client what server or servers to connect to.
 
 ---
-name: nomad-clustering-options
-# Nomad Clustering Options
-* Nomad has 3 clustering options:
-  * Manual Clustering:
-      * Uses known IP or DNS addresses
-  * Automated Clustering with Consul
-      * Uses a Consul cluster running on same servers.
-  * Cloud Auto-Joining
-      * Uses cloud tags from AWS, Azure, and GCP
-* In this chapter's lab, we will use manual clustering with DNS addresses.
-* To learn more, see the Nomad [Clustering Guide](https://www.nomadproject.io/guides/operations/cluster/bootstrapping.html).
-
----
 name: job-specification
 class: compact, smaller
 # Job Specification

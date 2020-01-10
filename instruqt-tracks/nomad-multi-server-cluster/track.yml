@@ -24,7 +24,7 @@ challenges:
 - slug: manual-clustering
   id: 7kmuc2a1yqge
   type: challenge
-  title: Bootstrap a Nomad Cluster with Manual Clustering
+  title: Bootstrap a Nomad Cluster Manually
   teaser: Bootstrap a Nomad cluster with 3 servers and 2 Nomad clients using manual
     clustering.
   assignment: |-
@@ -301,4 +301,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 1200
-checksum: "13517801321600540807"
+checksum: "10301289706920588019"

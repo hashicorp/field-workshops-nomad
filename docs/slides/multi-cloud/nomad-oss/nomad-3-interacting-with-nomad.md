@@ -88,7 +88,7 @@ name: getting-started-with-instruqt
 
 ---
 name: lab-nomad-basics-challenge-1
-# 👩‍💻 Lab Challenge 3.1: The Nomad CLI
+# 👩‍💻 Nomad Basics Lab
 * In this lab, you'll run some of the Nomad CLI commands.
 * You'll do this in the first challenge, "The Nomad CLI", of the "Nomad Basics" Instruqt track using the URL:
 https://instruqt.com/hashicorp/tracks/nomad-basics.
@@ -99,7 +99,7 @@ https://instruqt.com/hashicorp/tracks/nomad-basics.
 
 ---
 name: lab-challenge-3.1
-# 👩‍💻 Lab Challenge 3.1: Instructions
+# 👩‍💻 Lab Challenge 3.1: Using the Nomad CLI
 
 * Start the "Nomad Basics" track by clicking the purple "Start" button on the "Nomad CLI" challenge of the track.
 * While the challenge is loading, read the notes in both screens.
