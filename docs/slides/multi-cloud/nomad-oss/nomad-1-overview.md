@@ -32,26 +32,26 @@ name: chapter-1-topics
 
 
 ???
-* This is our upcoming chapter topics slide.
+- Topics discussed in Chapter 1
 
 ---
 name: chapter-1-nomad-place-in-hashistack
 # Nomad's Place in the HashiStack
-.center[![:scale 85%](images/Nomad_HashiStack_Velocity.png)]
+.center[![:scale 80%](images/Nomad_HashiStack_Velocity.png)]
 
 ???
 
-* Organizations can use Nomad to run their containerized workloads across any cloud or onprem.
+- Organizations can use Nomad to run their containerized workloads across any cloud or onprem.
 
 ---
 name: chapter-1-nomad-business-value
 # Nomad's Business Value
-.center[![:scale 85%](images/Nomad_Business_Value.png)]
+.center[![:scale 70%](images/Nomad_Business_Value.png)]
 
 ???
-* Nomad can help lower total cost of ownership via bin packing
-* Nomad can run both containerized and legacy apps (e.g. Java classes and jars)
-* Nomad is easy to operate and run
+-  Lowers total cost of ownership (TCO) via bin packing
+-  Runs both containerized and legacy apps (e.g. Java classes and jars)
+-  Easy to operate and maintain
 
 ---
 name:  chapter1-what-is-nomad
@@ -72,11 +72,12 @@ name:  chapter1-what-is-nomad
 ---
 name: chapter-1-nomad-use-cases
 # Nomad Use Cases
-
-1. Nomad's Use Cases
+.center[![:scale 70%](images/Nomad_Use_Cases.png)]
 
 ???
-* This is our use cases slide.
+- Container Workloads
+- Legacy Applications
+- Batch Jobs like Machine Learning
 
 ---
 name: chapter-1-nomad-oss-features
@@ -85,7 +86,7 @@ name: chapter-1-nomad-oss-features
 1. Nomad Open Source Features
 
 ???
-* This is our OSS Features slide.
+- This is our OSS Features slide.
 
 ---
 name: chapter-1-nomad-enterprise-features
@@ -94,4 +95,4 @@ name: chapter-1-nomad-enterprise-features
 1. Nomad Enterprise Features
 
 ???
-* This is our Enterprise Features slide.
+- This is our Enterprise Features slide.
