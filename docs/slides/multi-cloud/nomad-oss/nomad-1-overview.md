@@ -38,7 +38,7 @@ name: chapter-1-topics
 name: chapter-1-nomad-place-in-hashistack
 # Nomad's Place in the HashiStack
 
-1. Nomad's Place in the HashiStack
+.center[![:scale 100%](images/Nomad_HashiStack_Velocity.png)]
 
 ???
 * This explains Nomad's role in the HashiStack
