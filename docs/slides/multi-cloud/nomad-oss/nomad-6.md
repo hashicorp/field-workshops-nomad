@@ -23,8 +23,10 @@ layout: true
 name: chapter-6-topics
 # Chapter 6 Topics
 
-1. Using the Nomad CLI to Inspect Jobs
-1. Using the Nomad UI to Inspect Jobs
+* Using the Nomad CLI to:
+  * Inspect Jobs, Allocations, and Evaluations
+  * View Allocation Logs
+* Using the Nomad UI to do the same
 
 ???
 * In this chapter, we'll discuss how to monitor Nomad jobs including their allocations, evaluations, task groups, and tasks.
@@ -183,3 +185,12 @@ name: nomad-ui-task-logs
 
 ???
 * This is a screenshot showing the logs of a task in the Nomad UI.
+
+---
+name: chapter-6-summary
+# 📝 Chapter 6 Summary
+In this chapter, you learned about:
+* Using the Nomad CLI to:
+  * Inspect Jobs, Allocations, and Evaluations
+  * View Allocation Logs
+* Using the Nomad UI to do the same

@@ -1,9 +1,9 @@
-name: nomad-chapter-5-title
+name: nomad-chapter-4-title
 class: title, shelf, no-footer, fullbleed
 background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/bkgs/HashiCorp-Title-bkg.jpeg)
 count: false
 
-# Chapter 5
+# Chapter 4
 ## Nomad Jobs and Drivers
 
 ![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
@@ -20,8 +20,8 @@ layout: true
 ]
 
 ---
-name: chapter-5-topics
-# Chapter 5 Topics
+name: chapter-4-topics
+# Chapter 4 Topics
 
 1. Job and Scheduler Types
 1. Declaring Jobs and Their Target Datacenters
@@ -418,8 +418,8 @@ job "example" {
 * for sure now talk about consul
 
 ---
-name: nomad-5-Summary
-# 📝 Chapter 5 Summary
+name: nomad-4-Summary
+# 📝 Chapter 4 Summary
 
 * In this chapter, you learned some of the most important aspects of Nomad jobs:
   * Types of jobs and schedulers

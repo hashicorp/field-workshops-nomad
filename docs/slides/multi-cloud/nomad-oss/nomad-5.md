@@ -1,9 +1,9 @@
-name: nomad-chapter-4-title
+name: nomad-chapter-5-title
 class: title, shelf, no-footer, fullbleed
 background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/bkgs/HashiCorp-Title-bkg.jpeg)
 count: false
 
-# Chapter 4
+# Chapter 5
 ## Running Nomad Clusters and Jobs
 
 ![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
@@ -20,8 +20,8 @@ layout: true
 ]
 
 ---
-name: chapter-4-topics
-# Chapter 4 Topics
+name: chapter-5-topics
+# Chapter 5 Topics
 
 1. Configuring and Running Nomad Servers
 2. Configuring and Running Nomad Clients
@@ -35,7 +35,7 @@ name: chapter-4-topics
 * We'll also learn about different ways of joining servers and clients in clusters and how to modify jobs.
 
 ---
-name: chapter-4-summary
+name: chapter-5-summary
 # Where are We and Where are We Going?
 
 * We already learned about Nomad servers, clients, clusters, and jobs in Chapter 2.
@@ -139,7 +139,7 @@ job "redis" {
 
 ---
 name: lab-nomad-simple-cluster-track
-# 👩‍💻 Lab 4: Nomad Simple Cluster
+# 👩‍💻 Lab 5: Nomad Simple Cluster
 * Now, you'll have a chance to configure and run your first Nomad cluster.
 * You'll run a simple Nomad cluster consisting of 1 server and 2 clients in the "Nomad Simple Cluster" Instruqt track using the URL: https://instruqt.com/hashicorp/tracks/nomad-simple-cluster.
 * In the first challenge, you will configure and run the cluster.
@@ -197,8 +197,8 @@ class: smaller
 ???
 * This slide shows more Nomad commands you will use in the lab.
 ---
-name: lab-challenge-4.1
-# 👩‍💻 Lab Challenge 4.1: Run the Server and Clients
+name: lab-challenge-5.1
+# 👩‍💻 Lab Challenge 5.1: Run the Server and Clients
 * In this challenge, you'll configure and run the server and clients.
 * Instructions:
   * While the first challenge is loading, read the notes on both screens.
@@ -213,8 +213,8 @@ name: lab-challenge-4.1
 * Students can also click the green "Check" button to get reminders of what they should do next.
 
 ---
-name: lab-challenge-4.2
-# 👩‍💻 Lab Challenge 4.2: Create a Nomad Job
+name: lab-challenge-5.2
+# 👩‍💻 Lab Challenge 5.2: Create a Nomad Job
 
 * In this challenge, you'll create your first Nomad job using the `nomad job init` command (with the `-short` option to keep the job simpler).
 * You'll also be able to inspect the job specification.
@@ -230,8 +230,8 @@ name: lab-challenge-4.2
 * Students can also click the green "Check" button to get reminders of what they should do next.
 
 ---
-name: lab-challenge-4.3
-# 👩‍💻 Lab Challenge 4.3: Run Your First Nomad Job
+name: lab-challenge-5.3
+# 👩‍💻 Lab Challenge 5.3: Run Your First Nomad Job
 
 * In this challenge, you'll run and monitor your first Nomad job.
 * You'll be able to check the status of the job, its evaluation, its single allocation, and even see the logs for the `redis` task that it runs.
@@ -247,8 +247,8 @@ name: lab-challenge-4.3
 * Students can also click the green "Check" button to get reminders of what they should do next.
 
 ---
-name: lab-challenge-4.4
-# 👩‍💻 Lab Challenge 4.4: Modify a Job to Scale
+name: lab-challenge-5.4
+# 👩‍💻 Lab Challenge 5.4: Modify a Job to Scale
 
 * In this challenge, you'll modify your `redis` job to run 3 instances so it can handle more load.
 * You'll re-run the job and see that 2 new allocations are assigned.
@@ -264,8 +264,8 @@ name: lab-challenge-4.4
 * Students can also click the green "Check" button to get reminders of what they should do next.
 
 ---
-name: nomad-4-Summary
-# 📝 Chapter 4 Summary
+name: nomad-5-Summary
+# 📝 Chapter 5 Summary
 * In this chapter, you learned how to:
   - Create a sample Nomad job specification
   - Run a job.

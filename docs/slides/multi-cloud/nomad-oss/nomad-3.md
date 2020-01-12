@@ -167,8 +167,8 @@ name: lab-challenge-3.4
 name: chapter-3-Summary
 # 📝 Chapter 3 Summary
 
-In this section you were able to...
-* Become familiar with the Nomad Interfaces (CLI/UI/API)
+In this section you were able to:
+* Learn about and use with Nomad's Interfaces (CLI/UI/API)
 * Create, stop, and manage simple Nomad jobs
 
 ???

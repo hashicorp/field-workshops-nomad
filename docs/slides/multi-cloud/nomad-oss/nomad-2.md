@@ -33,7 +33,7 @@ name: chapter-2-topics
 
 ---
 name:  What Is Nomad
-# What is Nomad
+# What is Nomad?
 .smaller[
 * A flexible, lightweight, high performing, easy to use orchestrator
 * Used to deploy and manage containers and legacy applications simultaneously
@@ -48,8 +48,8 @@ name:  What Is Nomad
 -  Can manage individual services, batch functions, or even global system services such as monitoring functions.
 
 ---
-name:  Common Nomad Terms
-# Nomad Terms
+name:  Common Nomad Concepts
+# Nomad Concepts (1)
 
 .smaller[
 * Nomad **Clusters** consist of nodes running the Nomad binary, both Servers and Clients, in a single region
@@ -71,8 +71,8 @@ name:  Common Nomad Terms
 -  Task Groups are groups of tasks that must be run together, often colocated on the same client -  may be required for various architectural reasons.
 
 ---
-name:  More Nomad Terms
-# Nomad Terms (part 2)
+name:  More Nomad Concepts
+# Nomad Concepts (2)
 
 .smaller[
 * **Allocations** map the tasks and task groups within jobs to client nodes
@@ -167,7 +167,7 @@ name:  Multi-region Federation
 
 ---
 class: img-right
-Name:  Nomad Layout and Comms
+name:  Nomad Layout and Comms
 # Nomad Communications
 ![NomadArchitectureRegion](https://www.nomadproject.io/assets/images/nomad-architecture-region-a5b20915.png)
 
@@ -201,7 +201,7 @@ Focusing more on the Scheduler process
 
 ---
 class: img-right
-Name:  Nomad Evaluation
+name:  Nomad Evaluation
 # Nomad Scheduler Initiation - Evaluations
 
 ![NomadEvalAlloc](images/Nomad_eval_alloc.png)
@@ -221,7 +221,7 @@ An Evaluation is "Kicked Off" whenever ANY of the following occur
 ---
 class: img-right
 
-Name:  Nomad Scheduler
+name:  Nomad Scheduler
 # Nomad Scheduler Initiation
 
 ![NomadEvaluationKickoff](images/Nomad_Evaluation_Kickoff.png)
@@ -256,7 +256,7 @@ Scheduler on Follower Nodes pick the Evaluations off the queue and start plannin
 -  Once the evaluation is picked up by a Scheduler, the planning begins!
 
 ---
-Name:  Scheduling Workers
+name:  Scheduling Workers
 # Scheduler Operations
 
 All Servers run Scheduling Workers
@@ -271,7 +271,7 @@ All Servers run Scheduling Workers
 -  Server chooses the proper scheduler, either for standard services, batch jobs, or system level jobs.
 
 ---
-Name:  Scheduler Function Part 2
+name:  Scheduler Function Part 2
 # Scheduler Processing
 Now that the Scheduler has the job, let's look at what the it does...
 .smaller[
@@ -290,7 +290,7 @@ Now that the Scheduler has the job, let's look at what the it does...
 
 ---
 class: img-right
-Name:  Plan Queue Processing
+name:  Plan Queue Processing
 # Plan Queue Processing
 ![QueueProcessing](images/Queue_Processing.png)
 
@@ -311,12 +311,12 @@ Back to the leader now...
 -  Scheduler updates the Evaluation Broker with the decision, and clients pick up any changes deemed necessary
 
 ---
-Name:  End to End Flow
+name:  End to End Flow
 #  Flow Recap
 ![:scale 90%](images/Nomad_Overall_Flow.png)
 
 ---
-Name:  Job Priority
+name:  Job Priority
 # Job Priority
 * Every Scheduler, Planner, Program Manager, deals with struggling priorities.
 * **Nomad** is no different - Priority is processed during evaluation and planning
@@ -335,9 +335,9 @@ Name:  Job Priority
 -  What if a higher priority job is scheduled and resources are limited?
 
 ---
-Name:  Preemption
-# Preemption
-.center[Preemption allows Nomad to adjust resource allocations based on Job priority.]
+name:  Preemption
+# Preemption in Nomad
+.center[Preemption allows high-priority jobs to replace  other jobs.]
 .smaller[
 | Without Preemption            | With Preemption                  |
 |-------------------------------|-------------------------------------------------|
@@ -353,6 +353,60 @@ Name:  Preemption
 -  Any preemption actions necessary are highlighted as an output of the 'Plan' operation
 
 ---
+class: col-2
+name:  How Preemption Works
+layout: false
+# Preemption Details
+
+
+![systemalert](images/SystemAlerting.png)
+.center[We want to add the System Alerting app, but there's no room!]
+
+![fullcluster](images/FullCluster.png)
+.center[The Nomad cluster is already using all 12GB of memory!]
+
+
+
+???
+* Let's run through a quick example of how preemption works.
+* Here we have a Nomad cluster with a few allocations in an analytics solution.
+* All allocations are all happy, and now we have a new job added to the system for System Alerting.
+* We have enough CPU, and plenty of Hard Drive, but we are at the memory limit.
+* There's no room at the inn for our System Alerting process.  
+* Without Preemption, that's where we would stop.
+* But we have preemption, so we'll continue
+
+---
+class: col-2
+name:  How Preemption Works 2
+layout: false
+# Preemption Details 2
+
+![EvictBusinessAlert](images/EvictBusinessAlert1.png)
+.center[One of the Business Reporting apps needs to go!]
+
+![AddSystemAlert](images/AddSystemAlert1.png)
+
+
+???
+With Preemption, Nomad realizes that there are lower priority allocations that can be evicted.  So if we are adding one System Alerting job, we evict one Business Reporting Job.  The Business Reporting job has the lowest priority, so it gets evicted first.  But what happens if we have to add two more System Alerting allocations?
+
+---
+class: col-2
+
+name:  How Preemption Works 3
+# Preemption Details 3
+
+![EvictBusinessAlert](images/EvictBusinessAlert2.png)
+.center[More System Alerting means more eviction.]
+![AddSystemAlert](images/AddSystemAlert2.png)
+ .center[Log Collection isn't a candidate since priority delta < 10.]
+
+???
+* If we add two more Sytem Alerting allocations, we need to bump a Batch Analytics Allocation as well.
+* Evicting the Log Collection allocation would be sufficient, but the Batch Analytics Allocation has a lower priority.
+* Additionally, as the priority difference between System Alerting and Log Collection is less than 10, the Log Collection allocation isn't a candidate for preemption with respect to System Alerting.
+---
 name: Nomad within HashiCorp
 class: title, shelf, no-footer, fullbleed
 background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/bkgs/HashiCorp-Title-bkg.jpeg)
@@ -364,18 +418,26 @@ count: false
 ![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
 
 ???
-Nomad integrates well with other HashiCorp products.  We're just going to touch on teh functionality here.
+Nomad integrates well with other HashiCorp products.  We're just going to touch on the functionality here.
+
+---
+layout: true
+
+.footer[
+- Copyright © 2020 HashiCorp
+- ![:scale 100%](https://hashicorp.github.io/field-workshops-assets/assets/logos/HashiCorp_Icon_Black.svg)
+]
 
 ---
 name:  Nomad and Consul
 # Nomad's Native Integration with Consul
 
-.smaller[
-* Automatic Clustering of Servers and Clients
-* Service Discovery for Tasks and Jobs
-* Dynamic Configuration for applications
-* Secure communication between jobs and task groups using Consul Connect
-]
+* Consul enables:
+  * Automatic clustering of Nomad servers and clients
+  * Service discovery for tasks
+  * Dynamic configuration for applications run by tasks.
+* Consul Connect enables:
+  * Secure communication between jobs and task groups
 
 ???
 -  Nomad Servers and Clients can automatically find each other within the network, minimizing configuration and being more address-flexible.
@@ -387,13 +449,22 @@ name:  Nomad and Consul
 name:  Nomad and Vault
 # Nomad's Native Integration with Vault
 
-* Create and Distribute Vault tokens to be used by Tasks
-* Nomad tasks retrieve Secrets from Vault
-* Tasks access external services through short-lived credentials provided by Vault
-* Tasks can also retrieve Nomad API tokens using Vault's  [Nomad Secrets Engine](https://www.vaultproject.io/docs/secrets/nomad/index.html)
+* Nomad creates and distribute Vault tokens to tasks.
+* Nomad tasks retrieve secrets and service credentials from Vault.
+* Tasks access services with short-lived credentials dynamically generated by Vault.
+* Tasks can also retrieve Nomad API tokens using Vault's  [Nomad Secrets Engine](https://www.vaultproject.io/docs/secrets/nomad/index.html).
 
 ???
 -  Nomad's integration with Vault allows Vault tokens to be used by Nomad Tasks
 -  Nomad's tasks can retrieve secrets directly from Vault
 -  Vault can also provide short-lived credentials to Nomad tasks
 -  Vault offers a native Nomad Secrets Engine
+
+---
+name: chapter-2-summary
+# 📝 Chapter 2 Summary
+In this chapter, you learned about:
+  * Key Nomad Concepts
+  * Nomad's Architecture
+  * Nomad's Scheduling Processes
+  * Nomad Integrations with Vault and Consul
