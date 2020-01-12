@@ -4,12 +4,12 @@ background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/
 count: false
 
 # Chapter 5
-## Nomad Job Specification
+## Nomad Jobs and Drivers
 
 ![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
 
 ???
-* In this chapter, we'll discuss basic Nomad job specification.
+* In this chapter, we'll discuss Nomad jobs and drivers and cover basic Nomad job specification.
 
 ---
 layout: true
@@ -23,17 +23,89 @@ layout: true
 name: chapter-5-topics
 # Chapter 5 Topics
 
+1. Job and Scheduler Types
 1. Declaring Jobs and Their Target Datacenters
-2. Declaring Tasks, Task Groups, and Task Drivers
-3. Specifying Required Resources and Networks
-4. Registering Tasks as Consul Services
+1. Declaring Task Groups, Tasks, and Task Drivers
+1. Specifying Required Resources and Networks
+1. Registering Tasks as Consul Services
 
 ???
 * This is our chapter topics slide.
 
 ---
-class: compact, col-2
+name: jobs-definition
+class: compact
+# Nomad Jobs
+* We've already discussed **Nomad Jobs** in Chapter 2 and have already run a simple job in our first lab.
+* But what exactly is a Nomad Job?
+  * A specification provided by a user that declares  a workload for Nomad.
+  * A form of **desired state** for that workload.
+  * The actual workload executed by the job.
+* Nomad decides where the job should run and makes sure that the **actual state** matches the user's desired state.
+* Jobs are composed of one or more task groups which contain tasks.
+
+???
+* Define Jobs again to make sure we're all on the same page.
+
+---
+name: Job Types and Schedulers
+class: col-2, smaller
+# Nomad Job Types and Schedulers
+- The [type stanza](https://www.nomadproject.io/docs/job-specification/job.html#type) specifies the Nomad scheduler to use.
+ - Nomad has three scheduler types that can be used when creating your job:
+  - `service`
+  - `system`
+  - `batch`
+
+<br>
+
+```hcl
+job "example" {
+  datacenters = ["dc1"]
+* type = "system"
+}
+```
+???
+* There are 3 types of Nomad jobs, corresponding to the three types of Nomad schedulers
+
+---
+name: Service Scheduler
+# Service Scheduler
+- The [Service Scheduler](https://www.nomadproject.io/docs/schedulers.html#service) is designed for scheduling long lived services that should never go down
+- Service jobs are intended to run until explicitly stopped by an operator.
+- If a service task exits it is considered a failure and handled according to the job's `restart` and `reschedule` stanzas.
+
+???
+* First, we have the Service Scheduler
+
+---
+name: Batch Scheduler
+# Batch Scheduler
+  - The [Batch Scheduler](https://www.nomadproject.io/docs/schedulers.html#batch) runs batch jobs, which are short lived, usually finishing in a few minutes to a few days.
+  - They are much less sensitive to short term performance fluctuations.
+  - Batch jobs are intended to run until they exit successfully.
+  - Batch tasks that exit with an error are handled according to the job's `restart` and `reschedule` stanzas.
+
+???
+* Then, we have the Batch Scheduler
+
+---
+name: System Scheduler
+class: smaller
+# System Scheduler
+- The [System Scheduler](https://www.nomadproject.io/docs/schedulers.html#system) registers jobs that should run on all clients that meet constraints.
+- It is also invoked when clients join the cluster or transition into the ready state.
+  - This means that all registered system jobs will be re-evaluated and their tasks will be placed on the newly available nodes if the constraints are met.
+- Systems jobs are intended to run until explicitly stopped either by an operator or by preemption.
+- If a system task exits it is considered a failure and handled according to the job's `restart` stanza.
+- System jobs do not have rescheduling.
+
+???
+* And last we have the System Scheduler.
+
+---
 name: Declaring Jobs and Their Target Datacenters
+class: compact, col-2
 # Declaring Jobs and Their Target Datacenters
 
 .smaller[
@@ -43,7 +115,7 @@ name: Declaring Jobs and Their Target Datacenters
 - Servers are assigned to a specific region, managing state and making scheduling decisions within that region.
 ]
 
-```go
+```hcl
 
 *job "example" {
 * datacenters = ["dc1"]
@@ -60,8 +132,8 @@ name: Declaring Jobs and Their Target Datacenters
 ???
 * Simple redis job definition
 ---
+name: Declaring Task Groups
 class: compact, col-2
-name: Declaring Tasks, Task Groups, and Task Drivers
 # Declaring Task Groups
 
 .smaller[
@@ -72,38 +144,36 @@ name: Declaring Tasks, Task Groups, and Task Drivers
 <br>
 <br>
 <br>
-<br>
 
-```go
+<br>
+```hcl
 
 job "example" {
   datacenters = ["dc1"]
 *  group "cache" {
-*    task "redis-1" {
+*    task "redis" {
 *     driver = "docker"
-*     config {
-*     }
-*    task "redis-2" {
+*    }
+*    task "web" {
 *     driver = "docker"
-*     config {
-*     }
-*   }
-* }
+*    }
+*  }
 }
 ```
 
 ???
 * expanding the redis example with groups
+
 ---
+name: Declaring Tasks
 class: compact, col-2
-name: Declaring Tasks, Task Groups, and Task Drivers
-### Declaring Tasks
+# Declaring Tasks
 .smaller[
 - The [task stanza](https://www.nomadproject.io/docs/job-specification/task.html) creates an individual unit of work, such as a Docker container, web application, or batch processing.
 - Tasks can be short-lived batch jobs or long-running services such as a web application, database server, or API.
 ]
 <br>
-```go
+```hcl
 job "example" {
   datacenters = ["dc1"]
    group "cache" {
@@ -120,28 +190,26 @@ job "example" {
 * same redis example
 
 ---
+name: Declaring Task Drivers
 class: compact, col-2
-name: Declaring Tasks, Task Groups, and Task Drivers
-### Declaring Task Drivers
+# Declaring Task Drivers
 .smaller[
 -   [Task Drivers](https://www.nomadproject.io/docs/drivers) are used by Nomad clients to execute a task and provide resource isolation.
-    -  Task driver resource isolation is intended to provide a degree of separation of Nomad client CPU, memory, and storage between tasks.
-    -  Resource isolation effectiveness is dependent upon individual task driver implementations and underlying client operating systems.
+    -  Task driver resource isolation is intended to provide separation of Nomad client CPU, memory, and storage between tasks.
+    -  Resource isolation effectiveness is dependent upon individual task driver implementations and underlying operating systems.
 ]
 <br>
-```go
+```hcl
+
 job "example" {
   datacenters = ["dc1"]
    group "cache" {
-     task "redis-1" {
+     task "redis" {
 *     driver = "docker"
-      config {
-      }
-     task "redis-2" {
+     }
+     task "web" {
 *     driver = "docker"
-      config {
-      }
-    }
+     }
   }
 }
 ```
@@ -150,8 +218,8 @@ job "example" {
 * task driver explained
 
 ---
+name: HashiCorp and Community Task Drivers
 class: compact, col-2
-name: Declaring Tasks, Task Groups, and Task Drivers
 ### HashiCorp Task Drivers
 .smaller[
 - There are 5 task drivers developed and maintained by HashiCorp
@@ -175,22 +243,20 @@ name: Declaring Tasks, Task Groups, and Task Drivers
 * showing all the drivers except depricated drivers
 
 ---
+name: Specifying Required Resources
 class: compact, col-2
-name: Specifying Required Resources and Networks
 # Specifying Required Resources
-- The [resources stanza](https://www.nomadproject.io/docs/job-specification/resources.html) describes the requirements a task needs to execute.
+- The [resources stanza](https://www.nomadproject.io/docs/job-specification/resources.html) describes the requirements a task requires.
   - Resource requirements include memory, network, CPU, and device.
   - Tasks will only be scheduled to client nodes that satisfy its resource requirements.
 
-
-```go
-
+<br>
+```hcl
 
 job "example" {
-  datacenters = ["dc1"]
-  group "cache" {
+  group "cache"
+  {
     task "redis" {
-      driver = "docker"
 *     resources {
 *       cpu    = 500
 *       memory = 256
@@ -200,14 +266,16 @@ job "example" {
 *       }
 *     }
     }
+  }
+}
 ```
 
 ???
 * expanding the redis example with resources
 
 ---
+name: Specifying Networking
 class: compact, col-2
-name: Specifying Required Resources and Networks
 # Specifying Networking
 - The [network stanza](https://www.nomadproject.io/docs/job-specification/network.html) specifies the networking requirements for the task.
   - Bandwidth
@@ -217,7 +285,7 @@ name: Specifying Required Resources and Networks
 <br>
 <br>
 
-```go
+```hcl
 
 job "example" {
   datacenters = ["dc1"]
@@ -240,7 +308,7 @@ job "example" {
 
 ---
 class: compact, col-2
-name: Specifying Required Resources and Networks
+name: Specifying Port Mapping
 # Specifying Port Mapping
 .smaller[
 - Nomad supports [Dynamic Ports](https://www.nomadproject.io/docs/job-specification/network.html#dynamic-ports), [Static Ports](https://www.nomadproject.io/docs/job-specification/network.html#static-ports), and [Mapped Ports](https://www.nomadproject.io/docs/job-specification/network.html#mapped-ports).
@@ -251,9 +319,9 @@ name: Specifying Required Resources and Networks
 
 <br>
 <br>
+<br>
 
-```go
-
+```hcl
 
 job "example" {
   datacenters = ["dc1"]
@@ -276,8 +344,8 @@ job "example" {
 * port mapping
 
 ---
+name: Specifying Bridged Networks
 class: compact, col-2
-name: Specifying Required Resources and Networks
 # Specifying Bridged Networks
 .smaller[
 -  When the network stanza is defined at the group level with [bridge](https://www.nomadproject.io/docs/job-specification/network.html#bridge-mode) as the networking mode, all tasks in the task group share the same network namespace.
@@ -288,7 +356,7 @@ name: Specifying Required Resources and Networks
 <br>
 <br>
 
-```go
+```hcl
 
 job "example" {
   datacenters = ["dc1"]
@@ -311,12 +379,12 @@ job "example" {
 * good time to throw in consul ;)
 
 ---
-class: compact, col-2
 name: Registering Tasks as Consul Services
+class: compact, col-2
 # Registering Tasks as Consul Services
 .smaller[
 - The [service stanza](https://www.nomadproject.io/docs/job-specification/service.html) instructs Nomad to register the service with Consul for Service Discovery.
-- We can define tags, health checks, ports, and [several other parameters](https://www.nomadproject.io/docs/job-specification/service.html#service-parameters).
+- We can define tags, health checks, ports, and several other [parameters](https://www.nomadproject.io/docs/job-specification/service.html#service-parameters).
 ]
 <br>
 <br>
@@ -327,7 +395,7 @@ name: Registering Tasks as Consul Services
 <br>
 <br>
 <br>
-```go
+```hcl
 
 job "example" {
   datacenters = ["dc1"]
@@ -353,7 +421,8 @@ job "example" {
 name: nomad-5-Summary
 # 📝 Chapter 5 Summary
 
-* In this chapter, you learned some of the most important aspects of Nomad job specification:
+* In this chapter, you learned some of the most important aspects of Nomad jobs:
+  * Types of jobs and schedulers
   * Jobs and their target datacenters
   * Task groups, tasks, and task drivers
   * Required resources
