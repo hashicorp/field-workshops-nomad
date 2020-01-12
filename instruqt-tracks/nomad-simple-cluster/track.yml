@@ -262,7 +262,7 @@ challenges:
 
     Next, use the `nomad job plan` command to invoke a dry-run of the Nomad scheduler to see what would happen if you ran the updated job:
     ```
-    nomad plan example.nomad
+    nomad job plan example.nomad
     ```
     You will see that the scheduler detected the change in count and informs us that it will cause 2 new allocations to be created. The in-place update that will occur pushes the update of the job specification to the existing allocation but will not cause any service interruption.
 

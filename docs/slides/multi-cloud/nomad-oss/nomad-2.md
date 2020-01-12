@@ -371,7 +371,7 @@ name:  Nomad and Consul
 # Nomad's Native Integration with Consul
 
 .smaller[
-* Automatic Clustering for Servers and Clients
+* Automatic Clustering of Servers and Clients
 * Service Discovery for Tasks and Jobs
 * Dynamic Configuration for applications
 * Secure communication between jobs and task groups using Consul Connect

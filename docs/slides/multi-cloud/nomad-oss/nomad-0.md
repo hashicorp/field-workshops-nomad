@@ -54,10 +54,10 @@ name: workshop-topics
 1. HashiCorp Nomad Overview
 1. Nomad Concepts and Architecture
 1. Interacting with Nomad
+1. Nomad Jobs and Drivers
 1. Running Nomad Clusters and Jobs
-1. Basic Nomad Job Specification
-1. Vault Policies
 1. Nomad Monitoring and Logging
+1. Running Multi-Server Nomad/Consul Clusters
 1. Nomad Security
 
 ???
