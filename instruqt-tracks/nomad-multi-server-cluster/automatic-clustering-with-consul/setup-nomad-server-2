@@ -32,8 +32,24 @@ cat <<-EOF > /root/nomad/consul-server2.json
   "retry_join": [
     "nomad-server-1",
     "nomad-server-3"
-  ]
+  ],
+  "ports": {
+    "grpc": 8502
+  },
+  "connect": {
+    "enabled": true
+  }
 }
 EOF
+
+# Install CNI plugins
+curl -L -o cni-plugins.tgz https://github.com/containernetworking/plugins/releases/download/v0.8.3/cni-plugins-linux-amd64-v0.8.3.tgz
+mkdir -p /opt/cni/bin
+tar -C /opt/cni/bin -xzf cni-plugins.tgz
+
+# Configure iptables
+echo 1 > /proc/sys/net/bridge/bridge-nf-call-arptables
+echo 1 > /proc/sys/net/bridge/bridge-nf-call-ip6tables
+echo 1 > /proc/sys/net/bridge/bridge-nf-call-iptables
 
 exit 0

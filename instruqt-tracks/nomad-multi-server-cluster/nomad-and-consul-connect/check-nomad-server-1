@@ -1,0 +1,7 @@
+#!/bin/bash -l
+
+set -e
+
+grep -q "nomad job run connect.nomad" /root/.bash_history || fail-message "You haven't run the connect.nomad job yet."
+
+exit 0
