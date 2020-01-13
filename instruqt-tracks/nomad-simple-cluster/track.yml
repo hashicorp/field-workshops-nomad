@@ -250,7 +250,7 @@ challenges:
     Let's edit the example.nomad file on the "Job Spec" tab to update the `count` of the job's task group, setting it to 3. Do this  between the `group` and `task` stanzas so that you end up with:
     ```
     group "cache" {
-     count = 3
+      count = 3
       task "redis" {
     ```
     Once you have finished modifying the job specification, click the disk icon above the file to save it.
@@ -299,7 +299,7 @@ challenges:
     contents: |-
       The definition of a job is not static, and is meant to be updated over time. You may update a job to change a docker image or tag, to update ane application version, or to change the count of a task group to support higher load.
 
-      In this challenge, you will increase the `count` of the example job's task group. You will first run the `nomad job plan` command to do a dry run and then run the `nomad job run` commmand with the `-check-index` argument and the job modify index returned by the `plan` command.
+      In this challenge, you will increase the `count` of the example job's task group. You will first run the `nomad job plan` command to do a dry run and then run the `nomad job run` command with the `-check-index` argument and the job modify index returned by the `plan` command.
   tabs:
   - title: Job Spec
     type: code
