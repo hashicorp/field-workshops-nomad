@@ -15,7 +15,7 @@ owner: hashicorp
 developers:
 - roger@hashicorp.com
 - rjackson@hashicorp.com
-private: true
+private: false
 published: true
 challenges:
 - slug: nomad-cli
@@ -248,4 +248,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 900
-checksum: "6429745948083148324"
+checksum: "3883964769406992489"

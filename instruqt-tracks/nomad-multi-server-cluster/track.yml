@@ -20,7 +20,7 @@ owner: hashicorp
 developers:
 - pgryzan@hashicorp.com
 - roger@hashicorp.com
-private: true
+private: false
 published: true
 challenges:
 - slug: manual-clustering
@@ -401,4 +401,4 @@ challenges:
     port: 9002
   difficulty: basic
   timelimit: 1200
-checksum: "11486732186614978621"
+checksum: "1784007121523687210"
