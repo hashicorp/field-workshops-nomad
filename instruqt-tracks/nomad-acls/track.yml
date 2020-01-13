@@ -24,20 +24,30 @@ challenges:
 - slug: run-the-servers-and-clients
   id: 5efmxtpkfxlm
   type: challenge
-  title: Run the Nomad Servers and Clients
-  teaser: Configure and run three Nomad servers and 2 Nomad clients.
+  title: Confirm the Agents are running.
+  teaser: Confirming that the Agents are configured and running.
   assignment: |-
-    Before we begin securing our Nomad cluster, lets verify that all 3 servers and both clients are running. Check the servers with this command on the "Server 1" tab:
+    Before we begin securing our Nomad cluster, lets verify that all 3 servers and both clients are running.
+    Run all the folowing commands in the 'Server 1' tab
+
+    Check the servers:
     ```
     nomad server members
     ```
     You should see 3 servers that are all alive. server1 should be the leader.
 
-    Then check the client nodes with this command on the "Server 1" tab:
+    Then check the client nodes:
     ```
     nomad node status
     ```
     You should see two client nodes.
+
+    We have run a job that we will use as part of the challenges to visualize the use of ACL's
+    Check the job status
+    ```
+    nomad status
+    ```
+    You should see a job with the id of 'redis'.
 
     In the next challenge, you will configure ACLs for the Nomad cluster.
   notes:
@@ -52,7 +62,7 @@ challenges:
     contents: |-
       We've already started a cluster with three servers and two clients for you.
 
-      We've put all the server and client configuration files on the server1 VM so that you can conveniently see them in a single Instruqt tab. However, if you decide to edit any of the configuration files for any reason, be sure to do so on the tab that matches the file you change.
+      We have run a job called redis
   tabs:
   - title: Config Files
     type: code
@@ -120,6 +130,8 @@ challenges:
     nomad server members
     ```
     command in the "Server 1" Tab what is the result?
+
+    You will not be able to query the job status either.
 
     If everything is configured correctly you will get an access denied error.
     This is the expected behavior as Nomad ACLs is "Deny by default". We will be fixing this in a later challenge.
@@ -404,20 +416,145 @@ challenges:
 - slug: use-acls
   id: 2dzqorlvompb
   type: challenge
-  title: Use Nomad ACLs
+  title: Using Nomad ACLs
   teaser: See how Nomad ACLs restrict what different users can do in Nomad.
   assignment: |-
     Now, let's see the Nomad ACLs in action.
 
-    First, do the following ...
+    In the last section we created an anonymous ACL policy that allowed any anonymous unauthenticated connection to have read only access to the cluster.
+    To confirm we still have this access
+    Open the 'Server 2' tab and run the following commands.
+    ```
+    nomad job status
+    ```
+    You should see the status of the running redis job.
+
+    and then run.
+    ```
+    nomad agent-info
+    ```
+    This is not an ideal situation as anyone with access tot he API could get quite a bit of information about the cluster and its jobs.
+
+    Let us remove this access to secure our cluster once again.
+
+    In the 'Server 1' console tab run the following commands.
+
+    Let us export our admin token so we can run the commands.
+    ```
+    cd nomad
+    export NOMAD_TOKEN=`cat acl_token.txt | grep Secret | awk '{print$4}'`
+    ```
+    We will now delete the anonymous policy
+    ```
+    nomad acl policy delete anonymous
+    ```
+    Once this has run go back to the 'Server 2' termminal tab and try to run
+    ```
+    nomad agent-info
+    ```
+    You should recive an access denied error.
+
+    We will now create 2 policies one for our dev team and one for ops.
+
+    For the purpose of this example we will restrict the dev team to not be able to stop any job.
+
+    In the Config Files Editor you will now see 2 new files in the Lists
+     * dev_policy.hcl
+     * ops_policy.hcl
+
+    These two policy files will give each of the dev or ops team different permissions to the cluster.
+
+    The dev team will get Read only access to the cluster.
+    The Ops team will get Full access to the jobs.
+
+    Let us apply the policies.
+
+    We will use the nomad client to apply the policies to the cluster.
+
+    Open the `Server 1` terminal tab and run the following commands in that tab.
+
+    To apply the dev policy run the following command.
+    ```
+    nomad acl policy apply -description "Dev Read Only" devRO dev_policy.hcl
+    ```
+    We have named the policy `devRO`.
+
+    To apply the Ops policy run.
+    ```
+    nomad acl policy apply -description "OPS Read write" opsWR ops_policy.hcl
+    ```
+    We have named the policy `opsRW`
+
+    Run the following command to see a list of the policies that are now applied.
+
+    ```
+    nomad acl policy list
+    ```
+
+    There should be a list of the 2 policies we just applied.
+
+    To use these policies we need to create some client tokens for the dev and ops team.
+
+    It is very easy to create these tokens using the nomad client.
+
+    Open the ` Server 1` terminal tab and run the following commands.
+    ```
+    nomad acl token create -name="Dev Ro" -type="client" -policy="devRO" > devro_token.txt
+    ```
+
+    This will create our Dev read only token and apply the devRO policy to this token.
+    We export the token to a text file so we can use it a bit later to test.
+
+    We will do the same for the Ops Token by running the following command.
+    ```
+    nomad acl token create -name="Ops RW" -type="client" -policy="opsRW" > opsrw_token.txt
+    ```
+
+    If you now run ```nomad acl token list``` you should see a list with the two new tokens being there.
+
+    We can now test the teams access.
+
+    In the `Server 2` terminal tab export the dev token type the commands below
+    ```
+    cd nomad
+    export NOMAD_TOKEN="
+    ```
+    Open the `Server Config` tab open the devro_token.txt file and copy the `Secret ID` token and paste it after the opening ` " ` mark and then close the ` " ` and hit return.
+
+    If you now run ```nomad job status``` you should see the redis job listed again.
+
+    If you try to run ```nomad job stop redis``` you should get a permission denied error.
+
+    Now lets test the ops teams access.
+
+    In the `Server 3` terminal tab export the dev token by typing the commands below
+    ```
+    cd nomad
+    export NOMAD_TOKEN="
+    ```
+    Open the `Server Config` tab open the opsrw_token.txt file and copy the `Secret ID` token and paste it after the opening ` " ` mark and then close the ` " ` and hit return.
+
+    If you now run ```nomad job status``` you should see the redis job listed again.
+
+    If you try to run ```nomad job stop redis``` it should stop the job.
+
+    If you try to run ```nomad job start redis``` the job should start again.
+
+    As you can see the ACL permissions can be adjusted applied in many ways and it is recccomended that you read up further about the policies here. [Nomad ACLs](https://www.nomadproject.io/guides/security/acl.html)
 
     Congratulations on finishing the Nomad ACLs track!
   notes:
   - type: text
     contents: |-
       In this final challenge, you will see how the ACLs restrict what different users can do in Nomad.
+  - type: text
+    contents: |-
+      We will be applying a Developer Policy and also and Operations Policy to the cluster usign the Nomad client.
 
-      Blah Blah
+      We wil create some client tokens for a develoepr role and one for an Opersatios role and assign these to the corresponding policy.
+  - type: text
+    contents: |-
+      We will then use these token to perform som basic actions on the cluster.
   tabs:
   - title: Config Files
     type: code
@@ -432,12 +569,6 @@ challenges:
   - title: Server 3
     type: terminal
     hostname: nomad-server-3
-  - title: Client 1
-    type: terminal
-    hostname: nomad-client-1
-  - title: Client 2
-    type: terminal
-    hostname: nomad-client-2
   - title: Nomad UI
     type: service
     hostname: nomad-server-1
