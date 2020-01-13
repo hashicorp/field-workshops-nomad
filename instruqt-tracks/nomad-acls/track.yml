@@ -144,12 +144,12 @@ challenges:
 
     The result should be similar to this on each server.
 
-    ```
+    `
     root@nomad-server-1:~# ps -ef | grep nomad
     root      2203     1  1 10:28 ?        00:01:25 /usr/local/bin/nomad agent -config /etc/nomad.d
     root      3369  3345  0 12:06 pts/0    00:00:00 grep nomad
     root@nomad-server-1:~#
-    ```
+    `
 
     This confirms tha the agents are running.
 
@@ -229,12 +229,12 @@ challenges:
 
     The result should be similar to this on each client.
 
-    ```
+    `
     root@nomad-client-1:~# ps -ef | grep nomad
     root      2203     1  1 10:28 ?        00:01:25 /usr/local/bin/nomad agent -config /etc/nomad.d
     root      3369  3345  0 12:06 pts/0    00:00:00 grep nomad
     root@nomad-client-1:~#
-    ```
+    `
 
     This confirms tha the agents are running.
 
@@ -347,9 +347,7 @@ challenges:
     Copy the "Secret ID" token.
 
     Open the "Server1" console and run **ALL** the next commands in the "Server 1" console tab.
-    ```
-    export NOMAD_TOKEN="PLACE_YOUR_SECURE_ID_HERE"
-    ```
+    ```export NOMAD_TOKEN="``` `PLACE_YOUR_SECURE_ID_HERE`
 
     We now need to install the policy.
 
@@ -423,7 +421,7 @@ challenges:
 
     In the last section we created an anonymous ACL policy that allowed any anonymous unauthenticated connection to have read only access to the cluster.
     To confirm we still have this access
-    Open the 'Server 2' tab and run the following commands.
+    Open the `Server 2` terminal tab and run the following commands.
     ```
     nomad job status
     ```
@@ -433,11 +431,13 @@ challenges:
     ```
     nomad agent-info
     ```
+    You should see all the information about the Nomad Agent.
+
     This is not an ideal situation as anyone with access tot he API could get quite a bit of information about the cluster and its jobs.
 
     Let us remove this access to secure our cluster once again.
 
-    In the 'Server 1' console tab run the following commands.
+    In the `Server 1` terminal tab run the following commands.
 
     Let us export our admin token so we can run the commands.
     ```
@@ -448,7 +448,7 @@ challenges:
     ```
     nomad acl policy delete anonymous
     ```
-    Once this has run go back to the 'Server 2' termminal tab and try to run
+    Once this has run go back to the `Server 2` termminal tab and try to run
     ```
     nomad agent-info
     ```
@@ -458,7 +458,7 @@ challenges:
 
     For the purpose of this example we will restrict the dev team to not be able to stop any job.
 
-    In the Config Files Editor you will now see 2 new files in the Lists
+    In the `Config Files` Editor you will now see 2 new files in the Lists
      * dev_policy.hcl
      * ops_policy.hcl
 
@@ -510,13 +510,16 @@ challenges:
     nomad acl token create -name="Ops RW" -type="client" -policy="opsRW" > opsrw_token.txt
     ```
 
-    If you now run ```nomad acl token list``` you should see a list with the two new tokens being there.
+    If you now run
+    ```
+    nomad acl token list
+    ```
+    you should see a list with the two new tokens being there.
 
     We can now test the teams access.
 
     In the `Server 2` terminal tab export the dev token type the commands below
     ```
-    cd nomad
     export NOMAD_TOKEN="
     ```
     Open the `Server Config` tab open the devro_token.txt file and copy the `Secret ID` token and paste it after the opening ` " ` mark and then close the ` " ` and hit return.
@@ -529,7 +532,6 @@ challenges:
 
     In the `Server 3` terminal tab export the dev token by typing the commands below
     ```
-    cd nomad
     export NOMAD_TOKEN="
     ```
     Open the `Server Config` tab open the opsrw_token.txt file and copy the `Secret ID` token and paste it after the opening ` " ` mark and then close the ` " ` and hit return.
@@ -549,11 +551,11 @@ challenges:
       users can do in Nomad.
   - type: text
     contents: |-
-      We will be applying a Developer Policy and also and Operations Policy to the cluster usign the Nomad client.
+      We will be applying a Developer Policy and also and Operations Policy to the cluster using the Nomad client.
 
-      We wil create some client tokens for a develoepr role and one for an Opersatios role and assign these to the corresponding policy.
+      We will create some client tokens one for a Develoepr role and one for an Opersations role and assign these to the corresponding policy.
   - type: text
-    contents: We will then use these token to perform som basic actions on the cluster.
+    contents: We will then use these token to perform some basic actions on the cluster.
   tabs:
   - title: Config Files
     type: code
