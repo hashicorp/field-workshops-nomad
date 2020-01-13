@@ -62,7 +62,7 @@ challenges:
     contents: |-
       We've already started a cluster with three servers and two clients for you.
 
-      We have run a job called redis
+      We have run a job called redis which we will be using as part of our challeges as we move on.
   tabs:
   - title: Config Files
     type: code
@@ -545,16 +545,15 @@ challenges:
     Congratulations on finishing the Nomad ACLs track!
   notes:
   - type: text
-    contents: |-
-      In this final challenge, you will see how the ACLs restrict what different users can do in Nomad.
+    contents: In this final challenge, you will see how the ACLs restrict what different
+      users can do in Nomad.
   - type: text
     contents: |-
       We will be applying a Developer Policy and also and Operations Policy to the cluster usign the Nomad client.
 
       We wil create some client tokens for a develoepr role and one for an Opersatios role and assign these to the corresponding policy.
   - type: text
-    contents: |-
-      We will then use these token to perform som basic actions on the cluster.
+    contents: We will then use these token to perform som basic actions on the cluster.
   tabs:
   - title: Config Files
     type: code
@@ -575,4 +574,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 1800
-checksum: "13439494581140262406"
+checksum: "6799385084037922004"
