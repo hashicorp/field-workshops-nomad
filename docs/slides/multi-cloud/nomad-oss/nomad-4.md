@@ -243,6 +243,142 @@ class: compact, col-2
 * showing all the drivers except depricated drivers
 
 ---
+name: HashiCorp and Community Task Drivers
+class: compact, col-2
+### Docker Task Driver
+.smaller[
+- The driver configuration goes in the `config` stanza.
+- The only required configuration parameter for the [Docker driver](https://www.nomadproject.io/docs/drivers/docker.html) is the [image stanza](https://www.nomadproject.io/docs/drivers/docker.html#image). 
+  - There are several optional configuration parameters as well.
+  - Such as [networking](https://www.nomadproject.io/docs/drivers/docker.html#networking), [logging](https://www.nomadproject.io/docs/drivers/docker.html#logging), [security](https://www.nomadproject.io/docs/drivers/docker.html#security), and [storage](https://www.nomadproject.io/docs/drivers/docker.html#volumes) to name a few.
+]
+
+```hcl
+job "example" {
+  datacenters = ["dc1"]
+  group "cache" {
+    task "redis" {
+      driver = "docker"
+*     config {
+*       image = "redis:3.2"
+*       port_map {
+*         db = 6379
+*       }
+*     }
+}
+```
+
+???
+* Docker Driver
+
+---
+name: HashiCorp and Community Task Drivers
+class: compact, col-2
+### Isolated Fork/Exec Driver
+.smaller[
+- The [exec driver](https://www.nomadproject.io/docs/drivers/exec.html) is used to simply execute a particular command for a task.
+- The exec driver can invoke any command, it can be used to call scripts or other wrappers which provide higher level features
+  - The two configuration parameters are [command](https://www.nomadproject.io/docs/drivers/exec.html#command) and [args](https://www.nomadproject.io/docs/drivers/exec.html#args).
+]
+
+```hcl
+task "example" {
+* driver = "exec"
+  config {
+*   command = "/bin/sleep"
+*   args    = ["1"]
+  }
+}
+```
+
+???
+* amazing, you can run scipts with it too!
+
+---
+name: HashiCorp and Community Task Drivers
+class: compact, col-2
+### Java Driver
+.smaller[
+- The [Java driver](https://www.nomadproject.io/docs/drivers/java.html) is used to execute Java applications packaged into a Java Jar file. The driver requires the Jar file to be accessible from the Nomad client via the [artifact downloader](https://www.nomadproject.io/docs/job-specification/artifact.html).
+- Several [configuration options](https://www.nomadproject.io/docs/drivers/java.html#task-configuration) exist for managing your java stack requirements in the Java driver.
+]
+<br>
+<br>
+<br>
+
+```hcl
+task "web" {
+  driver = "java"
+  config {
+    jar_path    = "local/hello.jar"
+    jvm_options = ["-Xmx2048m", "-Xms256m"]
+  }
+  artifact {
+    source = "https://FQDN/hello.jar"
+    options {
+      checksum = "md5:123445555555555"
+      # ...
+```
+
+???
+* OMG it does Java, no way?!?!
+
+---
+name: HashiCorp and Community Task Drivers
+class: compact, col-2
+### Qemu Driver
+.smaller[
+The [qemu driver](https://www.nomadproject.io/docs/drivers/qemu.html) provides a generic virtual machine runner. Qemu can utilize the KVM kernel module to utilize hardware virtualization features and provide great performance. Currently the qemu driver can map a set of ports from the host machine to the guest virtual machine, and provides configuration for resource allocation.
+- The qemu driver can execute any regular qemu image (e.g. qcow, img, iso), and is currently invoked with qemu-system-x86_64.
+]
+
+<br>
+
+```hcl
+task "virtual" {
+  driver = "qemu"
+  config {
+    image_path  = "local/linux.img"
+    accelerator = "kvm"
+    graceful_shutdown = true
+    args        = ["-nodefaults"]
+  }
+  artifact {
+    source = "https://FQDN/linux.img"
+    options {
+      checksum = "md5:123445555555555"
+```
+
+???
+* wait, so you are telling me that Nomad can just run vm images all willy nilly?
+
+---
+name: HashiCorp and Community Task Drivers
+class: compact, col-2
+### Raw Fork/Exec Driver
+.smaller[
+- The [raw_exec driver](https://www.nomadproject.io/docs/drivers/raw_exec.html) is used to execute a command for a task without any isolation. 
+ - The task is started as the same user as the Nomad process. 
+ - **It should be used with extreme care and is _disabled by default_.**
+- The raw_exec driver provides **no [resource isolation](https://www.nomadproject.io/docs/drivers/raw_exec.html#resource-isolation)**.
+]
+
+<br>
+
+```hcl
+task "example" {
+  driver = "raw_exec"
+  config {
+    command = "/bin/sleep"
+    args    = ["1"]
+  }
+}
+```
+
+???
+* amazing, you can run scipts with it too!
+
+---
 name: Specifying Required Resources
 class: compact, col-2
 # Specifying Required Resources
