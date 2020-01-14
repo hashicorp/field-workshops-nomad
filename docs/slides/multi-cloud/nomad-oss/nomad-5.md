@@ -174,7 +174,7 @@ class: smaller
 * Plan a Nomad job (to do a dry run):
   * `nomad job plan <jobspec>`
 * Run a Nomad job:
-  * `nomad run <jobspec>`
+  * `nomad job run <jobspec>`
 
 ???
 * This slide shows some of the Nomad commands you will use in the lab.

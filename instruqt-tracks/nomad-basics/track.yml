@@ -38,7 +38,7 @@ challenges:
 
     You can get help for any Nomad command by adding `-h`, `-help`, or `--help` after it.  Try this:
     ```
-    nomad run -h
+    nomad job run -h
     ```
   notes:
   - type: text

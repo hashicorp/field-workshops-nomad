@@ -4,8 +4,8 @@
 echo -e "nomad version" >> /root/.bash_history
 nomad version
 
-# Get help for the `nomad run` command
-echo -e "nomad run -h" >> /root/.bash_history
-nomad run -h
+# Get help for the `nomad job run` command
+echo -e "nomad job run -h" >> /root/.bash_history
+nomad job run -h
 
 exit 0
