@@ -5,15 +5,15 @@ echo -e "cd nomad" >> /root/.bash_history
 cd nomad
 
 # Plan the job
-echo -e "nomad plan example.nomad" >> /root/.bash_history
-nomad plan example.nomad > planjob.log
+echo -e "nomad job plan example.nomad" >> /root/.bash_history
+nomad job plan example.nomad > planjob.log
 
 # Extract the job modify index
 job_modify_index=$(sed -n 1p planjob.log | cut -d'"' -f2)
 
 # Run the job
-echo -e "nomad run -check-index $job_modify_index example.nomad" >> /root/.bash_history
-nomad run -check-index $job_modify_index example.nomad
+echo -e "nomad job run -check-index $job_modify_index example.nomad" >> /root/.bash_history
+nomad job run -check-index $job_modify_index example.nomad
 
 # Stop the job
 echo -e "nomad job stop example" >> /root/.bash_history

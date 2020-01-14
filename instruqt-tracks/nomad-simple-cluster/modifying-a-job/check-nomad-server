@@ -6,9 +6,9 @@ grep -q "count = 3" /root/nomad/example.nomad || fail-message "You have not set 
 
 grep -q "cd nomad" /root/.bash_history || fail-message "You have not navigated to the nomad directory yet."
 
-grep -q "nomad plan example.nomad" /root/.bash_history || fail-message "You have not planned the Nomad job yet."
+grep -q "nomad job plan example.nomad" /root/.bash_history || fail-message "You have not planned the Nomad job yet."
 
-grep -q "nomad run -check-index .* example.nomad" /root/.bash_history || fail-message "You have not run the planned Nomad job yet or forgot to use the '-check-index' argument."
+grep -q "nomad job run -check-index .* example.nomad" /root/.bash_history || fail-message "You have not run the planned Nomad job yet or forgot to use the '-check-index' argument."
 
 grep -q "nomad job stop example" /root/.bash_history || fail-message "You have not stopped the job with the Nomad CLI yet."
 
