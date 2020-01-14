@@ -8,8 +8,8 @@ cd nomad
 sed -i 's/task/count = 3\n\t\ttask/g' example.nomad
 
 # Run the job
-echo -e "nomad run example.nomad" >> /root/.bash_history
-nomad run example.nomad > runjob.log
+echo -e "nomad job run example.nomad" >> /root/.bash_history
+nomad job run example.nomad > runjob.log
 
 # Extract evaluation and allocation IDs
 eval_id=$(sed -n 1p runjob.log | cut -d'"' -f2)

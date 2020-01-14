@@ -290,10 +290,10 @@ challenges:
     Inspect the following properties:
 
     1. Check that the Status attribute of the job is marked as "dead (stopped)".
-    2. Under the Allocations section, verify that all three allocations are have the "complete" status.
+    2. Under the Allocations section, verify that all three allocations have the "complete" status.
 
     <br>
-    Congratulations on finishing the Nomad Basics track!
+    Congratulations on finishing the Nomad Simple Cluster track!
   notes:
   - type: text
     contents: |-
@@ -314,4 +314,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 900
-checksum: "11582945149693883085"
+checksum: "11842144462749863460"
