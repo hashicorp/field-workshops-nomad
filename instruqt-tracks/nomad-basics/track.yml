@@ -19,7 +19,7 @@ private: false
 published: true
 challenges:
 - slug: nomad-cli
-  id: cpo9hhic9zuu
+  id: atio81hiysfy
   type: challenge
   title: The Nomad CLI
   teaser: Explore the Nomad Command Line Interface (CLI).
@@ -61,7 +61,7 @@ challenges:
   difficulty: basic
   timelimit: 300
 - slug: run-nomad-agent
-  id: fcqcho3xfdqh
+  id: 2gvixlkq52un
   type: challenge
   title: Run a Dev Mode Nomad Agent
   teaser: Run a Nomad server in development mode.
@@ -112,7 +112,7 @@ challenges:
   difficulty: basic
   timelimit: 900
 - slug: run-first-job
-  id: 6zskkbhblc43
+  id: xjjunqd5gsjz
   type: challenge
   title: Run Your First Nomad Job
   teaser: Run your first Nomad job with the Nomad CLI and UI.
@@ -191,7 +191,7 @@ challenges:
   difficulty: basic
   timelimit: 900
 - slug: use-nomad-http-api
-  id: drttknux1ay7
+  id: 4vobrui0upoe
   type: challenge
   title: Use Nomad's HTTP API
   teaser: Run and stop a job with Nomad's HTTP API.
@@ -248,4 +248,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 900
-checksum: "3883964769406992489"
+checksum: "5012004696476575306"
