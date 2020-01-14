@@ -1,5 +1,5 @@
-#!/bin/bash -i -l
-mkdir nomad
+#!/bin/bash -l
+mkdir /root/nomad
 cat <<-EOF > /root/nomad/anonymous.json
 {
     "Name": "anonymous",

@@ -6,4 +6,8 @@ grep -q "nomad job status" /root/.bash_history || fail-message "You haven't run 
 
 grep -q "export NOMAD_TOKEN" /root/.bash_history || fail-message "You haven't exported the admin token on Server 3 yet."
 
+grep -q "nomad job stop redis" /root/.bash_history || fail-message "You haven't run 'nomad job stop' on Server 3 yet."
+
+grep -q "nomad job run redis.nomad" /root/.bash_history || fail-message "You haven't run 'nomad job stop' on Server 3 yet."
+
 exit 0

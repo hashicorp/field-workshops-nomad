@@ -16,6 +16,6 @@ EOF
 
 #Clear Bash History
 #rm -rf /root/.bash_history
-echo "Configure Server ACLs" > /root/.bash_history
+echo "Use ACLs" > /root/.bash_history
 
 exit 0
