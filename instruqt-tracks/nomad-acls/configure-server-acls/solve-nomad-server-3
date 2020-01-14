@@ -1,0 +1,20 @@
+#!/bin/bash -l
+
+# Check the ACL Enabled
+cat <<EOF >> /etc/nomad.d/server3.hcl
+
+# ACL Enabled
+
+acl {
+    enabled = true
+}
+EOF
+
+# Check Authoritive region
+ex -s -c '10i|  authoritative_region = "global"' -c x /etc/nomad.d/server3.hcl
+
+systemctl restart nomad
+
+ps -ef | grep nomad
+
+exit 0

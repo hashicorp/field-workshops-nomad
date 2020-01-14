@@ -1,3 +1,5 @@
 #!/bin/bash -l
 
+grep -q "export NOMAD_TOKEN" /root/.bash_history || fail-message "You haven't exported the admin token on 'Server 3' yet."
+
 exit 0

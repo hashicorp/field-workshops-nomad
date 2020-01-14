@@ -1,0 +1,24 @@
+#!/bin/bash -l
+mkdir nomad
+cat <<-EOF > /root/nomad/anonymous.json
+{
+    "Name": "anonymous",
+    "Description": "Allow read-only access for anonymous requests",
+    "Rules": "
+        namespace \"default\" {
+            policy = \"read\"
+        }
+        agent {
+            policy = \"read\"
+        }
+        node {
+            policy = \"read\"
+        }
+    "
+}
+EOF
+
+rm -rf /root/.bash_history
+
+exit 0
+

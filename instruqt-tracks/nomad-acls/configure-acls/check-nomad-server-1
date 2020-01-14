@@ -1,9 +1,0 @@
-#!/bin/bash -l
-
-set -e
-
-grep -q "nomad server members" /root/.bash_history || fail-message "You haven't checked the status of your Nomad servers yet."
-
-grep -q "nomad node status" /root/.bash_history || fail-message "You haven't checked the status of your Nomad client nodes yet."
-
-exit 0

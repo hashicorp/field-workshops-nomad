@@ -1,0 +1,17 @@
+#!/bin/bash -l
+
+# Check the ACL Enabled
+cat <<EOF >> /root/nomad/client2.hcl
+
+# ACL Enabled
+
+acl {
+    enabled = true
+}
+EOF
+
+systemctl restart nomad
+
+ps -ef | grep nomad
+
+exit 0

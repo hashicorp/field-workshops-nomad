@@ -1,4 +1,20 @@
 #!/bin/bash -l
 
+cat <<-EOF > /root/nomad/dev_policy.hcl
+namespace "default" {
+    policy = "read"
+    capabilities = ["list-jobs", "read-job"]
+}
+EOF
+
+cat <<-EOF > /root/nomad/ops_policy.hcl
+namespace "default" {
+  policy = "write"
+  capabilities = ["list-jobs", "read-job", "submit-job", "dispatch-job", "read-logs", "read-fs", "alloc-exec", "alloc-lifecycle"]
+}
+EOF
+
+#Clear Bash History
+rm -rf /root/.bash_history
 
 exit 0

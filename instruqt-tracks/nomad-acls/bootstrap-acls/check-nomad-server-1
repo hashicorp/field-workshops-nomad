@@ -1,0 +1,15 @@
+#!/bin/bash -l
+
+set -e
+
+grep -q "Secret" /root/nomad/acl_token.txt || fail-message "Have you created the bootstrap token file acl_token.txt?."
+
+grep -q "export NOMAD_TOKEN=" /root/.bash_history || fail-message "Have you exported your Secret ID in the console"
+
+nomad server members | grep -q server1.global || fail-message "Have you applied the anonymous policy yet?"
+
+grep -q "nomad server members" /root/.bash_history || fail-message "You haven't checked the status of your Nomad servers yet."
+
+grep -q "nomad node status" /root/.bash_history || fail-message "You haven't checked the status of your Nomad client nodes yet."
+
+exit 0
