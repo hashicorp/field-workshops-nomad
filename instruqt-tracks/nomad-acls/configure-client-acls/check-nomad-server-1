@@ -2,6 +2,4 @@
 
 set -e
 
-grep -q "nomad node status" /root/.bash_history || fail-message "You haven't checked the status of your Nomad client nodes in the Server1 tab yet."
-
 exit 0

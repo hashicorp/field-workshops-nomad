@@ -28,7 +28,8 @@ challenges:
   teaser: Confirming that the Agents are configured and running.
   assignment: |-
     Before we begin securing our Nomad cluster, lets verify that all 3 servers and both clients are running.
-    Run all the folowing commands in the 'Server 1' tab
+
+    Run all the folowing commands on the 'Server 1' tab.
 
     Check the servers:
     ```
@@ -42,12 +43,13 @@ challenges:
     ```
     You should see two client nodes.
 
-    We have run a job that we will use as part of the challenges to visualize the use of ACL's
-    Check the job status
+    We have run a job that we will use as part of the challenges to visualize the use of ACLs.
+
+    Check the job status:
     ```
     nomad status
     ```
-    You should see a job with the id of 'redis'.
+    You should see a job with the id of `redis`.
 
     In the next challenge, you will configure ACLs for the Nomad cluster.
   notes:
@@ -58,16 +60,9 @@ challenges:
       The first challenge will run 3 Nomad servers and 2 Nomad clients for you. All you'll need to do is check that they are running.
 
       In the following challenges, you will configure and then use Nomad ACLs.
-  - type: text
-    contents: |-
-      We've already started a cluster with three servers and two clients for you.
 
-      We have run a job called redis which we will be using as part of our challeges as we move on.
+      We have run a job called `redis` which we will be using as part of our challeges as we move on.
   tabs:
-  - title: Config Files
-    type: code
-    hostname: nomad-server-1
-    path: /root/nomad/
   - title: Server 1
     type: terminal
     hostname: nomad-server-1
@@ -95,55 +90,46 @@ challenges:
   title: Configure Nomad Server ACLs
   teaser: Configure Nomad Server ACLs.
   assignment: |-
-    The APIs needed to manage policies and tokens are not enabled until ACLs are enabled.
-    We need to enable the ACL configuration for our cluster
+    We need to enable the ACL system for our cluster.
 
-    Let's start by configiuring ACLs in our Nomad Servers first.
+    Let's start by configiuring ACLs on our Nomad servers.
 
-    To do this we need to enable acl in the acl stanza of each server file. Go to each "Server Config" tab and add the following section to the end of the file, below the server stanza.
+    To do this, we need to enable ACLs in the `acl` stanza of each server file. Go to each "Server Config" tab and add the following section to the end of the file, below the server stanza.
     ```
     acl {
       enabled = true
     }
     ```
-    In a multi-region configuration you will need to add the "authoritative_region" configuration to the server stanza. Since we only have one region this is not strictly nessesary. We will however make the change to make it clear how it should look.
+    After adding copying and pasting the text from the assignment, click the disk icon to save your changes.
 
-    Lets add this configuration now.
+    In a multi-region topology you would need to add the "authoritative_region" configuration to the server stanza. Since we only have one region, this is not strictly necessary. We will, however, make the change to show how it should look.
 
-    For each server open the "Server Config" tab and edit the server stanza to look like this.
+    For each server, open the "Server Config" tab and edit the `server` stanza by adding<br>
+    `authoritative_region = "global"`<br>
+    under the line<br>
+    `bootstrap_expect = 3`.
 
-    ```
-    server {
-      enabled = true
-
-      # Self-elect, should be 3 or 5 for production
-      bootstrap_expect = 3
-      authoritative_region = "global"
-    }
-    ```
-    Now we need to restart the nomad servers one at a time. Complete the following steps for each server.
+    Now we need to restart the nomad servers one at a time. Run the following command for each server on the server console tabs.
     ```
     systemctl restart nomad
     ```
-    If you run the
+
+    Please run the next command on the "Server 1" tab:
     ```
     nomad server members
     ```
-    command in the "Server 1" Tab what is the result?
+    What is the result?
+
+    If everything was configured correctly, you will get a "403 permission denied" error.  This is the expected behavior since the Nomad ACL system is "Deny by default". We will fix this in a later challenge.
 
     You will not be able to query the job status either.
 
-    If everything is configured correctly you will get an access denied error.
-    This is the expected behavior as Nomad ACLs is "Deny by default". We will be fixing this in a later challenge.
-
-    To make sure the process is running we can run the following command on each server console tab.
-
+    To make sure the `nomad` process is running, we can run the following command on each server console tab:
     ```
     ps -ef | grep nomad
     ```
 
     The result should be similar to this on each server.
-
     `
     root@nomad-server-1:~# ps -ef | grep nomad
     root      2203     1  1 10:28 ?        00:01:25 /usr/local/bin/nomad agent -config /etc/nomad.d
@@ -151,16 +137,15 @@ challenges:
     root@nomad-server-1:~#
     `
 
-    This confirms tha the agents are running.
+    If you see two lines for all 3 servers, it confirms that the Nomad servers are all running.
 
-    In the next challenge, you will configure the nomad client servers for utilizing ACLs.
+    In the next challenge, you will configure the Nomad clients for utilizing ACLs.
   notes:
   - type: text
-    contents: In this challenge, you will configure the Nomad Servers for utilizing
-      ACLs.
-  - type: text
-    contents: In the next challenge, you will configure the Nomad Clients for utilizing
-      ACLs.
+    contents: |-
+      In this challenge, you will configure the Nomad servers to use ACLs.
+
+      In the next challenge, you will configure the Nomad clients to use ACLs.
   tabs:
   - title: Server 1 Config
     type: code
@@ -195,11 +180,9 @@ challenges:
   title: Configure Nomad Client ACLs
   teaser: Configure Nomad Client ACLs.
   assignment: |-
-    Now that we have the servers using ACLs we need to configure the Clients to use them as well.
+    Now that we have the servers using ACLs, we need to configure the Clients to use them as well.
 
-    Let's get started.
-
-    We need to enable acl in the acl stanza of each client file. Go to each client node config tab and add the following section to the end of the file, below the client stanza.
+    We need to enable ACLs in the `acl` stanza of each client file. Go to each Client Config tab and add the following section to the end of the file, below the client stanza.
     ```
     acl {
       enabled = true
@@ -207,48 +190,44 @@ challenges:
     ```
     That is all configuration that needs to be done.
 
-    Now you need to restart the nomad clients one at a time as we did for the servers. Complete the following steps for each server.
+    Now, you need to restart the nomad clients one at a time as you did for the servers. Run the following command for each client:
     ```
     systemctl restart nomad
     ```
     After you have restarted the Nomad Agents.
 
-    Run the following command in the "Server1" tab.
+    Run the following command on the "Client 1" tab:
     ```
     nomad node status
     ```
     What is the result?
 
-    You will see the same error that we recieved when we tried to check the server status earlier.
+    You will see the same error that you recieved when you tried to check the server status earlier.
 
-    Run the same command we did in the server challenge on both client node consoles to make sure that the Nomad process is running.
-
+    Run the same process check command you ran in the previous challenge on both client node consoles to make sure that the Nomad process is running on both clients.
     ```
     ps -ef | grep nomad
     ```
 
-    The result should be similar to this on each client.
-
+    The result should be similar to this on each client:
     `
     root@nomad-client-1:~# ps -ef | grep nomad
     root      2203     1  1 10:28 ?        00:01:25 /usr/local/bin/nomad agent -config /etc/nomad.d
     root      3369  3345  0 12:06 pts/0    00:00:00 grep nomad
     root@nomad-client-1:~#
-    `
+    `<br>
+    Note, however, that one client will have some extra Nomad processes because of the running job.
 
-    This confirms tha the agents are running.
+    If you do see at least one Nomad process on each client (other than the `grep` command), that confirms that the agents are running.
 
-    In the next challemge we will bootstrap the cluster ACL API and create our first management token
+    In the next challenge, we will bootstrap the cluster ACL system and create our first management token.
   notes:
   - type: text
-    contents: In this challenge, you will configure the Nomad Clients for utilizing
-      ACLs.
-  - type: text
-    contents: In the next challenge, you will bootstrap the Nomad Cluster ACLs.
+    contents: |-
+      In this challenge, you will configure the Nomad clients to use ACLs.
+
+      In the next challenge, you will bootstrap the Nomad cluster's ACL system.
   tabs:
-  - title: Server 1
-    type: terminal
-    hostname: nomad-server-1
   - title: Client 1 Config
     type: code
     hostname: nomad-client-1
@@ -275,28 +254,27 @@ challenges:
   title: Bootstrap Nomad ACLs
   teaser: Bootstrap Nomad ACLs.
   assignment: |-
-    Now that we have the servers and Clients using ACLs we need to bootstrap the ACL system.
+    Now that we have the servers and clients using ACLs, we need to bootstrap the ACL system.
 
-    Let's get started.
+    To enable the ACL system, we need to run the `nomad bootstrap` command. This will create the inital management ACL token for us to use to set up other parts of the ACL system.
 
-    To enable the API we need to run the "nomad bootstrap" command. This will create the inital management token for us to use to setup ACL in general.
-    This token information should be kept in a safe place as it has "FULL UNRESTRICTED" access to your cluster.
+    This token should be kept in a safe place since it has **FULL UNRESTRICTED** access to your cluster.
 
-    Let us ACL bootstrap the cluster.
+    Let's bootstrap the ACL system on the cluster.
 
-    Open the "Server 1" tab and run the following.
-
+    Open the "Server 1" tab and run the following command:
     ```
     cd nomad
     nomad acl bootstrap > acl_token.txt
     ```
 
-    This will bootstrap the cluster ACL API and export the bootstrap credentials into a file called "acl_token.txt" we will be using that to continue the challenge.
+    This will bootstrap the cluster's ACL system and export the bootstrap credentials into a file called "acl_token.txt", which we will be using to continue the challenge.
 
-    We now need to enable the anonymous policy so that we can interact with the cluster using the nomad cli.
-    To do this we need to export the "Secret ID" of our token as an environemnt variable called "NOMAD_TOKEN" and then use "curl" to create the policy.
+    We now need to enable the `anonymous` ACL policy so that we can interact with the cluster using the Nomad CLI.
 
-    Open the "Server 1 Edit" tab and you will see two files:
+    To do this, we need to export the "Secret ID" of our token as an environmemnt variable called `NOMAD_TOKEN` and then use `curl` to create the policy.
+
+    Open the "Files" tab and you will see two files:
       * anonymous.json
       * acl_token.txt
 
@@ -321,18 +299,14 @@ challenges:
 
     ```
 
-    As you can see this policy allows read access to three rules
-    * namespace
-    * agent
-    * node
+    As you can see, this policy allows read access for three rules
+      * namespace
+      * agent
+      * node
 
-    We now need to apply this policy to the cluster.
-    To do this we will need to create an "Authenticated" connection to the server that allows us to install policies.
+    We now need to apply this policy to the cluster. To do this, we will need to create an "authenticated" connection to the server that allows us to install policies.
 
-    Lets do that.
-
-    Open the acl_token.txt file
-    The file should look something like this.
+    Open the acl_token.txt file. It should look something like this:
     ```
     Accessor ID  = 6fa2c331-a156-9238-ed2d-fed666518934
     Secret ID    = 187abe9e-abb5-a917-5176-99d7eb642b44
@@ -344,32 +318,33 @@ challenges:
     Create Index = 29
     Modify Index = 29
     ```
+
     Copy the "Secret ID" token.
 
-    Open the "Server1" console and run **ALL** the next commands in the "Server 1" console tab.
-    ```export NOMAD_TOKEN="``` `PLACE_YOUR_SECURE_ID_HERE`
+    Run **ALL** of the following commands on the "Server 1" console tab:<br>
+    `export NOMAD_TOKEN=<Secret ID>`<br>
+    where <Secret ID/> is your "Secret ID" token.
 
-    We now need to install the policy.
-
+    We now need to install the policy. Please run the following `curl` command:
     ```
     curl --request POST --data @anonymous.json -H "X-Nomad-Token: $NOMAD_TOKEN" http://localhost:4646/v1/acl/policy/anonymous
     ```
 
-    To verify that the policy has been applied, run the following command to make sure.
+    To verify that the policy has been applied, run the following command:
     ```
-    curl http://localhost:4646/v1/jobs
+    curl http://localhost:4646/v1/jobs | jq
     ```
-    It should not give an error.
+    It should not give an error and should give nicely formatted JSON since we used `jq`.
 
-    Now we should be able to run our command from before.
+    Now we should be able to run our CLI commands from before.
 
-    Check the state of the servers.
+    Check the state of the servers:
     ```
     nomad server members
     ```
     You should see the 3 servers that are all alive. One of the servers will be a leader.
 
-    Check the node status.
+    Check the node status:
     ```
     nomad node status
     ```
@@ -379,14 +354,15 @@ challenges:
   notes:
   - type: text
     contents: |-
-      In this challenge, you will bootstrap the cluster to utilize ACLs.
+      In this challenge, you will bootstrap the cluster to use ACLs.
 
-      The ACL system uses a whitelist or default-deny model. This means by default no permissions are granted. For clients making requests without ACL tokens, we may want to grant some basic level of access.
-  - type: text
-    contents: In the final challenge, you will see how the ACLs restrict what different
-      users can do in Nomad.
+      The ACL system uses a whitelist or default-deny model. This means no permissions are initially granted.
+
+      For clients making requests without ACL tokens, we might want to grant some basic level of access. So, we will create an anonymous ACL policy.
+
+      In the final challenge, you will see how the ACLs restrict what different users can do in Nomad.
   tabs:
-  - title: Server 1 Edit
+  - title: Files
     type: code
     hostname: nomad-server-1
     path: /root/nomad/
@@ -419,59 +395,57 @@ challenges:
   assignment: |-
     Now, let's see the Nomad ACLs in action.
 
-    In the last section we created an anonymous ACL policy that allowed any anonymous unauthenticated connection to have read only access to the cluster.
-    To confirm we still have this access
-    Open the `Server 2` terminal tab and run the following commands.
+    In the last challenge, we created an anonymous ACL policy that allows any anonymous unauthenticated connection to have read only access to the the default namespace, agents, and nodes.
+
+    To confirm we still have this access, open the "Server 2" tab and run the following commands.
     ```
     nomad job status
     ```
-    You should see the status of the running redis job.
+    You should see that the "redis" job is running.
 
-    and then run.
+    Then run:
     ```
     nomad agent-info
     ```
-    You should see all the information about the Nomad Agent.
+    You should see all the information about the local Nomad agent.
 
-    This is not an ideal situation as anyone with access tot he API could get quite a bit of information about the cluster and its jobs.
+    This is not an ideal situation as anyone with access to the CLI or HTTP API could get quite a bit of information about the cluster and its jobs.
 
-    Let us remove this access to secure our cluster once again.
+    Let's remove this access to make our cluster more secure.
 
-    In the `Server 1` terminal tab run the following commands.
-
-    Let us export our admin token so we can run the commands.
+    In the "Server 1" tab, run the following commands:
     ```
     cd nomad
     export NOMAD_TOKEN=`cat acl_token.txt | grep Secret | awk '{print$4}'`
     ```
-    We will now delete the anonymous policy
+    We will now delete the anonymous policy:
     ```
     nomad acl policy delete anonymous
     ```
-    Once this has run go back to the `Server 2` termminal tab and try to run
+
+    Once this has run, go back to the "Server 2" tab and try to run this:
     ```
     nomad agent-info
     ```
-    You should recive an access denied error.
+    You should recive a "Permission denied" error.
 
-    We will now create 2 policies one for our dev team and one for ops.
+    We will now create 2 ACL policies, one for our dev team and one for our ops team.
 
-    For the purpose of this example we will restrict the dev team to not be able to stop any job.
+    For the purpose of this example, we will prevent the dev team from stopping any jobs.
 
-    In the `Config Files` Editor you will now see 2 new files in the Lists
-     * dev_policy.hcl
-     * ops_policy.hcl
+    In the `Config Files` editor you will now see 2 new files:
+      * dev_policy.hcl
+      * ops_policy.hcl
 
-    These two policy files will give each of the dev or ops team different permissions to the cluster.
+    These two policy files will give the dev and ops teams different permissions in the cluster.
 
-    The dev team will get Read only access to the cluster.
-    The Ops team will get Full access to the jobs.
+    The dev team will get read only access to namespace APIs which are the jobs, deployments, allocations, and evaluations APIs. The ops team will get full write access to those APIs.
 
-    Let us apply the policies.
+    Let's apply the policies.
 
-    We will use the nomad client to apply the policies to the cluster.
+    We will use the Nomad CLI to apply the policies to the cluster.
 
-    Open the `Server 1` terminal tab and run the following commands in that tab.
+    Open the "Server 1" tab and run the following commands in that tab.
 
     To apply the dev policy run the following command.
     ```
@@ -479,33 +453,32 @@ challenges:
     ```
     We have named the policy `devRO`.
 
-    To apply the Ops policy run.
+    To apply the ops policy, run:
     ```
-    nomad acl policy apply -description "OPS Read write" opsWR ops_policy.hcl
+    nomad acl policy apply -description "OPS Read write" opsRW ops_policy.hcl
     ```
-    We have named the policy `opsRW`
+    We have named the policy `opsRW`.
 
-    Run the following command to see a list of the policies that are now applied.
+    Run the following command to see a list of the ACL policies that are now applied.
 
     ```
     nomad acl policy list
     ```
 
-    There should be a list of the 2 policies we just applied.
+    The list should have the 2 policies we just applied.
 
-    To use these policies we need to create some client tokens for the dev and ops team.
+    To use these policies we need to create some ACL tokens for the dev and ops team.
 
-    It is very easy to create these tokens using the nomad client.
+    It is very easy to create these tokens using the Nomad CLI.
 
-    Open the ` Server 1` terminal tab and run the following commands.
+    Open the "Server 1" tab and run the following commands:
     ```
-    nomad acl token create -name="Dev Ro" -type="client" -policy="devRO" > devro_token.txt
+    nomad acl token create -name="Dev RO" -type="client" -policy="devRO" > devro_token.txt
     ```
 
-    This will create our Dev read only token and apply the devRO policy to this token.
-    We export the token to a text file so we can use it a bit later to test.
+    This will create our `Dev RO` read only token and apply the devRO policy to this token. We export the token to a text file so we can use it later.
 
-    We will do the same for the Ops Token by running the following command.
+    We will do the same for the Ops token by running the following command.
     ```
     nomad acl token create -name="Ops RW" -type="client" -policy="opsRW" > opsrw_token.txt
     ```
@@ -514,48 +487,42 @@ challenges:
     ```
     nomad acl token list
     ```
-    you should see a list with the two new tokens being there.
+    you should see a list with the two new tokens.
 
-    We can now test the teams access.
+    We can now test the access of the team with their tokens.
 
-    In the `Server 2` terminal tab export the dev token type the commands below
-    ```
-    export NOMAD_TOKEN="
-    ```
-    Open the `Server Config` tab open the devro_token.txt file and copy the `Secret ID` token and paste it after the opening ` " ` mark and then close the ` " ` and hit return.
+    In the "Server 2" tab, export the `Dev RO` token with this command:<br>
+    `export NOMAD_TOKEN=<dev_token>`<br>
+    replacing <dev_token/> with the value of `Secret ID` in the devro_token.txt file on the "Config Files" tab.
 
-    If you now run ```nomad job status``` you should see the redis job listed again.
+    If you now run `nomad job status`, you should see the `redis` job listed again.  But, if you try to run `nomad job stop redis`, you should get a "Permission denied" error.
 
-    If you try to run ```nomad job stop redis``` you should get a permission denied error.
+    Now let's test the access of the ops team:
 
-    Now lets test the ops teams access.
+    In the "Server 3" tab, export the `Ops RW` token with this command:<br>
+    `export NOMAD_TOKEN=<ops_token>`<br>
+    replacing <ops_token/> with the value of `Secret ID` in the opsrw_token.txt file on the "Config Files" tab.
 
-    In the `Server 3` terminal tab export the dev token by typing the commands below
-    ```
-    export NOMAD_TOKEN="
-    ```
-    Open the `Server Config` tab open the opsrw_token.txt file and copy the `Secret ID` token and paste it after the opening ` " ` mark and then close the ` " ` and hit return.
+    If you now run `nomad job status`, you should see the `redis` job listed again.
 
-    If you now run ```nomad job status``` you should see the redis job listed again.
+    If you try to run `nomad job stop redis`, the job should be stopped.
 
-    If you try to run ```nomad job stop redis``` it should stop the job.
+    If you try to run `cd nomad` followed by `nomad job start redis`, the job should be started again.
 
-    If you try to run ```nomad job start redis``` the job should start again.
-
-    As you can see the ACL permissions can be adjusted applied in many ways and it is recccomended that you read up further about the policies here. [Nomad ACLs](https://www.nomadproject.io/guides/security/acl.html)
+    As you can see, the ACL permissions can be adjusted in many ways.  We recommended that you read up further about the policies in the . [Nomad Access Control](https://www.nomadproject.io/guides/security/acl.html) guide.
 
     Congratulations on finishing the Nomad ACLs track!
   notes:
   - type: text
-    contents: In this final challenge, you will see how the ACLs restrict what different
-      users can do in Nomad.
+    contents: |-
+      In this final challenge, you will see how the ACLs restrict what different users can do in Nomad.
+
+      We will apply a Developer policy and also an Operations policy to the cluster using the Nomad CLI.
   - type: text
     contents: |-
-      We will be applying a Developer Policy and also and Operations Policy to the cluster using the Nomad client.
+      We will create two client tokens, one for a Developer role and one for an Operations role. We will also assign these to the corresponding policies.
 
-      We will create some client tokens one for a Develoepr role and one for an Opersations role and assign these to the corresponding policy.
-  - type: text
-    contents: We will then use these token to perform some basic actions on the cluster.
+      We will then use these token to perform some basic actions on the cluster and see that only members in of the Operations role can start and stop jobs.
   tabs:
   - title: Config Files
     type: code
@@ -576,4 +543,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 1800
-checksum: "6799385084037922004"
+checksum: "18323346438352149649"

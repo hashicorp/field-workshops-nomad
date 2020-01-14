@@ -2,10 +2,10 @@
 
 set -e
 
-grep -q "acl" /etc/nomad.d/client2.hcl || fail-message "Have you created the acl stanza in the client2.hcl file?."
+grep -q "acl" /etc/nomad.d/client2.hcl || fail-message "You have not added the 'acl' stanza to the client2.hcl file on Client 2 yet."
 
-grep -q "systemctl restart nomad" /root/.bash_history || fail-message "You haven't restarted your Nomad client2 yet."
+grep -q "systemctl restart nomad" /root/.bash_history || fail-message "You haven't restarted Client 2 yet."
 
-grep -q "ps -ef | grep nomad" /root/.bash_history || fail-message "You haven't performed the process check of your Nomad client2 yet."
+grep -q "ps -ef | grep nomad" /root/.bash_history || fail-message "You haven't performed the process check of Client 2 yet."
 
 exit 0

@@ -4,7 +4,7 @@ set -e
 
 grep -q "nomad job status" /root/.bash_history || fail-message "You haven't run 'nomad job status' on Server 2 yet."
 
-grep -q "nomad job status" /root/.bash_history || fail-message "You haven't run nomad 'agent-info' on Server 2 yet."
+grep -q "nomad agent-info" /root/.bash_history || fail-message "You haven't run 'nomad agent-info' on Server 2 yet."
 
 grep -q "export NOMAD_TOKEN" /root/.bash_history || fail-message "You haven't exported the admin token on 'Server 2' yet."
 

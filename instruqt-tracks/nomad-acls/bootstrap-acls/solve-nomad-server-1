@@ -1,8 +1,8 @@
 #!/bin/bash -l
-mkdir /tmp/nomad_test
-cd /tmp/nomad_test
+mkdir /root/nomad
+cd /root/nomad
 nomad acl bootstrap > acl_token.txt
-cat <<-EOF > /tmp/nomad_test/anonymous.json
+cat <<-EOF > /root/nomad/anonymous.json
 {
     "Name": "anonymous",
     "Description": "Allow read-only access for anonymous requests",
