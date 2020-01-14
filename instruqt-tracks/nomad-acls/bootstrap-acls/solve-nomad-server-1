@@ -1,5 +1,4 @@
 #!/bin/bash -l
-mkdir /root/nomad
 cd /root/nomad
 nomad acl bootstrap > acl_token.txt
 cat <<-EOF > /root/nomad/anonymous.json
