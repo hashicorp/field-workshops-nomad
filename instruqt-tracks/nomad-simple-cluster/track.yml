@@ -178,7 +178,7 @@ challenges:
     Run the job with these commands on the "Server" tab:
     ```
     cd nomad
-    nomad run example.nomad
+    nomad job run example.nomad
     ```
     You will see a response from the Nomad server indicating that an evaluation has been created and that an allocation has been submitted to one of the client nodes. You will also see a message indicating that the evaluation has been completed.
 
@@ -269,10 +269,10 @@ challenges:
     After running the plan, check if the dry-run is successful to see if there's enough resources for the changes. If it completes, then we're ready to apply the updates!
 
     Do that by running the following:<br>
-    `nomad run -check-index <job_modify_index> example.nomad`<br>
+    `nomad job run -check-index <job_modify_index> example.nomad`<br>
     where <job_modify_index\> is the job modify index returned by the `nomad job plan` command.
 
-    By using the `nomad run` command with the `check-index` option and the job modify index from the previous plan output, we guarantee that running the job will do exactly what the plan showed.
+    By using the `nomad job run` command with the `check-index` option and the job modify index from the previous plan output, we guarantee that running the job will do exactly what the plan showed.
 
     After running the job, we can see that 2 additional allocations were created as desired.
 
@@ -314,4 +314,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 900
-checksum: "17795310218003013063"
+checksum: "11582945149693883085"
