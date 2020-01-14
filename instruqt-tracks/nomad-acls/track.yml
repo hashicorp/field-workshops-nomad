@@ -29,7 +29,7 @@ challenges:
   assignment: |-
     Before we begin securing our Nomad cluster, lets verify that all 3 servers and both clients are running.
 
-    Run all the folowing commands on the 'Server 1' tab.
+    Run all the following commands on the 'Server 1' tab.
 
     Check the servers:
     ```
@@ -61,7 +61,7 @@ challenges:
 
       In the following challenges, you will configure and then use Nomad ACLs.
 
-      We have run a job called `redis` which we will be using as part of our challeges as we move on.
+      We have run a job called `redis` which we will be using as part of our challenges as we move on.
   tabs:
   - title: Server 1
     type: terminal
@@ -92,7 +92,7 @@ challenges:
   assignment: |-
     We need to enable the ACL system for our cluster.
 
-    Let's start by configiuring ACLs on our Nomad servers.
+    Let's start by configuring ACLs on our Nomad servers.
 
     To do this, we need to enable ACLs in the `acl` stanza of each server file. Go to each "Server Config" tab and add the following section to the end of the file, below the server stanza.
     ```
@@ -202,7 +202,7 @@ challenges:
     ```
     What is the result?
 
-    You will see the same error that you recieved when you tried to check the server status earlier.
+    You will see the same error that you received when you tried to check the server status earlier.
 
     Run the same process check command you ran in the previous challenge on both client node consoles to make sure that the Nomad process is running on both clients.
     ```
@@ -256,7 +256,7 @@ challenges:
   assignment: |-
     Now that we have the servers and clients using ACLs, we need to bootstrap the ACL system.
 
-    To enable the ACL system, we need to run the `nomad bootstrap` command. This will create the inital management ACL token for us to use to set up other parts of the ACL system.
+    To enable the ACL system, we need to run the `nomad bootstrap` command. This will create the initial management ACL token for us to use to set up other parts of the ACL system.
 
     This token should be kept in a safe place since it has **FULL UNRESTRICTED** access to your cluster.
 
@@ -272,7 +272,10 @@ challenges:
 
     We now need to enable the `anonymous` ACL policy so that we can interact with the cluster using the Nomad CLI.
 
-    To do this, we need to export the "Secret ID" of our token as an environmemnt variable called `NOMAD_TOKEN` and then use `curl` to create the policy.
+    To do this, we need to export the "Secret ID" of our token as an environment variable called `NOMAD_TOKEN` and then use `curl` to create the policy.
+
+    You can however use both `curl` and the `nomad` cli to add policies to the cluster. We will initially use curl to add the anonymous policy and then move to the nomad cli for the next challenge.
+    Policy file rules can either be created using JSON syntax or using the HCL syntax.
 
     Open the "Files" tab and you will see two files:
       * anonymous.json
@@ -427,7 +430,7 @@ challenges:
     ```
     nomad agent-info
     ```
-    You should recive a "Permission denied" error.
+    You should receive a "Permission denied" error.
 
     We will now create 2 ACL policies, one for our dev team and one for our ops team.
 
@@ -487,7 +490,7 @@ challenges:
     ```
     nomad acl token list
     ```
-    you should see a list with the two new tokens.
+    you should see a list with the two new tokens. You will also see the main bootstrap token we are using.
 
     We can now test the access of the team with their tokens.
 
@@ -522,7 +525,7 @@ challenges:
     contents: |-
       We will create two client tokens, one for a Developer role and one for an Operations role. We will also assign these to the corresponding policies.
 
-      We will then use these token to perform some basic actions on the cluster and see that only members in of the Operations role can start and stop jobs.
+      We will then use these tokens to perform some basic actions on the cluster and see that only members of the Operations role can start and stop jobs.
   tabs:
   - title: Config Files
     type: code
@@ -543,4 +546,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 1800
-checksum: "3077662963806598537"
+checksum: "3676304705362457887"
