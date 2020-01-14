@@ -13,8 +13,22 @@ EOF
 # Check Authoritive region
 ex -s -c '10i|  authoritative_region = "global"' -c x /etc/nomad.d/server3.hcl
 
+# Restart Nomad Agent
+echo -e "systemctl restart nomad" >> /root/.bash_history
 systemctl restart nomad
 
+sleep 15
+
+# Check Nomad Members
+echo -e "nomad server members" >> /root/.bash_history
+nomad server members
+
+# Check the Nomad nodes
+echo -e "nomad node status" >> /root/.bash_history
+nomad node status
+
+# Check nomad agent Running
+echo -e "ps -ef | grep nomad" >> /root/.bash_history
 ps -ef | grep nomad
 
 exit 0

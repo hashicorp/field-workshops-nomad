@@ -1,5 +1,18 @@
 #!/bin/bash -l
 
-grep -q "export NOMAD_TOKEN" /root/.bash_history || fail-message "You haven't exported the admin token on 'Server 3' yet."
+#Enable bash history
+HISTFILE=~/.bash_history
+set -o history
+
+cd /root/nomad
+scp -oStrictHostKeyChecking=no nomad-server-1:/root/nomad/opsrw_token.txt /root/nomad/opsrw_token.txt
+
+export NOMAD_TOKEN=`cat /root/nomad/opsrw_token.txt | grep Secret | awk '{print $4}'`
+
+nomad job status
+
+nomad job stop redis
+
+nomad job run redis.nomad
 
 exit 0

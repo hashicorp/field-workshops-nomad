@@ -2,7 +2,7 @@
 
 set -e
 
-grep -q "export NOMAD_TOKEN .*" /root/.bash_history || fail-message "You haven't exported the admin token on Server 1 yet."
+grep -q "export NOMAD_TOKEN" /root/.bash_history || fail-message "You haven't exported the admin token on Server 1 yet."
 
 grep -q "nomad acl policy delete anonymous" /root/.bash_history || fail-message "You haven't deleted the anonymous policy on Server 1 yet."
 
@@ -10,14 +10,12 @@ grep -q "nomad acl policy apply .* devRO dev_policy.hcl" /root/.bash_history || 
 
 grep -q "nomad acl policy apply .* opsRW ops_policy.hcl" /root/.bash_history || fail-message "You haven't created the opsRW ACL policy on Server 1 yet."
 
-grep -q "nomad acl policy apply .* devRO dev_policy.hcl" /root/.bash_history || fail-message "You haven't created the devRO ACL policy on Server 1 yet."
-
 grep -q "nomad acl policy list" /root/.bash_history || fail-message "You haven't listed your ACL policies on Server 1 yet."
 
-grep -q "nomad acl token create .* Dev RO .*" /root/.bash_history || fail-message "You haven't created the Dev RO token on Server 1 yet."
+grep -q "nomad acl token create .*Dev RO.*" /root/.bash_history || fail-message "You haven't created the Dev RO token on Server 1 yet."
 
-grep -q "nomad acl token create .* Ops RW .*" /root/.bash_history || fail-message "You haven't created the Ops RW token on Server 1 yet."
+grep -q "nomad acl token create .*Ops RW.*" /root/.bash_history || fail-message "You haven't created the Ops RW token on Server 1 yet."
 
-grep -q "nomad acl token list" /root/.bash_history || fail-message "You haven't listed your ACL tokens on Server 1 yet." 
+grep -q "nomad acl token list" /root/.bash_history || fail-message "You haven't listed your ACL tokens on Server 1 yet."
 
 exit 0

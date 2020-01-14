@@ -1,11 +1,24 @@
 #!/bin/bash -l
+#Enable bash history
+HISTFILE=~/.bash_history
+set -o history
 
-# Check the Nomad cluster members
-echo -e "nomad server members" >> /root/.bash_history
-nomad server members
+cd /root/nomad
 
-# Check the Nomad nodes
-echo -e "nomad node status" >> /root/.bash_history
-nomad node status
+export NOMAD_TOKEN=`cat /root/nomad/acl_token.txt | grep Secret | awk '{print $4}'`
+
+nomad acl policy delete anonymous
+
+nomad acl policy apply -description "Dev Read Only" devRO dev_policy.hcl
+
+nomad acl policy apply -description "OPS Read write" opsRW ops_policy.hcl
+
+nomad acl policy list
+
+nomad acl token create -name="Dev RO" -type="client" -policy="devRO" >  devro_token.txt
+
+nomad acl token create -name="Ops RW" -type="client" -policy="opsRW" >  opsrw_token.txt
+
+nomad acl token list
 
 exit 0
