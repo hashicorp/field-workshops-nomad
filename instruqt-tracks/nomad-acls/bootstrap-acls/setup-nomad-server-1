@@ -1,4 +1,4 @@
-#!/bin/bash -l
+#!/bin/bash -i -l
 mkdir nomad
 cat <<-EOF > /root/nomad/anonymous.json
 {
@@ -19,7 +19,7 @@ cat <<-EOF > /root/nomad/anonymous.json
 EOF
 
 #rm -rf /root/.bash_history
-echo "Configure Server ACLs" > /root/.bash_history
+echo "Bootstrap ACLs" > /root/.bash_history
 
 exit 0
 

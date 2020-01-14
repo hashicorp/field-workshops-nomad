@@ -1,4 +1,4 @@
-#!/bin/bash -l
+#!/bin/bash -i -l
 cd /root/nomad
 nomad acl bootstrap > acl_token.txt
 cat <<-EOF > /root/nomad/anonymous.json
@@ -19,7 +19,7 @@ cat <<-EOF > /root/nomad/anonymous.json
 }
 EOF
 
-export NOMAD_TOKEN=`cat acl_token.txt | grep Secret | awk '{print $4}'`
+export NOMAD_TOKEN=`cat /root/nomad/acl_token.txt | grep Secret | awk '{print $4}'`
 
 curl --request POST --data @anonymous.json -H "X-Nomad-Token: $NOMAD_TOKEN" http://localhost:4646/v1/acl/policy/anonymous
 
