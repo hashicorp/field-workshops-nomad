@@ -433,7 +433,7 @@ challenges:
 
     For the purpose of this example, we will prevent the dev team from stopping any jobs.
 
-    In the `Config Files` editor you will now see 2 new files:
+    In the "Config Files" tab you will now see 2 new files:
       * dev_policy.hcl
       * ops_policy.hcl
 
@@ -445,7 +445,7 @@ challenges:
 
     We will use the Nomad CLI to apply the policies to the cluster.
 
-    Open the "Server 1" tab and run the following commands in that tab.
+    Run the following commands on the "Server 1" tab.
 
     To apply the dev policy run the following command.
     ```
@@ -471,7 +471,7 @@ challenges:
 
     It is very easy to create these tokens using the Nomad CLI.
 
-    Open the "Server 1" tab and run the following commands:
+    Run the following commands on the "Server 1" tab:
     ```
     nomad acl token create -name="Dev RO" -type="client" -policy="devRO" > devro_token.txt
     ```
@@ -491,7 +491,7 @@ challenges:
 
     We can now test the access of the team with their tokens.
 
-    In the "Server 2" tab, export the `Dev RO` token with this command:<br>
+    On the "Server 2" tab, export the `Dev RO` token with this command:<br>
     `export NOMAD_TOKEN=<dev_token>`<br>
     replacing <dev_token/> with the value of `Secret ID` in the devro_token.txt file on the "Config Files" tab.
 
@@ -507,9 +507,9 @@ challenges:
 
     If you try to run `nomad job stop redis`, the job should be stopped.
 
-    If you try to run `cd nomad` followed by `nomad job start redis`, the job should be started again.
+    If you try to run `cd nomad` followed by `nomad job run redis.nomad`, the job should be started again.
 
-    As you can see, the ACL permissions can be adjusted in many ways.  We recommended that you read up further about the policies in the . [Nomad Access Control](https://www.nomadproject.io/guides/security/acl.html) guide.
+    As you can see, the ACL permissions can be adjusted in many ways.  We recommended that you read up further about the policies in the [Nomad Access Control](https://www.nomadproject.io/guides/security/acl.html) guide.
 
     Congratulations on finishing the Nomad ACLs track!
   notes:
@@ -543,4 +543,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 1800
-checksum: "18323346438352149649"
+checksum: "3077662963806598537"
