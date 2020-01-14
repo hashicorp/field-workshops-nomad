@@ -23,9 +23,10 @@ layout: true
 name: chapter-4-topics
 # Chapter 4 Topics
 
-1. Job and Scheduler Types
+1. Nomad Jobs and Schedulers
 1. Declaring Jobs and Their Target Datacenters
 1. Declaring Task Groups, Tasks, and Task Drivers
+1. Task Drivers that Jobs Can Use
 1. Specifying Required Resources and Networks
 1. Registering Tasks as Consul Services
 
@@ -48,11 +49,11 @@ class: compact
 * Define Jobs again to make sure we're all on the same page.
 
 ---
-name: Job Types and Schedulers
+name: Nomad Job and Scheduler Types
 class: col-2, smaller
-# Nomad Job Types and Schedulers
+# Nomad Job and Scheduler Types
 - The [type stanza](https://www.nomadproject.io/docs/job-specification/job.html#type) specifies the Nomad scheduler to use.
- - Nomad has three scheduler types that can be used when creating your job:
+- Nomad has three scheduler types that can be used when creating your job:
   - `service`
   - `system`
   - `batch`
@@ -195,8 +196,8 @@ class: compact, col-2
 # Declaring Task Drivers
 .smaller[
 -   [Task Drivers](https://www.nomadproject.io/docs/drivers) are used by Nomad clients to execute a task and provide resource isolation.
-    -  Task driver resource isolation is intended to provide separation of Nomad client CPU, memory, and storage between tasks.
-    -  Resource isolation effectiveness is dependent upon individual task driver implementations and underlying operating systems.
+-  Task driver resource isolation is intended to provide separation of Nomad client CPU, memory, and storage between tasks.
+-  Resource isolation effectiveness is dependent upon individual task driver implementations and underlying operating systems.
 ]
 <br>
 ```hcl
@@ -222,16 +223,16 @@ name: HashiCorp and Community Task Drivers
 class: compact, col-2
 ### HashiCorp Task Drivers
 .smaller[
-- There are 5 task drivers developed and maintained by HashiCorp
+- There are 5 task drivers developed and maintained by HashiCorp:
   - [Docker Driver](https://www.nomadproject.io/docs/drivers/docker.html)
+  - [Raw Fork/Exec Driver](https://www.nomadproject.io/docs/drivers/raw_exec.html)
   - [Isolated Fork/Exec Driver](https://www.nomadproject.io/docs/drivers/exec.html)
   - [Java Driver](https://www.nomadproject.io/docs/drivers/java.html)
   - [QEMU Driver](https://www.nomadproject.io/docs/drivers/qemu.html)
-  - [Raw Fork/Exec Driver](https://www.nomadproject.io/docs/drivers/raw_exec.html)
 <br>
 
 ###  Community Task Drivers
-- There are 5 open source community supported task drivers
+- There are 5 open source community supported task drivers:
   - [LXC Driver Driver](https://www.nomadproject.io/docs/drivers/external/lxc.html)
   - [Singularity Driver](https://www.nomadproject.io/docs/drivers/external/singularity.html)
   - [Jail Task Driver](https://www.nomadproject.io/docs/drivers/external/jail-task-driver.html)
@@ -241,6 +242,155 @@ class: compact, col-2
 
 ???
 * showing all the drivers except depricated drivers
+
+---
+name: Docker Task Driver
+class: compact, col-2
+# Docker Task Driver
+.smaller[
+- The [Docker Driver](https://www.nomadproject.io/docs/drivers/docker.html) (`docker`) manages and runs Docker containers.
+- The most important (and only required) configuration setting is `image`, which specifies the Docker image to use.
+- There are many other settings, most of which correspond to arguments that can be passed to the `docker run` command.
+- The `docker` driver can map ports from the host network into the containers.
+]
+
+<br>
+
+
+```hcl
+
+task "redis" {
+  driver = "docker"
+    config {
+      image = "redis:3.2"
+      port_map {
+        db = 6379
+      }
+    }
+  }    
+}
+```
+
+???
+* The Docker Driver runs Docker containers from Docker images.
+It can map ports.
+* It has a lot of configuration options
+
+---
+name: Raw Fork/Exec Driver
+class: compact, col-2
+# Raw Fork/Exec Driver
+.smaller[
+- The [Raw Fork/Exec Driver](https://www.nomadproject.io/docs/drivers/raw_exec.html) (`raw_exec`) is used to execute a command without any isolation.
+- The task is started as the same user as the Nomad process.
+- **It therefore should be used with extreme care and is disabled by default for security reasons.**
+- It can be enabled with in the Nomad client configuration in the `plugin` stanza.
+]
+
+
+```hcl
+
+task "example" {
+  driver = "raw_exec"
+  config {
+    command = "/bin/sleep"
+    args    = ["1"]
+  }
+}
+```
+
+???
+* The Raw Fork/Exec Driver can run scripts.
+* But it is somewhat dangerous.
+
+---
+name: Isolated Fork/Exec Driver
+class: compact, col-2
+# Isolated Fork/Exec Driver
+.smaller[
+- The [Isolated Fork/Exec Driver](https://www.nomadproject.io/docs/drivers/exec.html) (`exec`) is used to execute a particular command.
+- However, unlike the `raw_exec` driver, the `exec` driver users the underlying isolation primitives of the operating system to limit the task's access to resources.
+- This makes it **much safer** than the `raw_exec` driver.
+- It can be used to call scripts or other wrappers that provide higher level features.
+]
+<br>
+
+```hcl
+task "example" {
+  driver = "exec"
+  config {
+    command = "/bin/sleep"
+    args    = ["1"]
+  }
+}
+```
+
+???
+* The Isolated Fork/Exec Driver also runs scripts.
+* But it is much safer.
+
+---
+name: Java Driver
+class: compact, col-2
+# Java Driver
+.smaller[
+- The [Java Driver](https://www.nomadproject.io/docs/drivers/java.html) (`java`) is used to execute Java applications packaged Java Jar files.
+- It requires the Jar file to be accessible from the Nomad client via the [artifact downloader](https://www.nomadproject.io/docs/job-specification/artifact.html).
+- The Java application run by the driver can be configured with the `args`, `class`, `class_path`, `jar_path`, and `jvm_options` settings.
+]
+<br>
+<br>
+<br>
+
+```hcl
+
+task "web" {
+  driver = "java"
+  config {
+    jar_path    = "local/hello.jar"
+    jvm_options = ["-Xmx2048m", "-Xms256m"]
+  }
+  artifact {
+    source = "https://FQDN/hello.jar"
+  }
+}
+```
+
+???
+* The Java Driver lets you launch Java applications from Jar files.
+* You can even download them with the Nomad's artifact downloader.
+
+---
+name: Qemu Driver
+class: compact, col-2
+# Qemu Driver
+.smaller[
+* The [Qemu Driver](https://www.nomadproject.io/docs/drivers/qemu.html) (`qemu`) provides a generic virtual machine runner for QEMU.
+* It can map a set of ports from the host machine to the guest virtual machine and provide configuration for resource allocation.
+* The qemu driver can execute any regular QEMU image (e.g. qcow, img, iso), and is invoked with qemu-system-x86_64.
+* The driver requires the image to be accessible from the Nomad client via the artifact downloader.
+]
+
+<br>
+
+```hcl
+
+task "virtual" {
+  driver = "qemu"
+  config {
+    image_path  = "local/linux.img"
+    accelerator = "kvm"
+    graceful_shutdown = true
+    args        = ["-nodefaults"]
+  }
+  artifact {
+    source = "https://FQDN/linux.img"
+  }
+}
+```
+
+???
+* wait, so you are telling me that Nomad can just run vm images all willy nilly?
 
 ---
 name: Specifying Required Resources
@@ -421,13 +571,13 @@ job "example" {
 name: nomad-4-Summary
 # 📝 Chapter 4 Summary
 
-* In this chapter, you learned some of the most important aspects of Nomad jobs:
-  * Types of jobs and schedulers
-  * Jobs and their target datacenters
-  * Task groups, tasks, and task drivers
-  * Required resources
-  * Networking and port mapping
-  * Registering tasks as Consul services
+* In this chapter, you learned more about Nomad jobs including:
+  1. Nomad Jobs and Schedulers
+  1. Declaring Jobs and Their Target Datacenters
+  1. Declaring Task Groups, Tasks, and Task Drivers
+  1. Task Drivers that Jobs Can Use
+  1. Specifying Required Resources and Networks
+  1. Registering Tasks as Consul Services
 
 ???
 * What we learned in this chapter
