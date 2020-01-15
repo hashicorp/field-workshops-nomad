@@ -44,7 +44,7 @@ challenges:
     ## Run the Fabio Job
 
     ## Run the Prometheus Job
-    Note for Peter: the setup script for the server has deployed two version of the prometheus.nomad job specification file to the /root/nomad directory, prometheus1.nomad and prometheus2.nomad.  Both files specify the job name as `prometheus`, so you should have participants run `nomad job run prometheus1.nomad` in this portion of the challenge step.
+    Note for Peter: the setup script for the server has deployed two version of the prometheus.nomad job specification file to the /root/nomad directory, prometheus1.nomad and prometheus2.nomad. Both files specify the job name as `prometheus`, so you should have participants run `nomad job run prometheus1.nomad` in this portion of the challenge step.
   notes:
   - type: text
     contents: |-
@@ -55,7 +55,7 @@ challenges:
       This track will guide you through implementing the [Using Prometheus to Monitor Nomad Metrics](https://www.nomadproject.io/guides/operations/monitoring-and-alerting/prometheus-metrics.html) guide.
   - type: text
     contents: |-
-      The setup scripts for this track have configured and 4 VMs running Nomad and Consul agents.  One is functioning as a server while the other 3 are functioning as clients, both with regard to Nomad and to Consul.
+      The setup scripts for this track have configured 4 VMs running Nomad and Consul agents. One is functioning as a server while the other 3 are functioning as clients, both with regard to Nomad and to Consul.
 
       We've put all the server and client configuration files and job specification files on the nomad-server VM so that you can conveniently see them in a single Instruqt tab.
   - type: text
@@ -97,7 +97,7 @@ challenges:
     ## Run the Alertmanager Job
 
     ## Modify and Re-run the Prometheus Job
-    Note for Peter: the setup script for the server has deployed two version of the prometheus.nomad job specification file to the /root/nomad directory, prometheus1.nomad and prometheus2.nomad.  Both files specify the job name as `prometheus`, so you should have participants run `nomad job run prometheus2.nomad` in this step. Participants will not need to edit either file.
+    Note for Peter: the setup script for the server has deployed two version of the prometheus.nomad job specification file to the /root/nomad directory, prometheus1.nomad and prometheus2.nomad. Both files specify the job name as `prometheus`, so you should have participants run `nomad job run prometheus2.nomad` in this step. Participants will not need to edit either file.
   notes:
   - type: text
     contents: |-
@@ -163,4 +163,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 900
-checksum: "15410849798537056103"
+checksum: "4508997668215956887"
