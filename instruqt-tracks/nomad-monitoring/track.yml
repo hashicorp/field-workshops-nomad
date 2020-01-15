@@ -4,7 +4,7 @@ type: track
 title: Nomad Monitoring
 teaser: Monitor a Nomad cluster and jobs with Prometheus.
 description: |-
-  The Nomad client and server agents collect runtime performance metrics or [telemetry](https://www.nomadproject.io/docs/telemetry/index.html). Operators can use this data to gain real-time visibility into their Nomad clusters and improve performance. Additionally, Nomad operators can set up monitoring and alerting against these metrics and export the metrics to tools like Prometheus, Grafana, Graphite, DataDog, and Circonus.
+  The Nomad client and server agents collect runtime [telemetry](https://www.nomadproject.io/docs/telemetry/index.html). Operators can use this data to gain real-time visibility into their Nomad clusters and improve performance. Additionally, Nomad operators can set up monitoring and alerting against these metrics and export the metrics to tools like Prometheus, Grafana, Graphite, DataDog, and Circonus.
 
   This track will guide you through implementing the [Using Prometheus to Monitor Nomad Metrics](https://www.nomadproject.io/guides/operations/monitoring-and-alerting/prometheus-metrics.html) guide.
 
@@ -48,7 +48,7 @@ challenges:
   notes:
   - type: text
     contents: |-
-      The Nomad client and server agents collect runtime performance metrics or [telemetry](https://www.nomadproject.io/docs/telemetry/index.html). Operators can use this data to gain real-time visibility into their Nomad clusters and improve performance.
+      The Nomad client and server agents collect runtime [telemetry](https://www.nomadproject.io/docs/telemetry/index.html). Operators can use this data to gain real-time visibility into their Nomad clusters and improve performance.
 
       Additionally, Nomad operators can set up monitoring and alerting against these metrics and export the metrics to tools like Prometheus, Grafana, Graphite, DataDog, and Circonus.
 
@@ -163,4 +163,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 900
-checksum: "16397843931452838796"
+checksum: "15410849798537056103"
