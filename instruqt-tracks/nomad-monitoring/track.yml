@@ -1,0 +1,166 @@
+slug: nomad-monitoring
+id: mxfbvvo8n5l2
+type: track
+title: Nomad Monitoring
+teaser: Monitor a Nomad cluster and jobs with Prometheus.
+description: |-
+  The Nomad client and server agents collect runtime performance metrics or [telemetry](https://www.nomadproject.io/docs/telemetry/index.html). Operators can use this data to gain real-time visibility into their Nomad clusters and improve performance. Additionally, Nomad operators can set up monitoring and alerting against these metrics and export the metrics to tools like Prometheus, Grafana, Graphite, DataDog, and Circonus.
+
+  This track will guide you through implementing the [Using Prometheus to Monitor Nomad Metrics](https://www.nomadproject.io/guides/operations/monitoring-and-alerting/prometheus-metrics.html) guide.
+
+  Before running this track, we suggest you run the [Nomad Basics](https://instruqt.com/hashicorp/tracks/nomad-basics), [Nomad Simple Cluster](https://instruqt.com/hashicorp/tracks/nomad-simple-cluster), and [Nomad Multi-Server Cluster](https://instruqt.com/hashicorp/tracks/nomad-multi-server-cluster) tracks.
+icon: https://storage.googleapis.com/instruqt-hashicorp-tracks/logo/nomad.png
+tags:
+- Nomad
+- cluster
+- monitoring
+- telemetry
+- Prometheus
+owner: hashicorp
+developers:
+- roger@hashicorp.com
+private: true
+published: true
+challenges:
+- slug: fabio-and-prometheus-jobs
+  id: m4ly1zb0xyjh
+  type: challenge
+  title: Deploy Fabio and Prometheus
+  teaser: Run Nomad jobs that deploy Fabio and Prometheus to the Nomad cluster.
+  assignment: |-
+    In this challenge, you will run jobs that deploy Fabio and Prometheus to the Nomad cluster.
+
+    That's right: We'll be monitoring Nomad with an application (Prometheus) deployed by Nomad to the Nomad cluster!
+
+    But let's first check that the Nomad and Consul agents were deployed properly by running these commands on the "Server" tab:
+    ```
+    consul members
+    nomad server members
+    nomad node status
+    ```
+
+    The first should show 4 Consul agents, the second should show 1 Nomad server, and the third should show 3 Nomad clients.
+
+    ## Run the Fabio Job
+
+    ## Run the Prometheus Job
+    Note for Peter: the setup script for the server has deployed two version of the prometheus.nomad job specification file to the /root/nomad directory, prometheus1.nomad and prometheus2.nomad.  Both files specify the job name as `prometheus`, so you should have participants run `nomad job run prometheus1.nomad` in this portion of the challenge step.
+  notes:
+  - type: text
+    contents: |-
+      The Nomad client and server agents collect runtime performance metrics or [telemetry](https://www.nomadproject.io/docs/telemetry/index.html). Operators can use this data to gain real-time visibility into their Nomad clusters and improve performance.
+
+      Additionally, Nomad operators can set up monitoring and alerting against these metrics and export the metrics to tools like Prometheus, Grafana, Graphite, DataDog, and Circonus.
+
+      This track will guide you through implementing the [Using Prometheus to Monitor Nomad Metrics](https://www.nomadproject.io/guides/operations/monitoring-and-alerting/prometheus-metrics.html) guide.
+  - type: text
+    contents: |-
+      The setup scripts for this track have configured and 4 VMs running Nomad and Consul agents.  One is functioning as a server while the other 3 are functioning as clients, both with regard to Nomad and to Consul.
+
+      We've put all the server and client configuration files and job specification files on the nomad-server VM so that you can conveniently see them in a single Instruqt tab.
+  - type: text
+    contents: |-
+      In this challenge, you will first run a job that deploys the reverse proxy server [Fabio](https://fabiolb.net) that uses [Consul](https://www.consul.io).
+
+      You will then run a job that deploys [Prometheus](https://prometheus.io/docs/introduction/overview), an open-source systems monitoring and alerting tool.
+  tabs:
+  - title: Config Files
+    type: code
+    hostname: nomad-server
+    path: /root/nomad/
+  - title: Server
+    type: terminal
+    hostname: nomad-server
+  - title: Client 1
+    type: terminal
+    hostname: nomad-client-1
+  - title: Client 2
+    type: terminal
+    hostname: nomad-client-2
+  - title: Client 3
+    type: terminal
+    hostname: nomad-client-3
+  - title: Nomad UI
+    type: service
+    hostname: nomad-server
+    port: 4646
+  difficulty: basic
+  timelimit: 900
+- slug: add-alertmanager
+  id: aaqomh65hrcz
+  type: challenge
+  title: Deploy Alertmanager
+  teaser: Deploy Alertmanager] to the Nomad cluster and connect Prometheus to it.
+  assignment: |-
+    In this challenge, you will deploy the Prometheus Alertmanager to the Nomad cluster and modify the `prometheus.nomad` job to integrate the Prometheus server with Alertmanager.
+
+    ## Run the Alertmanager Job
+
+    ## Modify and Re-run the Prometheus Job
+    Note for Peter: the setup script for the server has deployed two version of the prometheus.nomad job specification file to the /root/nomad directory, prometheus1.nomad and prometheus2.nomad.  Both files specify the job name as `prometheus`, so you should have participants run `nomad job run prometheus2.nomad` in this step. Participants will not need to edit either file.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will deploy the Prometheus [Alertmanager](https://prometheus.io/docs/alerting/alertmanager) to the Nomad cluster. It manages alerts.
+
+      You will then modify the `prometheus.nomad` job to integrate the Prometheus server with Alertmanager and re-run the Prometheus job.
+  tabs:
+  - title: Config Files
+    type: code
+    hostname: nomad-server
+    path: /root/nomad/
+  - title: Server
+    type: terminal
+    hostname: nomad-server
+  - title: Client 1
+    type: terminal
+    hostname: nomad-client-1
+  - title: Client 2
+    type: terminal
+    hostname: nomad-client-2
+  - title: Client 3
+    type: terminal
+    hostname: nomad-client-3
+  - title: Nomad UI
+    type: service
+    hostname: nomad-server
+    port: 4646
+  difficulty: basic
+  timelimit: 900
+- slug: add-web-server
+  id: wzwlz6v21qqr
+  type: challenge
+  title: Deploy a Web Server
+  teaser: Deploy a web server to the Nomad cluster.
+  assignment: In this challenge, you will deploy a web server to the Nomad cluster
+    by running the `webserver.nomad` job.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will deploy a web server to the Nomad cluster.
+
+      You will then stop the web server and see alerts generated in Prometheus and Alertmanager from the metrics that Nomad is sending them.
+  tabs:
+  - title: Config Files
+    type: code
+    hostname: nomad-server
+    path: /root/nomad/
+  - title: Server
+    type: terminal
+    hostname: nomad-server
+  - title: Client 1
+    type: terminal
+    hostname: nomad-client-1
+  - title: Client 2
+    type: terminal
+    hostname: nomad-client-2
+  - title: Client 3
+    type: terminal
+    hostname: nomad-client-3
+  - title: Nomad UI
+    type: service
+    hostname: nomad-server
+    port: 4646
+  difficulty: basic
+  timelimit: 900
+checksum: "16397843931452838796"

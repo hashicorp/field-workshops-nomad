@@ -1,0 +1,53 @@
+#!/bin/bash -l
+
+mkdir -p /root/nomad
+
+cd nomad
+
+# Write Consul Client 2 Config
+cat <<-EOF > /root/nomad/consul-client2.json
+{
+  "ui": true,
+  "log_level": "INFO",
+  "data_dir": "/tmp/consul/client2",
+  "node_name": "client2",
+  "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
+  "client_addr": "{{ GetInterfaceIP \"ens4\" }}",
+  "retry_join": [
+    "nomad-server"
+  ]
+}
+EOF
+
+# Run the Consul agent
+consul agent -config-file consul-client2.json > consul.log 2>&1 &
+
+sleep 15
+
+# Write Nomad Client 2 Config
+cat <<-EOF > /root/nomad/nomad-client2.hcl
+# Setup data dir
+data_dir = "/tmp/nomad/client2"
+
+# Give the agent a unique name
+name = "client2"
+
+# Enable the client
+client {
+  enabled = true
+}
+
+# Telemetry
+telemetry {
+  collection_interval = "1s"
+  disable_hostname = true
+  prometheus_metrics = true
+  publish_allocation_metrics = true
+  publish_node_metrics = true
+}
+EOF
+
+# Run the Nomad agent
+nomad agent -config nomad-client2.hcl > nomad.log 2>&1 &
+
+exit 0

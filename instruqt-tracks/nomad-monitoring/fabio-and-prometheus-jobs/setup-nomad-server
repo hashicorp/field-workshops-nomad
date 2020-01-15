@@ -1,0 +1,408 @@
+#!/bin/bash -l
+
+mkdir -p /root/nomad
+
+cd nomad
+
+# Write Consul Server Config
+cat <<-EOF > /root/nomad/consul-server.json
+{
+  "server": true,
+  "ui": true,
+  "log_level": "INFO",
+  "data_dir": "/tmp/consul/server",
+  "node_name": "server",
+  "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
+  "client_addr": "{{ GetInterfaceIP \"ens4\" }}",
+  "bootstrap_expect": 1
+}
+EOF
+
+# Run the Consul agent
+consul agent -config-file consul-server.json > consul.log 2>&1 &
+
+sleep 15
+
+# Write Nomad Server Config
+cat <<-EOF > /root/nomad/nomad-server.hcl
+# Setup data dir
+data_dir = "/tmp/nomad/server"
+
+# Give the agent a unique name.
+name = "server"
+
+# Enable the server
+server {
+  enabled = true
+  bootstrap_expect = 1
+}
+
+# Telemetry
+telemetry {
+  collection_interval = "1s"
+  disable_hostname = true
+  prometheus_metrics = true
+  publish_allocation_metrics = true
+  publish_node_metrics = true
+}
+EOF
+
+# Run the Nomad server
+nomad agent -config nomad-server.hcl > nomad.log 2>&1 &
+
+# Write Nomad Client 1 Config
+cat <<-EOF > /root/nomad/nomad-client1.hcl
+# Setup data dir
+data_dir = "/tmp/nomad/client1"
+
+# Give the agent a unique name.
+name = "client1"
+
+# Enable the client
+client {
+  enabled = true
+}
+
+# Telemetry
+telemetry {
+  collection_interval = "1s"
+  disable_hostname = true
+  prometheus_metrics = true
+  publish_allocation_metrics = true
+  publish_node_metrics = true
+}
+EOF
+
+# Write Consul Client 1 Config
+cat <<-EOF > /root/nomad/consul-client1.json
+{
+  "ui": true,
+  "log_level": "INFO",
+  "data_dir": "/tmp/consul/client1",
+  "node_name": "client1",
+  "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
+  "client_addr": "{{ GetInterfaceIP \"ens4\" }}",
+  "retry_join": [
+    "nomad-server"
+  ]
+}
+EOF
+
+# Write Nomad Client 2 Config
+cat <<-EOF > /root/nomad/nomad-client2.hcl
+# Setup data dir
+data_dir = "/tmp/nomad/client2"
+
+# Give the agent a unique name.
+name = "client2"
+
+# Enable the client
+client {
+  enabled = true
+}
+
+# Telemetry
+telemetry {
+  collection_interval = "1s"
+  disable_hostname = true
+  prometheus_metrics = true
+  publish_allocation_metrics = true
+  publish_node_metrics = true
+}
+EOF
+
+# Write Consul Client 2 Config
+cat <<-EOF > /root/nomad/consul-client2.json
+{
+  "ui": true,
+  "log_level": "INFO",
+  "data_dir": "/tmp/consul/client2",
+  "node_name": "client2",
+  "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
+  "client_addr": "{{ GetInterfaceIP \"ens4\" }}",
+  "retry_join": [
+    "nomad-server"
+  ]
+}
+EOF
+
+# Write Nomad Client 3 Config
+cat <<-EOF > /root/nomad/nomad-client3.hcl
+# Setup data dir
+data_dir = "/tmp/nomad/client3"
+
+# Give the agent a unique name.
+name = "client3"
+
+# Enable the client
+client {
+  enabled = true
+}
+
+# Telemetry
+telemetry {
+  collection_interval = "1s"
+  disable_hostname = true
+  prometheus_metrics = true
+  publish_allocation_metrics = true
+  publish_node_metrics = true
+}
+EOF
+
+# Write Consul Client 3 Config
+cat <<-EOF > /root/nomad/consul-client3.json
+{
+  "ui": true,
+  "log_level": "INFO",
+  "data_dir": "/tmp/consul/client3",
+  "node_name": "client3",
+  "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
+  "client_addr": "{{ GetInterfaceIP \"ens4\" }}",
+  "retry_join": [
+    "nomad-server"
+  ]
+}
+EOF
+
+# Write fabio.nomad
+cat <<-EOF > /root/nomad/fabio.nomad
+job "fabio" {
+  datacenters = ["dc1"]
+  type = "system"
+
+  group "fabio" {
+    task "fabio" {
+      driver = "docker"
+      config {
+        image = "fabiolb/fabio"
+        network_mode = "host"
+      }
+
+      resources {
+        cpu    = 100
+        memory = 64
+        network {
+          mbits = 20
+          port "lb" {
+            static = 9999
+          }
+          port "ui" {
+            static = 9998
+          }
+        }
+      }
+    }
+  }
+}
+EOF
+
+# Write first version of prometheus.nomad
+cat <<-EOF > /root/nomad/prometheus1.nomad
+job "prometheus" {
+  datacenters = ["dc1"]
+  type = "service"
+
+  group "monitoring" {
+    count = 1
+    restart {
+      attempts = 2
+      interval = "30m"
+      delay = "15s"
+      mode = "fail"
+    }
+    ephemeral_disk {
+      size = 300
+    }
+
+    task "prometheus" {
+      template {
+        change_mode = "noop"
+        destination = "local/prometheus.yml"
+        data = <<EOH
+---
+global:
+  scrape_interval:     5s
+  evaluation_interval: 5s
+
+scrape_configs:
+
+  - job_name: 'nomad_metrics'
+
+    consul_sd_configs:
+    - server: '{{ env "NOMAD_IP_prometheus_ui" }}:8500'
+      services: ['nomad-client', 'nomad']
+
+    relabel_configs:
+    - source_labels: ['__meta_consul_tags']
+      regex: '(.*)http(.*)'
+      action: keep
+
+    scrape_interval: 5s
+    metrics_path: /v1/metrics
+    params:
+      format: ['prometheus']
+EOH
+      }
+      driver = "docker"
+      config {
+        image = "prom/prometheus:latest"
+        volumes = [
+          "local/prometheus.yml:/etc/prometheus/prometheus.yml"
+        ]
+        port_map {
+          prometheus_ui = 9090
+        }
+      }
+      resources {
+        network {
+          mbits = 10
+          port "prometheus_ui" {}
+        }
+      }
+      service {
+        name = "prometheus"
+        tags = ["urlprefix-/"]
+        port = "prometheus_ui"
+        check {
+          name     = "prometheus_ui port alive"
+          type     = "http"
+          path     = "/-/healthy"
+          interval = "10s"
+          timeout  = "2s"
+        }
+      }
+    }
+  }
+}
+EOF
+
+# Write alertmanager.nomad
+cat <<-EOF > /root/nomad/alertmanager.nomad
+job "alertmanager" {
+  datacenters = ["dc1"]
+  type = "service"
+
+  group "alerting" {
+    count = 1
+    restart {
+      attempts = 2
+      interval = "30m"
+      delay = "15s"
+      mode = "fail"
+    }
+    ephemeral_disk {
+      size = 300
+    }
+
+    task "alertmanager" {
+      driver = "docker"
+      config {
+        image = "prom/alertmanager:latest"
+        port_map {
+          alertmanager_ui = 9093
+        }
+      }
+      resources {
+        network {
+          mbits = 10
+          port "alertmanager_ui" {}
+        }
+      }
+      service {
+        name = "alertmanager"
+        tags = ["urlprefix-/alertmanager strip=/alertmanager"]
+        port = "alertmanager_ui"
+        check {
+          name     = "alertmanager_ui port alive"
+          type     = "http"
+          path     = "/-/healthy"
+          interval = "10s"
+          timeout  = "2s"
+        }
+      }
+    }
+  }
+}
+EOF
+
+# Write second version of prometheus.nomad
+cat <<-EOF > /root/nomad/prometheus2.nomad
+job "prometheus" {
+  datacenters = ["dc1"]
+  type = "service"
+
+  group "monitoring" {
+    count = 1
+    restart {
+      attempts = 2
+      interval = "30m"
+      delay = "15s"
+      mode = "fail"
+    }
+    ephemeral_disk {
+      size = 300
+    }
+
+    task "prometheus" {
+      template {
+        change_mode = "noop"
+        destination = "local/prometheus.yml"
+        data = <<EOH
+---
+global:
+  scrape_interval:     5s
+  evaluation_interval: 5s
+
+scrape_configs:
+
+  - job_name: 'nomad_metrics'
+
+    consul_sd_configs:
+    - server: '{{ env "NOMAD_IP_prometheus_ui" }}:8500'
+      services: ['nomad-client', 'nomad']
+
+    relabel_configs:
+    - source_labels: ['__meta_consul_tags']
+      regex: '(.*)http(.*)'
+      action: keep
+
+    scrape_interval: 5s
+    metrics_path: /v1/metrics
+    params:
+      format: ['prometheus']
+EOH
+      }
+      driver = "docker"
+      config {
+        image = "prom/prometheus:latest"
+        volumes = [
+          "local/prometheus.yml:/etc/prometheus/prometheus.yml"
+        ]
+        port_map {
+          prometheus_ui = 9090
+        }
+      }
+      resources {
+        network {
+          mbits = 10
+          port "prometheus_ui" {}
+        }
+      }
+      service {
+        name = "prometheus"
+        tags = ["urlprefix-/"]
+        port = "prometheus_ui"
+        check {
+          name     = "prometheus_ui port alive"
+          type     = "http"
+          path     = "/-/healthy"
+          interval = "10s"
+          timeout  = "2s"
+        }
+      }
+    }
+  }
+}
+EOF
+
+exit 0
