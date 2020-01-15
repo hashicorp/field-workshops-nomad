@@ -18,7 +18,7 @@ owner: hashicorp
 developers:
 - lhaig@hashicorp.com
 - roger@hashicorp.com
-private: true
+private: false
 published: true
 challenges:
 - slug: run-the-servers-and-clients
@@ -546,4 +546,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 1800
-checksum: "15186275601922762776"
+checksum: "6155152013242748687"
