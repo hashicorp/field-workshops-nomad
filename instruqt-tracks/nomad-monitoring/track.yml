@@ -17,8 +17,7 @@ tags:
 - telemetry
 - Prometheus
 owner: hashicorp
-developers:
-- roger@hashicorp.com
+developers: []
 private: true
 published: true
 challenges:
@@ -42,9 +41,28 @@ challenges:
     The first should show 4 Consul agents, the second should show 1 Nomad server, and the third should show 3 Nomad clients.
 
     ## Run the Fabio Job
+    The job file for Fabio has been created for you. View the file called `fabio.nomad`.
+
+    Register the `fabio` job from the "**Server**" tab.
+    ```
+    cd nomad
+    nomad job run fabio.nomad
+    ```
+    Connect to any of the Nomad clients on port `9998` to see the fabio web UI.
+
 
     ## Run the Prometheus Job
     Note for Peter: the setup script for the server has deployed two version of the prometheus.nomad job specification file to the /root/nomad directory, prometheus1.nomad and prometheus2.nomad. Both files specify the job name as `prometheus`, so you should have participants run `nomad job run prometheus1.nomad` in this portion of the challenge step.
+
+    Register the `prometheus` job from the "**Server**" tab.
+    ```
+    nomad job run prometheus1.nomad
+    ```
+
+    - Connect to any of the Nomad clients on port `9999`. There is only one instance of Prometheus, but fabio routes you to the correct node.
+
+    Use Prometheus to query how many jobs are running on our Nomad cluster.
+    - Type `nomad_nomad_job_summary_running` into the query section.
   notes:
   - type: text
     contents: |-
@@ -84,6 +102,14 @@ challenges:
     type: service
     hostname: nomad-server
     port: 4646
+  - title: Fabio UI
+    type: service
+    hostname: nomad-client-1
+    port: 9998
+  - title: Prometheus UI
+    type: service
+    hostname: nomad-client-1
+    port: 9999
   difficulty: basic
   timelimit: 900
 - slug: add-alertmanager
@@ -163,4 +189,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 900
-checksum: "4508997668215956887"
+checksum: "14259095369647403549"
