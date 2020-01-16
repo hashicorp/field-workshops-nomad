@@ -1,4 +1,6 @@
 # HashiCorp Nomad Field Workshops
+[![CircleCI](https://circleci.com/gh/hashicorp/field-workshops-nomad.svg?style=svg)](https://circleci.com/gh/hashicorp/field-workshops-nomad)
+
 All HashiCorp field workshops focused on Nomad should be placed in this repository. Similar field workshop repositories exist for these HashiCorp solutions:
 * [field-workshops-consul](https://github.com/hashicorp/field-workshops-consul)
 * [field-workshops-terraform](https://github.com/hashicorp/field-workshops-terraform)
@@ -7,6 +9,12 @@ All HashiCorp field workshops focused on Nomad should be placed in this reposito
 Additionally, field workshops focused on more than one HashiCorp solution can be found in the [field-workshops-hashistack](https://github.com/hashicorp/field-workshops-hashistack) repository.
 
 ## Slides
+
+The following Nomad workshop presentation have been completed:
+* https://hashicorp.github.io/field-workshops-nomad/slides/multi-cloud/nomad-oss
+
+Other presentations are just placeholders for future content.
+
 The slides for these workshops should be created using [Remark](https://remarkjs.com) and should be placed under the [docs/slides](./docs/slides) directory. This directory is organized by cloud and then by workshop.  If a workshop targets a single cloud, its slides should be placed in a directory under that cloud's directory ([aws](./docs/slides/aws), [azure](./docs/slides/azure), or [gcp](./docs/slides/gcp)). If a workshop can be used with multiple clouds, its slides should be placed in a directory under the [multi-cloud](./docs/slides/multi-cloud) directory.
 
 Please do **NOT** place any slides or any other content directly inside the [docs](./docs) directory.
