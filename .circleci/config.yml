@@ -1,0 +1,177 @@
+version: 2
+jobs:
+  instruqt-validate:
+    docker:
+      - image: ubuntu:latest
+    steps:
+      - checkout
+      - run:
+          name: Run Instruqt Validate
+          command: |
+            VERSION=$INSTRUQT_VERSION
+            apt -y update
+            apt -y install wget unzip
+            wget https://github.com/instruqt/cli/releases/download/${VERSION}/instruqt-linux-${VERSION}.zip -O /tmp/instruqt.zip
+            cd /tmp
+            unzip instruqt.zip
+            cp instruqt /usr/local/bin/instruqt
+            chmod +x /usr/local/bin/instruqt
+            instruqt version | grep $VERSION
+            RETVAL=$?
+            if [[ $RETVAL -ne 0 ]]; then
+              echo "Version $VERSION is not installed correctly."
+              exit 1
+            else
+              echo "Instruqt Version $VERSION is installed."
+            fi
+            echo "Running instruqt track validate..."
+            for dir in $(ls -d /root/project/instruqt-tracks/*); do
+              cd $dir && instruqt track validate
+            done
+  instruqt-test-nomad-basics:
+    docker:
+      - image: ubuntu:latest
+    steps:
+      - checkout
+      - run:
+          name: Run Instruqt Test
+          command: |
+            VERSION=$INSTRUQT_VERSION
+            apt -y update
+            apt -y install wget unzip
+            wget https://github.com/instruqt/cli/releases/download/${VERSION}/instruqt-linux-${VERSION}.zip -O /tmp/instruqt.zip
+            cd /tmp
+            unzip instruqt.zip
+            cp instruqt /usr/local/bin/instruqt
+            chmod +x /usr/local/bin/instruqt
+            instruqt version | grep $VERSION
+            RETVAL=$?
+            if [[ $RETVAL -ne 0 ]]; then
+              echo "Version $VERSION is not installed correctly."
+              exit 1
+            else
+              echo "Instruqt Version $VERSION is installed."
+            fi
+            echo "Running instruqt track test..."
+            cd /root/project/instruqt-tracks/nomad-basics
+            instruqt track test --skip-fail-check
+  instruqt-test-nomad-simple-cluster:
+    docker:
+      - image: ubuntu:latest
+    steps:
+      - checkout
+      - run:
+          name: Run Instruqt Test
+          command: |
+            VERSION=$INSTRUQT_VERSION
+            apt -y update
+            apt -y install wget unzip
+            wget https://github.com/instruqt/cli/releases/download/${VERSION}/instruqt-linux-${VERSION}.zip -O /tmp/instruqt.zip
+            cd /tmp
+            unzip instruqt.zip
+            cp instruqt /usr/local/bin/instruqt
+            chmod +x /usr/local/bin/instruqt
+            instruqt version | grep $VERSION
+            RETVAL=$?
+            if [[ $RETVAL -ne 0 ]]; then
+              echo "Version $VERSION is not installed correctly."
+              exit 1
+            else
+              echo "Instruqt Version $VERSION is installed."
+            fi
+            echo "Running instruqt track test..."
+            cd /root/project/instruqt-tracks/nomad-simple-cluster
+            instruqt track test --skip-fail-check
+  instruqt-test-nomad-multi-server-cluster:
+    docker:
+      - image: ubuntu:latest
+    steps:
+      - checkout
+      - run:
+          name: Run Instruqt Test
+          command: |
+            VERSION=$INSTRUQT_VERSION
+            apt -y update
+            apt -y install wget unzip
+            wget https://github.com/instruqt/cli/releases/download/${VERSION}/instruqt-linux-${VERSION}.zip -O /tmp/instruqt.zip
+            cd /tmp
+            unzip instruqt.zip
+            cp instruqt /usr/local/bin/instruqt
+            chmod +x /usr/local/bin/instruqt
+            instruqt version | grep $VERSION
+            RETVAL=$?
+            if [[ $RETVAL -ne 0 ]]; then
+              echo "Version $VERSION is not installed correctly."
+              exit 1
+            else
+              echo "Instruqt Version $VERSION is installed."
+            fi
+            echo "Running instruqt track test..."
+            cd /root/project/instruqt-tracks/nomad-multi-server-cluster
+            instruqt track test --skip-fail-check
+  instruqt-test-nomad-acls:
+    docker:
+      - image: ubuntu:latest
+    steps:
+      - checkout
+      - run:
+          name: Run Instruqt Test
+          command: |
+            VERSION=$INSTRUQT_VERSION
+            apt -y update
+            apt -y install wget unzip
+            wget https://github.com/instruqt/cli/releases/download/${VERSION}/instruqt-linux-${VERSION}.zip -O /tmp/instruqt.zip
+            cd /tmp
+            unzip instruqt.zip
+            cp instruqt /usr/local/bin/instruqt
+            chmod +x /usr/local/bin/instruqt
+            instruqt version | grep $VERSION
+            RETVAL=$?
+            if [[ $RETVAL -ne 0 ]]; then
+              echo "Version $VERSION is not installed correctly."
+              exit 1
+            else
+              echo "Instruqt Version $VERSION is installed."
+            fi
+            echo "Running instruqt track test..."
+            cd /root/project/instruqt-tracks/nomad-acls
+            instruqt track test --skip-fail-check
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - instruqt-validate
+      - instruqt-test-nomad-basics:
+          requires:
+            - instruqt-validate
+      - instruqt-test-nomad-simple-cluster:
+          requires:
+            - instruqt-validate
+      - instruqt-test-nomad-multi-server-cluster:
+          requires:
+            - instruqt-validate
+      - instruqt-test-nomad-acls:
+          requires:
+            - instruqt-validate
+  nightly-build:
+    triggers:
+      - schedule:
+          cron: "0 5 * * *"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - instruqt-validate
+      - instruqt-test-nomad-basics:
+          requires:
+            - instruqt-validate
+      - instruqt-test-nomad-simple-cluster:
+          requires:
+            - instruqt-validate
+      - instruqt-test-nomad-multi-server-cluster:
+          requires:
+            - instruqt-validate
+      - instruqt-test-nomad-acls:
+          requires:
+            - instruqt-validate
