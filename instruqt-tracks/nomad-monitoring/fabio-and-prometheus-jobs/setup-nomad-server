@@ -1,6 +1,7 @@
 #!/bin/bash -l
 
 nomad -autocomplete-install
+
 mkdir -p /root/nomad
 
 cd nomad

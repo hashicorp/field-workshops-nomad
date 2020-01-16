@@ -106,9 +106,17 @@ challenges:
     type: service
     hostname: nomad-client-1
     port: 9998
-  - title: Prometheus UI
+  - title: Prometheus UI 1
     type: service
     hostname: nomad-client-1
+    port: 9999
+  - title: Prometheus UI 2
+    type: service
+    hostname: nomad-client-2
+    port: 9999
+  - title: Prometheus UI 3
+    type: service
+    hostname: nomad-client-3
     port: 9999
   difficulty: basic
   timelimit: 900
@@ -189,4 +197,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 900
-checksum: "14259095369647403549"
+checksum: "668642881146979463"
