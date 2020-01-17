@@ -45,7 +45,7 @@ If you create a multi-part slide show, users will also be able to access each pa
 * https://hashicorp.github.io/field-workshops-nomad/slides/aws/nomad-oss/nomad-1.html
 * https://hashicorp.github.io/field-workshops-nomad/slides/aws/nomad-oss/nomad-2.html
 
-Each workshop should give the full link (or links) to that workshop's slides in one of its first few slides.
+Each workshop should give the full link to that workshop's slides in one of its first few slides.
 
 ## Instructor Guides
 The instructor guides for these workshops should be created as Markdown files and should be placed in the [instructor-guides](./instructor-guides) directory and have names like `<cloud>_<workshop_name>_INSTRUCTOR_GUIDE.md` where `<cloud>` is the cloud the workshop targets and `<workshop_name>` is the name of the workshop. But if the workshop is intended for use with multiple clouds, `<cloud>` should be omitted.
