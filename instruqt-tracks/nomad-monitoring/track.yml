@@ -225,44 +225,37 @@ challenges:
   type: challenge
   title: Deploy a Web Server
   teaser: Deploy a web server to the Nomad cluster.
-  assignment: "In this challenge, you will deploy a web server to the Nomad cluster
-    by running the `webserver.nomad` job.
+  assignment: |-
+    In this challenge, you will deploy a web server to the Nomad cluster by running the `webserver.nomad` job.
 
-    ## Run the Web Server Job\nThe `webserver`
-    job has already been created for you.\n- View the file called `webserver.nomad`
-    from \"Config Files\" tab.\n- Run the `webserver` job from the \"Server\" tab.\n```shell\ncd
-    /root/nomad\nnomad job run webserver.nomad\n```\n- Check the status\n```\nnomad
-    job status webserver\n```
+    ## Run the Web Server Job
+    The `webserver` job has already been created for you.
+    - View the file called `webserver.nomad` from \"Config Files\" tab.
+    - Run the `webserver` job from the \"Server\" tab.
+    ```shell
+    cd
+    /root/nomad
+    nomad job run webserver.nomad
+    ```
+    - Check the status
+    ```
+    nomad job status webserver
+    ```
+    At this point, re-run your Prometheus job. After a few seconds, you will see the web server and Alertmanager appear in your list of targets.
+    ![](https://www.nomadproject.io/assets/images/new-targets-7e2bcd93.png)
 
-    At this point, re-run your Prometheus job. After
-    a few seconds, you will see the web server and Alertmanager appear in your list
-    of targets.\n![](https://www.nomadproject.io/assets/images/new-targets-7e2bcd93.png)
+    You should also be able to go to the Alerts section of the Prometheus web interface and see the alert that we have configured. No alerts are active because our web server is up and running.
+    ![](https://www.nomadproject.io/assets/images/alerts-ee875c5e.png)
 
-
-    You
-    should also be able to go to the Alerts section of the Prometheus web interface
-    and see the alert that we have configured. No alerts are active because our web
-    server is up and running.\n![](https://www.nomadproject.io/assets/images/alerts-ee875c5e.png)
-
-    ##
-    Stop the Web Server\nRun `nomad stop webserver` to stop our webserver. \n- After
-    a few seconds, see that we have an active alert in the `Alerts` section of the
-    web interface (\"Prometheus UI\" tab).
-
+    ## Stop the Web Server
+    Run `nomad stop webserver` to stop our webserver.
+    - After a few seconds, see that we have an active alert in the `Alerts` section of the web interface (\"Prometheus UI\" tab).
     ![Active Alerts](https://www.nomadproject.io/assets/images/active-alert-cfcc7e45.png)
-
-    Go
-    to the Alertmanager web interface from \"Alertmanager\" tab.\n- See that Alertmanager
-    has received this alert as well. Since Alertmanager has been configured behind
-    fabio, go to the IP address of any of your client nodes at port `9999` and use
-    `/alertmanager` as the route. An example is shown below:
-
+    Go to the Alertmanager web interface from \"Alertmanager\" tab.
+    - See that Alertmanager has received this alert as well. Since Alertmanager has been configured behind fabio, go to the IP address of any of your client nodes at port `9999` and use `/alertmanager` as the route. An example is shown below:
     < client node IP >:9999/alertmanager
-
-    You
-    should see that Alertmanager has received the alert.
-
-    ![Alertmanager Web UI](https://www.nomadproject.io/assets/images/alertmanager-webui-612ce20c.png)"
+    You should see that Alertmanager has received the alert.
+    ![Alertmanager Web UI](https://www.nomadproject.io/assets/images/alertmanager-webui-612ce20c.png)
   notes:
   - type: text
     contents: |-
@@ -305,4 +298,4 @@ challenges:
     port: 9999
   difficulty: basic
   timelimit: 900
-checksum: "9939892375979713429"
+checksum: "10035005783410969160"
