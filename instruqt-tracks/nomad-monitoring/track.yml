@@ -75,14 +75,13 @@ challenges:
     - Connect to any of the Nomad clients on port `9999` (tabs Prometheus UI 1, 2 or 3).
     - NOTE: There is only one instance of Prometheus, but fabio routes you to the correct node.
 
-Use Prometheus to query how many
-jobs are running on our Nomad cluster from \"Prometheus UI\" tab.\n- Type `nomad_nomad_job_summary_running`
-into the query section.\n- Click \"Execute\".\n![running-jobs](https://www.nomadproject.io/assets/images/running-jobs-564b55df.png)\n-
-The value of our `fabio` job is `3` since it is using the [**system**][36] scheduler
-type. We are running three Nomad clients in our demo cluster.\n- The value of
-our `prometheus` job is `1` since we only deployed one instance of it.\n- To see
-the description of other metrics, visit the [telemetry](https://www.nomadproject.io/docs/configuration/telemetry.html)
-section.
+    Use Prometheus to query how many jobs are running on our Nomad cluster from \"Prometheus UI\" tab.
+    - Type `nomad_nomad_job_summary_running` into the query section.
+    - Click \"Execute\".
+    ![running-jobs](https://www.nomadproject.io/assets/images/running-jobs-564b55df.png)
+    - The value of our `fabio` job is `3` since it is using the [**system**][36] scheduler type. We are running three Nomad clients in our demo cluster.
+    - The value of our `prometheus` job is `1` since we only deployed one instance of it.
+    - To see the description of other metrics, visit the [telemetry](https://www.nomadproject.io/docs/configuration/telemetry.html) section.
   notes:
   - type: text
     contents: |-
