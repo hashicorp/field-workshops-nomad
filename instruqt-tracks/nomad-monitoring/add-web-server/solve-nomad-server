@@ -4,6 +4,22 @@
 HISTFILE=~/.bash_history
 set -o history
 
+# cd to nomad directory
 cd nomad
+
+# Run the webserver.nomad job
+nomad job run webserver.nomad
+
+# Check the status of the webserver job
+nomad job status webserver
+
+# Re-run the prometheus2.nomad job
+nomad job run prometheus2.nomad
+
+# Stop the webserver job
+nomad job stop webserver
+
+# Re-run the webserver job
+nomad job run webserver.nomad
 
 exit 0

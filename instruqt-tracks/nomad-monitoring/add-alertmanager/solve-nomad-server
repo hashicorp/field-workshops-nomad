@@ -4,6 +4,20 @@
 HISTFILE=~/.bash_history
 set -o history
 
+# cd to nomad directory
 cd nomad
+
+# Run the alertmanager.nomad job
+nomad job run alertmanager.nomad
+
+# Check the status of the alertmanager job
+nomad job status alertmanager
+
+# Run the prometheus2.nomad job
+nomad job run prometheus2.nomad
+
+# Check the status of the prometheus job
+nomad job status prometheus
+
 
 exit 0
