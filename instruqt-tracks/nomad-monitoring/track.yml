@@ -31,7 +31,7 @@ challenges:
 
     That's right: We'll be monitoring Nomad with an application (Prometheus) deployed by Nomad to the Nomad cluster!
 
-    First check that the Nomad and Consul agents were deployed properly by running these commands on the \"Server\" tab:
+    First check that the Nomad and Consul agents were deployed properly by running these commands on the "Server" tab:
     ```
     consul members
     nomad server members
@@ -42,30 +42,29 @@ challenges:
 
     ## Run the Fabio Job
     The job file for Fabio has been created for you.
-    - View the file called `fabio.nomad` from \"Config\" tab.
-
-    Register the `fabio` job from the \"Server\" tab.
+    - View the file called `fabio.nomad` from "Config" tab.
+    - Register the `fabio` job from the "Server" tab.
     ```
     cd nomad
     nomad job run fabio.nomad
     ```
 
-    - Connect to Nomad client on port `9998` (\"Fabio\" tab) to see the fabio web UI.
-      - You can connect to any client, but we prepared `client-1` as a tab.
+    - Click on "Fabio" tab. This connects to Nomad client on port `9998` for the fabio web UI.
+    - You can connect to any client, but we prepared `client-1` as a tab.
     - The Fabio routing table will be empty. We have not deployed anything that fabio can route to, yet.
 
     ## Run the Prometheus Job
-    Note for Peter: the setup script for the server has deployed two version of the prometheus.nomad job specification file to the /root/nomad directory, prometheus1.nomad and prometheus2.nomad. Both files specify the job name as `prometheus`, so you should have participants run `nomad job run prometheus1.nomad` in this portion of the challenge step.
+    NOTE: The setup script for the server has deployed two versions of the `prometheus.nomad` job specification file to the `/root/nomad` directory, `prometheus1.nomad` and `prometheus2.nomad`. Both files specify the job name as `prometheus`. You should run `nomad job run `prometheus1.nomad` in this step.
 
     The job file for Prometheus has been created for you.
-    - View the file called `prometheus1.nomad` from \"Config\" tab.
+    - View the file called `prometheus1.nomad` from "Config" tab.
 
-    Register the `prometheus` job from the \"Server\" tab.
+    Register the `prometheus` job from the "Server" tab.
     ```
     nomad job run prometheus1.nomad
     ```
 
-    Verify that fabio and prometheus are running on \"three\" and \"one\" clients, respectively.
+    Verify that fabio and prometheus are running on "three" and "one" clients, respectively.
     ```shell
     nomad node status
     nomad job status fabio | grep -A 5 Allocations
@@ -74,12 +73,13 @@ challenges:
 
     - Connect to any of the Nomad clients on port `9999` (tabs Prometheus UI 1, 2 or 3).
     - NOTE: There is only one instance of Prometheus, but fabio routes you to the correct node.
+    - You might need to click the refresh icon (top right).
 
-    Use Prometheus to query how many jobs are running on our Nomad cluster from \"Prometheus UI\" tab.
+    Use Prometheus to query how many jobs are running on our Nomad cluster from "Prometheus UI" tab.
     - Type `nomad_nomad_job_summary_running` into the query section.
-    - Click \"Execute\".
+    - Click "Execute".
     ![running-jobs](https://www.nomadproject.io/assets/images/running-jobs-564b55df.png)
-    - The value of our `fabio` job is `3` since it is using the [**system**][36] scheduler type. We are running three Nomad clients in our demo cluster.
+    - The value of our `fabio` job is `3` since it is using the [system](https://www.nomadproject.io/docs/schedulers.html#system) scheduler type. We are running three Nomad clients in our demo cluster.
     - The value of our `prometheus` job is `1` since we only deployed one instance of it.
     - To see the description of other metrics, visit the [telemetry](https://www.nomadproject.io/docs/configuration/telemetry.html) section.
   notes:
@@ -125,15 +125,15 @@ challenges:
     type: service
     hostname: nomad-client-1
     port: 9998
-  - title: Prometheus UI 1
+  - title: Prometheus1
     type: service
     hostname: nomad-client-1
     port: 9999
-  - title: Prometheus UI 2
+  - title: Prometheus2
     type: service
     hostname: nomad-client-2
     port: 9999
-  - title: Prometheus UI 3
+  - title: Prometheus3
     type: service
     hostname: nomad-client-3
     port: 9999
@@ -145,16 +145,14 @@ challenges:
   title: Deploy Alertmanager
   teaser: Deploy Alertmanager] to the Nomad cluster and connect Prometheus to it.
   assignment: |-
-    "In this challenge, you will deploy the Prometheus Alertmanager to the
-    Nomad cluster and modify the `prometheus.nomad` job to integrate the Prometheus
-    server with Alertmanager.
+    In this challenge, you will deploy the Prometheus Alertmanager to the Nomad cluster and modify the `prometheus.nomad` job to integrate the Prometheus server with Alertmanager.
 
     NOTE: Prometheus sends alerts to Alertmanager. Alertmanager sends out notifications to designated receivers.
 
     ## Run the Alertmanager Job
     The `alertmanager` job has already been created for you.
     - View the file called `alertmanager.nomad` from "Config Files" tab.
-    - Run the alertmanager job from the "Server" tab.
+    - Run the `alertmanager` job from the "Server" tab.
     ```shell
     cd /root/nomad
     nomad job run alertmanager.nomad
@@ -165,11 +163,13 @@ challenges:
     ```
 
     ## Modify and Re-run the Prometheus Job
+    NOTE: The setup script for the server has deployed two version of the `prometheus.nomad` job specification file to the `/root/nomad` directory, `prometheus1.nomad` and `prometheus2.nomad`. Both files specify the job name as `prometheus`. You should run `nomad job run prometheus2.nomad` in this step. You will not need
+    to edit either file.
+
     The modified prometheus job has already been created for you.
     - View the file called `prometheus2.nomad` from "Config Files" tab.
 
     NOTE: We added a few important sections to this job file:
-
     - added another template stanza that defines an alerting rule for our web server. Prometheus will send out an alert if it detects the `webserver` service has disappeared.
     - added an `alerting` block to our Prometheus configuration as well as a `rule_files` block to make Prometheus aware of Alertmanager as well as the rule we have defined.
     - are also scraping Alertmanager along with our web server.
@@ -184,13 +184,6 @@ challenges:
     nomad job status prometheus
     ```
     - You should see the following allocations and status: one allocation `running` and at least one allocation `complete`.
-
-
-    Note for Peter: the setup script for the server has deployed two version of the prometheus.nomad
-    job specification file to the /root/nomad directory, prometheus1.nomad and prometheus2.nomad.
-    Both files specify the job name as `prometheus`, so you should have participants
-    run `nomad job run prometheus2.nomad` in this step. Participants will not need
-    to edit either file."
   notes:
   - type: text
     contents: |-
@@ -230,32 +223,47 @@ challenges:
 
     ## Run the Web Server Job
     The `webserver` job has already been created for you.
-    - View the file called `webserver.nomad` from \"Config Files\" tab.
-    - Run the `webserver` job from the \"Server\" tab.
+    - View the file called `webserver.nomad` from "Config Files" tab.
+    - Run the `webserver` job from the "Server" tab.
     ```shell
-    cd
-    /root/nomad
+    cd /root/nomad
     nomad job run webserver.nomad
     ```
     - Check the status
     ```
     nomad job status webserver
     ```
-    At this point, re-run your Prometheus job. After a few seconds, you will see the web server and Alertmanager appear in your list of targets.
+    At this point, re-run your Prometheus job.
+
+    - Go to "Prometheus" tab. Click Status -> Targets.
+    - After a few seconds, you will see the `webserver` and `alertmanager` appear in your list of targets.
     ![](https://www.nomadproject.io/assets/images/new-targets-7e2bcd93.png)
 
-    You should also be able to go to the Alerts section of the Prometheus web interface and see the alert that we have configured. No alerts are active because our web server is up and running.
+    - Go to the "Alerts" section of the Prometheus web interface.
+    - Note the alert that we have configured. No alerts are active because our web server is up and running.
     ![](https://www.nomadproject.io/assets/images/alerts-ee875c5e.png)
 
     ## Stop the Web Server
-    Run `nomad stop webserver` to stop our webserver.
-    - After a few seconds, see that we have an active alert in the `Alerts` section of the web interface (\"Prometheus UI\" tab).
+    - Run `nomad stop webserver` in "Server" tab to stop our webserver.
+    - Go to "Prometheus" tab. Click "Alerts".
+    - Note that we have an active alert.
     ![Active Alerts](https://www.nomadproject.io/assets/images/active-alert-cfcc7e45.png)
-    Go to the Alertmanager web interface from \"Alertmanager\" tab.
-    - See that Alertmanager has received this alert as well. Since Alertmanager has been configured behind fabio, go to the IP address of any of your client nodes at port `9999` and use `/alertmanager` as the route. An example is shown below:
-    < client node IP >:9999/alertmanager
-    You should see that Alertmanager has received the alert.
+
+    Verify that Alertmanager has received this alert as well.
+    - Go to the "Alertmanager" web interface from "Alertmanager" tab.
+    - NOTE: Alertmanager has been configured behind fabio. You can go to the IP address of any of your client nodes at port `9999` and use `/alertmanager` as the route.
+    - For example: `<client_node_IP>:9999/alertmanager`
+    - You should see that Alertmanager has received the alert.
     ![Alertmanager Web UI](https://www.nomadproject.io/assets/images/alertmanager-webui-612ce20c.png)
+
+    ## Start the Web Server (optional)
+    - Run `cd /root/nomad && nomad job start webserver.nomad` in "Server" tab to stop our webserver.
+    - Go to "Prometheus" tab. Click "Alerts".
+    - Note that we do not have an active alert.
+
+    Verify that Alertmanager has removed this alert as well.
+    - Go to the "Alertmanager" web interface from "Alertmanager" tab.
+    - You should see that Alertmanager has removed the alert.
   notes:
   - type: text
     contents: |-
@@ -298,4 +306,4 @@ challenges:
     port: 9999
   difficulty: basic
   timelimit: 900
-checksum: "2110513304729932650"
+checksum: "8868373877923465657"

@@ -2,4 +2,14 @@
 
 set -e
 
+# Check that Nomad job was run for fabio
+grep -q "nomad job run fabio.nomad" /root/.bash_history || fail-message "You haven't run the fabio.nomad job yet."
+
+# Check that Nomad job was run for prometheus
+grep -q "nomad job run prometheus1.nomad" /root/.bash_history || fail-message "You haven't run the prometheus1.nomad job yet."
+
+# Check the status of your fabio and prometheus jobs
+grep -q "nomad job status fabio" /root/.bash_history || fail-message "You haven't checked the status of your Nomad fabio job yet."
+grep -q "nomad job status prometheus" /root/.bash_history || fail-message "You haven't checked the status of your Nomad prometheus job yet."
+
 exit 0

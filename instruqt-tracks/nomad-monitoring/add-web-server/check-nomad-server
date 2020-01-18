@@ -2,4 +2,10 @@
 
 set -e
 
+# Check that Nomad job was run for alertmanager
+grep -q "nomad job run webserver.nomad" /root/.bash_history || fail-message "You haven't run the webserver.nomad job yet."
+
+# Check the status of your fabio and prometheus jobs
+grep -q "nomad job status webserver" /root/.bash_history || fail-message "You haven't checked the status of your Nomad webserver job yet."
+
 exit 0
