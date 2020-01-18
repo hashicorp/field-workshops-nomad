@@ -15,7 +15,7 @@ cat <<-EOF > /root/nomad/consul-server.json
   "data_dir": "/tmp/consul/server",
   "node_name": "server",
   "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
-  "client_addr": "{{ GetInterfaceIP \"ens4\" }}",
+  "client_addr": "0.0.0.0",
   "bootstrap_expect": 1
 }
 EOF
@@ -83,7 +83,7 @@ cat <<-EOF > /root/nomad/consul-client1.json
   "data_dir": "/tmp/consul/client1",
   "node_name": "client1",
   "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
-  "client_addr": "{{ GetInterfaceIP \"ens4\" }}",
+  "client_addr": "0.0.0.0",
   "retry_join": [
     "nomad-server"
   ]
@@ -121,7 +121,7 @@ cat <<-EOF > /root/nomad/consul-client2.json
   "data_dir": "/tmp/consul/client2",
   "node_name": "client2",
   "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
-  "client_addr": "{{ GetInterfaceIP \"ens4\" }}",
+  "client_addr": "0.0.0.0",
   "retry_join": [
     "nomad-server"
   ]
@@ -159,7 +159,7 @@ cat <<-EOF > /root/nomad/consul-client3.json
   "data_dir": "/tmp/consul/client3",
   "node_name": "client3",
   "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
-  "client_addr": "{{ GetInterfaceIP \"ens4\" }}",
+  "client_addr": "0.0.0.0",
   "retry_join": [
     "nomad-server"
   ]

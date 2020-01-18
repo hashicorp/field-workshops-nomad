@@ -4,6 +4,20 @@
 HISTFILE=~/.bash_history
 set -o history
 
+# CD to nomad directory
 cd nomad
+
+# Run the fabio job
+nomad job run fabio.nomad
+
+# Run the prometheus1.nomad job
+nomad job run prometheus1.nomad
+
+# Check status of the fabio job
+nomad job status fabio
+
+# Check status of the prometheus job
+nomad job status prometheus
+
 
 exit 0
