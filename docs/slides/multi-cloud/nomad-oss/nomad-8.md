@@ -27,7 +27,7 @@ name: chapter-8-topics
 2. Nomad Access Control Lists (ACLs)
 3. Securing Nomad Clusters with TLS
 4. Using Vault's PKI Secrets Engine with Nomad
-5. Hands on LAB Nomad ACLs
+5. Hands on Lab: Nomad ACLs
 
 ???
 * This is our topics slide.
