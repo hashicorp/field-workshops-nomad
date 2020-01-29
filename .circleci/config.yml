@@ -62,8 +62,12 @@ jobs:
             do
               instruqt track test --skip-fail-check && break
               n=$[$n+1]
-              sleep 5
+              sleep 60
             done
+            if [ $n -ge 3 ]; then
+              echo "Instruqt track test failed three times."
+              exit 1
+            fi
   instruqt-test-nomad-simple-cluster:
     docker:
       - image: ubuntu:latest
@@ -98,8 +102,12 @@ jobs:
             do
               instruqt track test --skip-fail-check && break
               n=$[$n+1]
-              sleep 5
+              sleep 60
             done
+            if [ $n -ge 3 ]; then
+              echo "Instruqt track test failed three times."
+              exit 1
+            fi
   instruqt-test-nomad-multi-server-cluster:
     docker:
       - image: ubuntu:latest
@@ -134,8 +142,12 @@ jobs:
             do
               instruqt track test --skip-fail-check && break
               n=$[$n+1]
-              sleep 5
+              sleep 60
             done
+            if [ $n -ge 3 ]; then
+              echo "Instruqt track test failed three times."
+              exit 1
+            fi
   instruqt-test-nomad-acls:
     docker:
       - image: ubuntu:latest
@@ -170,8 +182,12 @@ jobs:
             do
               instruqt track test --skip-fail-check && break
               n=$[$n+1]
-              sleep 5
+              sleep 60
             done
+            if [ $n -ge 3 ]; then
+              echo "Instruqt track test failed three times."
+              exit 1
+            fi
   instruqt-test-nomad-monitoring:
     docker:
       - image: ubuntu:latest
@@ -206,8 +222,12 @@ jobs:
             do
               instruqt track test --skip-fail-check && break
               n=$[$n+1]
-              sleep 5
+              sleep 60
             done
+            if [ $n -ge 3 ]; then
+              echo "Instruqt track test failed three times."
+              exit 1
+            fi
 workflows:
   version: 2
   build-and-deploy:
