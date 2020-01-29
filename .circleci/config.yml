@@ -213,9 +213,9 @@ workflows:
   build-and-deploy:
     jobs:
       - instruqt-validate:
-        filters:
-          branches:
-            only: master
+          filters:
+            branches:
+              only: master
       - instruqt-test-nomad-basics:
           requires:
             - instruqt-validate
