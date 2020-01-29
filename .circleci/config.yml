@@ -215,37 +215,43 @@ workflows:
       - instruqt-validate
         filters:
           branches:
-            only: master
+            only:
+              - master
       - instruqt-test-nomad-basics:
           requires:
             - instruqt-validate
           filters:
             branches:
-              only: master
+              only:
+                - master
       - instruqt-test-nomad-simple-cluster:
           requires:
             - instruqt-validate
           filters:
             branches:
-              only: master
+              only:
+                - master
       - instruqt-test-nomad-multi-server-cluster:
           requires:
             - instruqt-validate
           filters:
             branches:
-              only: master
+              only:
+                - master
       - instruqt-test-nomad-acls:
           requires:
             - instruqt-validate
           filters:
             branches:
-              only: master
+              only:
+                - master
       - instruqt-test-nomad-monitoring:
           requires:
             - instruqt-validate
           filters:
             branches:
-              only: master
+              only:
+                - master
   nightly-build:
     triggers:
       - schedule:
