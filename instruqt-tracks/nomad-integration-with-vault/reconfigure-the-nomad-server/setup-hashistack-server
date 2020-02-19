@@ -1,0 +1,7 @@
+#!/bin/bash -l
+
+set -e
+
+# sed -i 's|cd /root/hashistack/vault||g' /root/.bash_profile
+
+exit 0

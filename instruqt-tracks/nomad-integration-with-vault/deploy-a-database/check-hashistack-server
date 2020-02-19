@@ -1,0 +1,9 @@
+#!/bin/bash -l
+
+set -e
+
+grep -q "nomad run /root/hashistack/nomad/db.nomad" /root/.bash_history || fail-message "You haven't run the database deployment job yet."
+
+grep -q "nomad status database" /root/.bash_history || fail-message "You haven't checked the status of the deployed job yet."
+
+exit 0

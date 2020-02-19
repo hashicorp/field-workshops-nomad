@@ -1,0 +1,19 @@
+#!/bin/bash -l
+
+# Check the Nomad cluster members
+echo -e "nomad server members" >> /root/.bash_history
+nomad server members
+
+# Check the Nomad nodes
+echo -e "nomad node status" >> /root/.bash_history
+nomad node status
+
+# Check the Consul server
+echo -e "consul members" >> /root/.bash_history
+consul members
+
+# Check the Vault server
+echo -e "vault status" >> /root/.bash_history
+vault status
+
+exit 0

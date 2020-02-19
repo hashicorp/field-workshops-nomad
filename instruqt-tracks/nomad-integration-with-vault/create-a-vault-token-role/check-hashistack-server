@@ -1,0 +1,9 @@
+#!/bin/bash -l
+
+set -e
+
+grep -q "vault write /auth/token/roles/nomad-cluster @nomad-cluster-role.json" /root/.bash_history || fail-message "You haven't created your token role yet."
+
+grep -q "vault token create -policy nomad-server -period 72h -orphan 2>&1 > /root/hashistack/nomad/nomad-server-token.log" /root/.bash_history || fail-message "You haven't created your Nomad token yet."
+
+exit 0

@@ -1,0 +1,13 @@
+#!/bin/bash -l
+
+set -e
+
+grep -q "vault write database/config/postgresql @connection.json" /root/.bash_history || fail-message "You haven't created the database connection yet."
+
+grep -q "vault write database/roles/accessdb db_name=postgresql creation_statements=@accessdb.sql default_ttl=1h max_ttl=24h" /root/.bash_history || fail-message "You haven't created the role yet."
+
+grep -q "vault read database/creds/accessdb" /root/.bash_history || fail-message "You haven't created the database credentials yet."
+
+grep -q "vault policy write access-tables access-tables-policy.hcl" /root/.bash_history || fail-message "You haven't created the access-table policy yet."
+
+exit 0

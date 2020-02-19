@@ -1,0 +1,29 @@
+#!/bin/bash -l
+
+set -e
+
+# Write Server main config file
+cat <<-EOF > /root/hashistack/vault/connection.json
+{
+  "plugin_name": "postgresql-database-plugin",
+  "allowed_roles": "accessdb",
+  "connection_url": "postgresql://{{username}}:{{password}}@database.service.consul:5432/postgres?sslmode=disable",
+  "username": "demo",
+  "password": "demo"
+}
+EOF
+
+# Write the SQL needed to allow Vault to create users in Postgres
+cat <<-EOF > /root/hashistack/vault/accessdb.sql
+CREATE USER "{{name}}" WITH ENCRYPTED PASSWORD '{{password}}' VALID UNTIL '{{expiration}}';
+ALTER USER "{{name}}" WITH SUPERUSER;
+EOF
+
+# Write the access-tables Policy
+cat <<-EOF > /root/hashistack/vault/access-tables-policy.hcl
+path "database/creds/accessdb" {
+  capabilities = ["read"]  
+}
+EOF
+
+exit 0

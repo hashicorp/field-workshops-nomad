@@ -1,0 +1,19 @@
+#!/bin/bash -l
+
+# Create the Database Connection
+echo -e "vault write database/config/postgresql @connection.json" >> /root/.bash_history
+vault write database/config/postgresql @connection.json
+
+# Create a Vault Role to Manage Database Privileges
+echo -e "vault write database/roles/accessdb db_name=postgresql creation_statements=@accessdb.sql default_ttl=1h max_ttl=24h" >> /root/.bash_history
+vault write database/roles/accessdb db_name=postgresql creation_statements=@accessdb.sql default_ttl=1h max_ttl=24h
+
+# Create PostgreSQL Credentials
+echo -e "vault read database/creds/accessdb" >> /root/.bash_history
+vault read database/creds/accessdb
+
+# Create the access-tables Policy
+echo -e "vault policy write access-tables access-tables-policy.hcl" >> /root/.bash_history
+vault policy write access-tables access-tables-policy.hcl
+
+exit 0

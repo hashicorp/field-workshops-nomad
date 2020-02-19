@@ -1,0 +1,11 @@
+#!/bin/bash -l
+
+set -e
+
+grep -q "nomad run /root/hashistack/nomad/web.nomad" /root/.bash_history || fail-message "You haven't deployed your application yet."
+
+grep -q "dig +short SRV web.service.consul." /root/.bash_history || fail-message "You haven't used dig to find a record yet."
+
+grep -q "curl http://web.service.consul:3000/api" /root/.bash_history || fail-message "You haven't curled your application yet."
+
+exit 0

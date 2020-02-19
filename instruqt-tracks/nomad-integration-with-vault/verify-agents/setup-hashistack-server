@@ -1,0 +1,321 @@
+#!/bin/bash -l
+
+#####################################################################################
+# Hashistack
+#####################################################################################
+
+# Create Hashistack directory
+mkdir -p /root/hashistack
+chmod -R 755 /root/hashistack
+
+#####################################################################################
+# Consul
+#####################################################################################
+
+# Delete any existing processes or assets
+systemctl stop consul
+rm -fr /root/hashistack/consul
+
+# Create Consul directories
+mkdir -p /root/hashistack/consul
+chmod -R 755 /root/hashistack/consul
+
+# Configure Consul Autocomplete
+consul -autocomplete-install
+complete -C /usr/local/bin/consul consul
+
+# Write Consul Server Configuation File
+cat <<-EOF > /root/hashistack/consul/server.json
+{
+    "datacenter": "instruqt",
+    "log_level": "INFO",
+    "data_dir": "/root/hashistack/consul/server",
+    "server": true,
+    "ui": true,
+    "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
+    "client_addr": "0.0.0.0",
+    "bootstrap_expect": 1,
+    "recursors" : [
+        "10.64.0.254"
+    ],
+    "ports": {
+        "grpc": 8502
+    },
+    "connect": {
+        "enabled": true
+    }
+}
+EOF
+
+# Write the Service Configuration
+cat <<-EOF > /etc/systemd/system/consul.service
+[Unit]
+Description=Consul
+Documentation=https://www.consul.io/intro/index.html
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Restart=on-failure
+ExecStart=/usr/local/bin/consul agent -dns-port 53 -config-file /root/hashistack/consul/server.json
+ExecReload=/bin/kill -HUP $MAINPID
+KillSignal=SIGTERM
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Stop Resolved DNS
+systemctl stop systemd-resolved
+
+# Enable the service
+systemctl enable consul
+systemctl start consul
+
+#####################################################################################
+# Vault
+#####################################################################################
+
+# Delete any existing processes or assets
+systemctl stop vault
+rm -fr /root/hashistack/vault
+
+# Create Consul directories
+mkdir -p /root/hashistack/vault
+chmod -R 755 /root/hashistack/vault
+
+# Install curl
+apk add curl
+
+# Install jq
+apk add jq
+
+# Configure Nomad Autocomplete
+vault -autocomplete-install
+complete -C /usr/local/bin/vault vault
+
+# Write server.hcl configuration
+cat <<-EOF > /root/hashistack/vault/server.hcl
+storage "consul" {}
+
+listener "tcp" {
+    address = "0.0.0.0:8200"
+    tls_disable = true
+}
+
+disable_mlock = true
+ui=true
+EOF
+
+# Write the Service Configuration
+cat <<-EOF > /etc/systemd/system/vault.service
+[Unit]
+Description=Vault
+Documentation=https://www.vaultproject.io/
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+Restart=on-failure
+Environment=GOMAXPROCS=nproc
+ExecStart=/usr/local/bin/vault server -config /root/hashistack/vault/server.hcl
+ExecReload=/bin/kill -HUP $MAINPID
+KillSignal=SIGTERM
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Enable the service
+systemctl enable vault
+systemctl start vault
+
+# Sleep 10 seconds
+sleep 10
+
+# Initialize Vault server
+vault operator init -key-shares=1 -key-threshold=1 > /root/hashistack/vault/init.log
+
+# Extract root token and unseal key from init.log
+token=$(sed -n 3p /root/hashistack/vault/init.log | cut -d':' -f2 | cut -d' ' -f2)
+unseal_key=$(sed -n 1p /root/hashistack/vault/init.log | cut -d':' -f2 | cut -d' ' -f2)
+
+# Write token to /root/token
+echo $token > /root/hashistack/vault/token
+
+# Write unseal key to /root/unseal_key
+echo $unseal_key > /root/hashistack/vault/unseal_key
+
+# Export VAULT_TOKEN to the bash environment
+echo -e "export VAULT_TOKEN=$token" >> /root/.bash_profile
+
+# Unseal Vault server
+vault operator unseal $unseal_key
+
+#####################################################################################
+# Nomad
+#####################################################################################
+
+# Delete any existing processes or assets
+systemctl stop nomad
+rm -fr /root/hashistack/nomad
+
+# Create Consul directory
+mkdir -p /root/hashistack/nomad
+# touch /root/hashistack/nomad/nomad.log
+chmod -R 755 /root/hashistack/nomad
+
+# Configure Nomad Autocomplete
+nomad -autocomplete-install
+complete -C /usr/local/bin/nomad nomad
+
+# Write Server main config file
+cat <<-EOF > /root/hashistack/nomad/server.hcl
+# Set the Datacenter
+datacenter = "instruqt"
+data_dir = "/root/hashistack/nomad/server"
+
+# Setup the bind address
+bind_addr = "0.0.0.0"
+
+# Enable the server
+server {
+    enabled = true
+    bootstrap_expect = 1
+}
+
+# Consul
+consul {
+    address = "127.0.0.1:8500"
+}
+
+# Vault
+vault {
+    enabled = false
+    address = "http://active.vault.service.consul:8200"
+    task_token_ttl = "1h"
+    create_from_role = "nomad-cluster"
+    token = "<your nomad server token>"
+}
+EOF
+
+# Write the Service Configuration
+cat <<-EOF > /etc/systemd/system/nomad.service
+[Unit]
+Description=Nomad
+Documentation=https://nomadproject.io/docs/
+Wants=network-online.target
+After=network-online.target
+
+# If you are running Consul, please uncomment following Wants/After configs.
+# Assuming your Consul service unit name is "consul"
+Wants=consul.service
+After=consul.service
+
+[Service]
+ExecReload=/bin/kill -HUP $MAINPID
+ExecStart=/usr/local/bin/nomad agent -config /root/hashistack/nomad/server.hcl
+KillMode=process
+KillSignal=SIGINT
+LimitNOFILE=infinity
+LimitNPROC=infinity
+Restart=on-failure
+RestartSec=2
+StartLimitBurst=3
+StartLimitInterval=10
+TasksMax=infinity
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Enable the service
+systemctl enable nomad
+systemctl start nomad
+
+# Install CNI plugins
+curl -L -o cni-plugins.tgz https://github.com/containernetworking/plugins/releases/download/v0.8.3/cni-plugins-linux-amd64-v0.8.3.tgz
+mkdir -p /opt/cni/bin
+tar -C /opt/cni/bin -xzf cni-plugins.tgz
+
+# Configure iptables
+echo 1 > /proc/sys/net/bridge/bridge-nf-call-arptables
+echo 1 > /proc/sys/net/bridge/bridge-nf-call-ip6tables
+echo 1 > /proc/sys/net/bridge/bridge-nf-call-iptables
+
+#####################################################################################
+# Consul Template 
+#####################################################################################
+
+BIN=/usr/local/bin
+CONSULTEMPLATEVERSION=0.24.1
+CONSULTEMPLATEDOWNLOAD=https://releases.hashicorp.com/consul-template/${CONSULTEMPLATEVERSION}/consul-template_${CONSULTEMPLATEVERSION}_linux_amd64.zip
+CONSULTEMPLATECONFIGDIR=/etc/consul-template.d
+CONSULTEMPLATEDIR=/opt/consul-template
+CONSULTEMPLATEBIN=$BIN/consul-template
+
+# Stop any existing processes or assets
+systemctl stop consul-template
+rm -fr /root/hashistack/consul-template
+
+# Create Consul directories
+mkdir -p /root/hashistack/consul-template
+chmod -R 755 /root/hashistack/consul-template
+
+cd /tmp
+
+curl -L $CONSULTEMPLATEDOWNLOAD > consul-template.zip
+
+## Install
+sudo unzip consul-template.zip -d $BIN
+sudo chmod 0755 $CONSULTEMPLATEBIN
+sudo chown root:root $CONSULTEMPLATEBIN
+
+## Configure
+sudo mkdir -p $CONSULTEMPLATECONFIGDIR
+sudo chmod 755 $CONSULTEMPLATECONFIGDIR
+sudo mkdir -p $CONSULTEMPLATEDIR
+sudo chmod 755 $CONSULTEMPLATEDIR
+
+cat <<-EOF > /root/hashistack/consul-template/client.hcl
+vault {
+    address = "http://active.vault.service.consul:8200"
+    unwrap_token = false
+    renew_token = true
+}
+
+syslog {
+    enabled = true
+    facility = "LOCAL5"
+}
+EOF
+
+cat <<-EOF > /etc/systemd/system/consul-template.service
+[Unit]
+Description=Consul Template Agent
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+Restart=on-failure
+ExecStart=/usr/local/bin/consul-template -config="/root/hashistack/consul-template/client.hcl"
+ExecReload=/bin/kill -HUP $MAINPID
+KillSignal=SIGTERM
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Enable the service
+systemctl enable consul-template
+systemctl start consul-template
+
+exit 0

@@ -1,0 +1,13 @@
+#!/bin/bash -l
+
+set -e
+
+grep -q "nomad server members" /root/.bash_history || fail-message "You haven't checked the status of the Nomad server yet."
+
+grep -q "nomad node status" /root/.bash_history || fail-message "You haven't checked the status of the Nomad client nodes yet."
+
+grep -q "consul members" /root/.bash_history || fail-message "You haven't checked the status of the Consul server yet."
+
+grep -q "vault status" /root/.bash_history || fail-message "You haven't checked the status of the Vault server yet."
+
+exit 0

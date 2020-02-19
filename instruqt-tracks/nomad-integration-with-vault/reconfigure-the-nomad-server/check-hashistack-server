@@ -1,0 +1,7 @@
+#!/bin/bash -l
+
+set -e
+
+grep -q "systemctl restart nomad" /root/.bash_history || fail-message "You haven't restarted the Nomad agent yet."
+
+exit 0

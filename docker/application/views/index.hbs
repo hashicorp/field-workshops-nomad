@@ -1,0 +1,14 @@
+<div class="row" data-bind="foreach: members">
+    <div class="col-md">
+        <a data-bind="attr: { href: $data.site_link, title: $data.name }" target="_blank">
+            <article class="container-fluid"  data-bind="css: { oss: !$data.is_enterprise }">
+                <img data-bind="attr: { src: $data.image_link }" />
+                <br />
+                <p data-bind="text: $data.description"></p>
+            </article>
+        </a>
+    </div>
+    <!-- ko if: (($index() + 1) % 2 == 0) -->
+    <div class="w-100"></div>
+    <!-- /ko -->
+</div>
