@@ -6,6 +6,6 @@ nomad run /root/hashistack/nomad/db.nomad
 
 # Write the Nomad policy to Vault
 echo -e "nomad status database" >> /root/.bash_history
-nomad status postgres-nomad-demo
+nomad status database
 
 exit 0
