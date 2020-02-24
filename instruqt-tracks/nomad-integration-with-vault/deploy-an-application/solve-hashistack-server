@@ -1,15 +1,15 @@
 #!/bin/bash -l
 
 # Deploy the Application
-echo -e "nomad run /root/hashistack/nomad/web-app.nomad" >> /root/.bash_history
-nomad run web-app.nomad
+echo -e "nomad run /root/hashistack/nomad/web.nomad" >> /root/.bash_history
+nomad run /root/hashistack/nomad/web.nomad
 
 # Dig the Application
 echo -e "dig +short SRV web.service.consul." >> /root/.bash_history
 dig +short SRV web.service.consul.
 
 # Curl the Application
-echo -e "curl http://web.service.consul:3000/api" >> /root/.bash_history
-curl http://web.service.consul:3000/api
+echo -e "curl http://web.service.consul:3000/api | jq" >> /root/.bash_history
+curl http://web.service.consul:3000/api | jq
 
 exit 0

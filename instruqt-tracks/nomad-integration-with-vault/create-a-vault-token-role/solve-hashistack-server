@@ -7,7 +7,7 @@ echo -e "vault write /auth/token/roles/nomad-cluster @nomad-cluster-role.json" >
 vault write /auth/token/roles/nomad-cluster @nomad-cluster-role.json
 
 # Write the Nomad policy to Vault
-echo -e "vault token create -policy nomad-server -period 72h -orphan 2>&1 > /root/hashistack/nomad/nomad-server-token.log" >> /root/.bash_history
-vault token create -policy nomad-server -period 72h -orphan 2>&1 > /root/hashistack/nomad/nomad-server-token.log
+echo -e "vault token create -policy nomad-server -period 72h -orphan > /root/hashistack/nomad/nomad-server-token.log" >> /root/.bash_history
+vault token create -policy nomad-server -period 72h -orphan > /root/hashistack/nomad/nomad-server-token.log
 
 exit 0
