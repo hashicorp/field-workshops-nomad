@@ -1,0 +1,10 @@
+#!/bin/bash -l
+
+#Enable bash history
+HISTFILE=/root/.bash_history
+set -o history
+
+# Run nomad node status
+nomad node status
+
+exit 0

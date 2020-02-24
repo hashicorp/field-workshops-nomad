@@ -1,0 +1,89 @@
+slug: nomad-governance
+id: 05ovf6ut5ojh
+type: track
+title: Nomad Enterprise Governance
+teaser: Learn how to use Nomad Enterprise's governance capabilities including namespaces,
+  resource quotas, and Sentinel policies.
+description: |-
+  This track will show you how to use Nomad Enterprise's governance capabilities including namespaces, resource quotas, and Sentinel policies.
+
+  Before running this track, we suggest you run the [Nomad Basics](https://instruqt.com/hashicorp/tracks/nomad-basics) and [Nomad Simple Cluster](https://instruqt.com/hashicorp/tracks/nomad-simple-cluster) tracks.
+icon: https://storage.googleapis.com/instruqt-hashicorp-tracks/logo/nomad.png
+tags:
+- nomad
+- governance
+- namespace
+- resource quotas
+- Sentinel
+owner: hashicorp
+developers:
+- roger@hashicorp.com
+private: true
+published: true
+challenges:
+- slug: verify-nomad-cluster-health
+  id: ktmjptuistsh
+  type: challenge
+  title: Verify the Health of Your Nomad Enterprise Cluster
+  teaser: |
+    Verify the health of the Nomad Enterprise cluster that has been deployed for you by the track's setup scripts.
+  assignment: |-
+    In this challenge, you will verify the health of the Nomad Enterprise cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
+
+    The cluster is running 1 Nomad/Consul server and 3 Nomad/Consul clients.
+
+    First, verify that all 4 Consul agents are running and connected to the cluster by running this command on the "Server" tab:
+    ```
+    consul members
+    ```
+    You should see 4 Consul agents.
+
+    Check that the Nomad server is running by running this command on the "Server" tab:
+    ```
+    nomad server members
+    ```
+    You should see 1 Nomad server.
+
+    Check the status of the Nomad client nodes by running this command on the "Server" tab:
+    ```
+    nomad node status
+    ```
+    You should see 3 Nomad clients.
+
+    Please also run the last command on the "Client 1", "Client 2", and "Client 3" tabs. In each case, you should see the same 3 Nomad clients.
+
+    In the next challenge, you will configure Nomad Enterprise namespaces.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will verify the health of the Nomad Enterprise cluster that has been deployed for you by the track's setup scripts.
+
+      This will include checking the health of a Consul cluster that has been set up on the same VMs.
+  tabs:
+  - title: Config Files
+    type: code
+    hostname: nomad-server-1
+    path: /root/nomad/
+  - title: Server
+    type: terminal
+    hostname: nomad-server-1
+  - title: Client 1
+    type: terminal
+    hostname: nomad-client-1
+  - title: Client 2
+    type: terminal
+    hostname: nomad-client-2
+  - title: Client 3
+    type: terminal
+    hostname: nomad-client-3
+  - title: Nomad UI
+    type: service
+    hostname: nomad-server-1
+    port: 4646
+  - title: Consul UI
+    type: service
+    hostname: nomad-server-1
+    port: 8500
+  difficulty: basic
+  timelimit: 3600
+checksum: "678055617374999598"
