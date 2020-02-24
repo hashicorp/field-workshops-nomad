@@ -453,7 +453,7 @@ challenges:
     ```
     The response should look similar to
     ```
-    1 1 30478 ip-172-31-58-230.node.instruct.consul.
+    1 1 3000 hashistack-client-1.node.instruqt.consul.
     ```
     Next curl your service at the appropriate port and names path:
     ```
@@ -515,4 +515,4 @@ challenges:
     port: 3000
   difficulty: basic
   timelimit: 600
-checksum: "9915745565355904983"
+checksum: "13503055070284607518"
