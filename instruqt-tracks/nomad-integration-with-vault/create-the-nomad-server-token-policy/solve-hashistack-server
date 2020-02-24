@@ -4,10 +4,6 @@
 echo -e "cd /root/hashistack/vault" >> /root/.bash_history
 cd /root/hashistack/vault
 
-# Log into Vault using the root token
-echo -e "vault login $(<token)" >> /root/.bash_history
-vault login $(<token)
-
 # Write the Nomad policy to Vault
 echo -e "vault policy write nomad-server nomad-server-policy.hcl" >> /root/.bash_history
 vault policy write nomad-server nomad-server-policy.hcl
