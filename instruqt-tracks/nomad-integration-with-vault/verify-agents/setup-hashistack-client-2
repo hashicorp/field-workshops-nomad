@@ -1,20 +1,12 @@
 #!/bin/bash -l
 
-#####################################################################################
 # Hashistack
-#####################################################################################
 
 # Create Hashistack directory
 mkdir -p /root/hashistack
 chmod -R 755 /root/hashistack
 
-#####################################################################################
 # Consul
-#####################################################################################
-
-# Delete any existing processes or assets
-systemctl stop consul
-rm -fr /root/hashistack/consul
 
 # Create Consul directories
 mkdir -p /root/hashistack/consul
@@ -26,7 +18,6 @@ cat <<-EOF > /root/hashistack/consul/client.json
     "datacenter": "instruqt",
     "log_level": "INFO",
     "data_dir": "/root/hashistack/consul/client",
-    "server": true,
     "ui": true,
     "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
     "client_addr": "0.0.0.0",
@@ -77,15 +68,9 @@ systemctl start consul
 consul -autocomplete-install
 complete -C /usr/local/bin/consul consul
 
-#####################################################################################
 # Nomad
-#####################################################################################
 
-# Delete any existing processes or assets
-systemctl stop nomad
-rm -fr /root/hashistack/nomad
-
-# Create Consul directory
+# Create Nomad directory
 mkdir -p /root/hashistack/nomad
 chmod -R 755 /root/hashistack/nomad
 
@@ -165,74 +150,5 @@ tar -C /opt/cni/bin -xzf cni-plugins.tgz
 echo 1 > /proc/sys/net/bridge/bridge-nf-call-arptables
 echo 1 > /proc/sys/net/bridge/bridge-nf-call-ip6tables
 echo 1 > /proc/sys/net/bridge/bridge-nf-call-iptables
-
-#####################################################################################
-# Consul Template 
-#####################################################################################
-
-BIN=/usr/local/bin
-CONSULTEMPLATEVERSION=0.24.1
-CONSULTEMPLATEDOWNLOAD=https://releases.hashicorp.com/consul-template/${CONSULTEMPLATEVERSION}/consul-template_${CONSULTEMPLATEVERSION}_linux_amd64.zip
-CONSULTEMPLATECONFIGDIR=/etc/consul-template.d
-CONSULTEMPLATEDIR=/opt/consul-template
-CONSULTEMPLATEBIN=$BIN/consul-template
-
-# Delete any existing processes or assets
-systemctl stop consul-template
-rm -fr /root/hashistack/consul-template
-
-# Create Consul directories
-mkdir -p /root/hashistack/consul-template
-chmod -R 755 /root/hashistack/consul-template
-
-cd /tmp
-
-curl -L $CONSULTEMPLATEDOWNLOAD > consul-template.zip
-
-## Install
-sudo unzip consul-template.zip -d $BIN
-sudo chmod 0755 $CONSULTEMPLATEBIN
-sudo chown root:root $CONSULTEMPLATEBIN
-
-## Configure
-sudo mkdir -p $CONSULTEMPLATECONFIGDIR
-sudo chmod 755 $CONSULTEMPLATECONFIGDIR
-sudo mkdir -p $CONSULTEMPLATEDIR
-sudo chmod 755 $CONSULTEMPLATEDIR
-
-cat <<-EOF > /root/hashistack/consul-template/client.hcl
-vault {
-    address = "http://active.vault.service.consul:8200"
-    unwrap_token = false
-    renew_token = true
-}
-
-syslog {
-    enabled = true
-    facility = "LOCAL5"
-}
-EOF
-
-cat <<-EOF > /etc/systemd/system/consul-template.service
-[Unit]
-Description=Consul Template Agent
-Requires=network-online.target
-After=network-online.target
-
-[Service]
-Restart=on-failure
-ExecStart=/usr/local/bin/consul-template -config="/root/hashistack/consul-template/client.hcl"
-ExecReload=/bin/kill -HUP $MAINPID
-KillSignal=SIGTERM
-User=root
-Group=root
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
-# Enable the service
-systemctl enable consul-template
-systemctl start consul-template
 
 exit 0

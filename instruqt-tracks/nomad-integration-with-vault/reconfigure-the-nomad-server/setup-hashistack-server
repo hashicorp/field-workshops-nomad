@@ -29,6 +29,4 @@ vault {
 }
 EOF
 
-EOF
-
 exit 0

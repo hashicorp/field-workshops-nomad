@@ -1,6 +1,13 @@
 #!/bin/bash -l
 
+# Enable the Database secrets engine
+vault secrets enable database
+
+# Sleep
+sleep 15
+
 # Create the Database Connection
+cd /root/hashistack/vault
 echo -e "vault write database/config/postgresql @connection.json" >> /root/.bash_history
 vault write database/config/postgresql @connection.json
 

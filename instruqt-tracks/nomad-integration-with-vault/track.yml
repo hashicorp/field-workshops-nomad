@@ -16,9 +16,9 @@ tags:
 - integration
 owner: hashicorp
 developers:
-- pgryzan@hashicorp.com
+- roger@hashicorp.com
 private: true
-published: false
+published: true
 challenges:
 - slug: verify-agents
   id: asse9bxgcyae
@@ -60,7 +60,7 @@ challenges:
   notes:
   - type: text
     contents: |-
-      <b>Welcome to the Nomad Integration with Vault Track</b>
+      <b>Nomad Integration with Vault</b>
       <hr />
       In this track, you are going to explore how <a target="_blank" href="https://nomadproject.io/docs/">Nomad</a> integrates seamlessly with <a target="_blank" href="https://www.vaultproject.io/docs/">Vault</a> and allows your application to retrieve dynamic credentials for various tasks. You will deploy a web application that needs to authenticate against a <a target="_blank" href="https://www.postgresql.org/docs/">PostgreSQL</a> database and display data from a table to the user.
   tabs:
@@ -484,11 +484,9 @@ challenges:
   - type: text
     contents: We are using the template stanza's vault integration to populate environment
       variables file that our application needs. The underlying tool being used is
-      <a target="_blank" href="https://learn.hashicorp.com/consul/developer-configuration/consul-template">Consul
-      Template</a>, which is integrated in <a target="_blank" href="https://nomadproject.io/docs/">Nomad</a>.
-      You can use <a target="_blank" href="https://learn.hashicorp.com/consul/developer-configuration/consul-template">Consul
-      Template's</a> documentation to learn more about the syntax needed to interact
-      with <a target="_blank" href="https://www.vaultproject.io/docs/">Vault</a>.
+      [Consul Template](https://learn.hashicorp.com/consul/developer-configuration/consul-template),
+      which is built into Nomad and can populate files with data from Consul's key/value
+      store and from Vault secrets.
   tabs:
   - title: Files
     type: code
@@ -515,4 +513,4 @@ challenges:
     port: 3000
   difficulty: basic
   timelimit: 600
-checksum: "5292717260689340313"
+checksum: "14218261436344190623"

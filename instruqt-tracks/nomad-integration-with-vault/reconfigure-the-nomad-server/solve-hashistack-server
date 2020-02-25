@@ -4,7 +4,7 @@
 rm /root/hashistack/nomad/server.hcl
 
 # Get the Genrated Nomad token
-token=$(sed -n 3p /root/hashistack/nomad/token | cut -d' ' -f17)
+token=$(sed -n 3p /root/hashistack/nomad/nomad-server-token.log | cut -d' ' -f17)
 
 # Create a new configuration file
 cat <<-EOF > /root/hashistack/nomad/server.hcl
@@ -38,5 +38,8 @@ EOF
 # Start Nomad Agent
 echo -e "systemctl restart nomad" >> /root/.bash_history
 systemctl restart nomad
+
+# Sleep
+sleep 30
 
 exit 0

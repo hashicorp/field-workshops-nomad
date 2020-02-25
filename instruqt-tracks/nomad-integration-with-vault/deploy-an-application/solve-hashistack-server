@@ -10,6 +10,6 @@ dig +short SRV web.service.consul.
 
 # Curl the Application
 echo -e "curl http://web.service.consul:3000/api | jq" >> /root/.bash_history
-curl http://web.service.consul:3000/api | jq
+curl http://web.service.consul:3000/api | jq .
 
 exit 0

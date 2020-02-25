@@ -1,5 +1,8 @@
 #!/bin/bash -l
 
+# Sleep
+sleep 30
+
 # Check the Nomad cluster members
 echo -e "nomad server members" >> /root/.bash_history
 nomad server members
