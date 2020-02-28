@@ -502,10 +502,10 @@ challenges:
     ```
     dig +short SRV web.service.consul.
     ```
-    The response should look similar to
-    ```
+    The response should look similar to:<br>
+    `
     1 1 3000 hashistack-client-1.node.instruqt.consul.
-    ```
+    `<br>
 
     Next curl your service at the appropriate port and names path:
     ```
@@ -566,4 +566,4 @@ challenges:
     port: 3000
   difficulty: basic
   timelimit: 600
-checksum: "5896017628852524076"
+checksum: "1549894355616910470"
