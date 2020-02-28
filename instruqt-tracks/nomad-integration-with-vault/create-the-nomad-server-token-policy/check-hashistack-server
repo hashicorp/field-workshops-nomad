@@ -1,9 +1,0 @@
-#!/bin/bash -l
-
-set -e
-
-grep -q "cd /root/hashistack/vault" /root/.bash_history || fail-message "You haven't changed directories to /root/hashistack/vault yet."
-
-grep -q "vault policy write nomad-server nomad-server-policy.hcl" /root/.bash_history || fail-message "You haven't written your Nomad policy to Vault yet."
-
-exit 0

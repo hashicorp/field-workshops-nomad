@@ -1,11 +1,15 @@
 #!/bin/bash -l
 
+# Enable bash history
+HISTFILE=/root/.bash_history
+set -o history
+
 # Create Token Role
-echo -e "nomad run /root/hashistack/nomad/db.nomad" >> /root/.bash_history
 nomad run /root/hashistack/nomad/db.nomad
 
+sleep 60
+
 # Write the Nomad policy to Vault
-echo -e "nomad status database" >> /root/.bash_history
 nomad status database
 
 exit 0

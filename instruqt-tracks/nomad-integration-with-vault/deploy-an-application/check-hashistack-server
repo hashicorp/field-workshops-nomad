@@ -4,8 +4,20 @@ set -e
 
 grep -q "nomad run /root/hashistack/nomad/web.nomad" /root/.bash_history || fail-message "You haven't deployed your application yet."
 
+web_status=$(nomad status web | grep "Status .* running" | wc -l)
+if [ "$web_status" -ne "1" ]; then
+  echo "The Nomad web job is not running yet."
+  exit 1
+fi
+
 grep -q "dig +short SRV web.service.consul." /root/.bash_history || fail-message "You haven't used dig to find a record yet."
 
 grep -q "curl http://web.service.consul:3000/api | jq" /root/.bash_history || fail-message "You haven't curled your application yet."
+
+products_length=$(curl http://web.service.consul:3000/api | jq '. | length')
+if [ "$products_length" -ne "6" ]; then
+  echo "The web application is not showing all 6 HashiCorp products."
+  exit 1
+fi
 
 exit 0

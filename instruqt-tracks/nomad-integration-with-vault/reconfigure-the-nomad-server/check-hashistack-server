@@ -2,6 +2,18 @@
 
 set -e
 
+vault_enabled=$(grep "enabled = true" /root/hashistack/nomad/server.hcl | wc -l)
+if [ "$vault_enabled" -ne "2" ]; then
+  echo "You have not enabled Vault in Nomad's server.hcl configuration file yet."
+  exit 1
+fi
+
+token_replaced=$(grep "your nomad server token" /root/hashistack/nomad/server.hcl | wc -l)
+if [ "$token_replaced" -ne "0" ]; then
+  echo "You have not added your Vault token to Nomad's server.hcl configuration file yet."
+  exit 1
+fi
+
 grep -q "systemctl restart nomad" /root/.bash_history || fail-message "You haven't restarted the Nomad agent yet."
 
 exit 0

@@ -1,15 +1,19 @@
 #!/bin/bash -l
 
+# Enable bash history
+HISTFILE=/root/.bash_history
+set -o history
+
 # Deploy the Application
-echo -e "nomad run /root/hashistack/nomad/web.nomad" >> /root/.bash_history
 nomad run /root/hashistack/nomad/web.nomad
 
+# Sleep
+sleep 60
+
 # Dig the Application
-echo -e "dig +short SRV web.service.consul." >> /root/.bash_history
 dig +short SRV web.service.consul.
 
 # Curl the Application
-echo -e "curl http://web.service.consul:3000/api | jq" >> /root/.bash_history
 curl http://web.service.consul:3000/api | jq .
 
 exit 0

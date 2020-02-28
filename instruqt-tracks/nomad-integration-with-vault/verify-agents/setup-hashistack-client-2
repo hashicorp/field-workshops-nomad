@@ -1,4 +1,4 @@
-#!/bin/bash -l
+Client#!/bin/bash -l
 
 # Hashistack
 
@@ -12,7 +12,11 @@ chmod -R 755 /root/hashistack
 mkdir -p /root/hashistack/consul
 chmod -R 755 /root/hashistack/consul
 
-# Write Consul Server Configuation File
+# Configure Consul Autocomplete
+consul -autocomplete-install
+complete -C /usr/local/bin/consul consul
+
+# Write Consul Client Configuation File
 cat <<-EOF > /root/hashistack/consul/client.json
 {
     "datacenter": "instruqt",
@@ -23,17 +27,8 @@ cat <<-EOF > /root/hashistack/consul/client.json
     "client_addr": "0.0.0.0",
     "retry_interval": "5s",
     "retry_join": [
-        "hashistack-server"
-    ],
-    "recursors" : [
-        "10.64.0.254"
-    ],
-    "ports": {
-        "grpc": 8502
-    },
-    "connect": {
-        "enabled": true
-    }
+        "hashistack-server:8301"
+    ]
 }
 EOF
 
@@ -47,7 +42,7 @@ After=network-online.target
 
 [Service]
 Restart=on-failure
-ExecStart=/usr/local/bin/consul agent -dns-port 53 -config-file /root/hashistack/consul/client.json
+ExecStart=/usr/local/bin/consul agent -config-file /root/hashistack/consul/client.json
 ExecReload=/bin/kill -HUP $MAINPID
 KillSignal=SIGTERM
 User=root
@@ -57,24 +52,31 @@ Group=root
 WantedBy=multi-user.target
 EOF
 
-# Stop Resolved DNS
-systemctl stop systemd-resolved
-
 # Enable the service
 systemctl enable consul
 systemctl start consul
 
-# Configure Consul Autocomplete
-consul -autocomplete-install
-complete -C /usr/local/bin/consul consul
+# Sleep
+sleep 30
+
+# Configure Resolved and iptables
+cat <<-EOF > /etc/systemd/resolved.conf.d/consul.conf
+[Resolve]
+DNS=127.0.0.1
+Domains=~consul
+EOF
+iptables -t nat -A OUTPUT -d localhost -p udp -m udp --dport 53 -j REDIRECT --to-ports 8600
+iptables -t nat -A OUTPUT -d localhost -p tcp -m tcp --dport 53 -j REDIRECT --to-ports 8600
+# We'll restart systemd-resolved from hashistack-server via SSH
 
 # Nomad
 
 # Create Nomad directory
 mkdir -p /root/hashistack/nomad
 chmod -R 755 /root/hashistack/nomad
+mkdir -p /root/hashistack/nomad/client
 
-# Write Server main config file
+# Write Client main config file
 cat <<-EOF > /root/hashistack/nomad/client.hcl
 # Set the Datacenter
 datacenter = "instruqt"
@@ -141,14 +143,6 @@ systemctl start nomad
 nomad -autocomplete-install
 complete -C /usr/local/bin/nomad nomad
 
-# Install CNI plugins
-curl -L -o cni-plugins.tgz https://github.com/containernetworking/plugins/releases/download/v0.8.3/cni-plugins-linux-amd64-v0.8.3.tgz
-mkdir -p /opt/cni/bin
-tar -C /opt/cni/bin -xzf cni-plugins.tgz
-
-# Configure iptables
-echo 1 > /proc/sys/net/bridge/bridge-nf-call-arptables
-echo 1 > /proc/sys/net/bridge/bridge-nf-call-ip6tables
-echo 1 > /proc/sys/net/bridge/bridge-nf-call-iptables
+systemctl restart systemd-resolved
 
 exit 0

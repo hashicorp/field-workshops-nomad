@@ -26,16 +26,23 @@ cat <<-EOF > /root/hashistack/consul/server.json
     "ui": true,
     "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
     "client_addr": "0.0.0.0",
-    "bootstrap_expect": 1,
-    "recursors" : [
-        "10.64.0.254"
-    ],
-    "ports": {
-        "grpc": 8502
-    },
-    "connect": {
-        "enabled": true
-    }
+    "bootstrap_expect": 1
+}
+EOF
+
+# Write Consul Client Configuation File
+cat <<-EOF > /root/hashistack/consul/client.json
+{
+    "datacenter": "instruqt",
+    "log_level": "INFO",
+    "data_dir": "/root/hashistack/consul/client",
+    "ui": true,
+    "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
+    "client_addr": "0.0.0.0",
+    "retry_interval": "5s",
+    "retry_join": [
+        "hashistack-server:8301"
+    ]
 }
 EOF
 
@@ -49,7 +56,7 @@ After=network-online.target
 
 [Service]
 Restart=on-failure
-ExecStart=/usr/local/bin/consul agent -dns-port 53 -config-file /root/hashistack/consul/server.json
+ExecStart=/usr/local/bin/consul agent -config-file /root/hashistack/consul/server.json
 ExecReload=/bin/kill -HUP $MAINPID
 KillSignal=SIGTERM
 User=root
@@ -59,15 +66,22 @@ Group=root
 WantedBy=multi-user.target
 EOF
 
-# Stop Resolved DNS
-systemctl stop systemd-resolved
-
 # Enable the service
 systemctl enable consul
 systemctl start consul
 
 # Sleep
 sleep 30
+
+# Configure Resolved and iptables
+cat <<-EOF > /etc/systemd/resolved.conf.d/consul.conf
+[Resolve]
+DNS=127.0.0.1
+Domains=~consul
+EOF
+iptables -t nat -A OUTPUT -d localhost -p udp -m udp --dport 53 -j REDIRECT --to-ports 8600
+iptables -t nat -A OUTPUT -d localhost -p tcp -m tcp --dport 53 -j REDIRECT --to-ports 8600
+systemctl restart systemd-resolved
 
 # Vault
 
@@ -90,6 +104,33 @@ listener "tcp" {
 
 disable_mlock = true
 ui=true
+EOF
+
+# Write copy of Nomad client.hcl to server
+cat <<-EOF > /root/hashistack/nomad/client.hcl
+# Set the Datacenter
+datacenter = "instruqt"
+data_dir = "/root/hashistack/nomad/client"
+
+# Setup the bind address
+bind_addr = "0.0.0.0"
+
+# Enable the client
+client {
+    enabled = true
+    servers = ["hashistack-server"]
+}
+
+# Consul
+consul {
+    address = "127.0.0.1:8500"
+}
+
+# Vault
+vault {
+    enabled = true
+    address = "http://active.vault.service.consul:8200"
+}
 EOF
 
 # Write the Service Configuration
@@ -145,6 +186,7 @@ vault operator unseal $unseal_key
 mkdir -p /root/hashistack/nomad
 # touch /root/hashistack/nomad/nomad.log
 chmod -R 755 /root/hashistack/nomad
+mkdir -p /root/hashistack/nomad/server
 
 # Configure Nomad Autocomplete
 nomad -autocomplete-install
@@ -216,14 +258,12 @@ EOF
 systemctl enable nomad
 systemctl start nomad
 
-# Install CNI plugins
-curl -L -o cni-plugins.tgz https://github.com/containernetworking/plugins/releases/download/v0.8.3/cni-plugins-linux-amd64-v0.8.3.tgz
-mkdir -p /opt/cni/bin
-tar -C /opt/cni/bin -xzf cni-plugins.tgz
+ssh -o StrictHostKeyChecking=no hashistack-client-1 << ENDSSH
+systemctl restart systemd-resolved
+ENDSSH
 
-# Configure iptables
-echo 1 > /proc/sys/net/bridge/bridge-nf-call-arptables
-echo 1 > /proc/sys/net/bridge/bridge-nf-call-ip6tables
-echo 1 > /proc/sys/net/bridge/bridge-nf-call-iptables
+ssh -o StrictHostKeyChecking=no hashistack-client-2 << ENDSSH
+systemctl restart systemd-resolved
+ENDSSH
 
 exit 0

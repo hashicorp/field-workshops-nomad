@@ -1,0 +1,16 @@
+#!/bin/bash -l
+
+# Enable bash history
+HISTFILE=/root/.bash_history
+set -o history
+
+# Change directory
+cd /root/hashistack/vault
+
+# Write the Nomad policy to Vault
+vault policy write nomad-server nomad-server-policy.hcl
+
+# Write the Nomad policy to Vault
+vault token create -policy nomad-server -period 72h -orphan > /root/hashistack/nomad/nomad-token.txt
+
+exit 0
