@@ -26,7 +26,10 @@ cat <<-EOF > /root/hashistack/consul/server.json
     "ui": true,
     "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
     "client_addr": "0.0.0.0",
-    "bootstrap_expect": 1
+    "bootstrap_expect": 1,
+    "recursors": [
+      "10.64.0.254"
+    ]
 }
 EOF
 
@@ -42,6 +45,9 @@ cat <<-EOF > /root/hashistack/consul/client.json
     "retry_interval": "5s",
     "retry_join": [
         "hashistack-server:8301"
+    ],
+    "recursors": [
+      "10.64.0.254"
     ]
 }
 EOF
@@ -104,33 +110,6 @@ listener "tcp" {
 
 disable_mlock = true
 ui=true
-EOF
-
-# Write copy of Nomad client.hcl to server
-cat <<-EOF > /root/hashistack/nomad/client.hcl
-# Set the Datacenter
-datacenter = "instruqt"
-data_dir = "/root/hashistack/nomad/client"
-
-# Setup the bind address
-bind_addr = "0.0.0.0"
-
-# Enable the client
-client {
-    enabled = true
-    servers = ["hashistack-server"]
-}
-
-# Consul
-consul {
-    address = "127.0.0.1:8500"
-}
-
-# Vault
-vault {
-    enabled = true
-    address = "http://active.vault.service.consul:8200"
-}
 EOF
 
 # Write the Service Configuration
@@ -219,6 +198,33 @@ vault {
     task_token_ttl = "1h"
     create_from_role = "nomad-cluster"
     token = "<your nomad server token>"
+}
+EOF
+
+# Write copy of Nomad client.hcl to server
+cat <<-EOF > /root/hashistack/nomad/client.hcl
+# Set the Datacenter
+datacenter = "instruqt"
+data_dir = "/root/hashistack/nomad/client"
+
+# Setup the bind address
+bind_addr = "0.0.0.0"
+
+# Enable the client
+client {
+    enabled = true
+    servers = ["hashistack-server"]
+}
+
+# Consul
+consul {
+    address = "127.0.0.1:8500"
+}
+
+# Vault
+vault {
+    enabled = true
+    address = "http://active.vault.service.consul:8200"
 }
 EOF
 

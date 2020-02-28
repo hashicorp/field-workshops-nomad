@@ -1,4 +1,4 @@
-Client#!/bin/bash -l
+#!/bin/bash -l
 
 # Hashistack
 
@@ -28,6 +28,9 @@ cat <<-EOF > /root/hashistack/consul/client.json
     "retry_interval": "5s",
     "retry_join": [
         "hashistack-server:8301"
+    ],
+    "recursors": [
+      "10.64.0.254"
     ]
 }
 EOF
