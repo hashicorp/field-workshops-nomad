@@ -98,7 +98,7 @@ challenges:
     hostname: hashistack-server
     port: 8200
   difficulty: basic
-  timelimit: 3600
+  timelimit: 600
 - slug: create-the-nomad-server-policy-and-token
   id: pupryaxbz98c
   type: challenge
@@ -566,4 +566,4 @@ challenges:
     port: 3000
   difficulty: basic
   timelimit: 600
-checksum: "1549894355616910470"
+checksum: "9843866719202502657"
