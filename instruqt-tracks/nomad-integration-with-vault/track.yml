@@ -187,7 +187,7 @@ challenges:
   - type: text
     contents: |-
       We will use the following token role:
-      <pre style="overflow-x: auto; white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word; padding: 15px;">
+      ```
       {
         "allowed_policies": "access-tables",
         "token_explicit_max_ttl": 0,
@@ -196,12 +196,13 @@ challenges:
         "token_period": 259200,
         "renewable": true
       }
-      </pre>
+      ```
+
       Note that the "access-tables" policy is listed under the `allowed_policies` key. We have not created this policy yet, but it will be used by our web job to retrieve database credentials.
   - type: text
     contents: |-
       To allow all policies except those you explicitly prohibit to be used by jobs, specify the `disallowed_policies` key instead and list the policies that should not be granted. If you take this approach, be sure to include the `nomad-server` policy. An example of this is shown below:
-      <pre style="overflow-x: auto; white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word; padding: 15px;">
+      ```
       {
         "disallowed_policies": "nomad-server",
         "token_explicit_max_ttl": 0,
@@ -210,7 +211,7 @@ challenges:
         "token_period": 259200,
         "renewable": true
       }
-      </pre>
+      ```
   tabs:
   - title: Files
     type: code
@@ -269,7 +270,7 @@ challenges:
   - type: text
     contents: |-
       The "vault" stanza will end up looking like this:
-      <pre style="overflow-x: auto; white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word; padding: 15px;">
+      ```
       vault {
         enabled = true
         address = "http://active.vault.service.consul:8200"
@@ -277,17 +278,19 @@ challenges:
         create_from_role = "nomad-cluster"
         token = "s.1234567890abcdefghijklmnop"
       }
-      </pre>
+      ```
+
       The Nomad server will renew the token automatically since it is a periodic token.
   - type: text
     contents: |-
       Nomad's Vault integration also needs be enabled on the Nomad clients, but this has already been done for you. The "vault" stanza on the clients looks like this:
-      <pre style="overflow-x: auto; white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word; padding: 15px;">
+      ```
       vault {
         enabled = true
         address = "http://active.vault.service.consul:8200"
       }
-      </pre>
+      ```
+
       Note that the Nomad clients are not given a Vault token.
   tabs:
   - title: Files
@@ -420,7 +423,7 @@ challenges:
   - type: text
     contents: |-
       You will set up the database secrets engine's connection with the following data:
-      <pre style="overflow-x: auto; white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word; padding: 15px;">
+      ```
       {
         "plugin_name": "postgresql-database-plugin",
         "allowed_roles": "accessdb",
@@ -428,7 +431,7 @@ challenges:
         "username": "demo",
         "password": "demo"
       }
-      </pre>
+      ```
   - type: text
     contents: |-
       We have specified "accessdb" in the `allowed_roles` key of our connection information. We will create the "accessdb" role for the database secrets engine soon.
@@ -439,21 +442,20 @@ challenges:
   - type: text
     contents: |-
       When you create the "accessdb" role, you will use the following SQL in the "creation_statements" parameter:
-      <pre style="overflow-x: auto; white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word; padding: 15px;">
+      ```
       CREATE USER "{{name}}" WITH ENCRYPTED PASSWORD '{{password}}' VALID UNTIL '{{expiration}}';
       ALTER USER "{{name}}" WITH SUPERUSER;
-      </pre>
+      ```
 
       In our case, the dynamic database user will have broad privileges that include the ability to read from the tables that our application will need to access.
   - type: text
     contents: |-
       Finally, we need to create the "access-tables" policy that was referenced in the "allowed_policies" key of the token role we created earlier. Tokens given this policy will be able to read dynamic database credentials from the "database/creds/accessdb" path in Vault.
-
-      <pre style="overflow-x: auto; white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word; padding: 15px;">
+      ```
       path "database/creds/accessdb" {
         capabilities = ["read"]
       }
-      </pre>
+      ```
 
       The Nomad "web" job will be assigned this policy.
   tabs:
@@ -484,7 +486,7 @@ challenges:
   title: Deploy a Web Application
   teaser: Deploy a web application with the appropriate policy and templating.
   assignment: |-
-    If you did not read all 3 notes screens while this challenge was starting, please do that now by clicking the "notes" button in the upper right corner. After reading all of them, click the "X" button to hide the notes.
+    If you did not read all 4 notes screens while this challenge was starting, please do that now by clicking the "notes" button in the upper right corner. After reading all of them, click the "X" button to hide the notes.
 
     The Nomad job file has been also been created for you and you can take a look at it by clicking on the "Files" tab and navigating to the "/root/hashistack/nomad/web.nomad" file.
 
@@ -528,18 +530,29 @@ challenges:
   - type: text
     contents: |-
       When you look at the job specification for the web job, you will see the following "vault" stanza:
-      <pre style="overflow-x: auto; white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word; padding: 15px;">
+      ```
       vault {
         policies = ["access-tables"]
       }
-      </pre>
+      ```
 
       This assigns the job the "access-tables" policy so that it can request database credentials from Vault.
   - type: text
     contents: |-
-      We are using the template stanza's vault integration to populate an configuration file that our application needs.
+      We are using the "template" stanza's vault integration to populate an configuration file that our application needs.
 
       The underlying tool being used is [Consul Template](https://learn.hashicorp.com/consul/developer-configuration/consul-template), which is built into Nomad and can populate files with data from Consul's key/value store and from Vault secrets.
+  - type: text
+    contents: |-
+      The "template" stanza of the job specification for the web job includes the following:
+      ```
+      {{ with secret "database/creds/accessdb" }}
+        DB_USERNAME="{{ .Data.username }}"
+        DB_PASSWORD="{{ .Data.password }}"
+      {{ end }}
+      ```
+
+      This tells the Consul Template sub-system of Nomad to retrive the dynamically generated username and password for the database from the "database/creds/accessdb" path on the Vault server and to store the "username" and "password" keys of that secret in the given variables within the task.
   tabs:
   - title: Files
     type: code
@@ -566,4 +579,4 @@ challenges:
     port: 3000
   difficulty: basic
   timelimit: 600
-checksum: "9843866719202502657"
+checksum: "6434272770393878953"
