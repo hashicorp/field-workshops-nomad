@@ -1,0 +1,26 @@
+#!/bin/bash -l
+
+# Enable bash history
+HISTFILE=/root/.bash_history
+set -o history
+
+# Enable the Database secrets engine
+vault secrets enable database
+
+# Sleep
+sleep 30
+
+# Create the Database Connection
+cd /root/hashistack/vault
+vault write database/config/postgresql @connection.json
+
+# Create a Vault Role to Manage Database Privileges
+vault write database/roles/accessdb db_name=postgresql creation_statements=@accessdb.sql default_ttl=1h max_ttl=24h
+
+# Create PostgreSQL Credentials
+vault read database/creds/accessdb
+
+# Create the access-tables Policy
+vault policy write access-tables access-tables-policy.hcl
+
+exit 0

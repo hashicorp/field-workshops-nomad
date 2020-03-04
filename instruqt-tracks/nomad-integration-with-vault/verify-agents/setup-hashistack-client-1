@@ -1,0 +1,151 @@
+#!/bin/bash -l
+
+# Hashistack
+
+# Create Hashistack directory
+mkdir -p /root/hashistack
+chmod -R 755 /root/hashistack
+
+# Consul
+
+# Create Consul directories
+mkdir -p /root/hashistack/consul
+chmod -R 755 /root/hashistack/consul
+
+# Configure Consul Autocomplete
+consul -autocomplete-install
+complete -C /usr/local/bin/consul consul
+
+# Write Consul Client Configuation File
+cat <<-EOF > /root/hashistack/consul/client.json
+{
+    "datacenter": "instruqt",
+    "log_level": "INFO",
+    "data_dir": "/root/hashistack/consul/client",
+    "ui": true,
+    "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
+    "client_addr": "0.0.0.0",
+    "retry_interval": "5s",
+    "retry_join": [
+        "hashistack-server:8301"
+    ],
+    "recursors": [
+      "10.64.0.254"
+    ]
+}
+EOF
+
+# Write the Service Configuration
+cat <<-EOF > /etc/systemd/system/consul.service
+[Unit]
+Description=Consul
+Documentation=https://www.consul.io/intro/index.html
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Restart=on-failure
+ExecStart=/usr/local/bin/consul agent -config-file /root/hashistack/consul/client.json
+ExecReload=/bin/kill -HUP $MAINPID
+KillSignal=SIGTERM
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Enable the service
+systemctl enable consul
+systemctl start consul
+
+# Sleep
+sleep 30
+
+# Configure Resolved and iptables
+cat <<-EOF > /etc/systemd/resolved.conf.d/consul.conf
+[Resolve]
+DNS=127.0.0.1
+Domains=~consul
+EOF
+iptables -t nat -A OUTPUT -d localhost -p udp -m udp --dport 53 -j REDIRECT --to-ports 8600
+iptables -t nat -A OUTPUT -d localhost -p tcp -m tcp --dport 53 -j REDIRECT --to-ports 8600
+# We'll restart systemd-resolved from hashistack-server via SSH
+
+# Nomad
+
+# Create Nomad directory
+mkdir -p /root/hashistack/nomad
+chmod -R 755 /root/hashistack/nomad
+mkdir -p /root/hashistack/nomad/client
+
+# Write Client main config file
+cat <<-EOF > /root/hashistack/nomad/client.hcl
+# Set the Datacenter
+datacenter = "instruqt"
+data_dir = "/root/hashistack/nomad/client"
+
+# Setup the bind address
+bind_addr = "0.0.0.0"
+
+# Enable the client
+client {
+    enabled = true
+    servers = ["hashistack-server"]
+}
+
+# Consul
+consul {
+    address = "127.0.0.1:8500"
+}
+
+# Vault
+vault {
+    enabled = true
+    address = "http://active.vault.service.consul:8200"
+}
+EOF
+
+# Write the Service Configuration
+cat <<-EOF > /etc/systemd/system/nomad.service
+[Unit]
+Description=Nomad
+Documentation=https://nomadproject.io/docs/
+Wants=network-online.target
+After=network-online.target
+
+# If you are running Consul, please uncomment following Wants/After configs.
+# Assuming your Consul service unit name is "consul"
+Wants=consul.service
+After=consul.service
+
+[Service]
+ExecReload=/bin/kill -HUP $MAINPID
+ExecStart=/usr/local/bin/nomad agent -config /root/hashistack/nomad/client.hcl
+KillMode=process
+KillSignal=SIGINT
+LimitNOFILE=infinity
+LimitNPROC=infinity
+Restart=on-failure
+RestartSec=2
+StartLimitBurst=3
+StartLimitInterval=10
+TasksMax=infinity
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Enable the service
+systemctl enable nomad
+systemctl start nomad
+
+# Configure Nomad Autocomplete
+nomad -autocomplete-install
+complete -C /usr/local/bin/nomad nomad
+
+systemctl restart systemd-resolved
+
+exit 0

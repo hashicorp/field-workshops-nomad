@@ -1,0 +1,48 @@
+#!/bin/bash -l
+
+# Enable bash history
+HISTFILE=/root/.bash_history
+set -o history
+
+# Remove the current configuration
+rm /root/hashistack/nomad/server.hcl
+
+# Get the Genrated Nomad token
+token=$(sed -n 3p /root/hashistack/nomad/nomad-token.txt | cut -d' ' -f17)
+
+# Create a new configuration file
+cat <<-EOF > /root/hashistack/nomad/server.hcl
+# Set the Datacenter
+datacenter = "instruqt"
+
+# Setup data dir
+data_dir = "/root/hashistack/nomad/server"
+
+# Give the agent a unique name. Defaults to hostname
+name = "server"
+
+# Enable the server
+server {
+  enabled = true
+
+  # Self-elect, should be 3 or 5 for production
+  bootstrap_expect = 1
+}
+
+# Vault
+vault {
+  enabled = true
+  address = "http://active.vault.service.consul:8200"
+  task_token_ttl = "1h"
+  create_from_role = "nomad-cluster"
+  token = "$token"
+}
+EOF
+
+# Start Nomad Agent
+systemctl restart nomad
+
+# Sleep
+sleep 60
+
+exit 0

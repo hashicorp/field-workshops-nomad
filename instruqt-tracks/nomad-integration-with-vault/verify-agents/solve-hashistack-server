@@ -1,0 +1,22 @@
+#!/bin/bash -l
+
+# Enable bash history
+HISTFILE=/root/.bash_history
+set -o history
+
+# Sleep
+sleep 30
+
+# Check the Nomad cluster members
+nomad server members
+
+# Check the Nomad nodes
+nomad node status
+
+# Check the Consul server
+consul members
+
+# Check the Vault server
+vault status
+
+exit 0

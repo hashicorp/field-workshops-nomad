@@ -1,0 +1,20 @@
+#!/bin/bash -l
+
+set -e
+
+# Write Server main config file
+cat <<-EOF > /root/hashistack/vault/nomad-cluster-role.json
+{
+  "allowed_policies": "access-tables",
+  "token_explicit_max_ttl": 0,
+  "name": "nomad-cluster",
+  "orphan": true,
+  "token_period": 259200,
+  "renewable": true
+}
+EOF
+
+# Set home directory
+echo -e "cd /root/hashistack/vault" >> /root/.bash_profile
+
+exit 0

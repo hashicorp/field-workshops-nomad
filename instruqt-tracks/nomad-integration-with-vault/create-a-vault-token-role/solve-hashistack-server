@@ -1,0 +1,12 @@
+#!/bin/bash -l
+
+# Enable bash history
+HISTFILE=/root/.bash_history
+set -o history
+
+cd /root/hashistack/vault
+
+# Create Token Role
+vault write auth/token/roles/nomad-cluster @nomad-cluster-role.json
+
+exit 0
