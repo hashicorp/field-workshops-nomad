@@ -1,0 +1,13 @@
+#!/bin/bash -l
+
+set -e
+
+grep -q "cd /root/nomad/sentinel" /root/.bash_history || fail-message "You have not navigated to the /root/nomad/sentinel directory on the Server yet."
+
+grep -q "nomad sentinel apply .* -level hard-mandatory allow-docker-and-java-drivers allow-docker-and-java-drivers.sentinel" /root/.bash_history || fail-message "You have not created the allow-docker-and-java-drivers Sentinel policy on the Server yet."
+
+grep -q "nomad sentinel apply .* -level soft-mandatory restrict-docker-images restrict-docker-images.sentinel" /root/.bash_history || fail-message "You have not created the restrict-docker-images Sentinel policy on the Server yet."
+
+grep -q "nomad sentinel apply .* -level soft-mandatory prevent-docker-host-network prevent-docker-host-network.sentinel" /root/.bash_history || fail-message "You have not created the prevent-docker-host-network Sentinel policy on the Server yet."
+
+exit 0

@@ -1,0 +1,28 @@
+#!/bin/bash -l
+
+#Enable bash history
+HISTFILE=/root/.bash_history
+set -o history
+
+# Change to /root/nomad
+cd /root/nomad/quotas
+
+# Create Default Resource Quota
+nomad quota apply quota-default.hcl
+
+# Create Dev Resource Quota
+nomad quota apply quota-dev.hcl
+
+# Create QA Resource Quota
+nomad quota apply quota-qa.hcl
+
+# Apply Default Quota to Default Namespace
+nomad namespace apply -quota default -description "default namespace" default
+
+# Create Dev Namespace and Apply Dev Quota
+nomad namespace apply -quota dev -description "dev namespace" dev
+
+# Create QA Namespace and Apply QA Quota
+nomad namespace apply -quota qa -description "qa namespace" qa
+
+exit 0

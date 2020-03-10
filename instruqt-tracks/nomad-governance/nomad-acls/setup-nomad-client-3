@@ -1,0 +1,12 @@
+#!/bin/bash -l
+
+# Add ACL stanza to nomad-client3.hcl config
+cat <<-EOF >> /etc/nomad.d/nomad-client3.hcl
+
+# Enable ACLs
+acl {
+  enabled = true
+}
+EOF
+
+exit 0

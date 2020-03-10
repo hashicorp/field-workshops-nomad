@@ -1,0 +1,54 @@
+#!/bin/bash -l
+
+#Enable bash history
+HISTFILE=/root/.bash_history
+set -o history
+
+# Change directory
+cd /root/nomad/acls
+
+# Restart server
+systemctl restart nomad
+
+# Sleep
+sleep 30
+
+# Bootstrap ACLs
+nomad acl bootstrap | tee bootstrap.txt
+
+# Export bootstrap token
+export NOMAD_TOKEN=$(cat bootstrap.txt | grep Secret | cut -d' ' -f7)
+echo "export NOMAD_TOKEN=$NOMAD_TOKEN" >> /root/.bash_profile
+
+# Sleep
+sleep 15
+
+# Restart the Nomad clients
+ssh -o StrictHostKeyChecking=no nomad-client-1 << ENDSSH
+HISTFILE=/root/.bash_history
+set -o history
+systemctl restart nomad
+ENDSSH
+ssh -o StrictHostKeyChecking=no nomad-client-2 << ENDSSH
+HISTFILE=/root/.bash_history
+set -o history
+systemctl restart nomad
+ENDSSH
+ssh -o StrictHostKeyChecking=no nomad-client-3 << ENDSSH
+HISTFILE=/root/.bash_history
+set -o history
+systemctl restart nomad
+ENDSSH
+
+# Add the ACL Policies
+nomad acl policy apply -description "restricted access for users without ACL tokens" anonymous acl-anonymous.hcl
+nomad acl policy apply -description "access for users with dev ACL tokens" dev acl-dev.hcl
+nomad acl policy apply -description "access for users with qa ACL tokens" qa acl-qa.hcl
+nomad acl policy apply -description "override soft-mandatory Sentinel policies" override acl-override.hcl
+
+# Add the ACL tokens
+nomad acl token create -name="alice" -policy=dev | tee alice-token.txt
+nomad acl token create -name="bob" -policy=qa | tee bob-token.txt
+nomad acl token create -name="charlie" -policy=override | tee charlie-token.txt
+
+exit 0
