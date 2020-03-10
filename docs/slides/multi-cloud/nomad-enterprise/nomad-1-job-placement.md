@@ -1,4 +1,4 @@
-name: nomad-enterprise-workshop-part-1
+name: chapter-1-title
 class: title, shelf, no-footer, fullbleed
 background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/bkgs/HashiCorp-Title-bkg.jpeg)
 count: false
