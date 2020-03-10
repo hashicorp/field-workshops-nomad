@@ -14,7 +14,7 @@ The following Nomad workshop presentation have been completed:
 * https://hashicorp.github.io/field-workshops-nomad/slides/multi-cloud/nomad-oss
 
 You can also see the current version of the Advanced Nomad Workshop slides that cover advanced OSS and Nomad Enterprise features here:
-* https://hashicorp.github.io/field-workshops-nomad/slides/multi-cloud/nomad-enterprise
+* https://hashicorp.github.io/field-workshops-nomad/slides/multi-cloud/advanced-nomad
 
 Other presentations are just placeholders for future content.
 
