@@ -464,7 +464,7 @@ challenges:
 - slug: run-nomad-jobs-1
   id: tiiro7dy0asi
   type: challenge
-  title: Run Nomad Jobs
+  title: Run Nomad Jobs Restricted by ACLs and Sentinel Policies
   teaser: |
     Run Nomad jobs and learn how Nomad ACL and Sentinel policies restrict them.
   assignment: |-
@@ -597,11 +597,13 @@ challenges:
     ```
     This should give a yellow warning about the violation of the "restrict-docker-images" Sentinel policy but successfully redeploy the job, switching the web server from nginx to httpd.
 
-    In this challenge, you saw how Nomad ACL and Sentinel policies restricted which jobs could be run and who could run them. In the next challenge, you will run some more jobs and see how they are affected by resource quotas.
+    In this challenge, you saw how Nomad ACL and Sentinel policies restricted which jobs could be run and who could run them.
+
+    In the next challenge, you will run some more jobs and see how they are affected by resource quotas.
   notes:
   - type: text
     contents: |-
-      In this challenge, you will run Nomad jobs and learn how Nomad ACL and  Sentinel policies restrict them.
+      In this challenge, you will run Nomad jobs and learn how Nomad ACL and Sentinel policies restrict them.
 
       You will see that some jobs cannot be run at all because they violate Sentinel policies and that other jobs cannot be run by certain users because their ACL tokens do not allow them to run jobs in the target namespaces.
 
@@ -619,5 +621,43 @@ challenges:
     hostname: nomad-server-1
     port: 4646
   difficulty: basic
+  timelimit: 900
+- slug: run-nomad-jobs-2
+  id: d3xyecyjqxwc
+  type: challenge
+  title: Run Nomad Jobs Restricted by Resource Quotas
+  teaser: |
+    Learn how Nomad Resource Quotas can prevent some jobs from running.
+  assignment: |-
+    In this challenge, you will run some more Nomad jobs and learn how Resource Quotas can prevent some of them from running.
+
+    Navigate to the /root/nomad/jobs directory by running this command on the "Server" tab:
+    ```
+    cd /root/nomad/jobs
+    ```
+
+
+    In this challenge, you saw how resource quotas can prevent some jobs from running.
+
+    In the next challenge, you will learn how Nomad's Preemption feature allows higher priority batch and service jobs to displace lower priority jobs.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will run some more Nomad jobs and learn how Resource Quotas can prevent some of them from running.
+
+      These are jobs that Nomad ACLs and Sentinel policies would allow to run if the namespaces they target were not already overloaded.
+  tabs:
+  - title: Config Files
+    type: code
+    hostname: nomad-server-1
+    path: /root/nomad/
+  - title: Server
+    type: terminal
+    hostname: nomad-server-1
+  - title: Nomad UI
+    type: service
+    hostname: nomad-server-1
+    port: 4646
+  difficulty: basic
   timelimit: 3600
-checksum: "2336444780247616715"
+checksum: "9949994488975478019"

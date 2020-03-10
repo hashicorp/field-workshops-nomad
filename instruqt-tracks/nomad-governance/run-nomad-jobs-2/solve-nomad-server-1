@@ -1,0 +1,10 @@
+#!/bin/bash -l
+
+#Enable bash history
+HISTFILE=/root/.bash_history
+set -o history
+
+# Change directory
+cd /root/nomad/jobs
+
+exit 0
