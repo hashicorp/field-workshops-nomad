@@ -13,6 +13,9 @@ Additionally, field workshops focused on more than one HashiCorp solution can be
 The following Nomad workshop presentation have been completed:
 * https://hashicorp.github.io/field-workshops-nomad/slides/multi-cloud/nomad-oss
 
+You can also see the current version of the Advanced Nomad Workshop slides that cover advanced OSS and Nomad Enterprise features here:
+* https://hashicorp.github.io/field-workshops-nomad/slides/multi-cloud/nomad-enterprise
+
 Other presentations are just placeholders for future content.
 
 The slides for these workshops should be created using [Remark](https://remarkjs.com) and should be placed under the [docs/slides](./docs/slides) directory. This directory is organized by cloud and then by workshop.  If a workshop targets a single cloud, its slides should be placed in a directory under that cloud's directory ([aws](./docs/slides/aws), [azure](./docs/slides/azure), or [gcp](./docs/slides/gcp)). If a workshop can be used with multiple clouds, its slides should be placed in a directory under the [multi-cloud](./docs/slides/multi-cloud) directory.
