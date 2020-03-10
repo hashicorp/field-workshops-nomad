@@ -1,15 +1,19 @@
-name: nomad-enterprise-workshop-part-3
+name: chapter-5-title
 class: title, shelf, no-footer, fullbleed
 background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/bkgs/HashiCorp-Title-bkg.jpeg)
 count: false
 
-# Chapter 3
-## Nomad Autopilot - Upgrades, Scalability, and Redundancy Zones
+# Chapter 4
+## Nomad Enterprise Platform
 
 ![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
 
 ???
-This section discusses Nomad's ability to automatically upgrade an entire cluster of Nomad servers in an automatic and controlled fashion. This can sometimes be referred to as "upgrade migration"
+* This chapter discusses the features of the Nomad Enterprise Platform (see https://www.hashicorp.com/products/nomad/pricing/ and https://nomadproject.io/docs/enterprise/#nomad-enterprise-platform)
+* This includes:
+  * Nomad's ability to automatically upgrade an entire cluster of Nomad servers in an automatic and controlled fashion. This can sometimes be referred to as "upgrade migration"
+  * Enhanced Read Scalability
+  * Redundancy Zones
 
 ---
 layout: true
@@ -23,10 +27,10 @@ layout: true
 name: Nomad Enterprise Features - Autopilot
 # Nomad Enterprise - Autopilot
 
-* Autopilot is a function that enables multiple features
-    * Automated Upgrades/Upgrade Migration
-    * Enhanced Read Scalability
-    * Redundancy Across Availability Zones
+* [Autopilot](https://learn.hashicorp.com/nomad/operating-nomad/autopilot) is a function that enables multiple features:
+    * [Automated Upgrades](https://nomadproject.io/docs/enterprise/#automated-upgrades)
+    * [Enhanced Read Scalability](https://nomadproject.io/docs/enterprise/#enhanced-read-scalability)
+    * [Redundancy Zones](https://nomadproject.io/docs/enterprise/#redundancy-zones)
 
 ???
 - Autopilot enables multiple features within Nomad Enterprise.
@@ -34,28 +38,24 @@ name: Nomad Enterprise Features - Autopilot
 
 ---
 name: Automated Upgrade Overview
-# Upgrade Process
+# Automated Upgrade Process
 
-* Add New Servers to Cluster with Updated Versions
-* Autopilot won't promote new Servers until Quorum Achived
-* Once Quorum Achived, Autopilot pomotes new Servers, demotes old servers
-* Autopilot can remove old servers from cluster automatically
-* Upgrade complete!
+* Add new servers to a cluster with updated versions.
+* Autopilot won't promote new servers until a quorum is achieved.
+* Once a quorum is achieved, Autopilot pomotes new servers and demotes old ones.
+* Autopilot can remove old servers from the cluster automatically.
+* Your upgrade is complete!
 
 ???
 - This section discusses Nomad's ability to automatically upgrade an entire cluster of Nomad servers in an automatic and controlled fashion.
 - Sometimes be referred to as "upgrade migration"
 
 ---
-class: img-right
+class: smaller
 name: Automated Upgrade Flow 1
 # Upgrade Process
-
-.smaller[
 * Existing Cluster, all on 0.10.1
-]
-
-![:scale 100%](images/Upgrade-Start.png)
+![:scale 65%](images/Upgrade-Start.png)
 
 ???
 - This section discusses Nomad's ability to automatically upgrade an entire cluster of Nomad servers in an automatic and controlled fashion.
@@ -63,33 +63,25 @@ name: Automated Upgrade Flow 1
 - Starting with a basic cluster, all on the same version
 
 ---
-class: img-right
+class: smaller
 name: Automated Upgrade Flow 2
 # Upgrade Process
-
-.smaller[
 * Existing Cluster, all on 0.10.1
-* New Servers Introduced
-]
-
-![:scale 100%](images/Introduce-New-Servers.png)
+* New Servers Introduced Running 0.10.4
+![:scale 65%](images/Introduce-New-Servers.png)
 
 ???
 - New Servers are introduced with newer version
 - Great use of Terraform
 
 ---
-class: img-right
+class: smaller
 name: Automated Upgrade Flow 3
 # Upgrade Process
-
-.smaller[
 * Existing Cluster, all on 0.10.1
-* New Servers Introduced
+* New Servers Introduced Running 0.10.4
 * Quorum Achieved, Old Servers Demoted
-]
-
-![:scale 100%](images/Demote-Old-Servers.png)
+![:scale 65%](images/Demote-Old-Servers.png)
 
 ???
 - Once enough new servers are introduced, quorum achieved
@@ -97,31 +89,30 @@ name: Automated Upgrade Flow 3
 - Note:  This is default operation and can be overridden
 
 ---
-class: img-right
+class: smaller
 name: Automated Upgrade Flow 4
 # Upgrade Complete
-
-.smaller[
 * Existing Cluster, all on 0.10.1
-* New Servers Introduced
+* New Servers Introduced Running 0.10.4
 * Quorum Achieved, Old Servers Demoted
 * Old Servers Removed
-]
-
-![:scale 100%](images/Upgraded-Servers.png)
+![:scale 65%](images/Upgraded-Servers.png)
 
 ???
 - Once the new servers have been promoted old servers can be decommissioned
+- And clients can be upgraded to the new version.
 
 ---
 name: Scaling Readbility
-# Increasing Read Scalability
+# Enhanced Read Scalability
 
-* Add Non-Voting Servers to Cluster
-* Receives Replicated Data, But Never Promoted
-* Improves Scheduling Abilities and Read Performance
-* Configured in server Stanza with `non_voting_server` Parameter
+* Add non-voting servers to a cluster.
+* They receive replicated data but are never promoted.
+* This improves scheduling abilities and read performance.
+* This is configured in the `server` stanza with the `non_voting_server` parameter.
 
+???
+* Enhanced Read Scalability allows additional non-voting servers in a Nomad cluster.
 ---
 name: Nomad Redundancy Zones
 # Nomad Redundancy Zones
@@ -130,9 +121,10 @@ name: Nomad Redundancy Zones
     * Server Cluster in each Availability Zone (3-5 machines per zone)
     * Or give up redundancy with a single Server in each Zone
 * With Redundancy Zones
-    * Servers are associated with Availability Zones
-    * Nomad keeps one voting server in each Zone
-    * Cluster Functionality retained across Availabity Zone Failures
+    * Servers are associated with Availability Zones.
+    * Nomad keeps one voting server in each zone.
+    * Nomad also keeps one non-voting server in each zone.
+    * Cluster Functionality retained across availabity zone failures.
 
 ???
 - Redundancy Zones allows servers to be associated with a zone, and enables clusters to communicate across zones
