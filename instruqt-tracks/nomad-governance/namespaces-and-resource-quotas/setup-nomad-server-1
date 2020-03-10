@@ -1,0 +1,47 @@
+#!/bin/bash -l
+
+mkdir -p /root/nomad/quotas
+
+# Write Default Resource Quota
+cat <<-EOF > /root/nomad/quotas/quota-default.hcl
+name = "default"
+description = "default quota"
+
+limit {
+    region = "global"
+    region_limit {
+        cpu = 4600
+        memory = 4100
+    }
+}
+EOF
+
+# Write Dev Resource Quota
+cat <<-EOF > /root/nomad/quotas/quota-dev.hcl
+name = "dev"
+description = "dev quota"
+
+limit {
+    region = "global"
+    region_limit {
+        cpu = 4600
+        memory = 4100
+    }
+}
+EOF
+
+# Write QA Resource Quota
+cat <<-EOF > /root/nomad/quotas/quota-qa.hcl
+name = "qa"
+description = "qa quota"
+
+limit {
+    region = "global"
+    region_limit {
+        cpu = 4600
+        memory = 4100
+    }
+}
+EOF
+
+exit 0

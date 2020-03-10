@@ -1,0 +1,70 @@
+#!/bin/bash -l
+
+#Enable bash history
+HISTFILE=/root/.bash_history
+set -o history
+
+# Change directory
+cd /root/nomad/jobs
+
+# Export bootstrap token
+export NOMAD_TOKEN=$(cat /root/nomad/acls/bootstrap.txt | grep Secret | cut -d' ' -f7)
+
+# Run the sleep.nomad job
+nomad job run sleep.nomad
+
+# Sleep
+sleep 10
+
+# Run the catalogue.nomad job
+nomad job run catalogue.nomad
+
+# Sleep
+sleep 10
+
+# Run catalogue job with -policy-override argument
+nomad job run -policy-override catalogue.nomad
+
+# Export Alice's token
+export NOMAD_TOKEN=$(cat /root/nomad/acls/alice-token.txt | grep Secret | cut -d' ' -f7)
+
+# Run the webserver-test.nomad job as Alice
+nomad job run webserver-test.nomad
+
+# Sleep
+sleep 10
+
+# Export Bob's token
+export NOMAD_TOKEN=$(cat /root/nomad/acls/bob-token.txt | grep Secret | cut -d' ' -f7)
+
+# Have Bob try to override the Sentinel policies
+nomad job run -policy-override webserver-test.nomad
+
+# Sleep
+sleep 10
+
+# Switch to nginx
+sed -i "s/httpd/nginx/g" webserver-test.nomad
+
+# Add tag
+sed -i "s/nginx/nginx:1.15.6/g" webserver-test.nomad
+
+# Run the webserver-test.nomad job as Bob
+nomad job run webserver-test.nomad
+
+# Sleep
+sleep 30
+
+# Switch back to httpd
+sed -i "s/nginx:1.15.6/httpd:2.4/g" webserver-test.nomad
+
+# Export Charlie's token
+export NOMAD_TOKEN=$(cat /root/nomad/acls/charlie-token.txt | grep Secret | cut -d' ' -f7)
+
+# Run webserver-test.nomad with override
+nomad job run -policy-override webserver-test.nomad
+
+# Sleep
+sleep 60
+
+exit 0

@@ -1,0 +1,7 @@
+#!/bin/bash -l
+
+set -e
+
+grep -q "systemctl restart nomad" /root/.bash_history || fail-message "You have not restarted Client 3 yet."
+
+exit 0

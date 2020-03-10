@@ -1,0 +1,19 @@
+#!/bin/bash -l
+
+#Enable bash history
+HISTFILE=/root/.bash_history
+set -o history
+
+# Change to /root/nomad/sentinel
+cd /root/nomad/sentinel
+
+# Create allow-docker-and-java-drivers.sentinel
+nomad sentinel apply -description "Only allow the Docker and Java drivers" -level hard-mandatory allow-docker-and-java-drivers allow-docker-and-java-drivers.sentinel
+
+# Create restrict-docker-images.sentinel
+nomad sentinel apply -description "Restrict allowed Docker images" -level soft-mandatory restrict-docker-images restrict-docker-images.sentinel
+
+# Create prevent-docker-host-network.sentinel
+nomad sentinel apply -description "Prevent Docker containers running with host network mode" -level soft-mandatory prevent-docker-host-network prevent-docker-host-network.sentinel
+
+exit 0

@@ -1,0 +1,134 @@
+#!/bin/bash -l
+
+rm /root/.bash_history
+touch /root/.bash_history
+
+# Add ACL stanza to nomad.hcl config
+cat <<-EOF >> /etc/nomad.d/nomad-server1.hcl
+
+# Enable ACLs
+acl {
+  enabled = true
+}
+EOF
+
+# Add ACL stanza to copy of nomad.hcl config
+cat <<-EOF >> /root/nomad/nomad-server1.hcl
+
+# Enable ACLs
+acl {
+  enabled = true
+}
+EOF
+
+# Add ACL stanza to copy of nomad-client1.hcl config
+cat <<-EOF >> /root/nomad/nomad-client1.hcl
+
+# Enable ACLs
+acl {
+  enabled = true
+}
+EOF
+
+# Add ACL stanza to copy of nomad-client2.hcl config
+cat <<-EOF >> /root/nomad/nomad-client2.hcl
+
+# Enable ACLs
+acl {
+  enabled = true
+}
+EOF
+
+# Add ACL stanza to copy of nomad-client3.hcl config
+cat <<-EOF >> /root/nomad/nomad-client3.hcl
+
+# Enable ACLs
+acl {
+  enabled = true
+}
+EOF
+
+# Make acls directory
+mkdir /root/nomad/acls
+
+# Write Anonymous ACL
+cat <<-EOF > /root/nomad/acls/acl-anonymous.hcl
+namespace "default" {
+  capabilities = ["list-jobs"]
+}
+
+agent {
+  policy = "read"
+}
+
+node {
+  policy = "read"
+}
+EOF
+
+# Write Dev ACL
+cat <<-EOF > /root/nomad/acls/acl-dev.hcl
+namespace "default" {
+  capabilities = ["list-jobs"]
+}
+
+namespace "dev" {
+  policy = "write"
+}
+
+agent {
+  policy = "read"
+}
+
+node {
+  policy = "read"
+}
+EOF
+
+
+# Write QA ACL
+cat <<-EOF > /root/nomad/acls/acl-qa.hcl
+namespace "default" {
+  capabilities = ["list-jobs"]
+}
+
+namespace "qa" {
+  policy = "write"
+}
+
+agent {
+  policy = "read"
+}
+
+node {
+  policy = "read"
+}
+EOF
+
+# Write override ACL
+cat <<-EOF > /root/nomad/acls/acl-override.hcl
+namespace "default" {
+  policy = "write"
+  capabilities = ["sentinel-override"]
+}
+
+namespace "dev" {
+  policy = "write"
+  capabilities = ["sentinel-override"]
+}
+
+namespace "qa" {
+  policy = "write"
+  capabilities = ["sentinel-override"]
+}
+
+agent {
+  policy = "read"
+}
+
+node {
+  policy = "read"
+}
+EOF
+
+exit 0

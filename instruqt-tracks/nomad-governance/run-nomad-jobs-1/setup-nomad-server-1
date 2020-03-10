@@ -1,0 +1,372 @@
+#!/bin/bash -l
+
+# Make jobs directory
+mkdir /root/nomad/jobs
+
+# Write the sleep job
+cat <<-EOF > /root/nomad/jobs/sleep.nomad
+job "sleep" {
+  datacenters = ["dc1"]
+
+  task "sleep" {
+    driver = "exec"
+
+    config {
+      command = "/bin/sleep"
+      args    = ["60"]
+    }
+  }
+}
+EOF
+
+# Write the catalogue job
+cat <<-EOF > /root/nomad/jobs/catalogue.nomad
+job "catalogue" {
+  datacenters = ["dc1"]
+
+  constraint {
+    attribute = "\${attr.kernel.name}"
+    value = "linux"
+  }
+
+  update {
+    stagger = "10s"
+    max_parallel = 1
+  }
+
+
+  # - catalogue - #
+  group "catalogue" {
+    count = 1
+
+    restart {
+      attempts = 10
+      interval = "5m"
+      delay = "25s"
+      mode = "delay"
+    }
+
+    # - app - #
+    task "catalogue" {
+      driver = "docker"
+
+      config {
+        image = "rberlind/catalogue:latest"
+        command = "/app"
+        args = ["-port", "8080", "-DSN", "catalogue_user:default_password@tcp(127.0.0.1:3306)/socksdb"]
+        hostname = "catalogue.service.consul"
+        network_mode = "host"
+        port_map = {
+          http = 8080
+        }
+      }
+
+      service {
+        name = "catalogue"
+        tags = ["app", "catalogue"]
+        port = "http"
+      }
+
+      resources {
+        cpu = 100 # 100 Mhz
+        memory = 128 # 32MB
+        network {
+          mbits = 10
+          port "http" {
+            static = 8080
+          }
+        }
+      }
+    } # - end app - #
+
+    # - db - #
+    task "cataloguedb" {
+      driver = "docker"
+
+      config {
+        image = "rberlind/catalogue-db:latest"
+        hostname = "catalogue-db.service.consul"
+        command = "docker-entrypoint.sh"
+        args = ["mysqld", "--bind-address", "127.0.0.1"]
+        network_mode = "host"
+        port_map = {
+          http = 3306
+        }
+      }
+
+      env {
+        MYSQL_DATABASE = "socksdb"
+        MYSQL_ALLOW_EMPTY_PASSWORD = "true"
+      }
+
+      service {
+        name = "catalogue-db"
+        tags = ["db", "catalogue", "catalogue-db"]
+        port = "http"
+      }
+
+      resources {
+        cpu = 100 # 100 Mhz
+        memory = 256 # 256MB
+        network {
+          mbits = 10
+          port "http" {
+            static = 3306
+          }
+        }
+      }
+
+    } # - end db - #
+
+  } # - end group - #
+}
+EOF
+
+# Write the webserver-test job
+cat <<-EOF > /root/nomad/jobs/webserver-test.nomad
+job "webserver-test" {
+  datacenters = ["dc1"]
+  namespace = "qa"
+
+  constraint {
+    attribute = "\${attr.kernel.name}"
+    value = "linux"
+  }
+
+  update {
+    stagger = "10s"
+    max_parallel = 1
+  }
+
+  group "webserver" {
+    count = 2
+
+    restart {
+      attempts = 10
+      interval = "5m"
+      delay = "25s"
+      mode = "delay"
+    }
+
+    # - db - #
+    task "webserver" {
+      driver = "docker"
+
+      config {
+        # "httpd" is not an allowed image
+        image = "httpd"
+        port_map = {
+          http = 80
+        }
+      }
+
+      service {
+        name = "webserver-test"
+        tags = ["test", "webserver", "qa"]
+        port = "http"
+      }
+
+      resources {
+        cpu = 500 # 500 Mhz
+        memory = 512 # 512MB
+        network {
+          mbits = 10
+          port "http" {}
+        }
+      }
+    } # - end task - #
+  } # - end group - #
+}
+EOF
+
+# Write the website-dev job
+cat <<-EOF > /root/nomad/jobs/website-dev.nomad
+job "website" {
+  datacenters = ["dc1"]
+  namespace = "dev"
+
+  constraint {
+    attribute = "\${attr.kernel.name}"
+    value = "linux"
+  }
+
+  update {
+    stagger = "10s"
+    max_parallel = 1
+  }
+
+  group "nginx" {
+    count = 2
+
+    restart {
+      attempts = 10
+      interval = "5m"
+      delay = "25s"
+      mode = "delay"
+    }
+
+    # - db - #
+    task "nginx" {
+      driver = "docker"
+
+      config {
+        image = "nginx:1.15.6"
+        port_map = {
+          http = 80
+        }
+      }
+
+      service {
+        name = "nginx-dev"
+        tags = ["web", "nginx", "dev"]
+        port = "http"
+      }
+
+      resources {
+        cpu = 500 # 500 Mhz
+        memory = 512 # 512MB
+        network {
+          mbits = 10
+          port "http" {}
+        }
+      }
+    } # - end task - #
+  } # - end group - #
+
+  group "mongodb" {
+    count = 2
+
+    restart {
+      attempts = 10
+      interval = "5m"
+      delay = "25s"
+      mode = "delay"
+    }
+
+    # - db - #
+    task "mongodb" {
+      driver = "docker"
+
+      config {
+        image = "mongo:3.4.3"
+        port_map = {
+          http = 27017
+        }
+      }
+
+      service {
+        name = "mongodb-dev"
+        tags = ["db", "mongodb", "dev"]
+        port = "http"
+      }
+
+      resources {
+        cpu = 500 # 500 Mhz
+        memory = 512 # 512MB
+        network {
+          mbits = 10
+          port "http" {}
+        }
+      }
+    } # - end task - #
+  } # - end group - #
+
+}
+EOF
+
+# Write the website-qa job
+cat <<-EOF > /root/nomad/jobs/website-qa.nomad
+job "website" {
+  datacenters = ["dc1"]
+  namespace = "qa"
+
+  constraint {
+    attribute = "\${attr.kernel.name}"
+    value = "linux"
+  }
+
+  update {
+    stagger = "10s"
+    max_parallel = 1
+  }
+
+  group "nginx" {
+    count = 2
+
+    restart {
+      attempts = 10
+      interval = "5m"
+      delay = "25s"
+      mode = "delay"
+    }
+
+    # - db - #
+    task "nginx" {
+      driver = "docker"
+
+      config {
+        image = "nginx:1.15.6"
+        port_map = {
+          http = 80
+        }
+      }
+
+      service {
+        name = "nginx-qa"
+        tags = ["web", "nginx", "qa"]
+        port = "http"
+      }
+
+      resources {
+        cpu = 500 # 500 Mhz
+        memory = 1024 # 1024MB
+        network {
+          mbits = 10
+          port "http" {}
+        }
+      }
+    } # - end task - #
+  } # - end group - #
+
+  group "mongodb" {
+    count = 2
+
+    restart {
+      attempts = 10
+      interval = "5m"
+      delay = "25s"
+      mode = "delay"
+    }
+
+    # - db - #
+    task "mongodb" {
+      driver = "docker"
+
+      config {
+        image = "mongo:3.4.3"
+        port_map = {
+          http = 27017
+        }
+      }
+
+      service {
+        name = "mongodb-qa"
+        tags = ["db", "mongodb", "qa"]
+        port = "http"
+      }
+
+      resources {
+        cpu = 500 # 500 Mhz
+        memory = 1024 # 1024MB
+        network {
+          mbits = 10
+          port "http" {}
+        }
+      }
+    } # - end task - #
+  } # - end group - #
+
+}
+EOF
+
+exit 0
