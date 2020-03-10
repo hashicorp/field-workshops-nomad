@@ -3,9 +3,9 @@ id: 05ovf6ut5ojh
 type: track
 title: Nomad Enterprise Governance
 teaser: |
-  Learn how to use Nomad Enterprise's governance capabilities including namespaces, resource quotas, and Sentinel policies.
+  Learn how to use Nomad Enterprise's governance capabilities including namespaces, resource quotas, Sentinel policies, and preemption of batch and service jobs.
 description: |-
-  This track will show you how to use Nomad Enterprise's governance capabilities including [Namespaces](https://learn.hashicorp.com/nomad/governance-and-policy/namespaces), [Resource Quotas](https://learn.hashicorp.com/nomad/governance-and-policy/quotas), and [Sentinel Policies](https://learn.hashicorp.com/nomad/governance-and-policy/sentinel).
+  This track will show you how to use Nomad Enterprise's governance capabilities including [Namespaces](https://learn.hashicorp.com/nomad/governance-and-policy/namespaces), [Resource Quotas](https://learn.hashicorp.com/nomad/governance-and-policy/quotas), [Sentinel Policies](https://learn.hashicorp.com/nomad/governance-and-policy/sentinel), and [Preemption](https://learn.hashicorp.com/nomad/advanced-scheduling/preemption).
 
   You will also configure and use [Nomad ACLs](https://learn.hashicorp.com/nomad/acls/fundamentals) which are applicable to namespaces and resource quotas and required by Nomad Sentinel policies.
 
@@ -17,9 +17,11 @@ tags:
 - namespaces
 - resource quotas
 - Sentinel
+- Preemption
 - ACLs
 owner: hashicorp
 developers:
+- pgryzan@hashicorp.com
 - roger@hashicorp.com
 private: true
 published: true
@@ -59,9 +61,11 @@ challenges:
   notes:
   - type: text
     contents: |-
-      In this challenge, you will verify the health of the Nomad Enterprise cluster that has been deployed for you by the track's setup scripts.
+      In this challenge, you will verify the health of the Nomad Enterprise cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
 
-      This will include checking the health of a Consul cluster that has been set up on the same VMs.
+      In later challenges, you will define Nomad [Namespaces](https://learn.hashicorp.com/nomad/governance-and-policy/namespaces), [Resource Quotas](https://learn.hashicorp.com/nomad/governance-and-policy/quotas), [Nomad ACLs](https://learn.hashicorp.com/nomad/acls/fundamentals), and [Sentinel Policies](https://learn.hashicorp.com/nomad/governance-and-policy/sentinel).
+
+      You will then run jobs and learn how Sentinel policies and resource quotas restrict them. You will also see how [Preemption](https://learn.hashicorp.com/nomad/advanced-scheduling/preemption) can be used to run jobs that have higher priorities.
   tabs:
   - title: Config Files
     type: code
@@ -616,4 +620,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 3600
-checksum: "4481810433272092583"
+checksum: "2336444780247616715"
