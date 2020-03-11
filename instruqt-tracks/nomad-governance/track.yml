@@ -35,7 +35,7 @@ challenges:
   assignment: |-
     In this challenge, you will verify the health of the Nomad Enterprise cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
 
-    The cluster is running 1 Nomad/Consul server and 3 Nomad/Consul clients.
+    The cluster is running 1 Nomad/Consul server and 3 Nomad/Consul clients. Each of these has 3.6GB of memory and 1 virtual CPU with 2,300MHz of CPU capacity. This means that the total capacity of the 3 Nomad clients is 10.8GB of memory and 6,900MHz of CPU capacity.
 
     First, verify that all 4 Consul agents are running and connected to the cluster by running this command on the "Server" tab:
     ```
@@ -166,7 +166,7 @@ challenges:
 
     The third command should show the "default", "dev", and "qa" resource quotas.
 
-    The last command should show a JSON document with information about the resource quota's limits and current usage. There is also a simpler `nomad quota status` command that gives back simpler information more like what the `nomad namespace status` command gives.
+    The last command should show a JSON document with information about the resource quota's limits and current usage. There is also a `nomad quota status` command that gives back streamlined information more like what the `nomad namespace status` command gives.
 
     In the next challenge, you will enable Nomad's ACL system and define ACL policies and tokens which are applicable to Nomad namespaces and resource quotas and required by Nomad Sentinel policies.
   notes:
@@ -627,25 +627,133 @@ challenges:
   type: challenge
   title: Run Nomad Jobs Restricted by Resource Quotas
   teaser: |
-    Learn how Nomad Resource Quotas can prevent some jobs from running.
+    Learn how Nomad Resource Quotas can prevent some jobs from running all of their desired allocations.
   assignment: |-
-    In this challenge, you will run some more Nomad jobs and learn how Resource Quotas can prevent some of them from running.
+    In this challenge, you will run some more Nomad jobs and learn how Resource Quotas can prevent some of them from running all of their desired allocations.
 
     Navigate to the /root/nomad/jobs directory by running this command on the "Server" tab:
     ```
     cd /root/nomad/jobs
     ```
 
+    Next, export Alice's Nomad ACL token with this command:
+    ```
+    export NOMAD_TOKEN=$(cat /root/nomad/acls/alice-token.txt | grep Secret | cut -d' ' -f7)
+    ```
 
-    In this challenge, you saw how resource quotas can prevent some jobs from running.
+    Have Alice inspect the current usage of the "dev" resource quota with this command:
+    ```
+    nomad quota status dev
+    ```
+    This will return the following:<br>
+    `
+    Name        = dev
+    Description = dev quota
+    Limits      = 1
 
-    In the next challenge, you will learn how Nomad's Preemption feature allows higher priority batch and service jobs to displace lower priority jobs.
+    Quota Limits
+    Region  CPU Usage  Memory Usage  Network Usage
+    global  0 / 4600   0 / 4100      - / inf
+    `<br>
+    which indicates that none of the "dev" resource quota is being used. ("inf" under "Network Usage" stands for infinity and means that there is no limit on network usage in the "dev" resource quota.)
+
+    Inspect the "website-dev.nomad" job specification file in the jobs directory on the "Config Files" tab and note that it wants to run a job called "website" in the "dev" namespace. The job consists of "nginx" and "mongodb" task groups that each have one task that would consume 500MHz of CPU and 512MB of memory. However, the count for each task group is 2, so the job would consume a total of 2,000MHz of CPU and 2,048MB of RAM if Nomad is able to schedule all four tasks. Since there are currently no jobs running in the "dev" namespace and these amounts are lower than the limits of the "dev" resource quota, Nomad should be able to run the entire job.
+
+    See if that is true by running the job as Alice with this command:
+    ```
+    nomad job run website-dev.nomad
+    ```
+
+    After waiting 30 seconds, check the status of the job with this command:
+    ```
+    nomad job status -namespace=dev website
+    ```
+    Note that you need to specify the namespace since job names are not unique across multiple namespaces.
+
+    You should see 4 allocations running at the bottom. You can also check the status of the "website" job in the "dev" namespace in the Nomad UI after providing a suitable ACL token after selecting the "ACL Tokens" menu; we recommend using Charlie's token from the charlie-token.txt file in the /root/nomad/acls directory. You'll then need to select the "Jobs" menu and click the Instruqt refresh icon to make the Nomad UI show the namespace selector which will let you select the "dev" namespace. If you click on the "website" job in the "dev" namespace, you will see 4 Desired, Placed, and Healthy allocations.
+
+    Run `nomad quota status dev` on the "Server" tab again to see how much of the "dev" resource quota is being used. You should now see this:<br>
+    `
+    Name        = dev
+    Description = dev quota
+    Limits      = 1
+
+    Quota Limits
+    Region  CPU Usage    Memory Usage  Network Usage
+    global  2000 / 4600  2048 / 4100   40 / inf
+    `<br>
+    which exactly matches what we had expected.
+
+    Next, inspect the "website-qa.nomad" job specfication on the "Config Files" tab. It is very similar to the "website-dev.nomad" job specification and even uses the same job name, "website", but it targets the "qa" namespace and wants to use 1,024MB of memory for each task. This means it will want to use a total of 4,096MB of memory.
+
+    Export Bob's Nomad ACL token with this command:
+    ```
+    export NOMAD_TOKEN=$(cat /root/nomad/acls/bob-token.txt | grep Secret | cut -d' ' -f7)
+    ```
+
+    Then, have Bob check the current usage in the "qa" namespace with this command:
+    ```
+    nomad quota status qa
+    ```
+    This will return the following:<br>
+    `
+    Name        = qa
+    Description = qa quota
+    Limits      = 1
+
+    Quota Limits
+    Region  CPU Usage    Memory Usage  Network Usage
+    global  1000 / 4600  1024 / 4100   20 / inf
+    `<br>
+
+    Since 1,024MB of memory is already being used and the "qa" resource quota limits the "qa" namespace to a total of 4,100MB and the "website-qa.nomad" needs 4,096MB, Nomad clearly cannot schedul all 4 allocations of the job.
+
+    Even so, have Bob try to run it with this command:
+    ```
+    nomad job run website-qa.nomad
+    ```
+    This will return something like this:<br>
+    `
+    ==> Monitoring evaluation "17faede9"
+      Evaluation triggered by job "website"
+      Evaluation within deployment: "ecfe5ffc"
+      Allocation "718aae72" created: node "89683da5", group "nginx"
+      Allocation "5452e158" created: node "a9e882e3", group "nginx"
+      Allocation "5f7186bd" created: node "a9e882e3", group "mongodb"
+      Evaluation status changed: "pending" -> "complete"
+      ==> Evaluation "17faede9" finished with status "complete" but failed to place all allocations:
+      Task Group "mongodb" (failed to place 1 allocation):
+      * Quota limit hit "memory exhausted (5120 needed > 4100 limit)"
+      Evaluation "f94e7499" waiting for additional capacity to place remainder
+    `<br>
+
+    Note that the Nomad failed to place 1 allocation because the running job and the four allocations of the new job would need a total of 5,120MB which is greater than the 4,096MB limit of the "qa" resource quota.
+
+    You can also select the "qa" namespace in the Nomad UI, select the "website" in it, and confirm that only 3 of the 4 allocations of the "website" job are running while 1 of them is queued. The fact that the allocation is currently queued rather than failed is important; this means that it could still be deployed if extra memory became available within the "qa" namespace or if the memory limit of the "qa" resource quota were increased.
+
+    To see this actually happen, stop the "webserver-test" job by running this command on the "Server" tab:
+    ```
+    nomad job stop -namespace=qa webserver-test
+    ```
+    and quickly switch back to the Nomad UI. Over the next 15-30 seconds, you should see the "Placed" number and then the "Healthy" number both change to 4, showing that Nomad completed the deployment of the "website" job in the "qa" namespace after extra memory was made available by stopping the "webserver-test" job in the same namespace.
+
+    Recall from the first challenge that the total capacity of the 3 Nomad clients in your cluster is 10.8GB of memory and 6,900MHz of CPU capacity. So, your cluster actually has enough memory on the 3 Nomad clients to run both the "website" and the "webserver-test" jobs in the "qa" namespace along with the "website" job in the "dev" namespace and the "catalogue" job in the "default" namespace.
+
+    But the total resources allocated to the 3 resource quotas are 12GB of memory and 13,800MHz of CPU capacity. So, if Nomad had allowed the QA team to run both the "website" and "webserver-test" jobs in the "qa" namespace, the Dev team might have been adversely affected if they had later tried to run some other jobs.
+
+    So, the Nomad Enterprise namespaces and resource quotas did exactly what they were supposed to do: prevent the QA team from using more resources on the Nomad cluster than it had been allocated.
+
+    In this challenge, you saw how resource quotas can prevent jobs that violate them from running all of their desired allocations. You also saw that stopping a job in a namespace can allow a queued allocation to be deployed.
+
+    In the final challenge of this track, you will learn how Nomad's Preemption feature allows higher priority batch and service jobs to displace lower priority jobs.
   notes:
   - type: text
     contents: |-
-      In this challenge, you will run some more Nomad jobs and learn how Resource Quotas can prevent some of them from running.
+      In this challenge, you will run some more Nomad jobs and learn how Resource Quotas can prevent some of their allocations from running.
 
       These are jobs that Nomad ACLs and Sentinel policies would allow to run if the namespaces they target were not already overloaded.
+
+      You will also see that stopping a job in a namespace can allow a queued allocation to be deployed.
   tabs:
   - title: Config Files
     type: code
@@ -660,4 +768,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 3600
-checksum: "9949994488975478019"
+checksum: "7209859261242739259"

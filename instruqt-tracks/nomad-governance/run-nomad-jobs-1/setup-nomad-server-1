@@ -7,6 +7,8 @@ mkdir /root/nomad/jobs
 cat <<-EOF > /root/nomad/jobs/sleep.nomad
 job "sleep" {
   datacenters = ["dc1"]
+  type        = "service"
+  priority    = 40
 
   task "sleep" {
     driver = "exec"
@@ -23,6 +25,8 @@ EOF
 cat <<-EOF > /root/nomad/jobs/catalogue.nomad
 job "catalogue" {
   datacenters = ["dc1"]
+  type        = "service"
+  priority    = 40
 
   constraint {
     attribute = "\${attr.kernel.name}"
@@ -126,6 +130,8 @@ EOF
 cat <<-EOF > /root/nomad/jobs/webserver-test.nomad
 job "webserver-test" {
   datacenters = ["dc1"]
+  type        = "service"
+  priority    = 40
   namespace = "qa"
 
   constraint {
@@ -148,7 +154,7 @@ job "webserver-test" {
       mode = "delay"
     }
 
-    # - db - #
+    # - web - #
     task "webserver" {
       driver = "docker"
 
@@ -183,6 +189,8 @@ EOF
 cat <<-EOF > /root/nomad/jobs/website-dev.nomad
 job "website" {
   datacenters = ["dc1"]
+  type        = "service"
+  priority    = 40
   namespace = "dev"
 
   constraint {
@@ -205,7 +213,7 @@ job "website" {
       mode = "delay"
     }
 
-    # - db - #
+    # - web - #
     task "nginx" {
       driver = "docker"
 
@@ -278,6 +286,8 @@ EOF
 cat <<-EOF > /root/nomad/jobs/website-qa.nomad
 job "website" {
   datacenters = ["dc1"]
+  type        = "service"
+  priority    = 40
   namespace = "qa"
 
   constraint {

@@ -4,4 +4,33 @@ set -e
 
 grep -q "cd /root/nomad/jobs" /root/.bash_history || fail-message "You have not navigated to the /root/nomad/jobs directory on the Server yet."
 
+grep -q "export NOMAD_TOKEN=\$(cat /root/nomad/acls/alice-token.txt | grep Secret | cut -d' ' -f7)" /root/.bash_history || fail-message "You have not exported Alice's ACL token on the Server yet."
+
+grep -q "nomad quota status dev" /root/.bash_history || fail-message "You have not checked the status of the dev resoure quota on the Server yet."
+
+grep -q "nomad job run website-dev.nomad" /root/.bash_history || fail-message "You have not run the website-dev.nomad job on the Server yet."
+
+grep -q "nomad job status -namespace=dev website" /root/.bash_history || fail-message "You have not checked the status of the website job in the dev namespace on the Server yet."
+
+dev_quota_checks=$(grep "nomad quota status dev" /root/.bash_history | wc -l)
+if [ $dev_quota_checks -lt 2 ]; then
+  echo "You have not checked the status of the dev resource quota a second time after running the website job in the dev namespace."
+  exit 1
+fi
+
+grep -q "export NOMAD_TOKEN=\$(cat /root/nomad/acls/bob-token.txt | grep Secret | cut -d' ' -f7)" /root/.bash_history || fail-message "You have not exported Bob's ACL token on the Server yet."
+
+grep -q "nomad quota status qa" /root/.bash_history || fail-message "You have not checked the status of the qa resource quota on the Server yet."
+
+grep -q "nomad job run website-qa.nomad" /root/.bash_history || fail-message "You have not run the website-qa.nomad job on the Server yet."
+
+grep -q "nomad job stop -namespace=qa webserver-test" /root/.bash_history || fail-message "You have not stopped the webserver-test job on the Server yet."
+
+# Verify that all allocations for website in qa are healthy
+qa_website_healthy=$(nomad job status -namespace=qa website | grep Deployed -A3 | grep "2        2       2" | wc -l)
+if [ $qa_website_healthy -ne 2 ]; then
+  echo "The website job in the qa namespace does not have 4 healthy allocations yet."
+  exit 1
+fi
+
 exit 0
