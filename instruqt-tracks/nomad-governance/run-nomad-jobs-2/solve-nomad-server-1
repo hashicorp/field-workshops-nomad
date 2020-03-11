@@ -1,0 +1,46 @@
+#!/bin/bash -l
+
+#Enable bash history
+HISTFILE=/root/.bash_history
+set -o history
+
+# Change directory
+cd /root/nomad/jobs
+
+# Export Alice's ACL token
+export NOMAD_TOKEN=$(cat /root/nomad/acls/alice-token.txt | grep Secret | cut -d' ' -f7)
+
+# Check the dev resource quota
+nomad quota status dev
+
+# Run the website-dev.nomad job
+nomad job run website-dev.nomad
+
+# Sleep
+sleep 30
+
+# Check the status of the website job in the dev namespace
+nomad job status -namespace=dev website
+
+# Check the dev resource quota again
+nomad quota status dev
+
+# Export Bob's ACL token
+export NOMAD_TOKEN=$(cat /root/nomad/acls/bob-token.txt | grep Secret | cut -d' ' -f7)
+
+# Check the qa resource quota
+nomad quota status qa
+
+# Run the website-qa.nomad job
+nomad job run website-qa.nomad
+
+# Sleep
+sleep 30
+
+# Stop the webserver-test job
+nomad job stop -namespace=qa webserver-test
+
+# Sleep
+sleep 30
+
+exit 0
