@@ -9,6 +9,7 @@ job "sleep" {
   datacenters = ["dc1"]
   type        = "service"
   priority    = 40
+  namespace = "default"
 
   task "sleep" {
     driver = "exec"
@@ -27,6 +28,7 @@ job "catalogue" {
   datacenters = ["dc1"]
   type        = "service"
   priority    = 40
+  namespace = "default"
 
   constraint {
     attribute = "\${attr.kernel.name}"
@@ -73,7 +75,7 @@ job "catalogue" {
 
       resources {
         cpu = 100 # 100 Mhz
-        memory = 128 # 32MB
+        memory = 128 # 128MB
         network {
           mbits = 10
           port "http" {
@@ -287,7 +289,7 @@ cat <<-EOF > /root/nomad/jobs/website-qa.nomad
 job "website" {
   datacenters = ["dc1"]
   type        = "service"
-  priority    = 40
+  priority    = 50
   namespace = "qa"
 
   constraint {

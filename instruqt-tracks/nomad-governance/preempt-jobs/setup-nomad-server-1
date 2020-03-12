@@ -1,0 +1,64 @@
+#!/bin/bash -l
+
+rm /root/.bash_history
+touch /root/.bash_history
+
+cat <<-EOF > /root/nomad/scheduler.json
+{
+  "PreemptionConfig": {
+    "SystemSchedulerEnabled": true,
+    "BatchSchedulerEnabled": true,
+    "ServiceSchedulerEnabled": true
+  }
+}
+EOF
+
+cat <<-EOF > /root/nomad/jobs/mongo.nomad
+job "mongo" {
+  datacenters = ["dc1"]
+  type        = "service"
+  priority    = 80
+  namespace = "default"
+
+  group "mongo" {
+    count = 3
+
+    restart {
+      attempts = 10
+      interval = "5m"
+      delay = "25s"
+      mode = "delay"
+    }
+
+    # - db - #
+    task "mongodb" {
+      driver = "docker"
+
+      config {
+        image = "mongo:3.4.3"
+        port_map = {
+          http = 27017
+        }
+      }
+
+      service {
+        name = "mongodb-default"
+        tags = ["db", "mongodb", "default"]
+        port = "http"
+      }
+
+      resources {
+        cpu = 1000 # Mhz
+        memory = 1024 # MB
+        network {
+          mbits = 10
+          port "http" {}
+        }
+      }
+    } # - end task - #
+  } # - end group - #
+
+}
+EOF
+
+exit 0
