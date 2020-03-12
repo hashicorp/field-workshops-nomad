@@ -22,7 +22,7 @@ tags:
 owner: hashicorp
 developers:
 - roger@hashicorp.com
-private: true
+private: false
 published: true
 challenges:
 - slug: verify-nomad-cluster-health
@@ -951,5 +951,5 @@ challenges:
     hostname: nomad-server-1
     port: 4646
   difficulty: basic
-  timelimit: 3600
-checksum: "16852601112036918199"
+  timelimit: 600
+checksum: "16181069987979820397"
