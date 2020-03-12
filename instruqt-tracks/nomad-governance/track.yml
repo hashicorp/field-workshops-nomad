@@ -3,9 +3,9 @@ id: 05ovf6ut5ojh
 type: track
 title: Nomad Enterprise Governance
 teaser: |
-  Learn how to use Nomad Enterprise's governance capabilities including namespaces, resource quotas, Sentinel policies, and preemption of batch and service jobs.
+  Learn how to use Nomad Enterprise's governance capabilities including namespaces, resource quotas, and Sentinel policies.
 description: |-
-  This track will show you how to use Nomad Enterprise's governance capabilities including [Namespaces](https://learn.hashicorp.com/nomad/governance-and-policy/namespaces), [Resource Quotas](https://learn.hashicorp.com/nomad/governance-and-policy/quotas), [Sentinel Policies](https://learn.hashicorp.com/nomad/governance-and-policy/sentinel), and [Preemption](https://learn.hashicorp.com/nomad/advanced-scheduling/preemption).
+  This track will show you how to use Nomad Enterprise's governance capabilities including [Namespaces](https://learn.hashicorp.com/nomad/governance-and-policy/namespaces), [Resource Quotas](https://learn.hashicorp.com/nomad/governance-and-policy/quotas), and [Sentinel Policies](https://learn.hashicorp.com/nomad/governance-and-policy/sentinel).
 
   You will also configure and use [Nomad ACLs](https://learn.hashicorp.com/nomad/acls/fundamentals) which are applicable to namespaces and resource quotas and required by Nomad Sentinel policies.
 
@@ -17,7 +17,6 @@ tags:
 - namespaces
 - resource quotas
 - Sentinel
-- Preemption
 - ACLs
 owner: hashicorp
 developers:
@@ -64,7 +63,7 @@ challenges:
 
       In later challenges, you will define Nomad [Namespaces](https://learn.hashicorp.com/nomad/governance-and-policy/namespaces), [Resource Quotas](https://learn.hashicorp.com/nomad/governance-and-policy/quotas), [Nomad ACLs](https://learn.hashicorp.com/nomad/acls/fundamentals), and [Sentinel Policies](https://learn.hashicorp.com/nomad/governance-and-policy/sentinel).
 
-      You will then run jobs and learn how Sentinel policies and resource quotas restrict them. You will also see how [Preemption](https://learn.hashicorp.com/nomad/advanced-scheduling/preemption) can be used to displace lower priority jobs with higher priority jobs when a Nomad cluster is low on resources.
+      You will then run jobs and learn how Sentinel policies and resource quotas restrict them.
   tabs:
   - title: Config Files
     type: code
@@ -97,7 +96,7 @@ challenges:
   assignment: |-
     In this challenge, you will configure Default, Dev, and QA Nomad namespaces and resource quotas.
 
-    Start by inspecting the "quota-default.hcl", "quota-dev.hcl", and "quota-qa.hcl" resource quota specifications in the quotas directory on the "Config Files" tab. These are written in the HashiCorp Configuration Language (HCL). The first sets global limits of 6,000 MHz of CPU capacity and 8,192 MB of memory while the others set global limits of 4,600 MHz of CPU capacity and 4,100 MB of memory.
+    Start by inspecting the "quota-default.hcl", "quota-dev.hcl", and "quota-qa.hcl" resource quota specifications in the quotas directory on the "Config Files" tab. These are written in the HashiCorp Configuration Language (HCL). The first sets global limits of 2,300 MHz of CPU capacity and 3,100 MB of memory while the others set global limits of 2,300 MHz of CPU capacity and 4,100 MB of memory.
 
     The resource quota specification files are all in the /root/nomad/quotas directory, so please navigate to it with this command:
     ```
@@ -740,15 +739,13 @@ challenges:
     ```
     and quickly switch back to the Nomad UI. Over the next 15-30 seconds, you should see the "Placed" number and then the "Healthy" number both change to 4, showing that Nomad completed the deployment of the "website" job in the "qa" namespace after extra memory was made available by stopping the "webserver-test" job in the same namespace.
 
-    Recall from the first challenge that the total capacity of the 3 Nomad clients in your cluster is 11.25GB of memory and 6,900MHz of CPU capacity. So, your cluster actually has enough memory on the 3 Nomad clients to run both the "website" and the "webserver-test" jobs in the "qa" namespace along with the "website" job in the "dev" namespace and the "catalogue" job in the "default" namespace.
+    Recall from the first challenge that the total capacity of the 3 Nomad clients in your cluster is 11.25GB of memory and 6,900MHz of CPU capacity. So, your cluster ostensibly has enough memory on the 3 Nomad clients to run both the "website" and the "webserver-test" jobs in the "qa" namespace along with the "website" job in the "dev" namespace and the "catalogue" job in the "default" namespace.
 
-    But the total resources allocated to the 3 resource quotas are 12GB of memory and 13,800MHz of CPU capacity. So, if Nomad had allowed the QA team to run both the "website" and "webserver-test" jobs in the "qa" namespace, the Dev team might have been adversely affected if they had later tried to run some other jobs.
-
-    So, the Nomad Enterprise namespaces and resource quotas did exactly what they were supposed to do: prevent the QA team from using more resources on the Nomad cluster than it had been allocated.
+    However, it is important to keep in mind that some memory and CPU capacity is needed by the OS and the Nomad client itself on each of the 3 Nomad clients. So, if Nomad had allowed the QA team to run both the "website" and "webserver-test" jobs in the "qa" namespace, the Dev team might have been adversely affected if they had later tried to run some other jobs.
 
     In this challenge, you saw how resource quotas can prevent jobs that violate them from running all of their desired allocations. You also saw that stopping a job in a namespace can allow a queued allocation to be deployed.
 
-    In the final challenge of this track, you will learn how Nomad's Preemption feature allows higher priority batch and service jobs to displace lower priority jobs.
+    Congratulatons on completing the Nomad Enterprise Governance track!
   notes:
   - type: text
     contents: |-
@@ -771,185 +768,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 900
-- slug: preempt-jobs
-  id: g5nsedwgg1fu
-  type: challenge
-  title: Use Preemption to Run High Priority Jobs
-  teaser: |
-    Learn how Nomad Preemption allows high priority jobs to displace lower priority jobs.
-  assignment: |-
-    ## Introduction
-    In this challenge, you will learn how [Nomad Preemption](https://learn.hashicorp.com/nomad/advanced-scheduling/preemption) allows high priority Nomad jobs to displace allocations from lower priority jobs when a Nomad cluster does not have enough physical resources.
-
-    Note that preemption and job priority are orthogonal to namespaces and resource quotas. This has two consequences:
-
-      1. Preemption cannot occur if scheduling the job would violate the resource quota of the targeted namespace.
-      2. Jobs in other namespaces can be preempted.
-
-    In this challenge, you'll use the bootstrap token that was exported to /root/nomad/acls/bootstrap.txt for all Nomad CLI commands. Since you added this to your .bash_profile after bootstrapping the Nomad ACL system, it should already be set in this challenge.
-
-    ## Check the Current Preemption Status
-    By default, preemption is only enabled for system jobs on Nomad clusters. With the bootstrap token, you can check that this is true by using the "operator/scheduler/configuration" Nomad API endpoint. (There is currently no Nomad CLI command to do this.)
-
-    Confirm that preemption is not yet enabled for your Nomad cluster by running this command on the "Server" tab:
-    ```
-    curl -s --header "X-Nomad-Token: $NOMAD_TOKEN" http://localhost:4646/v1/operator/scheduler/configuration?pretty
-    ```
-
-    This will return something like this:<br>
-    `
-    {
-      "Index": 5,
-      "KnownLeader": true,
-      "LastContact": 0,
-      "SchedulerConfig": {
-        "CreateIndex": 5,
-        "ModifyIndex": 5,
-        "PreemptionConfig": {
-          "BatchSchedulerEnabled": false,
-          "ServiceSchedulerEnabled": false,
-          "SystemSchedulerEnabled": true
-        }
-      }
-    }
-    `<br>
-
-    Note that `BatchSchedulerEnabled` and `ServiceSchedulerEnabled` are both `false` while `SystemSchedulerEnabled` is `true` as expected.
-
-    ## Try to Run a Job Without Preemption
-    Inspect the "mongo.nomad" job in the "jobs" directory on the "Config Files" tab. This is actually extracted from the "website-qa.nomad" job; the differences are that it only tries to run 3 allocations of the "mongodb" task group that each use 1,024MB of memory and 1,000MHz of CPU in the "default" namespace. Additionally, it has a priority of 80.
-
-    Recall that your Nomad cluster has a total capacity of 11.25GB of memory and 6,900 MHz CPU capacity. Additionally, the jobs that are currently running have reserved 6,258MB of memory and 4,200MHz of CPU capacity. Since scheduling all 3 allocations of the "mongo.nomad" job would add 3,000MHz of CPU, that would exhaust the available CPU capacity of the cluster.
-
-    If you look at the "website-dev.nomad" and "website-qa.nomad" job specification files, you'll see that they have priorities of 40 and 50 respectively. So, we would expect an allocation from the "website" job in the "dev" namespace to be preempted before any allocations from the "website" job in the "qa" namespace.
-
-    Navigate to the /root/nomad/jobs directory by running this command on the "Server" tab:
-    ```
-    cd /root/nomad/jobs
-    ```
-
-    Try running the job with this command on the "Server" tab:
-    ```
-    nomad job run mongo.nomad
-    ```
-
-    This should return something like this:
-    ```
-    Monitoring evaluation "43bc0230"
-    Evaluation triggered by job "mongo"
-    Evaluation within deployment: "e3a7a3fd"
-    Allocation "56cdf4c5" created: node "eeed6764", group "mongo"
-    Allocation "b18afbff" created: node "793c4515", group "mongo"
-    Evaluation status changed: "pending" -> "complete"
-    Evaluation "43bc0230" finished with status "complete" but failed to place all allocations:
-    Task Group "mongo" (failed to place 1 allocation):
-      * Resources exhausted on 3 nodes
-      * Dimension "cpu" exhausted on 3 nodes
-    Evaluation "2ecb8488" waiting for additional capacity to place remainder
-    ```
-
-    In this case, Nomad could only schedule 2 of the job's 3 allocations because the 3 Nomad client nodes do not have enough CPU capacity. (You might see Nomad fail to place 2 allocations depending on how the allocations of running jobs are distributed across the 3 Nomad clients.)
-
-    In fact, if you provide the bootstrap token to the Nomad UI, click the Instruqt refresh button above it, look at the "default" namespace in it, and then select the "mongo" job, you will see that only 2 of its allocations are running; the other allocation is queued.
-
-    Purge the "mongo" job by running this command on the "Server" tab:
-    ```
-    nomad stop -purge mongo
-    ```
-    The job will be purged and disappear from the "default" namespace in the Nomad UI.
-
-    ## Enable Preemption
-    A Nomad operator can enable preemption for batch and service jobs by doing a `POST` against the "operator/scheduler/configuration" the same Nomad API endpoint used to retrieve the preemption status.
-
-    To make doing the POST easier, we have added a "scheduler.json" file to the /root/nomad directory which you can see on the "Config Files" tab. It looks like this:<br>
-    `
-    {
-      "PreemptionConfig": {
-        "SystemSchedulerEnabled": true,
-        "BatchSchedulerEnabled": true,
-        "ServiceSchedulerEnabled": true
-      }
-    }
-    `<br>
-
-    Please enable preemption for all job types with this command on the "Server" tab:
-    ```
-    curl -X POST --header "X-Nomad-Token: $NOMAD_TOKEN" http://localhost:4646/v1/operator/scheduler/configuration?pretty -d @../scheduler.json
-    ```
-
-    This will return something like this:<br>
-    `
-    {
-      "Index": 279,
-      "Updated": false
-    }
-    `<br>
-    Don't worry about the "Updated" value being "false". The command will have succeeded despite that.
-
-    If you want to be sure, re-run the GET operation against the same API endpoint:
-    ```
-    curl -s --header "X-Nomad-Token: $NOMAD_TOKEN" http://localhost:4646/v1/operator/scheduler/configuration?pretty
-    ```
-    All 3 scheduler preemption options should now be `true`.
-
-    ## Try to Run a Job With Preemption
-    Now that you've enabled preemption for batch and service jobs, you should be able to successfully run the "mongo.nomad" job. But let's try planning it first with this command:
-    ```
-    nomad job plan mongo.nomad
-    ```
-
-    This will return something like this:
-    ```
-    + Job: "mongo"
-    + Task Group: "mongo" (2 create)
-      + Task: "mongodb" (forces create)
-
-    Scheduler dry-run:
-      - All tasks successfully allocated.
-
-    Preemptions:
-
-    Alloc ID                              Job ID   Task Group
-    d1b276da-ec2a-a45c-a03f-e50685760b27  website  nginx
-    2b4e62d1-c209-dacb-eccf-f9236ca6c038  website  mongodb
-    ```
-
-    This indicates that running the job will need to preempt 2 running allocations. (You might see different task groups being preempted.) While this does not indicate which namespace the allocations belong to, you can compare the allocation IDs to those of the "website" job in the "dev" namespace and confirm that they are in that namespace. Alternatively, you can run `nomad job status -namespace=dev website` to see the allocation IDs of the "website" job in the "dev" namespace.
-
-    Finally, run the "mongo.nomad" job again with this command:
-    ```
-    nomad job run mongo.nomad
-    ```
-
-    If you inspect the "mongo" job in the Nomad UI (after clicking the Instruqt refresh icon), you will see that all 3 of its allocations are running.
-
-    Additionally, if you inspect the "Allocations" tab of the "website" job in the "dev" namespace, you will see that 2 preemptions occurred within the past minute. Furthermore, the "Overview" tab of this job will show placement failures and indicate that 2 allocations are currently queued.
-
-    Depending on the exact distribution of allocations across your 3 Nomad clients, it is possible that Nomad will only have to preempt 1 allocation. It is also possible that it might be able to reschedule them to other Nomad clients.
-
-    To summarize, in this challenge, you have seen that after enabling preemption for service and batch jobs, Nomad was able to preempt an allocation from a running service job that it could not previously preempt.
-
-    Congratulatons on completing the Nomad Enterprise Governance track!
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you will you will learn how [Nomad Preemption](https://learn.hashicorp.com/nomad/advanced-scheduling/preemption) allows high priority Nomad jobs to displace allocations from lower priority jobs.
-
-      While the open source version of Nomad can use preemption for [system](https://www.nomadproject.io/docs/schedulers.html#system) jobs, Nomad Enterprise is required to use preemption with [service](https://nomadproject.io/docs/schedulers/#service) and [batch](https://nomadproject.io/docs/schedulers/#batch) jobs. But, this is not enabled by default.
-
-      So far, all of the jobs you ran in this track were service jobs (which is the default type).
-  tabs:
-  - title: Config Files
-    type: code
-    hostname: nomad-server-1
-    path: /root/nomad/
-  - title: Server
-    type: terminal
-    hostname: nomad-server-1
-  - title: Nomad UI
-    type: service
-    hostname: nomad-server-1
-    port: 4646
-  difficulty: basic
-  timelimit: 600
-checksum: "3808151574248033858"
+checksum: "18329136048642455152"
