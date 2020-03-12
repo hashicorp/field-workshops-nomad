@@ -386,7 +386,7 @@ challenges:
     hostname: nomad-server-1
     port: 4646
   difficulty: basic
-  timelimit: 900
+  timelimit: 600
 - slug: sentinel-policies
   id: s3crog1t2mdz
   type: challenge
@@ -952,4 +952,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 600
-checksum: "16181069987979820397"
+checksum: "3808151574248033858"
