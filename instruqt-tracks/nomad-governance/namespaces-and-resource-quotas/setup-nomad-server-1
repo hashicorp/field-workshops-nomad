@@ -10,8 +10,8 @@ description = "default quota"
 limit {
     region = "global"
     region_limit {
-        cpu = 6000
-        memory = 8192
+        cpu = 2300
+        memory = 3100
     }
 }
 EOF
@@ -24,7 +24,7 @@ description = "dev quota"
 limit {
     region = "global"
     region_limit {
-        cpu = 4600
+        cpu = 2300
         memory = 4100
     }
 }
@@ -38,7 +38,7 @@ description = "qa quota"
 limit {
     region = "global"
     region_limit {
-        cpu = 4600
+        cpu = 2300
         memory = 4100
     }
 }
