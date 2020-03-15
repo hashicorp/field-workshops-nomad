@@ -71,8 +71,8 @@ job "fabio" {
       }
 
       resources {
-        cpu    = 100
-        memory = 64
+        cpu    = 200
+        memory = 128
         network {
           mbits = 20
           port "lb" {
@@ -89,7 +89,7 @@ job "fabio" {
 EOF
 
 # Write the chatapp.nomad job
-cat <<-EOF > /root/nomad/jobs/chatapp.nomad
+cat <<-EOF > /root/nomad/jobs/chat-app.nomad
 job "chat-app" {
   datacenters = ["dc1"]
   type = "service"
@@ -97,18 +97,22 @@ job "chat-app" {
   group "chat-app" {
     count = 3
 
+    spread {
+      attribute = "\${node.unique.name}"
+    }
+
     update {
-      max_parallel     = 1
-      health_check     = "task_states"
+      max_parallel = 1
+      health_check = "checks"
       min_healthy_time = "15s"
       healthy_deadline = "2m"
+      # canary = 3
     }
 
     network {
       mode = "bridge"
       port "http" {
-        static = 9002
-        to     = 5000
+        to = 5000
       }
     }
 
@@ -125,7 +129,7 @@ job "chat-app" {
       }
 
       resources {
-        cpu = 500 # MHz
+        cpu = 300 # MHz
         memory = 512 # MB
       }
 
@@ -133,8 +137,15 @@ job "chat-app" {
 
     service {
       name = "chat-app"
-      tags = ["chat-app"]
+      tags = ["urlprefix-/","chat-app"]
       port = "http"
+      check {
+        name     = "chat-app alive"
+        type     = "http"
+        path     = "/chats"
+        interval = "10s"
+        timeout  = "2s"
+      }
 
       connect {
         sidecar_service {

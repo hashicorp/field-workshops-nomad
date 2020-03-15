@@ -9,6 +9,8 @@ description: |-
 
   This track will guide you through implementing these update strategies based on the [Nomad Job Update Strategies](https://learn.hashicorp.com/nomad/update-strategies) guide.
 
+  You will run "mongodb", "fabio", and  "chat-app" jobs and update the last using rolling, blue/green, and canary update strategies. Fabio will be used as a reverse proxy server that will forward requests to instances of the "chat" application which will store its chat messages in a single MongoDB database.
+
   Before running this track, we suggest you run the [Nomad Basics](https://instruqt.com/hashicorp/tracks/nomad-basics), [Nomad Simple Cluster](https://instruqt.com/hashicorp/tracks/nomad-simple-cluster), and [Nomad Multi-Server Cluster](https://instruqt.com/hashicorp/tracks/nomad-multi-server-cluster) tracks.
 icon: https://storage.googleapis.com/instruqt-hashicorp-tracks/logo/nomad.png
 tags:
@@ -60,12 +62,8 @@ challenges:
     contents: |-
       In this challenge, you will verify the health of the Nomad Enterprise cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
 
-      In later challenges, you will run chatapp and mongodb jobs and update the first using rolling, blue/green, and canary update strategies.
+      In later challenges, you will run "mongodb", "fabio", and  "chat-app" jobs and update the last using rolling, blue/green, and canary update strategies. Fabio will be used as a reverse proxy server that will forward requests to instances of the "chat" application which will store its messages in a single MongoDB database.
   tabs:
-  - title: Jobs
-    type: code
-    hostname: nomad-server-1
-    path: /root/nomad/jobs/
   - title: Server
     type: terminal
     hostname: nomad-server-1
@@ -82,11 +80,11 @@ challenges:
 - slug: deploy-the-jobs
   id: tglnvylrrmeo
   type: challenge
-  title: Deploy the Chat and MongoDB Jobs
+  title: Deploy the MongoDB, Fabio, and Chat-App Jobs
   teaser: |
-    Deploy the initial versions of the Chat and MongoDB jobs.
+    Deploy the MongoDB, Fabio, and Chat-App jobs.
   assignment: |-
-    In this challenge, you will deploy the inital versions of the Chat and MongoDB jobs.
+    In this challenge, you will deploy the "mongodb", "fabio", and "chat-app" jobs.
 
     Inspect the "mongodb.nomad" job specification file on the "Jobs" tab. This will deploy a "db" task group that runs the MongoDB database on port 27017 from the "mongo" Docker image.
 
@@ -113,23 +111,63 @@ challenges:
 
     You can check the job in the Nomad UI after waiting 15-30 seconds, clicking the Instruqt refresh button above the Nomad UI, and then selecting the "mongodb" job. You might need to make your browser window a bit wider to see the UI properly and so that the Instruqt buttons do not overlap the Nomad UI tab. You could also click the rectangular button next to the refresh button to hide this assignment. After no more than 1 minute, you should see that the job has 1 healthy allocation.
 
-    Alternatively, you can run the `nomad job status mongodb` command on the "Server" tab to check the status of the job and validate that the "db" task group is healthy.
+    Alternatively, you can run the command:
+    ```
+    nomad job status mongodb
+    ```
+    on the "Server" tab to check the status of the "mongodb" job and validate that the "db" task group is healthy.
 
-    Next, inspect the "chatapp.nomad" job specification file on the "Jobs" tab. This job deploys 3 instances of a "chat-app" task group that runs a custom Docker image, "lhaig/anon-app:0.02" created by two HashiCorp solutions engineers, Guy Barrows and Lance Haig. Note that the job specifies the "0.02" tag. Later, when we update the app in various ways, we will specify a different tag to use a different version of it.
+    Next, inspect the "fabio.nomad" job specification file on the "Jobs" tab. This job deploys the reverse proxy server [Fabio](https://fabiolb.net) as a system job on all the Nomad clients from a Docker image. Since it is a system job, no "count" is specified for the "fabio" task group. Fabio will automatically detect certain services registered in Consul and route requests to Fabio's port, 9999, to dynamic ports selected by Nomad for those services.
 
-    The "chat-app" task group runs on the static port 9002 on the Nomad clients; that port is mapped to port 5000 inside the Docker containers.
+    Run the "fabio.nomad" job on the "Server" tab with this command:
+    ```
+    nomad job run fabio.nomad
+    ```
+    This should return something like this:<br>
+    `
+    ==> Monitoring evaluation "d08fff01"
+    Evaluation triggered by job "fabio"
+    Allocation "d17c329d" created: node "211ec400", group "fabio"
+    Allocation "ac529c74" created: node "7de22213", group "fabio"
+    Allocation "c857996d" created: node "9c9b53e9", group "fabio"
+    Evaluation status changed: "pending" -> "complete"
+    ==> Evaluation "d08fff01" finished with status "complete"
+    `<br>
+    Since this is a system job, the node IDs for the 3 allocations are all distinct; one instance of the "fabio" task group is deployed to each Nomad client.
+
+    Next, inspect the "chat-app.nomad" job specification file on the "Jobs" tab. This job deploys 3 instances of a "chat-app" task group that runs a custom Docker image, "lhaig/anon-app:0.02" created by two HashiCorp solutions engineers, Guy Barrows and Lance Haig. Note that the job specifies the "0.02" tag for that image. Later, when we update the app in various ways, we will specify a different tag to use a different version of it.
+
+    One instance of the chat-app task group will be deployed to each Nomad client because of the job's use of the "spread" stanza:<br>
+    `
+    spread {
+      attribute = "${node.unique.name}"
+    }
+    `<br>
+    Later, when we do a blue-green deployment, we will see that the new "green" deployments will also be spread evenly across the 3 Nomad clients.
+
+    The "chat-app" task runs on a dynamic port selected by Nomad; that port is mapped to port 5000 inside the task group's "network" stanza:<br>
+    `
+    network {
+      mode = "bridge"
+      port "http" {
+        to = 5000
+      }
+    }
+    `<br>
+    Fabio will automatically add a route for each instance of the chat app because of the "urlprefix-/" tag in the task group's "service" stanza.
 
     Additionally, the task group has the following stanza:<br>
     `
     update {
-      max_parallel     = 1
-      health_check     = "task_states"
+      max_parallel = 1
+      health_check = "checks"
       min_healthy_time = "15s"
       healthy_deadline = "2m"
+      # canary = 3
     }
     `<br>
 
-    This tells Nomad that it should update one instance of the task group at a time, base the health of each instance on the state of its tasks, require a new allocation to be healthy for 15 seconds before marking it as healthy, and require a new allocation to be healthy after no more than 2 minutes; if an allocation is not healthy within 2 minutes, it will be marked as unhealthy.
+    This tells Nomad that it should update one instance of the task group at a time, base the health of each instance on its health checks, require a new allocation to be healthy for 15 seconds before marking it as healthy, and require a new allocation to be healthy after no more than 2 minutes; if an allocation is not healthy within 2 minutes, it will be marked as unhealthy. The "canary" attribute is commented out for now; we will uncomment it when doing blue/green and canary deployments later in this track.
 
     Finally, the "chat-app" task group uses Consul Connect [sidecar proxies](https://www.consul.io/docs/connect/proxies.html) to talk to the MongoDB database using mutual Transport Layer Security (mTLS) certificates. This is implemented by this stanza:<br>
     `
@@ -143,12 +181,12 @@ challenges:
           }
         }
       }
-    } # end connnect
+    }
     `<br>
 
-    Run the "chatapp.nomad" job on the "Server" tab with this command:
+    Run the "chat-app.nomad" job on the "Server" tab with this command:
     ```
-    nomad job run chatapp.nomad
+    nomad job run chat-app.nomad
     ```
     This should return something like this:<br>
     `
@@ -176,7 +214,7 @@ challenges:
     ca660509  48f9e81c  chat-app    0        run      running  21s ago  14s ago
     `<br>
 
-    Note that the Node IDs of the 3 allocations are all different. In other words, Nomad scheduled one instance of the chat-app task to each Nomad client. It had to do this because we used the static port 9002 which would prevent more than one instance of the app running on any of the Nomad clients.
+    Note that the Node IDs of the 3 allocations are all different. In other words, Nomad scheduled one instance of the chat-app task to each Nomad client because of the `spread` stanza we included in the "chat-app.nomad" job specification.
 
     You can also check out the "chat-app" job in the Nomad UI. Within 1 minute of running the job, all 3 allocations should be healthy.
 
@@ -188,7 +226,7 @@ challenges:
   notes:
   - type: text
     contents: |-
-      In this challenge, you will deploy the inital versions of the Chat and MongoDB jobs.
+      In this challenge, you will deploy the "mongodb", "fabio", and "chat-app" jobs.
 
       In the next challenge, you will update the Chat app using the rolling update strategy.
   tabs:
@@ -214,15 +252,15 @@ challenges:
   - title: Chat 1
     type: service
     hostname: nomad-client-1
-    port: 9002
+    port: 9999
   - title: Chat 2
     type: service
     hostname: nomad-client-2
-    port: 9002
+    port: 9999
   - title: Chat 3
     type: service
     hostname: nomad-client-3
-    port: 9002
+    port: 9999
   difficulty: basic
   timelimit: 600
 - slug: rolling-update
@@ -230,7 +268,7 @@ challenges:
   type: challenge
   title: Do a Rolling Update of the Chat Job
   teaser: |
-    Do a rolling update of the Chat job.
+    Do a rolling update of the Chat job in which you replace one instance at a time.
   assignment: |-
     In this challenge, you will do a rolling update of the Chat job.
 
@@ -243,12 +281,12 @@ challenges:
 
     If you prefer, you could just run this command instead of editing the file yourself:
     ```
-    sed -i "s/anon-app:0.02/anon-app:dark-0.02/g" chatapp.nomad
+    sed -i "s/anon-app:0.02/anon-app:dark-0.02/g" chat-app.nomad
     ```
 
-    Now, check what would happen if you redeployed the application with this command:
+    Now, check what would happen if you redeployed the "chat-app" job with this command:
     ```
-    nomad job plan chatapp.nomad
+    nomad job plan chat-app.nomad
     ```
 
     This should return the following text:<br>
@@ -263,9 +301,9 @@ challenges:
     `<br>
     This indicates that Nomad would initially only update 1 of the 3 allocations, confirming that it would do a rolling update.
 
-    Go ahead and actually run a rolling update of the chat-app application:
+    Go ahead and actually run a rolling update of the chat application:
     ```
-    nomad job run chatapp.nomad
+    nomad job run chat-app.nomad
     ```
 
     In the Nomad UI, if you click the Instruqt refresh button and then select the "chat-app" job, you will see that there is a new deployment running. Over the next few minutes, you will see the numbers of placed and healthy allocations for this deployment increase to 3.
@@ -314,15 +352,15 @@ challenges:
   - title: Chat 1
     type: service
     hostname: nomad-client-1
-    port: 9002
+    port: 9999
   - title: Chat 2
     type: service
     hostname: nomad-client-2
-    port: 9002
+    port: 9999
   - title: Chat 3
     type: service
     hostname: nomad-client-3
-    port: 9002
+    port: 9999
   difficulty: basic
   timelimit: 3600
 - slug: blue-green-deployment
@@ -330,9 +368,11 @@ challenges:
   type: challenge
   title: Do a Blue/Green Deployment of the Chat Job
   teaser: |
-    Do a blue/green deployment of the Chat job.
+    Do a blue/green deployment of the Chat job in which you deploy 3 new instances alongside the current ones and then promote the deployment when satisfied.
   assignment: |-
     In this challenge, you will do a blue/green deployment of the Chat job.
+
+    This means that you will initally deploy 3 new instances of the chat app with the original light background but keep the 3 instances with the dark background running. When you are satisfied with the new instances, you will promote the deployment, causing Nomad to stop the old instances.
 
     Please navigate back to the /root/nomad/jobs directory on the "Server" tab again with this command:
     ```
@@ -341,14 +381,89 @@ challenges:
 
     Edit the "chat-app.nomad" job specification file on the "Jobs" tab, making the following changes:
 
-      1. Change the "dark-0.02" tag on the image back to "0.02".
-      2.
+      1. Uncomment the line with `canary = 3` in the "update" stanza by removing `# ` from before it.
+      2. Change the "dark-0.02" tag on the image back to "0.02".
+
+    If you prefer, you can use these commands to edit the file for you:
+    ```
+    sed -i "s/# canary = 3/canary = 3/g" chat-app.nomad
+    sed -i "s/dark-0.02/0.02/g" chat-app.nomad
+    ```
+
+    Setting the "canary" attribute to the "count" attribute of the "chat-app" task group tells Nomad to deploy 3 new "green" instances of the task group as part of a blue/green deployment in which the 3 "blue" instances that are running the dark version of the chat app continue to run even after the new "green" instances that will run the "light" version of the chat app are deployed. (Note that the colors "blue" and "green" here have nothing to do with the changing background colors of the chat app; they are just standard terminology for referring to this particular update pattern.)
+
+    Now, check what would happen if you redeployed the "chat-app" job with this command on the "Server" tab:
+    ```
+    nomad job plan chat-app.nomad
+    ```
+
+    This should return something like this:<br>
+    `
+    +/- Job: "chat-app"
+    +/- Task Group: "chat-app" (3 canary, 3 ignore)
+      +/- Update {
+          AutoPromote:      "false"
+          AutoRevert:       "false"
+        +/- Canary:           "0" => "3"
+          HealthCheck:      "checks"
+          HealthyDeadline:  "120000000000"
+          MaxParallel:      "1"
+          MinHealthyTime:   "15000000000"
+          ProgressDeadline: "600000000000"
+        }
+      +/- Task: "chat-app" (forces create/destroy update)
+        +/- Config {
+          +/- image: "lhaig/anon-app:dark-0.02" => "lhaig/anon-app:0.02"
+            }
+          Task: "connect-proxy-chat-app"
+    `<br>
+
+    The plan indicates that Nomad would create 3 canaries to run the "0.02" version of the chat app but ignore the 3 allocations that are currently running. That would result in 6 instances of the chat app running on the 3 Nomad clients. That is ok, however, since we are using ports dynamically selected by Nomad and are using Fabio to forward requests to the chat app clients.
+
+    Go ahead and re-run the "chat-app" job with this command:
+    ```
+    nomad job run chat-app.nomad
+    ```
+
+    This should return something like this:<br>
+    `
+    ==> Monitoring evaluation "81ca49f4"
+    Evaluation triggered by job "chat-app"
+    Evaluation within deployment: "916c6388"
+    Allocation "0803dbf0" created: node "c645cab8", group "chat-app"
+    Allocation "b8f8e7c2" created: node "ded26beb", group "chat-app"
+    Allocation "e57ae40c" created: node "f9ce3ddf", group "chat-app"
+    Evaluation status changed: "pending" -> "complete"
+    ==> Evaluation "81ca49f4" finished with status "complete"
+    `<br>
+
+    If you look at the chat-app job in the Nomad UI, you will see that there are 6 allocations running.  As you watch the current deployment, you will see the number of canaries climb to "3/3". You will also see an organge "Promote Canary" button and a message saying "Deployment is running but requires manual promotion".
+
+    Check the status of the "chat-app" job by running this command:
+    ```
+    nomad job status chat-app
+    ```
+    The "Deployed" section should show "false" in the "Promoted" column along with 3 desired, 3 canaries, 3 placed, and 3 healthy instances. The "Allocations" section at the bottom should show 6 running and 3 stopped allocations. The latter are from when you did the rolling update in the last challenge.
+
+    If you select the "Fabio UI" tab and click the Instruqt refresh button, you will see that Fabio now has 6 routes. If you refresh the "Chat 1", "Chat 2", and "Chat 3" tabs, you will still only see the version of the app with the dark background because Fabio uses sticky sessions and keeps the 3 tabs connected to the chat app instances it had already connected them to.
+
+    Next, you can promote the "green" allocations by running this command:<br>
+    `
+    nomad deployment promote <deployment_id>
+    `<br>
+    replacing <deployment_id\> with the deployment ID returned by the last command. Alternatively, you could click the orange "Promote Canary" button in the Nomad UI.
+
+    After clicking the Instruqt refresh button for the Nomad UI and selecting the "chat-app" job, you should see that the number of running clients has changed to 3.
+
+    Now, when you refresh the the "Chat 1", "Chat 2", and "Chat 3" tabs, you will only see the version of the chat app with the light background since the allocations with the dark background have been stopped by Nomad.
+
+    If you had been unhappy with the new version of the chat app, you could have rolled back to the old version by running `nomad deployment fail <deployment_id>`, replacing <deployment_id\> with the deployment ID returned by the job status command. Nomad would then stop the new allocations leaving the app in the state it had been in before you re-ran the job.
 
     In the next challenge, you will update the Chat job using a canary deployment.
   notes:
   - type: text
     contents: |-
-      In this challenge, you will do a blue/green deployment of the Chat job.
+      In this challenge, you will do a "blue/green" deployment of the Chat job. This means that you will initally deploy 3 new instances of the chat app with the original light background but keep the 3 instances with the dark background running. When you are satisfied with the new instances, you will promote the deployment, causing Nomad to stop the old instances.
 
       In the next challenge, you will update the Chat job using a canary deployment.
   tabs:
@@ -374,15 +489,15 @@ challenges:
   - title: Chat 1
     type: service
     hostname: nomad-client-1
-    port: 9002
+    port: 9999
   - title: Chat 2
     type: service
     hostname: nomad-client-2
-    port: 9002
+    port: 9999
   - title: Chat 3
     type: service
     hostname: nomad-client-3
-    port: 9002
+    port: 9999
   difficulty: basic
   timelimit: 3600
 - slug: canary-deployment
@@ -390,17 +505,19 @@ challenges:
   type: challenge
   title: Do a Canary Deployment of the Chat Job
   teaser: |
-    Do a canary deployment of the Chat job.
+    Do a canary deployment of the Chat job in which you deploy and evaluate 1 new instance but decide to roll back the deployment.
   assignment: |-
-    In this challenge, you will do a canary deployment of the Chat job.
+    In this challenge, you will do a canary deployment of the chat-app job.
+
+    This means that you will initally deploy 1 new "canary" instance of the chat app with the dark background but keep the 3 instances with the light background that you deployed in the last challenge running. When you are satisfied with the canary, you will promote the deployment, causing Nomad to do a rolling update to replace the 3 older instances.
 
     Congratulations on completing the Nomad Job Update Strategies track!
   notes:
   - type: text
     contents: |-
-      In this challenge, you will do a canary deployment of the Chat job.
+      In this challenge, you will do a "canary" deployment of the Chat job.
 
-      In a canary deployment, one or more additional allocations of the job are deployed while Nomad continues to run the original allocations. This gives operators a chance to verify that the new version of the job is behaving correctly before completely replacing the old version.
+      This means that you will initally deploy 1 new "canary" instance of the chat app with the dark background but keep the 3 instances with the light background that you deployed in the last challenge running. When you are satisfied with the canary, you will promote the deployment, causing Nomad to do a rolling update to replace the 3 older instances.
   tabs:
   - title: Jobs
     type: code
@@ -424,15 +541,15 @@ challenges:
   - title: Chat 1
     type: service
     hostname: nomad-client-1
-    port: 9002
+    port: 9999
   - title: Chat 2
     type: service
     hostname: nomad-client-2
-    port: 9002
+    port: 9999
   - title: Chat 3
     type: service
     hostname: nomad-client-3
-    port: 9002
+    port: 9999
   difficulty: basic
   timelimit: 3600
-checksum: "13723511898125120825"
+checksum: "11399941958673161602"

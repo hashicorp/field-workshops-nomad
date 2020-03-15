@@ -35,7 +35,7 @@ cat <<-EOF > /etc/consul.d/consul-client1.json
   "data_dir": "/tmp/consul/client1",
   "node_name": "client1",
   "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
-  "client_addr": "{{ GetInterfaceIP \"ens4\" }}",
+  "client_addr": "0.0.0.0",
   "retry_join": [
     "nomad-server-1"
   ],
