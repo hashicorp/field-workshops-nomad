@@ -2,7 +2,18 @@
 
 set -e
 
-#
-grep -q "" /root/.bash_history || fail-message "You haven't on the Nomad server yet."
+grep -q "cd /root/nomad/jobs" /root/.bash_history || fail-message "You have not navigated to /root/nomad/jobs on the Nomad server yet."
+
+grep -q "canary = 1" /root/nomad/jobs/chat-app.nomad || fail-message "You have not set canary to 1 in chat-app.nomad on the Nomad server yet."
+
+grep -q "dark-0.02" /root/nomad/jobs/chat-app.nomad || fail-message "You have not set the image tag to 'dark-0.02' in  chat-app.nomad on the Nomad server yet."
+
+grep -q "nomad job plan chat-app.nomad" /root/.bash_history || fail-message "You have not planned the canary deployment of the chat-app job on the Nomad server yet."
+
+grep -q "nomad job run chat-app.nomad" /root/.bash_history || fail-message "You have not run the canary deployment of the chat-app job on the Nomad server yet."
+
+grep -q "nomad job status chat-app" /root/.bash_history || fail-message "You have not checked the status of the canary deployment of the chat-app job on the Nomad server yet."
+
+grep -q "nomad deployment fail" /root/.bash_history || fail-message "You have not failed the canary deployment of the chat-app job on the Nomad server yet."
 
 exit 0

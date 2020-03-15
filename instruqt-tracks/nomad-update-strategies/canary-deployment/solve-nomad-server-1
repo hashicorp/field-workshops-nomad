@@ -4,4 +4,29 @@
 HISTFILE=~/.bash_history
 set -o history
 
+# Change directory
+cd /root/nomad/jobs
+
+# Edit chat-app.nomad
+sed -i "s/canary = 3/canary = 1/g" chat-app.nomad
+sed -i "s/0.02/dark-0.02/g" chat-app.nomad
+
+# Plan the job
+nomad job plan chat-app.nomad
+
+# Run the job
+nomad job run chat-app.nomad
+
+# Sleep
+sleep 120
+
+# Check the status
+nomad job status chat-app > canary-status.txt
+
+# Determine the ID of the active deployment
+canary_deployment_id=$(cat canary-status.txt | grep "Latest Deployment" -A1 | grep ID | cut -d'=' -f2 | cut -d' ' -f2)
+
+# Roll back the deployment
+nomad deployment fail $canary_deployment_id
+
 exit 0
