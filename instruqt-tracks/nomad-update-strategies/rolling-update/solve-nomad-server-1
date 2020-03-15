@@ -1,0 +1,25 @@
+#!/bin/bash -l
+
+#Enable bash history
+HISTFILE=~/.bash_history
+set -o history
+
+# Change directory
+cd /root/nomad/jobs
+
+# Edit chat-app.nomad
+sed -i "s/anon-app:0.02/anon-app:dark-0.02/g" chat-app.nomad
+
+# Plan chat-app.nomad deployment
+nomad job plan chat-app.nomad
+
+# Run chat-app.nomad Job
+nomad job run chat-app.nomad
+
+# Sleep
+sleep 120
+
+# Check status of chat-app Job
+nomad job status chat-app
+
+exit 0

@@ -1,0 +1,168 @@
+#!/bin/bash -l
+
+set -e
+
+mkdir /root/nomad/jobs
+
+# Write the mongodb.nomad job
+cat <<-EOF > /root/nomad/jobs/mongodb.nomad
+job "mongodb" {
+  datacenters = ["dc1"]
+  type = "service"
+
+  group "db" {
+    count = 1
+
+    volume "mongodb_vol" {
+      type = "host"
+      source = "mongodb_mount"
+    }
+
+    network {
+      mode = "bridge"
+    }
+
+    task "mongodb" {
+      driver = "docker"
+
+      config {
+        image = "mongo"
+      }
+
+      volume_mount {
+        volume = "mongodb_vol"
+        destination = "/data/db"
+      }
+
+      resources {
+        cpu = 500 # MHz
+        memory = 512 # MB
+      }
+
+    } # end mongodb task
+
+    service {
+      name = "mongodb"
+      tags = ["mongodb"]
+      port = "27017"
+
+      connect {
+        sidecar_service {}
+      }
+    } # end service
+
+  } # end db group
+
+}
+EOF
+
+# Write fabio.nomad
+cat <<-EOF > /root/nomad/jobs/fabio.nomad
+job "fabio" {
+  datacenters = ["dc1"]
+  type = "system"
+
+  group "fabio" {
+    task "fabio" {
+      driver = "docker"
+      config {
+        image = "fabiolb/fabio"
+        network_mode = "host"
+      }
+
+      resources {
+        cpu    = 200
+        memory = 128
+        network {
+          mbits = 20
+          port "lb" {
+            static = 9999
+          }
+          port "ui" {
+            static = 9998
+          }
+        }
+      }
+    }
+  }
+}
+EOF
+
+# Write the chatapp.nomad job
+cat <<-EOF > /root/nomad/jobs/chat-app.nomad
+job "chat-app" {
+  datacenters = ["dc1"]
+  type = "service"
+
+  group "chat-app" {
+    count = 3
+
+    spread {
+      attribute = "\${node.unique.name}"
+    }
+
+    update {
+      max_parallel = 1
+      health_check = "checks"
+      min_healthy_time = "15s"
+      healthy_deadline = "2m"
+      # canary = 3
+    }
+
+    network {
+      mode = "bridge"
+      port "http" {
+        to = 5000
+      }
+    }
+
+    task "chat-app" {
+      driver = "docker"
+
+      config {
+        image = "lhaig/anon-app:0.02"
+      }
+
+      env {
+        "MONGODB_SERVER" = "127.0.0.1"
+        "MONGODB_PORT" = "27017"
+      }
+
+      resources {
+        cpu = 300 # MHz
+        memory = 512 # MB
+      }
+
+    } # end chat-app task
+
+    service {
+      name = "chat-app"
+      tags = ["urlprefix-/","chat-app"]
+      port = "http"
+      check {
+        name     = "chat-app alive"
+        type     = "http"
+        path     = "/chats"
+        interval = "10s"
+        timeout  = "2s"
+      }
+
+      connect {
+        sidecar_service {
+          tags = ["chat-app-proxy"]
+          proxy {
+            upstreams {
+              destination_name = "mongodb"
+              local_bind_port = 27017
+            }
+          }
+        }
+      } # end connnect
+    } # end service
+
+  } # end chat-app group
+
+}
+EOF
+
+exit 0

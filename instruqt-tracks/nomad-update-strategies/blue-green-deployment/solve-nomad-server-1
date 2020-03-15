@@ -1,0 +1,32 @@
+#!/bin/bash -l
+
+#Enable bash history
+HISTFILE=~/.bash_history
+set -o history
+
+# Change directory
+cd /root/nomad/jobs
+
+# Edit the chat-nomad.nomad Job
+sed -i "s/# canary = 3/canary = 3/g" chat-app.nomad
+sed -i "s/dark-0.02/0.02/g" chat-app.nomad
+
+# Plan a blue/green deployment of the chat-app job
+nomad job plan chat-app.nomad
+
+# Run a blue/green deployment of the chat-app job
+nomad job run chat-app.nomad
+
+# Sleep
+sleep 180
+
+# Check the status of the blue/green deployment
+nomad job status chat-app > blue-green-status.txt
+
+# Determine the ID of the active deployment
+blue_green_deployment_id=$(cat blue-green-status.txt | grep "Latest Deployment" -A1 | grep ID | cut -d'=' -f2 | cut -d' ' -f2)
+
+# Promote the deployment
+nomad deployment promote $blue_green_deployment_id
+
+exit 0

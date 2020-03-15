@@ -1,0 +1,18 @@
+#!/bin/bash -l
+
+set -e
+
+#
+grep -q "cd /root/nomad/jobs" /root/.bash_history || fail-message "You have not navigated to /root/nomad/jobs on the Nomad server yet."
+
+grep -q "nomad job run mongodb.nomad" /root/.bash_history || fail-message "You have not run the mongodb.nomad job on the Nomad server yet."
+
+grep -q "nomad job status mongodb" /root/.bash_history || fail-message "You have not checked the status of the mongodb job with the CLI on the Nomad server yet."
+
+grep -q "nomad job run fabio.nomad" /root/.bash_history || fail-message "You have not run the fabio.nomad job on the Nomad server yet."
+
+grep -q "nomad job run chat-app.nomad" /root/.bash_history || fail-message "You have not run the chat-app.nomad job on the Nomad server yet."
+
+grep -q "nomad job status chat-app" /root/.bash_history || fail-message "You have not checked the status of the chat-app job on the Nomad server yet."
+
+exit 0
