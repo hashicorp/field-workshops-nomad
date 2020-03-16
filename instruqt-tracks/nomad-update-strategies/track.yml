@@ -1,5 +1,5 @@
-slug: nomad-update-strategies
-id: ijfbyi1drwpu
+slug: nomad-update-strategies-nginx
+id: orxif8plq08a
 type: track
 title: Nomad Job Update Strategies
 teaser: |
@@ -9,7 +9,7 @@ description: |-
 
   This track will guide you through implementing these update strategies based on the [Nomad Job Update Strategies](https://learn.hashicorp.com/nomad/update-strategies) guide.
 
-  You will run "mongodb", "fabio", and  "chat-app" jobs and update the last using rolling, blue/green, and canary update strategies. Fabio will be used as a reverse proxy server that will forward requests to instances of the "chat" application which will store its chat messages in a single MongoDB database.
+  You will run "mongodb", "chat-app", and "nginx" jobs and update the second using rolling, blue/green, and canary update strategies. NGINX will be used as a load balancer that will forward requests to instances of the "chat" application which will store its chat messages in a single MongoDB database.
 
   Before running this track, we suggest you run the [Nomad Basics](https://instruqt.com/hashicorp/tracks/nomad-basics), [Nomad Simple Cluster](https://instruqt.com/hashicorp/tracks/nomad-simple-cluster), and [Nomad Multi-Server Cluster](https://instruqt.com/hashicorp/tracks/nomad-multi-server-cluster) tracks.
 icon: https://storage.googleapis.com/instruqt-hashicorp-tracks/logo/nomad.png
@@ -22,11 +22,11 @@ tags:
 owner: hashicorp
 developers:
 - roger@hashicorp.com
-private: true
+private: false
 published: true
 challenges:
 - slug: verify-nomad-cluster-health
-  id: ehjpxbybs49x
+  id: d0jmzi59u4th
   type: challenge
   title: Verify the Health of Your Nomad Enterprise Cluster
   teaser: |
@@ -62,7 +62,7 @@ challenges:
     contents: |-
       In this challenge, you will verify the health of the Nomad Enterprise cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
 
-      In later challenges, you will run "mongodb", "fabio", and  "chat-app" jobs and update the last using rolling, blue/green, and canary update strategies. Fabio will be used as a reverse proxy server that will forward requests to instances of the "chat" application which will store its messages in a single MongoDB database.
+      In later challenges, you will run "mongodb", "chat-app", and "nginx" jobs and update the second using rolling, blue/green, and canary update strategies. NGINX will be used as a load balancer that will forward requests to instances of the "chat" application which will store its messages in a single MongoDB database.
   tabs:
   - title: Server
     type: terminal
@@ -78,14 +78,15 @@ challenges:
   difficulty: basic
   timelimit: 300
 - slug: deploy-the-jobs
-  id: tglnvylrrmeo
+  id: tdts2n3bahc0
   type: challenge
-  title: Deploy the MongoDB, Fabio, and Chat-App Jobs
+  title: Deploy the MongoDB, NGINX, and Chat-App Jobs
   teaser: |
-    Deploy the MongoDB, Fabio, and Chat-App jobs.
+    Deploy the MongoDB, NGINX, and Chat-App jobs.
   assignment: |-
-    In this challenge, you will deploy the "mongodb", "fabio", and "chat-app" jobs.
+    In this challenge, you will deploy the "mongodb", "chat-app", and "nginx" jobs.
 
+    ## Run the mongodb.nomad Job
     Inspect the "mongodb.nomad" job specification file on the "Jobs" tab. This will deploy a "db" task group that runs the MongoDB database on port 27017 from the "mongo" Docker image.
 
     Note that the database persists its data to the Nomad volume "mongodb_vol" which uses the "mongodb_mount" host volume that was configured on each Nomad client. The "mongodb_vol" volume is mounted inside the Docker container on the path "/data/db".
@@ -117,24 +118,7 @@ challenges:
     ```
     on the "Server" tab to check the status of the "mongodb" job and validate that the "db" task group is healthy.
 
-    Next, inspect the "fabio.nomad" job specification file on the "Jobs" tab. This job deploys the reverse proxy server [Fabio](https://fabiolb.net) as a system job on all the Nomad clients from a Docker image. Since it is a system job, no "count" is specified for the "fabio" task group. Fabio will automatically detect certain services registered in Consul and route requests to Fabio's port, 9999, to dynamic ports selected by Nomad for those services.
-
-    Run the "fabio.nomad" job on the "Server" tab with this command:
-    ```
-    nomad job run fabio.nomad
-    ```
-    This should return something like this:<br>
-    `
-    ==> Monitoring evaluation "d08fff01"
-    Evaluation triggered by job "fabio"
-    Allocation "d17c329d" created: node "211ec400", group "fabio"
-    Allocation "ac529c74" created: node "7de22213", group "fabio"
-    Allocation "c857996d" created: node "9c9b53e9", group "fabio"
-    Evaluation status changed: "pending" -> "complete"
-    ==> Evaluation "d08fff01" finished with status "complete"
-    `<br>
-    Since this is a system job, the node IDs for the 3 allocations are all distinct; one instance of the "fabio" task group is deployed to each Nomad client.
-
+    ## Run the chat-app.nomad Job
     Next, inspect the "chat-app.nomad" job specification file on the "Jobs" tab. This job deploys 3 instances of a "chat-app" task group that runs a custom Docker image, "lhaig/anon-app:0.02" created by two HashiCorp solutions engineers, Guy Barrows and Lance Haig. Note that the job specifies the "0.02" tag for that image. Later, when we update the app in various ways, we will specify a different tag to use a different version of it.
 
     One instance of the chat-app task group will be deployed to each Nomad client because of the job's use of the "spread" stanza:<br>
@@ -154,7 +138,7 @@ challenges:
       }
     }
     `<br>
-    Fabio will automatically add a route for each instance of the chat app because of the "urlprefix-/" tag in the task group's "service" stanza.
+    The NGINX load balancer that you deploy after the "chat-app" job will automatically add a route for each instance of the chat app because of the "template" stanza within the "nginx.nomad" job specification file.
 
     Additionally, the task group has the following stanza:
     ```
@@ -166,7 +150,6 @@ challenges:
       # canary = 3
     }
     ```
-
     This tells Nomad that it should update one instance of the task group at a time, base the health of each instance on its health checks, require a new allocation to be healthy for 15 seconds before marking it as healthy, and require a new allocation to be healthy after no more than 2 minutes; if an allocation is not healthy within 2 minutes, it will be marked as unhealthy. The "canary" attribute is commented out for now; you will uncomment it when doing blue/green and canary deployments later in this track.
 
     Finally, the "chat-app" task group uses Consul Connect [sidecar proxies](https://www.consul.io/docs/connect/proxies.html) to talk to the MongoDB database using mutual Transport Layer Security (mTLS) certificates. This is implemented by this stanza:<br>
@@ -216,19 +199,41 @@ challenges:
 
     Note that the Node IDs of the 3 allocations are all different. In other words, Nomad scheduled one instance of the chat-app task to each Nomad client because of the `spread` stanza we included in the "chat-app.nomad" job specification.
 
-    You can also check out the "chat-app" job in the Nomad UI. Within 1 minute of running the job, all 3 allocations should be healthy.
+    You can also check out the "chat-app" job in the Nomad UI. Within 90 seconds of running the job, all 3 allocations should be healthy.
 
     You can also verify that the Nomad task groups were automatically registered as Consul services by looking at the "Services" tab of the Consul UI. Note the sidecar proxy services created by Nomad's integration with Consul Connect. The services all include node checks and service checks.
 
-    You can visit the chat-app UI on the "Chat 1", "Chat 2", and "Chat 3" tabs and click the Instruqt refresh button for each of them to make them show up. Note that all instances of the chat app currently have a light background.
+    ## Run the nginx.nomad Job
+    Next, inspect the "nginx.nomad" job specification file on the "Jobs" tab. This job deploys [NGINX](https://nginx.org) as a system job on all the Nomad clients from a Docker image. Since it is a system job, no "count" is specified for the "nginx" task group.
 
-    Since we are using Fabio, the 3 Chat tabs are not actually pinned to the 3 Nomad clients. Each time you click the refresh button for one of the tabs, you will be randomly connected to an instance of the app on any the 3 Nomad clients.
+    NGINX will route requests to the "chat-app" Consul service registered by the "chat-app" job; this is done by the "template" stanza of the job which generates the NGINX configuration file, "load-balancer.conf", based on the current instances of the "chat-app" service. (This explains why we run the "nginx.nomad" job after the "chat-app.nomad" job.)
+
+    The "ip_hash" instruction in the "load-balancer.conf" configuration file is included to make the NGINX sessions of the chat app sticky. This is required to avoid HTTP 400 errors that would otherwise occur when multiple requests are sent during the lifetime of a socket used by the socket.io framework. (See this [doc](https://socket.io/docs/using-multiple-nodes) for details.)
+
+    Run the "nginx.nomad" job on the "Server" tab with this command:
+    ```
+    nomad job run nginx.nomad
+    ```
+    This should return something like this:<br>
+    `
+    ==> Monitoring evaluation "d08fff01"
+    Evaluation triggered by job "nginx"
+    Allocation "d17c329d" created: node "211ec400", group "nginx"
+    Evaluation status changed: "pending" -> "complete"
+    ==> Evaluation "d08fff01" finished with status "complete"
+    `<br>
+
+    You can now access the chat-app UI on the "Chat 1", "Chat 2", and "Chat 3" tabs. Note that all instances of the chat app currently have a light background.
+
+    Since we are using NGINX, the 3 Chat tabs are not actually pinned to specific Nomad clients. In fact, all of them are pointing at the NGINX load balancer itself on the corresponding Nomad client. Each time you click the refresh button for any of the Chat tabs, you will be randomly connected to an instance of the chat app on any the 3 Nomad clients in a new session. As mentioned above, however, each session of the chat app between refreshes is sticky.
+
+    If you type messages in either Chat tab, they will usually show up in the other tab. However, you might sometimes need to click the Instruqt refresh button to the right of all the tabs while one of the Chat tabs is selected in order to force it to reconnect to the database. This is an issue with the chat app itself rather than with Nomad.
 
     In the next challenge, you will update the Chat app to use a dark background using Nomad's rolling update strategy.
   notes:
   - type: text
     contents: |-
-      In this challenge, you will deploy the "mongodb", "fabio", and "chat-app" jobs.
+      In this challenge, you will deploy the "mongodb", "chat-app", and "nginx" jobs.
 
       In the next challenge, you will update the Chat app using the rolling update strategy.
   tabs:
@@ -247,26 +252,22 @@ challenges:
     type: service
     hostname: nomad-server-1
     port: 4646
-  - title: Fabio UI
-    type: service
-    hostname: nomad-client-1
-    port: 9998
   - title: Chat 1
     type: service
     hostname: nomad-client-1
-    port: 9999
+    port: 8080
   - title: Chat 2
     type: service
     hostname: nomad-client-2
-    port: 9999
+    port: 8080
   - title: Chat 3
     type: service
     hostname: nomad-client-3
-    port: 9999
+    port: 8080
   difficulty: basic
   timelimit: 600
 - slug: rolling-update
-  id: 2vakukxvlho2
+  id: zcdcygf1s6sh
   type: challenge
   title: Do a Rolling Update of the Chat Job
   teaser: |
@@ -312,6 +313,8 @@ challenges:
 
     As the number of healthy allocations increases, refresh the "Chat 1", "Chat 2", and "Chat 3" tabs periodically. Initially, you will only see the light background; but over the next 2 minutes as the rolling update proceeds, you will see the dark background 1/3 of the time, then 2/3 of the time, and then all the time.
 
+    Since each instance of the chat app is getting its messages from MongoDB, the old messages will show up in the instances of the chat app with the dark background.
+
     After all the chat-app allocations are healthy and the chat-app clients only show the dark background, run the following command on the "Server" tab:
     ```
     nomad job status chat-app
@@ -341,26 +344,22 @@ challenges:
     type: service
     hostname: nomad-server-1
     port: 4646
-  - title: Fabio UI
-    type: service
-    hostname: nomad-client-1
-    port: 9998
   - title: Chat 1
     type: service
     hostname: nomad-client-1
-    port: 9999
+    port: 8080
   - title: Chat 2
     type: service
     hostname: nomad-client-2
-    port: 9999
+    port: 8080
   - title: Chat 3
     type: service
     hostname: nomad-client-3
-    port: 9999
+    port: 8080
   difficulty: basic
   timelimit: 600
 - slug: blue-green-deployment
-  id: 2o5tzi8hyd5f
+  id: 3r4wmr3zrh2r
   type: challenge
   title: Do a Blue/Green Deployment of the Chat Job
   teaser: |
@@ -414,7 +413,7 @@ challenges:
           Task: "connect-proxy-chat-app"
     `<br>
 
-    The plan indicates that Nomad would create 3 canaries to run the "0.02" version of the chat app but ignore the 3 allocations that are currently running. That would result in 6 instances of the chat app running on the 3 Nomad clients. That is ok, however, since we are using ports dynamically selected by Nomad and are using Fabio to forward requests to the chat app instances.
+    The plan indicates that Nomad would create 3 canaries to run the "0.02" version of the chat app but ignore the 3 allocations that are currently running. That would result in 6 instances of the chat app running on the 3 Nomad clients. That is ok, however, since we are using ports dynamically selected by Nomad and are using NGINX to forward requests to the chat app instances.
 
     Go ahead and re-run the "chat-app" job with this command:
     ```
@@ -439,9 +438,7 @@ challenges:
     ```
     nomad job status chat-app
     ```
-    The "Deployed" section should eventually show "false" in the "Promoted" column along with 3 desired, 3 canaries, 3 placed, and 3 healthy instances. The "Allocations" section at the bottom should show 6 running and 3 stopped allocations. The latter are from when you did the rolling update in the last challenge.
-
-    If you select the "Fabio UI" tab and click the Instruqt refresh button, you will see that Fabio now has 6 routes.
+    The "Deployed" section will show "false" in the "Promoted" column and will eventually show 3 desired, 3 canaries, 3 placed, and 3 healthy instances. The "Allocations" section at the bottom should show 6 running and 3 stopped allocations. The latter are from when you did the rolling update in the last challenge.
 
     If you refresh the "Chat 1", "Chat 2", and "Chat 3" tabs, you will see the app with both the light and the dark backgrounds. Each background should show up 50% of the time since all 6 allocations are active at this point.
 
@@ -480,26 +477,22 @@ challenges:
     type: service
     hostname: nomad-server-1
     port: 4646
-  - title: Fabio UI
-    type: service
-    hostname: nomad-client-1
-    port: 9998
   - title: Chat 1
     type: service
     hostname: nomad-client-1
-    port: 9999
+    port: 8080
   - title: Chat 2
     type: service
     hostname: nomad-client-2
-    port: 9999
+    port: 8080
   - title: Chat 3
     type: service
     hostname: nomad-client-3
-    port: 9999
+    port: 8080
   difficulty: basic
   timelimit: 600
 - slug: canary-deployment
-  id: 8sbd1wqgtqir
+  id: n3gbteuho9x3
   type: challenge
   title: Do a Canary Deployment of the Chat Job
   teaser: |
@@ -570,7 +563,7 @@ challenges:
     ==> Evaluation "0fd02bb5" finished with status "complete"
     `<br>
 
-    If you look at the chat-app job in the Nomad UI, you will see that there are 4 allocations running. You will also see an orange "Promote Canary" button as in the last challenge. Additionally, the active deployment will show "1/1" Canaries, 1 Placed, 3 Desired, and 1 Healthy allocation.
+    If you look at the chat-app job in the Nomad UI, you will see that there are 4 allocations running. You will also see an orange "Promote Canary" button as in the last challenge. Additionally, the active deployment will eventually show "1/1" Canaries, 1 Placed, 3 Desired, and 1 Healthy allocation.
 
     The fact that the active deployment only has 1 healthy allocation might worry you, but this is actually ok; it just means that Nomad still plans on deploying 2 more allocations with the new version of the app if you do promote the canary. In other words, since the "count" of the "chat-app" task group is 3, Nomad will always want to deploy 3 allocations as part of any deployment of the job. By specifying 1 canary, you forced Nomad to delay the other 2 allocations.
 
@@ -578,9 +571,9 @@ challenges:
     ```
     nomad job status chat-app
     ```
-    The "Deployed" section should show "false" in the "Promoted" column along with 3 desired, 1 canary, 1 placed, and 1 healthy instances, agreeing with what the active deployment in the Nomad UI showed. The "Allocations" section at the bottom should show 4 running and 6 stopped allocations. The latter are from when you did the rolling and blue/green updates in the last two challenges.
+    The "Deployed" section should show "false" in the "Promoted" column along with 3 desired, 1 canary, 1 placed, and (eventually) 1 healthy instances, agreeing with what the active deployment in the Nomad UI showed. The "Allocations" section at the bottom should show 4 running and 6 stopped allocations. The latter are from when you did the rolling and blue/green updates in the last two challenges.
 
-    If you select the "Fabio UI" tab and click the Instruqt refresh button, you will see that Fabio now has 4 routes. If you refresh the "Chat 1", "Chat 2", and "Chat 3" tabs, you will see the app with both the light and the dark backgrounds. However, the dark background should only show up 1/4 of the time. That makes sense since you are running 3 instances of the chat app with the light background from the last challenge along with the single canary that uses the dark background.
+    If you refresh the "Chat 1", "Chat 2", and "Chat 3" tabs, you will see the app with both the light and the dark backgrounds. However, the dark background should only show up 1/4 of the time. That makes sense since you are running 3 instances of the chat app with the light background from the last challenge along with the single canary that uses the dark background.
 
     Let's assume that you like the light background of the app better than the dark background that the canary is using and want to roll back the deployment.
 
@@ -601,7 +594,7 @@ challenges:
     `<br>
     This indicates that Nomad has failed the deployment. The Nomad UI will also show a message "Deployment marked as failed".
 
-    While the message does not say is that Nomad will stop the canary allocation and leave the 3 allocations with the light background running. However, you can confirm that this has happened by refreshing the Chat tabs multiple times. You will only see the light background.
+    What the message does not say is that Nomad will stop the canary allocation and leave the 3 allocations with the light background running. However, you can confirm that this has happened by refreshing the Chat tabs multiple times. You will only see the light background.
 
     Together, this challenge and the previous one show that you can test out changes to an application with Nomad and then either promote the changes or roll them back. The choice is yours.
 
@@ -630,22 +623,18 @@ challenges:
     type: service
     hostname: nomad-server-1
     port: 4646
-  - title: Fabio UI
-    type: service
-    hostname: nomad-client-1
-    port: 9998
   - title: Chat 1
     type: service
     hostname: nomad-client-1
-    port: 9999
+    port: 8080
   - title: Chat 2
     type: service
     hostname: nomad-client-2
-    port: 9999
+    port: 8080
   - title: Chat 3
     type: service
     hostname: nomad-client-3
-    port: 9999
+    port: 8080
   difficulty: basic
   timelimit: 600
-checksum: "6853214861076601752"
+checksum: "16951472042636669795"

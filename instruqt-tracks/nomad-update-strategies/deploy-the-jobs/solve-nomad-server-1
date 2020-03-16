@@ -16,12 +16,6 @@ sleep 30
 # Check mongodb job Status
 nomad job status mongodb
 
-# Run fabio Job
-nomad job run fabio.nomad
-
-# Sleep
-sleep 30
-
 # Run chat-app Job
 nomad job run chat-app.nomad
 
@@ -30,5 +24,11 @@ sleep 120
 
 # Check chat-app Status
 nomad job status chat-app
+
+# Run nginx Job
+nomad job run nginx.nomad
+
+# Sleep
+sleep 30
 
 exit 0
