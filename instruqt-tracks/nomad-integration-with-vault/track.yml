@@ -332,7 +332,7 @@ challenges:
     ```
     nomad status database
     ```
-    You should see a summary of the database job that shows its status as "running". If it is not running, wait 15 seconds and re-run the command. You can also explore the job details in the Nomad UI on the "Nomad" tab.
+    You should see a summary of the database job that shows its status as "running". If it is not running, wait 15 seconds and re-run the command. Eventually, the "db" task group should have 1 healthy allocation. You can also explore the job details in the Nomad UI on the "Nomad" tab.
 
     Our next challenge will be to configure the Vault Database Secrets Engine.
 
@@ -496,7 +496,7 @@ challenges:
     ```
     nomad run /root/hashistack/nomad/web.nomad
     ```
-    Click on the "Nomad" tab and wait until the job has been successfully deployed in the Nomad UI as indicated by a green bar in the Summary column for the "web" job in the list of jobs. Alternatively, you can run the `nomad status web` command until it shows the status of the web job as "running".
+    Click on the "Nomad" tab and wait until the job has been successfully deployed in the Nomad UI as indicated by a green bar in the Summary column for the "web" job in the list of jobs. Alternatively, you can run the `nomad status web` command until it shows the status of the web job as "running" and the "demo" task group has 1 healthy allocation.
 
     After waiting about 30 seconds, confirm that the application is accessing the database by running two commands on the "Server" tab.
 
@@ -579,4 +579,4 @@ challenges:
     port: 3000
   difficulty: basic
   timelimit: 600
-checksum: "6434272770393878953"
+checksum: "3842454214146841892"
