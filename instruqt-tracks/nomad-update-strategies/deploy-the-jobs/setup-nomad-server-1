@@ -56,31 +56,80 @@ job "mongodb" {
 }
 EOF
 
-# Write fabio.nomad
-cat <<-EOF > /root/nomad/jobs/fabio.nomad
-job "fabio" {
+cat <<-EOF > /root/nomad/jobs/nginx.nomad
+job "nginx" {
   datacenters = ["dc1"]
   type = "system"
 
-  group "fabio" {
-    task "fabio" {
+  group "nginx" {
+
+    task "nginx" {
       driver = "docker"
+
       config {
-        image = "fabiolb/fabio"
-        network_mode = "host"
+        image = "nginx"
+
+        port_map {
+          http = 80
+        }
+
+        volumes = [
+          "local:/etc/nginx/conf.d",
+        ]
+      }
+
+      template {
+        data = <<EOT
+upstream chat {
+  # enable sticky session based on IP
+  ip_hash;
+{{ range service "chat-app" }}
+  server {{ .Address }}:{{ .Port }};
+{{ else }}server 127.0.0.1:65535; # force a 502
+{{ end }}
+}
+
+server {
+  listen 80;
+
+  location / {
+    proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+    proxy_set_header Host \$host;
+    proxy_pass http://chat;
+
+    # enable WebSockets
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade \$http_upgrade;
+    proxy_set_header Connection "upgrade";
+   }
+}
+EOT
+
+        destination   = "local/load-balancer.conf"
+        change_mode   = "signal"
+        change_signal = "SIGHUP"
       }
 
       resources {
-        cpu    = 200
-        memory = 128
         network {
-          mbits = 20
-          port "lb" {
-            static = 9999
+          mbits = 10
+
+          port "http" {
+            static = 8080
           }
-          port "ui" {
-            static = 9998
-          }
+        }
+      }
+
+      service {
+        name = "nginx"
+        tags = ["nginx"]
+        port = "http"
+        check {
+          name     = "nginx alive"
+          type     = "http"
+          path     = "/"
+          interval = "10s"
+          timeout  = "2s"
         }
       }
     }
@@ -137,7 +186,7 @@ job "chat-app" {
 
     service {
       name = "chat-app"
-      tags = ["urlprefix-/","chat-app"]
+      tags = ["chat-app"]
       port = "http"
       check {
         name     = "chat-app alive"
