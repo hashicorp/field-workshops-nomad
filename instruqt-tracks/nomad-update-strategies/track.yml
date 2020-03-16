@@ -1,7 +1,7 @@
-slug: nomad-update-strategies
-id: ijfbyi1drwpu
+slug: nomad-update-strategies-fabio
+id: nkdrc7y87daj
 type: track
-title: Nomad Job Update Strategies
+title: Nomad Job Update Strategies (Fabio)
 teaser: |
   Explore Nomad job update strategies including rolling, blue/green, and canary updates.
 description: |-
@@ -23,10 +23,10 @@ owner: hashicorp
 developers:
 - roger@hashicorp.com
 private: true
-published: true
+published: false
 challenges:
 - slug: verify-nomad-cluster-health
-  id: ehjpxbybs49x
+  id: bp6asohmqvac
   type: challenge
   title: Verify the Health of Your Nomad Enterprise Cluster
   teaser: |
@@ -78,7 +78,7 @@ challenges:
   difficulty: basic
   timelimit: 300
 - slug: deploy-the-jobs
-  id: tglnvylrrmeo
+  id: 1zzm0qyixx5j
   type: challenge
   title: Deploy the MongoDB, Fabio, and Chat-App Jobs
   teaser: |
@@ -266,7 +266,7 @@ challenges:
   difficulty: basic
   timelimit: 600
 - slug: rolling-update
-  id: 2vakukxvlho2
+  id: 5a9gve8xpsdh
   type: challenge
   title: Do a Rolling Update of the Chat Job
   teaser: |
@@ -360,7 +360,7 @@ challenges:
   difficulty: basic
   timelimit: 600
 - slug: blue-green-deployment
-  id: 2o5tzi8hyd5f
+  id: 4qq0j90tcvi5
   type: challenge
   title: Do a Blue/Green Deployment of the Chat Job
   teaser: |
@@ -499,7 +499,7 @@ challenges:
   difficulty: basic
   timelimit: 600
 - slug: canary-deployment
-  id: 8sbd1wqgtqir
+  id: 5lavxsxl0sdr
   type: challenge
   title: Do a Canary Deployment of the Chat Job
   teaser: |
@@ -525,7 +525,7 @@ challenges:
     sed -i "s/0.02/dark-0.02/g" chat-app.nomad
     ```
 
-    Setting the "canary" attribute to "1" tells Nomad to deploy a single "canary" instances of the chat app with the dark background while leaving the 3 instances with the light background running.
+    Setting the "canary" attribute to "1" tells Nomad to deploy a single "canary" instance of the chat app with the dark background while leaving the 3 instances with the light background running.
 
     Now, check what would happen if you redeployed the "chat-app" job with this command on the "Server" tab:
     ```
@@ -601,7 +601,7 @@ challenges:
     `<br>
     This indicates that Nomad has failed the deployment. The Nomad UI will also show a message "Deployment marked as failed".
 
-    While the message does not say is that Nomad will stop the canary allocation and leave the 3 allocations with the light background running. However, you can confirm that this has happened by refreshing the Chat tabs multiple times. You will only see the light background.
+    What the message does not say is that Nomad will stop the canary allocation and leave the 3 allocations with the light background running. However, you can confirm that this has happened by refreshing the Chat tabs multiple times. You will only see the light background.
 
     Together, this challenge and the previous one show that you can test out changes to an application with Nomad and then either promote the changes or roll them back. The choice is yours.
 
@@ -648,4 +648,4 @@ challenges:
     port: 9999
   difficulty: basic
   timelimit: 600
-checksum: "6853214861076601752"
+checksum: "5572114285110426906"
