@@ -518,7 +518,7 @@ challenges:
     sed -i "s/0.02/dark-0.02/g" chat-app.nomad
     ```
 
-    Setting the "canary" attribute to "1" tells Nomad to deploy a single "canary" instances of the chat app with the dark background while leaving the 3 instances with the light background running.
+    Setting the "canary" attribute to "1" tells Nomad to deploy a single "canary" instance of the chat app with the dark background while leaving the 3 instances with the light background running.
 
     Now, check what would happen if you redeployed the "chat-app" job with this command on the "Server" tab:
     ```
@@ -637,4 +637,4 @@ challenges:
     port: 8080
   difficulty: basic
   timelimit: 600
-checksum: "16951472042636669795"
+checksum: "6792203208452295904"
