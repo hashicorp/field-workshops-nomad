@@ -280,7 +280,7 @@ challenges:
     cd /root/nomad/jobs
     ```
 
-    Next, you need to modify the "chat-app.nomad" job specification to use a different tag on the "lhaig/anon-app" image. Edit the file on the "Jobs" tab and change the "0.02" tag to "dark-0.02". Then click the disk icon above the file to save it.
+    Next, you need to modify the "chat-app.nomad" job specification to use a different tag on the "lhaig/anon-app" image. Edit the file on the "Jobs" tab and change the `0.02` tag to `dark-0.02`. Then click the disk icon above the file to save it.
 
     If you prefer, you could just run this command instead of editing the file yourself:
     ```
@@ -377,7 +377,7 @@ challenges:
     Edit the "chat-app.nomad" job specification file on the "Jobs" tab, making the following changes:
 
       1. Uncomment the line with `canary = 3` in the "update" stanza by removing `# ` from before it.
-      2. Change the "dark-0.02" tag on the image back to "0.02".
+      2. Change the `dark-0.02` tag on the image back to `0.02`.
 
     If you prefer, you can use these commands to edit the file for you:
     ```
@@ -510,7 +510,7 @@ challenges:
     Edit the "chat-app.nomad" job specification file on the "Jobs" tab, making the following changes:
 
       1. Change the line with `canary = 3` in the "update" stanza to `canary = 1`.
-      2. Change the "0.02" tag on the image to "dark-0.02".
+      2. Change the `0.02` tag on the image to `dark-0.02`.
 
     If you prefer, you can use these commands to edit the file for you:
     ```
@@ -637,4 +637,4 @@ challenges:
     port: 8080
   difficulty: basic
   timelimit: 600
-checksum: "6792203208452295904"
+checksum: "11723544583326229361"
