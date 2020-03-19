@@ -233,6 +233,6 @@ sleep 15
 
 systemctl start nomad
 
-sleep 30
+sleep 45
 
 exit 0

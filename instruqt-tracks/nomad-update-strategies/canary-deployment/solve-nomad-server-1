@@ -9,7 +9,7 @@ cd /root/nomad/jobs
 
 # Edit chat-app.nomad
 sed -i "s/canary = 3/canary = 1/g" chat-app.nomad
-sed -i "s/0.02/dark-0.02/g" chat-app.nomad
+sed -i "s/light-0.03/dark-0.03/g" chat-app.nomad
 
 # Plan the job
 nomad job plan chat-app.nomad

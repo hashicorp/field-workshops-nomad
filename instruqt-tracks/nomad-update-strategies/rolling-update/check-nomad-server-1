@@ -4,10 +4,6 @@ set -e
 
 grep -q "cd /root/nomad/jobs" /root/.bash_history || fail-message "You have not navigated to /root/nomad/jobs on the Nomad server yet."
 
-grep -q "" /root/.bash_history || fail-message "You have not on the Nomad server yet."
-
-grep -q "dark-0.02" /root/nomad/jobs/chat-app.nomad || fail-message "You have not set the image tag to 'dark-0.02' in  chat-app.nomad on the Nomad server yet."
-
 grep -q "nomad job plan chat-app.nomad" /root/.bash_history || fail-message "You have not planned a new deployment of the chat-app job on the Nomad server yet."
 
 grep -q "nomad job run chat-app.nomad" /root/.bash_history || fail-message "You have not run the rolling update of the chat-app job on the Nomad server yet."

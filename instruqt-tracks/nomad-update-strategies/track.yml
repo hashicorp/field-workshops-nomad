@@ -119,7 +119,7 @@ challenges:
     on the "Server" tab to check the status of the "mongodb" job and validate that the "db" task group is healthy.
 
     ## Run the chat-app.nomad Job
-    Next, inspect the "chat-app.nomad" job specification file on the "Jobs" tab. This job deploys 3 instances of a "chat-app" task group that runs a custom Docker image, "lhaig/anon-app:0.02" created by two HashiCorp solutions engineers, Guy Barrows and Lance Haig. Note that the job specifies the "0.02" tag for that image. Later, when we update the app in various ways, we will specify a different tag to use a different version of it.
+    Next, inspect the "chat-app.nomad" job specification file on the "Jobs" tab. This job deploys 3 instances of a "chat-app" task group that runs a custom Docker image, "lhaig/anon-app:light-0.03" created by two HashiCorp solutions engineers, Guy Barrows and Lance Haig. Note that the job specifies the "light-0.03" tag for that image to use a version of the chat app with a light background. Later, when we update the app in various ways, we will also use the tag, "dark-0.03", to use a version of the app with a dark background.
 
     One instance of the chat-app task group will be deployed to each Nomad client because of the job's use of the "spread" stanza:<br>
     `
@@ -139,18 +139,6 @@ challenges:
     }
     `<br>
     The NGINX load balancer that you deploy after the "chat-app" job will automatically add a route for each instance of the chat app because of the "template" stanza within the "nginx.nomad" job specification file.
-
-    Additionally, the task group has the following stanza:
-    ```
-    update {
-      max_parallel = 1
-      health_check = "checks"
-      min_healthy_time = "15s"
-      healthy_deadline = "2m"
-      # canary = 3
-    }
-    ```
-    This tells Nomad that it should update one instance of the task group at a time, base the health of each instance on its health checks, require a new allocation to be healthy for 15 seconds before marking it as healthy, and require a new allocation to be healthy after no more than 2 minutes; if an allocation is not healthy within 2 minutes, it will be marked as unhealthy. The "canary" attribute is commented out for now; you will uncomment it when doing blue/green and canary deployments later in this track.
 
     Finally, the "chat-app" task group uses Consul Connect [sidecar proxies](https://www.consul.io/docs/connect/proxies.html) to talk to the MongoDB database using mutual Transport Layer Security (mTLS) certificates. This is implemented by this stanza:<br>
     `
@@ -280,12 +268,20 @@ challenges:
     cd /root/nomad/jobs
     ```
 
-    Next, you need to modify the "chat-app.nomad" job specification to use a different tag on the "lhaig/anon-app" image. Edit the file on the "Jobs" tab and change the `0.02` tag to `dark-0.02`. Then click the disk icon above the file to save it.
+    Please inspect the "chat-app.nomad" job specification file on the "Jobs" tab again and note that the setup script for this challenge has added the following stanza to the "chat-app" task group:
+    ```
+    update {
+      max_parallel = 1
+      health_check = "checks"
+      min_healthy_time = "15s"
+      healthy_deadline = "2m"
+      # canary = 3
+    }
+    ```
 
-    If you prefer, you could just run this command instead of editing the file yourself:
-    ```
-    sed -i "s/anon-app:0.02/anon-app:dark-0.02/g" chat-app.nomad
-    ```
+    This tells Nomad that it should update one instance of the task group at a time, base the health of each instance on its health checks, require a new allocation to be healthy for 15 seconds before marking it as healthy, and require a new allocation to be healthy after no more than 2 minutes; if an allocation is not healthy within 2 minutes, it will be marked as unhealthy. The "canary" attribute is commented out for now; you will uncomment it when doing blue/green and canary deployments later in this track.
+
+    Additionally, the "chat-app.nomad" job specification is now using the "dark-0.03" tag on the "lhaig/anon-app" image instead of the original "light-0.03" tag. This will give the chat app a dark background.
 
     Now, check what would happen if you redeployed the "chat-app" job with this command:
     ```
@@ -298,7 +294,7 @@ challenges:
     +/- Task Group: "chat-app" (1 create/destroy update, 2 ignore)
       +/- Task: "chat-app" (forces create/destroy update)
         +/- Config {
-          +/- image: "lhaig/anon-app:0.02" => "lhaig/anon-app:dark-0.02"
+          +/- image: "lhaig/anon-app:light-0.03" => "lhaig/anon-app:dark-0.03"
             }
           Task: "connect-proxy-chat-app"
     `<br>
@@ -377,12 +373,12 @@ challenges:
     Edit the "chat-app.nomad" job specification file on the "Jobs" tab, making the following changes:
 
       1. Uncomment the line with `canary = 3` in the "update" stanza by removing `# ` from before it.
-      2. Change the `dark-0.02` tag on the image back to `0.02`.
+      2. Change the `dark-0.03` tag on the image back to `light-0.03`.
 
     If you prefer, you can use these commands to edit the file for you:
     ```
     sed -i "s/# canary = 3/canary = 3/g" chat-app.nomad
-    sed -i "s/dark-0.02/0.02/g" chat-app.nomad
+    sed -i "s/dark-0.03/light-0.03/g" chat-app.nomad
     ```
 
     Setting the "canary" attribute to the "count" attribute of the "chat-app" task group tells Nomad to deploy 3 new instances of the task group as part of a "blue/green" deployment in which the 3 "blue" instances of the chat app with the dark background continue to run even after the new "green" instances of the chat app with the light background are deployed. (Note that the colors "blue" and "green" here have nothing to do with the background colors of the chat app; they are just standard terminology for referring to this particular update strategy.)
@@ -408,12 +404,12 @@ challenges:
           }
       +/- Task: "chat-app" (forces create/destroy update)
         +/- Config {
-          +/- image: "lhaig/anon-app:dark-0.02" => "lhaig/anon-app:0.02"
+          +/- image: "lhaig/anon-app:dark-0.03" => "lhaig/anon-app:light-0.03"
             }
           Task: "connect-proxy-chat-app"
     `<br>
 
-    The plan indicates that Nomad would create 3 canaries to run the "0.02" version of the chat app but ignore the 3 allocations that are currently running. That would result in 6 instances of the chat app running on the 3 Nomad clients. That is ok, however, since we are using ports dynamically selected by Nomad and are using NGINX to forward requests to the chat app instances.
+    The plan indicates that Nomad would create 3 canaries to run the "light-0.03" version of the chat app but ignore the 3 allocations that are currently running. That would result in 6 instances of the chat app running on the 3 Nomad clients. That is ok, however, since we are using ports dynamically selected by Nomad and are using NGINX to forward requests to the chat app instances.
 
     Go ahead and re-run the "chat-app" job with this command:
     ```
@@ -510,12 +506,12 @@ challenges:
     Edit the "chat-app.nomad" job specification file on the "Jobs" tab, making the following changes:
 
       1. Change the line with `canary = 3` in the "update" stanza to `canary = 1`.
-      2. Change the `0.02` tag on the image to `dark-0.02`.
+      2. Change the `light-0.03` tag on the image to `dark-0.03`.
 
     If you prefer, you can use these commands to edit the file for you:
     ```
     sed -i "s/canary = 3/canary = 1/g" chat-app.nomad
-    sed -i "s/0.02/dark-0.02/g" chat-app.nomad
+    sed -i "s/light-0.03/dark-0.03/g" chat-app.nomad
     ```
 
     Setting the "canary" attribute to "1" tells Nomad to deploy a single "canary" instance of the chat app with the dark background while leaving the 3 instances with the light background running.
@@ -541,12 +537,12 @@ challenges:
           }
       +/- Task: "chat-app" (forces create/destroy update)
         +/- Config {
-          +/- image: "lhaig/anon-app:0.02" => "lhaig/anon-app:dark-0.02"
+          +/- image: "lhaig/anon-app:light-0.03" => "lhaig/anon-app:dark-0.03"
             }
           Task: "connect-proxy-chat-app"
     `<br>
 
-    The plan indicates that Nomad would create 1 canary to run the "dark-0.02" version of the chat app but ignore the 3 allocations that are currently running. That would result in 4 instances of the chat app running on the 3 Nomad clients.
+    The plan indicates that Nomad would create 1 canary to run the "dark-0.03" version of the chat app but ignore the 3 allocations that are currently running. That would result in 4 instances of the chat app running on the 3 Nomad clients.
 
     Go ahead and re-run the "chat-app" job with this command:
     ```
@@ -637,4 +633,4 @@ challenges:
     port: 8080
   difficulty: basic
   timelimit: 600
-checksum: "11723544583326229361"
+checksum: "298882181793944640"
