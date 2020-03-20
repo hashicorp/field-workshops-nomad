@@ -102,12 +102,12 @@ challenges:
     ```
     This should return something like this:<br>
     `
-    ==> Monitoring evaluation "d66b5ced"
+    ==> Monitoring evaluation "64754ee4"
     Evaluation triggered by job "mongodb"
-    Evaluation within deployment: "d5d97844"
-    Allocation "3c257515" created: node "8a0ecd90", group "db"
+    Evaluation within deployment: "baa2ea28"
+    Allocation "60fde323" created: node "6777b2ca", group "db"
     Evaluation status changed: "pending" -> "complete"
-    ==> Evaluation "d66b5ced" finished with status "complete"
+    ==> Evaluation "64754ee4" finished with status "complete"
     `<br>
 
     You can check the job in the Nomad UI after waiting 15-30 seconds, clicking the Instruqt refresh button above the Nomad UI, and then selecting the "mongodb" job. You might need to make your browser window a bit wider to see the UI properly and so that the Instruqt buttons do not overlap the Nomad UI tab. You could also click the rectangular button next to the refresh button to hide this assignment. After no more than 1 minute, you should see that the job has 1 healthy allocation.
@@ -138,7 +138,7 @@ challenges:
       }
     }
     `<br>
-    The NGINX load balancer that you deploy after the "chat-app" job will automatically add a route for each instance of the chat app because of the "template" stanza within the "nginx.nomad" job specification file.
+    The NGINX load balancer that you will deploy after the "chat-app" job will automatically add a route for each instance of the chat app because of the "template" stanza within the "nginx.nomad" job specification file.
 
     Finally, the "chat-app" task group uses Consul Connect [sidecar proxies](https://www.consul.io/docs/connect/proxies.html) to talk to the MongoDB database using mutual Transport Layer Security (mTLS) certificates. This is implemented by this stanza:<br>
     `
@@ -161,14 +161,14 @@ challenges:
     ```
     This should return something like this:<br>
     `
-    ==> Monitoring evaluation "83924539"
+    ==> Monitoring evaluation "f08ca561"
     Evaluation triggered by job "chat-app"
-    Evaluation within deployment: "e7cde396"
-    Allocation "5fa9f018" created: node "48f9e81c", group "chat-app"
-    Allocation "712e8d99" created: node "8a0ecd90", group "chat-app"
-    Allocation "c81e3ab3" created: node "acba5ef2", group "chat-app"
+    Evaluation within deployment: "5dc975d3"
+    Allocation "5d57baab" created: node "9afadcdd", group "chat-app"
+    Allocation "14a5cc97" created: node "6777b2ca", group "chat-app"
+    Allocation "2f792469" created: node "4b19ed9a", group "chat-app"
     Evaluation status changed: "pending" -> "complete"
-    ==> Evaluation "83924539" finished with status "complete" "complete"
+    ==> Evaluation "f08ca561" finished with status "complete"
     `<br>
 
     After waiting about 60 seconds, check the status of the "chat-app" job with this command on the "Server" tab:
@@ -179,15 +179,15 @@ challenges:
     This should indicate that the job is running and have an Allocations section at the bottom that looks like this:<br>
     `
     Allocations
-    ID        Node ID   Task Group  Version  Desired  Status   Created  Modified
-    8b883f54  8a0ecd90  chat-app    0        run      running  21s ago  18s ago
-    c9cc1c1c  acba5ef2  chat-app    0        run      running  21s ago  14s ago
-    ca660509  48f9e81c  chat-app    0        run      running  21s ago  14s ago
+    ID        Node ID   Task Group  Version  Desired  Status   Created    Modified
+    14a5cc97  6777b2ca  chat-app    0        run      running  1m11s ago  24s ago
+    2f792469  4b19ed9a  chat-app    0        run      running  1m11s ago  16s ago
+    5d57baab  9afadcdd  chat-app    0        run      running  1m11s ago  16s ago
     `<br>
 
     Note that the Node IDs of the 3 allocations are all different. In other words, Nomad scheduled one instance of the chat-app task to each Nomad client because of the `spread` stanza we included in the "chat-app.nomad" job specification.
 
-    You can also check out the "chat-app" job in the Nomad UI. Within 90 seconds of running the job, all 3 allocations should be healthy.
+    You can also check out the "chat-app" job in the Nomad UI. Within 60 seconds of running the job, all 3 allocations should be healthy.
 
     You can also verify that the Nomad task groups were automatically registered as Consul services by looking at the "Services" tab of the Consul UI. Note the sidecar proxy services created by Nomad's integration with Consul Connect. The services all include node checks and service checks.
 
@@ -204,18 +204,20 @@ challenges:
     ```
     This should return something like this:<br>
     `
-    ==> Monitoring evaluation "d08fff01"
+    ==> Monitoring evaluation "32fbe07d"
     Evaluation triggered by job "nginx"
-    Allocation "d17c329d" created: node "211ec400", group "nginx"
+    Allocation "38f8f053" created: node "9afadcdd", group "nginx"
+    Allocation "58e6b570" created: node "6777b2ca", group "nginx"
+    Allocation "683d7322" created: node "4b19ed9a", group "nginx"
     Evaluation status changed: "pending" -> "complete"
-    ==> Evaluation "d08fff01" finished with status "complete"
+    ==> Evaluation "32fbe07d" finished with status "complete"
     `<br>
 
     You can now access the chat-app UI on the "Chat 1", "Chat 2", and "Chat 3" tabs. Note that all instances of the chat app currently have a light background.
 
-    Since we are using NGINX, the 3 Chat tabs are not actually pinned to specific Nomad clients. In fact, all of them are pointing at the NGINX load balancer itself on the corresponding Nomad client. Each time you click the refresh button for any of the Chat tabs, you will be randomly connected to an instance of the chat app on any the 3 Nomad clients in a new session. As mentioned above, however, each session of the chat app between refreshes is sticky.
+    Since we are using NGINX, the 3 Chat tabs are not actually pinned to specific Nomad clients. In fact, all of them are pointing at the NGINX load balancer itself on the corresponding Nomad client. Each time you click the refresh button for any of the Chat tabs, you will be randomly connected to an instance of the chat app on any of the 3 Nomad clients in a new session. As mentioned above, however, each session of the chat app between refreshes is sticky.
 
-    If you type messages in either Chat tab, they will usually show up in the other tab. However, you might sometimes need to click the Instruqt refresh button to the right of all the tabs while one of the Chat tabs is selected in order to force it to reconnect to the database. This is an issue with the chat app itself rather than with Nomad.
+    If you type messages in the Chat tabs, they will usually show up in the other tab. However, you might sometimes need to click the Instruqt refresh button to the right of all the tabs while one of the Chat tabs is selected in order to force it to reconnect to the database. This is an issue with the chat app itself rather than with Nomad.
 
     In the next challenge, you will update the Chat app to use a dark background using Nomad's rolling update strategy.
   notes:
@@ -454,9 +456,9 @@ challenges:
   notes:
   - type: text
     contents: |-
-      In this challenge, you will do a "blue/green" deployment of the Chat job. This means that you will initally deploy 3 new instances of the chat app with the original light background but keep the 3 instances with the dark background running. When you are satisfied with the new version of the app, you will promote the deployment, causing Nomad to stop the old instances.
+      In this challenge, you will do a "blue/green" deployment of the Chat job for which Nomad will deploy 3 new instances of the chat app with the original light background but keep the 3 instances with the dark background running.
 
-      In the next challenge, you will update the Chat job using a "canary" deployment, but you will rollback the deployment instead of promoting it.
+      When you are satisfied with the new version of the app, you will promote the deployment, causing Nomad to stop the old instances.
   tabs:
   - title: Jobs
     type: code
@@ -598,9 +600,7 @@ challenges:
   notes:
   - type: text
     contents: |-
-      In this challenge, you will do a "canary" deployment of the Chat job.
-
-      This means that you will deploy 1 new "canary" instance of the chat app with the dark background but keep the 3 instances with the light background that you deployed in the last challenge running.
+      In this challenge, you will do a "canary" deployment of the Chat job for which Nomad will deploy 1 new "canary" instance of the chat app with the dark background but keep the 3 instances with the light background that you deployed in the last challenge running.
 
       However, instead of promoting the deployment, you will roll it back.
   tabs:
@@ -633,4 +633,4 @@ challenges:
     port: 8080
   difficulty: basic
   timelimit: 600
-checksum: "298882181793944640"
+checksum: "10290034433640436544"
