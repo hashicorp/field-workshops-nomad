@@ -169,7 +169,7 @@ name:  Multi-region Federation
 class: img-right
 name:  Nomad Layout and Comms
 # Nomad Communications
-![NomadArchitectureRegion](https://www.nomadproject.io/assets/images/nomad-architecture-region-a5b20915.png)
+![NomadArchitectureRegion](images/nomad-architecture-region.png)
 
 .smaller[
 * 3-5 Server Nodes
