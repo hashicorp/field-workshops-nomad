@@ -150,3 +150,29 @@ main = rule {
   allow_docker_and_java
 }
 ```
+
+???
+* This is a Nomad Sentinel policy that only allows the Docker and Java task drivers to be used.
+
+---
+name: lab-nomad-governance
+# 👩‍💻 Nomad Enterprise Governance Lab
+* In this lab, you'll learn how to use Nomad Enterprise's governance capabilities including namespaces, resource quotas, and Sentinel policies.
+* You'll also enable and use Nomad ACLs since these are required in order to use Sentinel in Nomad.
+* You'll do this using the Instruqt track "Nomad Enterprise Governance" at this URL:<br>
+https://play.instruqt.com/hashicorp/tracks/nomad-governance
+
+???
+* Now, you can do explore Nomad namespaces, resource quotas, and Sentinel policies hands-on
+* You'll be running the Instruqt track "Nomad Enterprise Governance"
+
+---
+name: chapter-5-Summary
+# 📝 Chapter 5 Summary
+
+In this section you did the following:
+* Learned about Nomad Enterprise's governance features including namespaces, resource quotas, and Sentinel policies.
+* Actually worked with all 3 of those constructs and Nomad ACLs in an Instruqt lab.
+
+???
+* You now know a lot more about Nomad Enterprise's governance features than you did an hour ago.
