@@ -50,6 +50,7 @@ name: workshop-topics
 # Workshop Topics
 
 1. Nomad Job Placement and Variable Interpolation
+1. Nomad Job Update Strategies
 1. Nomad Integration with Vault Using Templates
 1. Stateful Workloads with Nomad Host Volumes
 1. Nomad Enterprise Platform Features
