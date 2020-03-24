@@ -65,6 +65,7 @@ name: instruqt-tracks
 * This workshop uses [Instruqt](https://instruqt.com) for hands-on labs.
 * Instruqt labs are run in "tracks" that are divided into "challenges".
 * This workshop uses the following tracks (with more to be added):
+    1. https://play.instruqt.com/hashicorp/tracks/nomad-update-strategies-nginx
     1. https://play.instruqt.com/hashicorp/tracks/nomad-integration-with-vault
     1. https://play.instruqt.com/hashicorp/tracks/nomad-governance
 
