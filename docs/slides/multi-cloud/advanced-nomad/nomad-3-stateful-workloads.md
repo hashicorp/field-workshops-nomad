@@ -4,12 +4,13 @@ background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/
 count: false
 
 # Chapter 3
-## Stateful Workloads with Host Volumes
+## Stateful Workloads with Nomad
 
 ![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
 
 ???
-* This chapter covers running stateful workloads with Nomad Host Volumes.
+* This chapter covers running stateful workloads with Nomad.
+* It includes using Nomad Host Volumes and Docker volume drivers to access external data storage solutions like  Portworx.
 
 ---
 layout: true
@@ -21,74 +22,129 @@ layout: true
 
 ---
 name: chapter-3-topics
-# Stateful Workloads with Nomad Host Volumes
+# Stateful Workloads with Nomad
 * Stateful Workloads Overview
-* Stateful Workloads Hands on Track
+* Using Nomad Host Volumes
+* Using [Portworx](https://docs.portworx.com/install-with-other/nomad) with a Docker Volume Driver
+* Stateful Workloads Hands-on Lab
 
 ---
-name: nomad-stateful-workloads-overview
-## Stateful Workloads Overview
+name: types-of-workload
+# Types of Workloads
 
-Nomad applications are generally deployed in 2 configurations:
+* Nomad workloads are generally deployed in 2 configurations:
+  * Stateful
+  * Stateless
 
-* Stateful
-* Stateless
-
-**Stateless** applications are relatively easy to deploy as the state is thrown away after the job has run.
-
-**Stateful** applications on the other hand require somewhere to store data when they are running
+* **Stateless** workloads are relatively easy to deploy as the state is thrown away after the job has run.
+* **Stateful** workloads on the other hand need to store state that can be used if the job is run again.
 
 ???
+* There are 2 kinds of workloads or applications: stateless and stateful.
+* The latter have extra requirements and complexity.
 
 ---
-name: nomad-stateful-workloads-overview-2
-## Stateful Workloads Overview
+name: nomad-storage-volume-options
+# Storage Volume Options
 
-Nomad allows for mounting persistant data volumes in 2 ways:
-
-* Local Storage Volumes
-* Remote Storage Volumes
-
-These can be presented by using:
-
-**[Host Volume Mounts](https://nomadproject.io/docs/configuration/client/#host_volume-stanza)**
-
-**[Docker Volume Drivers](https://nomadproject.io/docs/drivers/docker/#inlinecode-volumes-16)**
+* Nomad 0.10 allows mounting persistant storage volumes in 2 ways:
+  * Local Storage Volumes which can be exposed to Nomad using [Host Volume Mounts](https://nomadproject.io/docs/configuration/client/#host_volume-stanza)
+  * Remote Storage Volumes which can be exposed to Nomad jobs using [Docker Volume Drivers](https://nomadproject.io/docs/drivers/docker/#inlinecode-volumes-16)
+* Nomad 0.11 will support additional storage providers through [Container Storage Interface (CSI)](https://github.com/container-storage-interface/spec/blob/master/spec.md) plugins.
 
 ???
+* Nomad 0.10 offers two choices for mounting persistent data volumes: Host Volumes and Docker Volume Drivers.
+* Nomad 0.11 will support additional storage providers through CSI plugins.
 
 ---
-name: nomad-stateful-workloads-overview-3
-## Stateful Workloads Overview
+name: nomad-host-volumes
+# Using Nomad Host Volumes
 
-Nomad host volumes allows you to mount any directory on a client into an allocation.
-These directories could be any one of the following:
-
-* Simple Local Directory (/opt/coolapp/data/)
-* NFS Mountpoint (mount -t nfs 10.10.0.10:/backups /var/backups)
-* GlusterFS (gfs1.gluster-host.intern:/datastore /mnt/datastore)
-
-These mounts can then be connected to [tasks](https://nomadproject.io/docs/job-specification/task/) within a [task group](https://nomadproject.io/docs/job-specification/group/)
+* Nomad **Host Volumes** allows you to mount any directory on a Nomad client into allocations.
+* These directories can be any of the following:
+  * Simple Local Directory (/opt/coolapp/data/)
+  * NFS Mountpoint (mount -t nfs 10.10.0.10:/backups /var/backups)
+  * GlusterFS (gfs1.gluster-host.intern:/datastore /mnt/datastore)
+* These mounts can be used by [tasks](https://nomadproject.io/docs/job-specification/task/) within a [task group](https://nomadproject.io/docs/job-specification/group/) for any [task driver](https://nomadproject.io/docs/drivers).
 
 ???
+* Nomad host volumes work with multiple task drivers.
+* They use storage volumes mounted on the Nomad clients.
 
 ---
-name: nomad-stateful-workloads-overview-4
-## Stateful Workloads Overview
+name: nomad-host-volumes-configurationon-client
+# Configuring Host Volumes on Nomad Clients
+* The `host_volume` stanza is added to the `client` stanza of Nomad configuration files to define host volumes.
 
-Nomads Docker task driver support enables the integration of software-defined storage (SDS) solutions like Portworx to support Docker stateful workloads.
-
-Nomad does **NOT** manage storage pools or replication. The SDS provider should manage that.
+```hcl
+client {
+  enabled = true
+  host_volume "mongodb_mount" {
+    path      = "/opt/mongodb/data"
+    read_only = false
+  }
+}
+```
 
 ???
+* The [host_volume](https://nomadproject.io/docs/configuration/client/#host_volume-stanza) stanza is added to the `client` stanza of Nomad configuration files to define host volumes.
 
 ---
-name: nomad-stateful-workloads-overview-5
-## Stateful Workloads Hands on Track
-
-Some hands on experience using host volumes for Stateful applications in nomad can be found here:
-
-(https://instruqt.com)
-
+name: nomad-volumes-configurationon-in-jobs
+class: smaller
+# Using Host Volumes in Nomad Jobs
+* The [volume](https://nomadproject.io/docs/job-specification/volume) stanza is added to task groups to use a host volume mounted on the client.
+```hcl
+volume "mongodb_vol" {
+  type = "host"
+  source = "mongodb_mount"
+}
+```
+* The [volume_mount](https://nomadproject.io/docs/job-specification/volume_mount) stanza is added to tasks to allow a task to use the task group's volume.
+```hcl
+volume_mount {
+  volume = "mongodb_vol"
+  destination = "/data/db"
+}
+```
 
 ???
+* The `volume` and `volume_mount` stanzas are added to task groups and tasks respectively to use Nomad host volumes in jobs.
+
+---
+name: using-docker-volume-drivers
+## Using Docker Volume Drivers
+* Nomad's [Docker Task Driver](https://nomadproject.io/docs/drivers/docker) enables the integration of software-defined storage (SDS) solutions like [Portworx](https://docs.portworx.com/install-with-other/nomad) through [Docker Volume Drivers](https://docs.docker.com/engine/extend/plugins_volume/#create-a-volumedriver) to support stateful Docker workloads.
+  * Docker volume drivers are enabled with the [volume_driver](https://nomadproject.io/docs/drivers/docker/#volume_driver) stanza.
+  * Volumes are mounted using the [volumes](https://nomadproject.io/docs/drivers/docker/#volumes) or [mounts](https://nomadproject.io/docs/drivers/docker/#mounts) stanza.
+  * Alternatively, you can use the [mounts](https://nomadproject.io/docs/drivers/docker/#mounts) stanza instead of the above stanzas to exercise more control over volume definitions.
+* Nomad does **NOT** manage storage pools or replication for Docker volume drivers. The SDS provider should manage that.
+
+???
+* Nomad's Docker driver can be used with external storage solutions using Docker volume drivers.
+* Nomad does not manage the storage pools or replication of data in these external storage solutions.
+
+---
+name: lab-nomad-governance
+# 👩‍💻 Nomad Host Volumes Lab
+* In this lab, you'll learn how to use Nomad host volumes.
+* You'll do this using the Instruqt track "Nomad Host Volumes" at this URL:<br>
+https://play.instruqt.com/hashicorp/tracks/nomad-host-volumes
+* To explore using Nomad with Portworx, please see the [Stateful Workloads with Portworx](https://learn.hashicorp.com/nomad/stateful-workloads/portworx) learn track.
+
+???
+* Now, you can explore Nomad host volumes hands-on
+* You'll be running the Instruqt track "Nomad Host Volumes"
+
+---
+name: chapter-3-Summary
+# 📝 Chapter 3 Summary
+
+In this section you did the following:
+* Learned about Nomad's options to run stateful workloads including:
+  * Using Nomad host volumes with any task driver
+  * Using Docker volume drivers with the Docker driver
+* Actually worked with Nomad host volumes in an Instruqt lab.
+
+???
+* You now know a lot more about Nomad's persistent storage options than you did an hour ago.
