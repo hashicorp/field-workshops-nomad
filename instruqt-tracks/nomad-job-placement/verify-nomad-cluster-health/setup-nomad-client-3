@@ -1,0 +1,67 @@
+#!/bin/bash -l
+
+# Make directory for mongodb mount
+mkdir -p /opt/mongodb/data
+
+# Write Nomad Client 3 Config
+cat <<-EOF > /etc/nomad.d/nomad-client3.hcl
+# Setup data dir
+data_dir = "/tmp/nomad/client3"
+
+# Give the agent a unique name
+name = "client3"
+
+# Enable the client
+client {
+  enabled = true
+
+  host_volume "mongodb_mount" {
+    path      = "/opt/mongodb/data"
+    read_only = false
+  }
+}
+
+# Consul configuration
+consul {
+  address = "nomad-client-3:8500"
+}
+EOF
+
+# Write Consul Client 3 Config
+cat <<-EOF > /etc/consul.d/consul-client3.json
+{
+  "ui": true,
+  "log_level": "INFO",
+  "data_dir": "/tmp/consul/client3",
+  "node_name": "client3",
+  "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
+  "client_addr": "0.0.0.0",
+  "retry_join": [
+    "nomad-server-1"
+  ],
+  "connect": {
+    "enabled": true
+  },
+  "ports": {
+    "grpc": 8502
+  }
+}
+EOF
+
+# Install CNI plugins
+curl -s -L -o cni-plugins.tgz https://github.com/containernetworking/plugins/releases/download/v0.8.3/cni-plugins-linux-amd64-v0.8.3.tgz
+mkdir -p /opt/cni/bin
+tar -C /opt/cni/bin -xzf cni-plugins.tgz
+
+# Configure iptables
+echo 1 > /proc/sys/net/bridge/bridge-nf-call-arptables
+echo 1 > /proc/sys/net/bridge/bridge-nf-call-ip6tables
+echo 1 > /proc/sys/net/bridge/bridge-nf-call-iptables
+
+systemctl start consul
+
+sleep 15
+
+systemctl start nomad
+
+exit 0
