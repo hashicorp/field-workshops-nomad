@@ -57,11 +57,14 @@ challenges:
     contents: |-
       In this challenge, you will verify the health of the Nomad Enterprise cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
 
-      In later challenges, you will run "mongodb", "chat-app", and "nginx" jobs and update the second using rolling, blue/green, and canary update strategies. nginx will be used as a load balancer that will forward requests to instances of the "chat" application which will store its messages in a single MongoDB database.
+      In later challenges, you will run "mongodb", "chat-app", and "nginx" jobs and update them using Nomad Job Placement stanzas Constraint, Affinity, and  Spread. Nginx will be used as a load balancer that will forward requests to instances of the "chat" application which will store its messages in a single MongoDB database.
   tabs:
   - title: Server
     type: terminal
     hostname: nomad-server-1
+  - title: Client
+    type: terminal
+    hostname: nomad-client-1
   - title: Consul UI
     type: service
     hostname: nomad-server-1
@@ -76,6 +79,70 @@ challenges:
     port: 8081
   difficulty: basic
   timelimit: 300
+- slug: deploy-the-jobs-traefik
+  id: ak0ehohkwlsk
+  type: challenge
+  title: Verify the Health of Your Nomad Enterprise Cluster
+  teaser: |
+    Verify the health of the Nomad Enterprise cluster that has been deployed for you by the track's setup scripts.
+  assignment: |-
+    In this challenge, you will verify the health of the Nomad Enterprise cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
+
+    The cluster is running 1 Nomad/Consul server and 3 Nomad/Consul clients. The [Consul Connect integration](https://nomadproject.io/guides/integrations/consul-connect) has been enabled on the server and clients since the chatapp uses it to talk to the MongoDB database. Additionally, a Nomad [host volume](https://nomadproject.io/docs/configuration/client/#host_volume-stanza) called "mongodb_mount" has been configured on the clients under the /opt/mongodb/data directory so that MongoDB can persist its data.
+
+    First, verify that all 4 Consul agents are running and connected to the cluster by running this command on the "Server" tab:
+    ```
+    consul members
+    ```
+    You should see 4 Consul agents with the "alive" status.
+
+    Check that the Nomad server is running by running this command on the "Server" tab:
+    ```
+    nomad server members
+    ```
+    You should see 1 Nomad server with the "alive" status.
+
+    Check the status of the Nomad client nodes by running this command on the "Server" tab:
+    ```
+    nomad node status
+    ```
+    You should see 3 Nomad clients with the "ready" status.
+
+    You can also check the status of the Nomad server and clients in the Nomad and Consul UIs.
+
+    In the next challenge, you will configure Nomad Enterprise namespaces and resource quotas.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will verify the health of the Nomad Enterprise cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
+
+      In later challenges, you will run "mongodb", "chat-app", and "nginx" jobs and update them using Nomad Job Placement stanzas Constraint, Affinity, and  Spread. Nginx will be used as a load balancer that will forward requests to instances of the "chat" application which will store its messages in a single MongoDB database.
+  tabs:
+  - title: Jobs
+    type: code
+    hostname: nomad-server-1
+    path: /root/nomad/jobs/
+  - title: Server
+    type: terminal
+    hostname: nomad-server-1
+  - title: Consul UI
+    type: service
+    hostname: nomad-server-1
+    port: 8500
+  - title: Nomad UI
+    type: service
+    hostname: nomad-server-1
+    port: 4646
+  - title: Traefik UI
+    type: service
+    hostname: nomad-server-1
+    port: 8081
+  - title: Traefik UI
+    type: service
+    hostname: nomad-server-1
+    port: 8080
+  difficulty: basic
+  timelimit: 3600
 - slug: deploy-the-jobs
   id: s21kxxwztur9
   type: challenge
@@ -118,7 +185,7 @@ challenges:
     on the "Server" tab to check the status of the "mongodb" job and validate that the "db" task group is healthy.
 
     ## Run the chat-app.nomad Job
-    Next, inspect the "chat-app.nomad" job specification file on the "Jobs" tab. This job deploys 3 instances of a "chat-app" task group that runs a custom Docker image, "lhaig/anon-app:light-0.03" created by two HashiCorp solutions engineers, Guy Barrows and Lance Haig. Note that the job specifies the "light-0.03" tag for that image to use a version of the chat app with a light background. Later, when we update the app in various ways, we will also use the tag, "dark-0.03", to use a version of the app with a dark background.
+    Next, inspect the "chat-app.nomad" job specification file on the "Jobs" tab. This job deploys 3 instances of a "chat-app" task group that runs a custom Docker image.
 
     One instance of the chat-app task group will be deployed to each Nomad client because of the job's use of the "spread" stanza:<br>
     `
@@ -126,7 +193,7 @@ challenges:
       attribute = "${node.unique.name}"
     }
     `<br>
-    Later, when we do a blue-green deployment, we will see that the new "green" deployments will also be spread evenly across the 3 Nomad clients.
+    Later, when we change the job to use the Constraint stanza, you will see that the jobs have moved hosts based on the new configuration.
 
     The "chat-app" task runs on a dynamic port selected by Nomad; that port is mapped to port 5000 inside the task group's "network" stanza:<br>
     `
@@ -212,35 +279,20 @@ challenges:
     ==> Evaluation "32fbe07d" finished with status "complete"
     `<br>
 
-    You can now access the chat-app UI on the "Chat 1", "Chat 2", and "Chat 3" tabs. Note that all instances of the chat app currently have a light background.
+    You can now access the chat-app UI on the "Chat 1", "Chat 2", and "Chat 3" tabs.
 
     Since we are using nginx, the 3 Chat tabs are not actually pinned to specific Nomad clients. In fact, all of them are pointing at the nginx load balancer itself on the corresponding Nomad client. Each time you click the refresh button for any of the Chat tabs, you will be randomly connected to an instance of the chat app on any of the 3 Nomad clients in a new session. As mentioned above, however, each session of the chat app between refreshes is sticky.
 
     If you type messages in the Chat tabs, they will usually show up in the other tab. However, you might sometimes need to click the Instruqt refresh button to the right of all the tabs while one of the Chat tabs is selected in order to force it to reconnect to the database. This is an issue with the chat app itself rather than with Nomad.
 
-    In the next challenge, you will update the Chat app to use a dark background using Nomad's rolling update strategy.
+    In the next challenge, you will update the Chat app to use the Constraint Stanza.
   notes:
   - type: text
     contents: |-
       In this challenge, you will deploy the "mongodb", "chat-app", and "nginx" jobs.
 
-      In the next challenge, you will update the Chat app using the rolling update strategy.
+      In the next challenge, you will update the Chat app using the Constraint Stanza.
   tabs:
-  - title: Jobs
-    type: code
-    hostname: nomad-server-1
-    path: /root/nomad/jobs/
-  - title: Server
-    type: terminal
-    hostname: nomad-server-1
-  - title: Consul UI
-    type: service
-    hostname: nomad-server-1
-    port: 8500
-  - title: Nomad UI
-    type: service
-    hostname: nomad-server-1
-    port: 4646
   - title: nginx UI
     type: service
     hostname: nomad-server-1
@@ -257,6 +309,108 @@ challenges:
     type: service
     hostname: nomad-client-3
     port: 8080
+  - title: Jobs
+    type: code
+    hostname: nomad-server-1
+    path: /root/nomad/jobs/
+  - title: Server
+    type: terminal
+    hostname: nomad-server-1
+  - title: Consul UI
+    type: service
+    hostname: nomad-server-1
+    port: 8500
+  - title: Nomad UI
+    type: service
+    hostname: nomad-server-1
+    port: 4646
   difficulty: basic
   timelimit: 3600
-checksum: "13992001899526899210"
+- slug: show-constraint
+  id: lnfmntfw6so3
+  type: challenge
+  title: Change the Spread stanza to Constraint
+  teaser: |
+    Change the Spread stanza to Constraint and get nodes to run on same instances
+  assignment: "In this challenge, you will change out the Spread stanza with the Constraint
+    stanza demonstrating how we can bind jobs to hosts in other ways.\n\n\nPlease
+    navigate back to the /root/nomad/jobs directory on the \"Server\" tab again with
+    this command:\n```\ncd /root/nomad/jobs\n```\n\nEdit the \"chat-app.nomad\" job
+    specification file on the \"Jobs\" tab, making the following changes:\n\n--edited
+    this out for now  1. Change the count to 4\n      `count = 4`\n  1. Change the
+    out the Spread stanza <br>\n      `\n      spread {\n      attribute = \"${node.unique.name}\"\n
+    \     }\n      ` <br>\n      With this new Constraint stanza\n      ```\n      constraint
+    {\n      attribute = \"${attr.platform.gce.machine-type}\"\n      value     =
+    \"n1-standard-1\"\n      }\n      ```\nNow, check what would happen if you redeployed
+    the \"chat-app\" job with this command on the \"Server\" tab:\n```\nnomad job
+    plan chat-app.nomad\n```\n\nThis should return something like this:<br>\n`\n +/-
+    Job: \"chat-app\"\n +/- Task Group: \"chat-app\" (1 create/destroy update, 2 ignore)\n
+    + Constraint {\n     LTarget: \"\"\n   + Operand: \"distinct_hosts\"\n   + RTarget:
+    \"true\"\n   }\n   Task: \"chat-app\"\n   Task: \"connect-proxy-chat-app\"\n`<br>\n\nThe
+    plan indicates that Nomad would update 1 based on increasing the count and \n\nGo
+    ahead and re-run the \"chat-app\" job with this command:\n```\nnomad job run chat-app.nomad\n```\n\nThis
+    should return something like this:<br>\n`\n==> Monitoring evaluation \"0fd02bb5\"\n
+    \   Evaluation triggered by job \"chat-app\"\n    Evaluation within deployment:
+    \"fa80df0c\"\n    Allocation \"7633b926\" created: node \"14e04978\", group \"chat-app\"\n
+    \   Evaluation status changed: \"pending\" -> \"complete\"\n==> Evaluation \"0fd02bb5\"
+    finished with status \"complete\"\n`<br>\n\nIf you look at the chat-app job in
+    the Nomad UI, you will see that there are 4 allocations running. You will also
+    see an orange \"Promote Canary\" button as in the last challenge. Additionally,
+    the active deployment will eventually show \"1/1\" Canaries, 1 Placed, 3 Desired,
+    and 1 Healthy allocation.\n\nThe fact that the active deployment only has 1 healthy
+    allocation might worry you, but this is actually ok; it just means that Nomad
+    still plans on deploying 2 more allocations with the new version of the app if
+    you do promote the canary. In other words, since the \"count\" of the \"chat-app\"
+    task group is 3, Nomad will always want to deploy 3 allocations as part of any
+    deployment of the job. By specifying 1 canary, you forced Nomad to delay the other
+    2 allocations.\n\nCheck the status of the \"chat-app\" job by running this command:\n```\nnomad
+    job status chat-app\n```\nThe \"Deployed\" section should show \"false\" in the
+    \"Promoted\" column along with 3 desired, 1 canary, 1 placed, and (eventually)
+    1 healthy instances, agreeing with what the active deployment in the Nomad UI
+    showed. The \"Allocations\" section at the bottom should show 4 running and 6
+    stopped allocations. The latter are from when you did the rolling and blue/green
+    updates in the last two challenges.\n\nEdit the \"mongodb.nomad\" job specification
+    file on the \"Jobs\" tab, making the following changes:\n\n 1. Change the out
+    the current Constraint stanza \n     '<br>\n     constraint {\n     distinct_hosts
+    = true\n     }\n     with the constraint stanza\n     ```\n     constraint {\n
+    \    attribute = \"${attr.platform.gce.machine-type}\"\n     value     = \"n1-standard-2\"\n
+    \    }\n     ```\n\n\n\nTogether, this challenge and the previous one show that
+    you can test out changes to an application with Nomad and then either promote
+    the changes or roll them back. The choice is yours.\n\nCongratulations on completing
+    the Nomad Job Update Strategies track!"
+  notes:
+  - type: text
+    contents: In this challenge, you will do Update the number of chat apps and change
+      out thea Spread stanza with the Constraint stanza. You will also pin the DB
+      server to one host based on Constraint.
+  tabs:
+  - title: Jobs
+    type: code
+    hostname: nomad-server-1
+    path: /root/nomad/jobs/
+  - title: Server
+    type: terminal
+    hostname: nomad-server-1
+  - title: Consul UI
+    type: service
+    hostname: nomad-server-1
+    port: 8500
+  - title: Nomad UI
+    type: service
+    hostname: nomad-server-1
+    port: 4646
+  - title: Chat 1
+    type: service
+    hostname: nomad-client-1
+    port: 8080
+  - title: Chat 2
+    type: service
+    hostname: nomad-client-2
+    port: 8080
+  - title: Chat 3
+    type: service
+    hostname: nomad-client-3
+    port: 8080
+  difficulty: basic
+  timelimit: 3600
+checksum: "12757015974504597901"

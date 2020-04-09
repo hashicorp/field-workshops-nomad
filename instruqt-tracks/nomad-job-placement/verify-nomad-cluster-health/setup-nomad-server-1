@@ -217,6 +217,51 @@ cat <<-EOF > /root/nomad/consul-client3.json
 }
 EOF
 
+# Write Nomad Client 4 Config
+cat <<-EOF > /root/nomad/nomad-client4.hcl
+# Setup data dir
+data_dir = "/tmp/nomad/client4"
+
+# Give the agent a unique name.
+name = "client4"
+
+# Enable the client
+client {
+  enabled = true
+
+  host_volume "mongodb_mount" {
+    path      = "/opt/mongodb/data"
+    read_only = false
+  }
+}
+
+# Consul configuration
+consul {
+  address = "nomad-client-4:8500"
+}
+EOF
+
+# Write Consul Client 4 Config
+cat <<-EOF > /root/nomad/consul-client4.json
+{
+  "ui": true,
+  "log_level": "INFO",
+  "data_dir": "/tmp/consul/client4",
+  "node_name": "client4",
+  "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
+  "client_addr": "0.0.0.0",
+  "retry_join": [
+    "nomad-server-1"
+  ],
+  "connect": {
+    "enabled": true
+  },
+  "ports": {
+    "grpc": 8502
+  }
+}
+EOF
+
 # Install CNI plugins
 curl -s -L -o cni-plugins.tgz https://github.com/containernetworking/plugins/releases/download/v0.8.3/cni-plugins-linux-amd64-v0.8.3.tgz
 mkdir -p /opt/cni/bin
