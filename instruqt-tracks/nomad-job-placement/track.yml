@@ -6,7 +6,7 @@ teaser: Explore Nomad Job Placement strategies with Constraints, Affinities, and
 description: |-
   This track will show how to use Nomad's Job Placement with Constraints, Affinities, and Spread to demonstrate the complexity with wihch you can control your job placement.
 
-  In this track you will deploy a nomad cluster with a Chat App, MongoDB, and Trafik
+  In this track you will deploy a nomad cluster with a WebApp and [Trafek](https://containo.us/traefik/) for networking.
 
   Before running this track, we suggest you run the [Nomad Basics](https://instruqt.com/hashicorp/tracks/nomad-basics) and [Nomad Simple Cluster](https://instruqt.com/hashicorp/tracks/nomad-simple-cluster) tracks.
 icon: https://storage.googleapis.com/instruqt-frontend/img/tracks/default.png
@@ -57,7 +57,7 @@ challenges:
     contents: |-
       In this challenge, you will verify the health of the Nomad Enterprise cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
 
-      In later challenges, you will run "mongodb", "chat-app", and "nginx" jobs and update them using Nomad Job Placement stanzas Constraint, Affinity, and  Spread. Nginx will be used as a load balancer that will forward requests to instances of the "chat" application which will store its messages in a single MongoDB database.
+      In later challenges, you will run a nomad job for a "webapp" and a "traefik" jobs and update them using Nomad Job Placement stanzas Constraint, Affinity, and  Spread.
   tabs:
   - title: Server
     type: terminal
@@ -73,50 +73,57 @@ challenges:
     type: service
     hostname: nomad-server-1
     port: 4646
-  - title: nginx UI
-    type: service
-    hostname: nomad-server-1
-    port: 8081
   difficulty: basic
   timelimit: 300
-- slug: deploy-the-jobs-traefik
+- slug: deploy-the-jobs
   id: ak0ehohkwlsk
   type: challenge
-  title: Verify the Health of Your Nomad Enterprise Cluster
+  title: Deploy the WebApp and Traefik
   teaser: |
-    Verify the health of the Nomad Enterprise cluster that has been deployed for you by the track's setup scripts.
-  assignment: |-
-    In this challenge, you will verify the health of the Nomad Enterprise cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
-
-    The cluster is running 1 Nomad/Consul server and 3 Nomad/Consul clients. The [Consul Connect integration](https://nomadproject.io/guides/integrations/consul-connect) has been enabled on the server and clients since the chatapp uses it to talk to the MongoDB database. Additionally, a Nomad [host volume](https://nomadproject.io/docs/configuration/client/#host_volume-stanza) called "mongodb_mount" has been configured on the clients under the /opt/mongodb/data directory so that MongoDB can persist its data.
-
-    First, verify that all 4 Consul agents are running and connected to the cluster by running this command on the "Server" tab:
-    ```
-    consul members
-    ```
-    You should see 4 Consul agents with the "alive" status.
-
-    Check that the Nomad server is running by running this command on the "Server" tab:
-    ```
-    nomad server members
-    ```
-    You should see 1 Nomad server with the "alive" status.
-
-    Check the status of the Nomad client nodes by running this command on the "Server" tab:
-    ```
-    nomad node status
-    ```
-    You should see 3 Nomad clients with the "ready" status.
-
-    You can also check the status of the Nomad server and clients in the Nomad and Consul UIs.
-
-    In the next challenge, you will configure Nomad Enterprise namespaces and resource quotas.
+    Deploy a WebApp and Traefik
+  assignment: "In this challenge, we will introduce Traefik ![alt text](https://containo.us/assets/img/traefik-logo.svg)
+    \n\nYou will deploy a WebApp with 3 instances and Traefik to enable communications.\n\n##
+    Run the webapp.nomad Job\nInspect the \"webapp.nomad\" job specification file
+    on the \"Jobs\" tab. This will deploy a WebApp.\n\nNavigate to the /root/nomad/jobs
+    directory on the \"Server\" tab with this command:\n```\ncd /root/nomad/jobs\n```\n\nRun
+    the \"webapp.nomad\" job with this command on the \"Server\" tab:\n```\nnomad
+    job run webapp.nomad\n```\nThis should return something like this:<br>\n`\n==>
+    Monitoring evaluation \"e86a91bb\"\nEvaluation triggered by job \"demo-webapp\"\nEvaluation
+    within deployment: \"92da48d4\"\nAllocation \"1feff487\" created: node \"530789ff\",
+    group \"demo\"\nAllocation \"e8082da6\" created: node \"21d0cdba\", group \"demo\"\nAllocation
+    \"1a423ab1\" created: node \"edca4722\", group \"demo\"\nEvaluation status changed:
+    \"pending\" -> \"complete\"\n==> Evaluation \"e86a91bb\" finished with status
+    \"complete\"\n`<br>\n\nYou can check the job in the Nomad UI after waiting 15-30
+    seconds, clicking the Instruqt refresh button above the Nomad UI, and then selecting
+    the \"webapp\" job. You might need to make your browser window a bit wider to
+    see the UI properly and so that the Instruqt buttons do not overlap the Nomad
+    UI tab. You could also click the rectangular button next to the refresh button
+    to hide this assignment. After no more than 1 minute, you should see that the
+    job has 1 healthy allocation.\n\nAlternatively, you can run the command:\n```\nnomad
+    job status webapp\n```\non the \"Server\" tab to check the status of the \"webapp\"
+    jobs and validate that the \"webapp\" task group is healthy.\n\n## Run the traefik.nomad
+    Job\nInspect the \"traefik.nomad\" job specification file on the \"Jobs\" tab.
+    This will deploy Traefik.\n\nRun the \"traefik.nomad\" job with this command on
+    the \"Server\" tab:\n```\nnomad job run traefik.nomad\n```\nThis should return
+    something like this:<br>\n`\n==> Monitoring evaluation \"21f6eb47\"\nEvaluation
+    triggered by job \"traefik\"\nEvaluation within deployment: \"14c4b0cc\"\nAllocation
+    \"9a123921\" created: node \"edca4722\", group \"traefik\"\nEvaluation status
+    changed: \"pending\" -> \"complete\"\n==> Evaluation \"21f6eb47\" finished with
+    status \"complete\"\n`<br>\n\nYou can check the job in the Nomad UI after waiting
+    15-30 seconds, clicking the Instruqt refresh button above the Nomad UI, and then
+    selecting the \"traefik\" job. You might need to make your browser window a bit
+    wider to see the UI properly and so that the Instruqt buttons do not overlap the
+    Nomad UI tab. You could also click the rectangular button next to the refresh
+    button to hide this assignment. After no more than 1 minute, you should see that
+    the job has 1 healthy allocation.\n\nAlternatively, you can run the command:\n```\nnomad
+    job status traefik\n```\non the \"Server\" tab to check the status of the \"traefik\"
+    job and validate that the \"REPLACEME\" task group is healthy."
   notes:
   - type: text
     contents: |-
-      In this challenge, you will verify the health of the Nomad Enterprise cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
+      In this challenge, you will deploy a webapp and Traefik
 
-      In later challenges, you will run "mongodb", "chat-app", and "nginx" jobs and update them using Nomad Job Placement stanzas Constraint, Affinity, and  Spread. Nginx will be used as a load balancer that will forward requests to instances of the "chat" application which will store its messages in a single MongoDB database.
+      In later challenges, you will run `UPDATETHIS`
   tabs:
   - title: Jobs
     type: code
@@ -125,197 +132,9 @@ challenges:
   - title: Server
     type: terminal
     hostname: nomad-server-1
-  - title: Consul UI
-    type: service
-    hostname: nomad-server-1
-    port: 8500
-  - title: Nomad UI
-    type: service
-    hostname: nomad-server-1
-    port: 4646
-  - title: Traefik UI
-    type: service
-    hostname: nomad-server-1
-    port: 8081
-  - title: Traefik UI
-    type: service
-    hostname: nomad-server-1
-    port: 8080
-  difficulty: basic
-  timelimit: 3600
-- slug: deploy-the-jobs
-  id: s21kxxwztur9
-  type: challenge
-  title: Deploy the MongoDB, nginx, and Chat-App Jobs
-  teaser: |
-    Deploy the MongoDB, nginx, and Chat-App jobs.
-  assignment: |-
-    In this challenge, you will deploy the "mongodb", "chat-app", and "nginx" jobs.
-
-    ## Run the mongodb.nomad Job
-    Inspect the "mongodb.nomad" job specification file on the "Jobs" tab. This will deploy a "db" task group that runs the MongoDB database on port 27017 from the "mongo" Docker image.
-
-    Note that the database persists its data to the Nomad volume "mongodb_vol" which uses the "mongodb_mount" host volume that was configured on each Nomad client. The "mongodb_vol" volume is mounted inside the Docker container on the path "/data/db".
-
-    Navigate to the /root/nomad/jobs directory on the "Server" tab with this command:
-    ```
-    cd /root/nomad/jobs
-    ```
-
-    Run the "mongodb.nomad" job with this command on the "Server" tab:
-    ```
-    nomad job run mongodb.nomad
-    ```
-    This should return something like this:<br>
-    `
-    ==> Monitoring evaluation "64754ee4"
-    Evaluation triggered by job "mongodb"
-    Evaluation within deployment: "baa2ea28"
-    Allocation "60fde323" created: node "6777b2ca", group "db"
-    Evaluation status changed: "pending" -> "complete"
-    ==> Evaluation "64754ee4" finished with status "complete"
-    `<br>
-
-    You can check the job in the Nomad UI after waiting 15-30 seconds, clicking the Instruqt refresh button above the Nomad UI, and then selecting the "mongodb" job. You might need to make your browser window a bit wider to see the UI properly and so that the Instruqt buttons do not overlap the Nomad UI tab. You could also click the rectangular button next to the refresh button to hide this assignment. After no more than 1 minute, you should see that the job has 1 healthy allocation.
-
-    Alternatively, you can run the command:
-    ```
-    nomad job status mongodb
-    ```
-    on the "Server" tab to check the status of the "mongodb" job and validate that the "db" task group is healthy.
-
-    ## Run the chat-app.nomad Job
-    Next, inspect the "chat-app.nomad" job specification file on the "Jobs" tab. This job deploys 3 instances of a "chat-app" task group that runs a custom Docker image.
-
-    One instance of the chat-app task group will be deployed to each Nomad client because of the job's use of the "spread" stanza:<br>
-    `
-    spread {
-      attribute = "${node.unique.name}"
-    }
-    `<br>
-    Later, when we change the job to use the Constraint stanza, you will see that the jobs have moved hosts based on the new configuration.
-
-    The "chat-app" task runs on a dynamic port selected by Nomad; that port is mapped to port 5000 inside the task group's "network" stanza:<br>
-    `
-    network {
-      mode = "bridge"
-      port "http" {
-        to = 5000
-      }
-    }
-    `<br>
-    The nginx load balancer that you will deploy after the "chat-app" job will automatically add a route for each instance of the chat app because of the "template" stanza within the "nginx.nomad" job specification file.
-
-    Finally, the "chat-app" task group uses Consul Connect [sidecar proxies](https://www.consul.io/docs/connect/proxies.html) to talk to the MongoDB database using mutual Transport Layer Security (mTLS) certificates. This is implemented by this stanza:<br>
-    `
-    connect {
-      sidecar_service {
-        tags = ["chat-app-proxy"]
-        proxy {
-          upstreams {
-            destination_name = "mongodb"
-            local_bind_port = 27017
-          }
-        }
-      }
-    }
-    `<br>
-
-    Run the "chat-app.nomad" job on the "Server" tab with this command:
-    ```
-    nomad job run chat-app.nomad
-    ```
-    This should return something like this:<br>
-    `
-    ==> Monitoring evaluation "f08ca561"
-    Evaluation triggered by job "chat-app"
-    Evaluation within deployment: "5dc975d3"
-    Allocation "5d57baab" created: node "9afadcdd", group "chat-app"
-    Allocation "14a5cc97" created: node "6777b2ca", group "chat-app"
-    Allocation "2f792469" created: node "4b19ed9a", group "chat-app"
-    Evaluation status changed: "pending" -> "complete"
-    ==> Evaluation "f08ca561" finished with status "complete"
-    `<br>
-
-    After waiting about 60 seconds, check the status of the "chat-app" job with this command on the "Server" tab:
-    ```
-    nomad job status chat-app
-    ```
-
-    This should indicate that the job is running and have an Allocations section at the bottom that looks like this:<br>
-    `
-    Allocations
-    ID        Node ID   Task Group  Version  Desired  Status   Created    Modified
-    14a5cc97  6777b2ca  chat-app    0        run      running  1m11s ago  24s ago
-    2f792469  4b19ed9a  chat-app    0        run      running  1m11s ago  16s ago
-    5d57baab  9afadcdd  chat-app    0        run      running  1m11s ago  16s ago
-    `<br>
-
-    Note that the Node IDs of the 3 allocations are all different. In other words, Nomad scheduled one instance of the chat-app task to each Nomad client because of the `spread` stanza we included in the "chat-app.nomad" job specification.
-
-    You can also check out the "chat-app" job in the Nomad UI. Within 60 seconds of running the job, all 3 allocations should be healthy.
-
-    You can also verify that the Nomad task groups were automatically registered as Consul services by looking at the "Services" tab of the Consul UI. Note the sidecar proxy services created by Nomad's integration with Consul Connect. The services all include node checks and service checks.
-
-    ## Run the nginx.nomad Job
-    Next, inspect the "nginx.nomad" job specification file on the "Jobs" tab. This job deploys [nginx](https://nginx.org) as a system job on all the Nomad clients from a Docker image. Since it is a system job, no "count" is specified for the "nginx" task group.
-
-    nginx will route requests to the "chat-app" Consul service registered by the "chat-app" job; this is done by the "template" stanza of the job which generates the nginx configuration file, "load-balancer.conf", based on the current instances of the "chat-app" service. (This explains why we run the "nginx.nomad" job after the "chat-app.nomad" job.)
-
-    The "ip_hash" instruction in the "load-balancer.conf" configuration file is included to make the nginx sessions of the chat app sticky. This is required to avoid HTTP 400 errors that would otherwise occur when multiple requests are sent during the lifetime of a socket used by the socket.io framework. (See this [doc](https://socket.io/docs/using-multiple-nodes) for details.)
-
-    Run the "nginx.nomad" job on the "Server" tab with this command:
-    ```
-    nomad job run nginx.nomad
-    ```
-    This should return something like this:<br>
-    `
-    ==> Monitoring evaluation "32fbe07d"
-    Evaluation triggered by job "nginx"
-    Allocation "38f8f053" created: node "9afadcdd", group "nginx"
-    Allocation "58e6b570" created: node "6777b2ca", group "nginx"
-    Allocation "683d7322" created: node "4b19ed9a", group "nginx"
-    Evaluation status changed: "pending" -> "complete"
-    ==> Evaluation "32fbe07d" finished with status "complete"
-    `<br>
-
-    You can now access the chat-app UI on the "Chat 1", "Chat 2", and "Chat 3" tabs.
-
-    Since we are using nginx, the 3 Chat tabs are not actually pinned to specific Nomad clients. In fact, all of them are pointing at the nginx load balancer itself on the corresponding Nomad client. Each time you click the refresh button for any of the Chat tabs, you will be randomly connected to an instance of the chat app on any of the 3 Nomad clients in a new session. As mentioned above, however, each session of the chat app between refreshes is sticky.
-
-    If you type messages in the Chat tabs, they will usually show up in the other tab. However, you might sometimes need to click the Instruqt refresh button to the right of all the tabs while one of the Chat tabs is selected in order to force it to reconnect to the database. This is an issue with the chat app itself rather than with Nomad.
-
-    In the next challenge, you will update the Chat app to use the Constraint Stanza.
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you will deploy the "mongodb", "chat-app", and "nginx" jobs.
-
-      In the next challenge, you will update the Chat app using the Constraint Stanza.
-  tabs:
-  - title: nginx UI
-    type: service
-    hostname: nomad-server-1
-    port: 8080
-  - title: Chat 1
-    type: service
+  - title: Client
+    type: terminal
     hostname: nomad-client-1
-    port: 8080
-  - title: Chat 2
-    type: service
-    hostname: nomad-client-2
-    port: 8080
-  - title: Chat 3
-    type: service
-    hostname: nomad-client-3
-    port: 8080
-  - title: Jobs
-    type: code
-    hostname: nomad-server-1
-    path: /root/nomad/jobs/
-  - title: Server
-    type: terminal
-    hostname: nomad-server-1
   - title: Consul UI
     type: service
     hostname: nomad-server-1
@@ -324,6 +143,10 @@ challenges:
     type: service
     hostname: nomad-server-1
     port: 4646
+  - title: Traefik UI
+    type: service
+    hostname: nomad-server-1
+    port: 8080
   difficulty: basic
   timelimit: 3600
 - slug: show-constraint
@@ -413,4 +236,4 @@ challenges:
     port: 8080
   difficulty: basic
   timelimit: 3600
-checksum: "12757015974504597901"
+checksum: "9879594043874361883"

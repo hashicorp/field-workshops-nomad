@@ -1,6 +1,6 @@
 #!/bin/bash -l
 
-mkdir /root/nomad
+mkdir -p /root/nomad
 
 # Write Nomad Server 1 Config
 cat <<-EOF > /etc/nomad.d/nomad-server1.hcl
@@ -93,11 +93,6 @@ name = "client1"
 # Enable the client
 client {
   enabled = true
-
-  host_volume "mongodb_mount" {
-    path      = "/opt/mongodb/data"
-    read_only = false
-  }
 }
 
 # Consul configuration
@@ -138,11 +133,6 @@ name = "client2"
 # Enable the client
 client {
   enabled = true
-
-  host_volume "mongodb_mount" {
-    path      = "/opt/mongodb/data"
-    read_only = false
-  }
 }
 
 # Consul configuration
@@ -183,11 +173,6 @@ name = "client3"
 # Enable the client
 client {
   enabled = true
-
-  host_volume "mongodb_mount" {
-    path      = "/opt/mongodb/data"
-    read_only = false
-  }
 }
 
 # Consul configuration
@@ -228,11 +213,6 @@ name = "client4"
 # Enable the client
 client {
   enabled = true
-
-  host_volume "mongodb_mount" {
-    path      = "/opt/mongodb/data"
-    read_only = false
-  }
 }
 
 # Consul configuration

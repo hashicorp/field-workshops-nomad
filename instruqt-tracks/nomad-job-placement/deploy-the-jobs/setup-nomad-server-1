@@ -4,157 +4,46 @@ set -e
 
 mkdir /root/nomad/jobs
 
-# Write the mongodb.nomad job
-cat <<-EOF > /root/nomad/jobs/mongodb.nomad
-job "mongodb" {
+# Write the webapp.nomad job
+cat <<-EOF > /root/nomad/jobs/webapp.nomad
+job "webapp" {
   datacenters = ["dc1"]
-  type = "service"
 
-  group "db" {
-    # All groups in this job should be scheduled on different hosts.
-    constraint {
-      distinct_hosts = true
-    }
-    count = 1
+  group "webapp" {
+    count = 7
 
-    volume "mongodb_vol" {
-      type = "host"
-      source = "mongodb_mount"
-    }
+    task "server" {
+      env {
+        PORT    = "${NOMAD_PORT_http}"
+        NODE_IP = "${NOMAD_IP_http}"
+      }
 
-    network {
-      mode = "bridge"
-    }
-
-    task "mongodb" {
       driver = "docker"
 
       config {
-        image = "mongo"
-      }
-
-      volume_mount {
-        volume = "mongodb_vol"
-        destination = "/data/db"
-      }
-
-      resources {
-        cpu = 500 # MHz
-        memory = 1998 # MB
-      }
-
-    } # end mongodb task
-
-    service {
-      name = "mongodb"
-      tags = ["mongodb"]
-      port = "27017"
-
-      connect {
-        sidecar_service {}
-      }
-    } # end service
-
-  } # end db group
-
-}
-EOF
-
-cat <<-EOF > /root/nomad/jobs/nginx.nomad
-job "nginx" {
-  datacenters = ["dc1"]
-  type = "system"
-
-  group "nginx" {
-
-    task "nginx" {
-      driver = "docker"
-
-      config {
-        image = "nginx"
-
-        port_map {
-          http = 80
-        }
-
-        volumes = [
-          "local:/etc/nginx/conf.d",
-        ]
-      }
-
-      template {
-        data = <<EOT
-upstream chat {
-  # enable sticky session based on IP
-  ip_hash;
-{{ range service "chat-app" }}
-  server {{ .Address }}:{{ .Port }};
-{{ else }}server 127.0.0.1:65535; # force a 502
-{{ end }}
-}
-
-server {
-  listen 80;
-
-  location / {
-    proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-    proxy_set_header Host \$host;
-    proxy_pass http://chat;
-
-    # enable WebSockets
-    proxy_http_version 1.1;
-    proxy_set_header Upgrade \$http_upgrade;
-    proxy_set_header Connection "upgrade";
-  }
-
-  location /chat/ {
-    proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-    proxy_set_header Host \$host;
-    proxy_pass http://chat;
-
-    # enable WebSockets
-    proxy_http_version 1.1;
-    proxy_set_header Upgrade \$http_upgrade;
-    proxy_set_header Connection "upgrade";
-  }
-
-   location  /socket.io/ {
-    proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-    proxy_set_header Host \$host;
-    proxy_pass http://chat;
-
-    # enable WebSockets
-    proxy_http_version 1.1;
-    proxy_set_header Upgrade \$http_upgrade;
-    proxy_set_header Connection "upgrade";
-  }
-}
-EOT
-
-        destination   = "local/load-balancer.conf"
-        change_mode   = "signal"
-        change_signal = "SIGHUP"
+        image = "hashicorp/demo-webapp-lb-guide"
       }
 
       resources {
         network {
           mbits = 10
-
-          port "http" {
-            static = 8080
-          }
+          port  "http"{}
         }
       }
 
       service {
-        name = "nginx"
-        tags = ["nginx"]
+        name = "webapp"
         port = "http"
+
+        tags = [
+          "traefik.tags=service",
+          "traefik.frontend.rule=PathPrefixStrip:/myapp",
+        ]
+
         check {
-          name     = "nginx alive"
           type     = "http"
-          path     = "/chat/chats"
-          interval = "10s"
+          path     = "/"
+          interval = "2s"
           timeout  = "2s"
         }
       }
@@ -163,72 +52,84 @@ EOT
 }
 EOF
 
-# Write the chatapp.nomad job
-cat <<-EOF > /root/nomad/jobs/chat-app.nomad
-job "chat-app" {
+cat <<-EOF > /root/nomad/jobs/traefik.nomad
+job "traefik" {
+  region      = "global"
   datacenters = ["dc1"]
-  type = "service"
+  type        = "service"
 
-  group "chat-app" {
-    count = 3
+  group "traefik" {
+    count = 1
 
-    spread {
-      attribute = "\${node.unique.name}"
-    }
-
-    network {
-      mode = "bridge"
-      port "http" {
-        to = 5000
-      }
-    }
-
-    task "chat-app" {
+    task "traefik" {
       driver = "docker"
 
       config {
-        image = "lhaig/anon-app:light-0.03"
+        image        = "traefik:1.7"
+        network_mode = "host"
+
+        volumes = [
+          "local/traefik.toml:/etc/traefik/traefik.toml",
+        ]
       }
 
-      env {
-        "MONGODB_SERVER" = "127.0.0.1"
-        "MONGODB_PORT" = "27017"
+      template {
+        data = <<EOD
+[entryPoints]
+    [entryPoints.http]
+    address = ":8080"
+    [entryPoints.traefik]
+    address = ":8081"
+
+[api]
+
+    dashboard = true
+
+# Enable Consul Catalog configuration backend.
+[consulCatalog]
+
+endpoint = "127.0.0.1:8500"
+
+domain = "consul.localhost"
+
+prefix = "traefik"
+
+constraints = ["tag==service"]
+EOD
+
+        destination = "local/traefik.toml"
       }
 
       resources {
-        cpu = 300 # MHz
-        memory = 512 # MB
-      }
+        cpu    = 250
+        memory = 128
 
-    } # end chat-app task
+        network {
+          mbits = 10
 
-    service {
-      name = "chat-app"
-      tags = ["chat-app"]
-      port = "http"
-      check {
-        name     = "chat-app alive"
-        type     = "http"
-        path     = "/chats"
-        interval = "10s"
-        timeout  = "2s"
-      }
+          port "http" {
+            static = 8080
+          }
 
-      connect {
-        sidecar_service {
-          tags = ["chat-app-proxy"]
-          proxy {
-            upstreams {
-              destination_name = "mongodb"
-              local_bind_port = 27017
-            }
+          port "api" {
+            static = 8081
           }
         }
-      } # end connnect
-    } # end service
+      }
 
-  } # end chat-app group
+      service {
+        name = "traefik"
 
+        check {
+          name     = "alive"
+          type     = "tcp"
+          port     = "http"
+          interval = "10s"
+          timeout  = "2s"
+        }
+      }
+    }
+  }
 }
 EOF
 

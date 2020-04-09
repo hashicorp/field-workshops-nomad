@@ -1,8 +1,5 @@
 #!/bin/bash -l
 
-# Make directory for mongodb mount
-mkdir -p /opt/mongodb/data
-
 # Write Nomad Client 1 Config
 cat <<-EOF > /etc/nomad.d/nomad-client1.hcl
 # Setup data dir
@@ -14,11 +11,6 @@ name = "client1"
 # Enable the client
 client {
   enabled = true
-
-  host_volume "mongodb_mount" {
-    path      = "/opt/mongodb/data"
-    read_only = false
-  }
 }
 
 # Consul configuration
