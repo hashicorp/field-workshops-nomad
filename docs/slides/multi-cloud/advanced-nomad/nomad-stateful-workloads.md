@@ -135,7 +135,7 @@ class: compact
 * Since the CSI plugins are run as Nomad jobs and told about volumes they should manage with the `nomad volume register` command, no configuration changes are needed on Nomad clients.
 
 ---
-name: lab-nomad-governance
+name: lab-host-volumes
 # 👩‍💻 Nomad Host Volumes Lab
 * In this lab, you'll learn how to use Nomad host volumes.
 * You'll do this using the Instruqt track "Nomad Host Volumes" at this URL:<br>
