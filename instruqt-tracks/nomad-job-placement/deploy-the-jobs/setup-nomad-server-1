@@ -10,7 +10,7 @@ job "webapp" {
   datacenters = ["dc1"]
 
   group "webapp" {
-    count = 7
+    count = 3
 
     task "server" {
       env {
@@ -52,6 +52,7 @@ job "webapp" {
 }
 EOF
 
+# Write the traefik.nomad job
 cat <<-EOF > /root/nomad/jobs/traefik.nomad
 job "traefik" {
   region      = "global"
@@ -62,8 +63,12 @@ job "traefik" {
     count = 1
 
     task "traefik" {
+      constraint
+      {
+        attribute = "${attr.platform.gce.machine-type}"
+        value     = "n1-standard-2"
+      }
       driver = "docker"
-
       config {
         image        = "traefik:1.7"
         network_mode = "host"

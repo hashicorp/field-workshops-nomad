@@ -81,43 +81,95 @@ challenges:
   title: Deploy the WebApp and Traefik
   teaser: |
     Deploy a WebApp and Traefik
-  assignment: "In this challenge, we will introduce Traefik ![alt text](https://containo.us/assets/img/traefik-logo.svg)
-    \n\nYou will deploy a WebApp with 3 instances and Traefik to enable communications.\n\n##
-    Run the webapp.nomad Job\nInspect the \"webapp.nomad\" job specification file
-    on the \"Jobs\" tab. This will deploy a WebApp.\n\nNavigate to the /root/nomad/jobs
-    directory on the \"Server\" tab with this command:\n```\ncd /root/nomad/jobs\n```\n\nRun
-    the \"webapp.nomad\" job with this command on the \"Server\" tab:\n```\nnomad
-    job run webapp.nomad\n```\nThis should return something like this:<br>\n`\n==>
-    Monitoring evaluation \"e86a91bb\"\nEvaluation triggered by job \"demo-webapp\"\nEvaluation
-    within deployment: \"92da48d4\"\nAllocation \"1feff487\" created: node \"530789ff\",
-    group \"demo\"\nAllocation \"e8082da6\" created: node \"21d0cdba\", group \"demo\"\nAllocation
-    \"1a423ab1\" created: node \"edca4722\", group \"demo\"\nEvaluation status changed:
-    \"pending\" -> \"complete\"\n==> Evaluation \"e86a91bb\" finished with status
-    \"complete\"\n`<br>\n\nYou can check the job in the Nomad UI after waiting 15-30
+  assignment: |-
+    In this challenge, we will introduce Traefik ![alt text](https://containo.us/assets/img/traefik-logo.svg)
+
+
+    You will deploy a WebApp with 3 instances and Traefik to enable communications.
+
+    ##
+    Run the webapp.nomad Job
+    Inspect the "webapp.nomad" job specification file
+    on the "Jobs" tab. This will deploy a WebApp.
+
+    Navigate to the /root/nomad/jobs
+    directory on the "Server" tab with this command:
+    ```
+    cd /root/nomad/jobs
+    ```
+
+    Run
+    the "webapp.nomad" job with this command on the "Server" tab:
+    ```
+    nomad job run webapp.nomad
+    ```
+    This should return something like this:<br>
+    `
+    ==>
+    Monitoring evaluation "e86a91bb"
+    Evaluation triggered by job "demo-webapp"
+    Evaluation
+    within deployment: "92da48d4"
+    Allocation "1feff487" created: node "530789ff",
+    group "demo"
+    Allocation "e8082da6" created: node "21d0cdba", group "demo"
+    Allocation
+    "1a423ab1" created: node "edca4722", group "demo"
+    Evaluation status changed:
+    "pending" -> "complete"
+    ==> Evaluation "e86a91bb" finished with status
+    "complete"
+    `<br>
+
+    You can check the job in the Nomad UI after waiting 15-30
     seconds, clicking the Instruqt refresh button above the Nomad UI, and then selecting
-    the \"webapp\" job. You might need to make your browser window a bit wider to
+    the "webapp" job. You might need to make your browser window a bit wider to
     see the UI properly and so that the Instruqt buttons do not overlap the Nomad
     UI tab. You could also click the rectangular button next to the refresh button
     to hide this assignment. After no more than 1 minute, you should see that the
-    job has 1 healthy allocation.\n\nAlternatively, you can run the command:\n```\nnomad
-    job status webapp\n```\non the \"Server\" tab to check the status of the \"webapp\"
-    jobs and validate that the \"webapp\" task group is healthy.\n\n## Run the traefik.nomad
-    Job\nInspect the \"traefik.nomad\" job specification file on the \"Jobs\" tab.
-    This will deploy Traefik.\n\nRun the \"traefik.nomad\" job with this command on
-    the \"Server\" tab:\n```\nnomad job run traefik.nomad\n```\nThis should return
-    something like this:<br>\n`\n==> Monitoring evaluation \"21f6eb47\"\nEvaluation
-    triggered by job \"traefik\"\nEvaluation within deployment: \"14c4b0cc\"\nAllocation
-    \"9a123921\" created: node \"edca4722\", group \"traefik\"\nEvaluation status
-    changed: \"pending\" -> \"complete\"\n==> Evaluation \"21f6eb47\" finished with
-    status \"complete\"\n`<br>\n\nYou can check the job in the Nomad UI after waiting
+    job has 1 healthy allocation.
+
+    Alternatively, you can run the command:
+    ```
+    nomad job status webapp
+    ```
+    on the "Server" tab to check the status of the "webapp" jobs and validate that the "webapp" task group is healthy.
+
+    ## Run the traefik.nomad
+    Job Inspect the "traefik.nomad" job specification file on the "Jobs" tab. This will deploy Traefik.
+
+    Run the "traefik.nomad" job with this command on the "Server" tab:
+    ```
+    nomad job run traefik.nomad
+    ```
+    This should return something like this:<br>
+    `
+    ==> Monitoring evaluation "21f6eb47"
+    Evaluation
+    triggered by job "traefik"
+    Evaluation within deployment: "14c4b0cc"
+    Allocation
+    "9a123921" created: node "edca4722", group "traefik"
+    Evaluation status
+    changed: "pending" -> "complete"
+    ==> Evaluation "21f6eb47" finished with
+    status "complete"
+    `<br>
+
+    You can check the job in the Nomad UI after waiting
     15-30 seconds, clicking the Instruqt refresh button above the Nomad UI, and then
-    selecting the \"traefik\" job. You might need to make your browser window a bit
+    selecting the "traefik" job. You might need to make your browser window a bit
     wider to see the UI properly and so that the Instruqt buttons do not overlap the
     Nomad UI tab. You could also click the rectangular button next to the refresh
     button to hide this assignment. After no more than 1 minute, you should see that
-    the job has 1 healthy allocation.\n\nAlternatively, you can run the command:\n```\nnomad
-    job status traefik\n```\non the \"Server\" tab to check the status of the \"traefik\"
-    job and validate that the \"REPLACEME\" task group is healthy."
+    the job has 1 healthy allocation.
+
+    Alternatively, you can run the command:
+    ```
+    nomad
+    job status traefik
+    ```
+    on the "Server" tab to check the status of the "traefik" job and validate that the "REPLACEME" task group is healthy.
   notes:
   - type: text
     contents: |-
@@ -135,6 +187,15 @@ challenges:
   - title: Client
     type: terminal
     hostname: nomad-client-1
+  - title: Client
+    type: terminal
+    hostname: nomad-client-2
+  - title: Client
+    type: terminal
+    hostname: nomad-client-3
+  - title: Client
+    type: terminal
+    hostname: nomad-client-4
   - title: Consul UI
     type: service
     hostname: nomad-server-1
@@ -145,8 +206,8 @@ challenges:
     port: 4646
   - title: Traefik UI
     type: service
-    hostname: nomad-server-1
-    port: 8080
+    hostname: nomad-client-1
+    port: 8081
   difficulty: basic
   timelimit: 3600
 - slug: show-constraint
@@ -155,52 +216,67 @@ challenges:
   title: Change the Spread stanza to Constraint
   teaser: |
     Change the Spread stanza to Constraint and get nodes to run on same instances
-  assignment: "In this challenge, you will change out the Spread stanza with the Constraint
-    stanza demonstrating how we can bind jobs to hosts in other ways.\n\n\nPlease
-    navigate back to the /root/nomad/jobs directory on the \"Server\" tab again with
-    this command:\n```\ncd /root/nomad/jobs\n```\n\nEdit the \"chat-app.nomad\" job
-    specification file on the \"Jobs\" tab, making the following changes:\n\n--edited
-    this out for now  1. Change the count to 4\n      `count = 4`\n  1. Change the
-    out the Spread stanza <br>\n      `\n      spread {\n      attribute = \"${node.unique.name}\"\n
-    \     }\n      ` <br>\n      With this new Constraint stanza\n      ```\n      constraint
-    {\n      attribute = \"${attr.platform.gce.machine-type}\"\n      value     =
-    \"n1-standard-1\"\n      }\n      ```\nNow, check what would happen if you redeployed
-    the \"chat-app\" job with this command on the \"Server\" tab:\n```\nnomad job
-    plan chat-app.nomad\n```\n\nThis should return something like this:<br>\n`\n +/-
-    Job: \"chat-app\"\n +/- Task Group: \"chat-app\" (1 create/destroy update, 2 ignore)\n
-    + Constraint {\n     LTarget: \"\"\n   + Operand: \"distinct_hosts\"\n   + RTarget:
-    \"true\"\n   }\n   Task: \"chat-app\"\n   Task: \"connect-proxy-chat-app\"\n`<br>\n\nThe
-    plan indicates that Nomad would update 1 based on increasing the count and \n\nGo
-    ahead and re-run the \"chat-app\" job with this command:\n```\nnomad job run chat-app.nomad\n```\n\nThis
-    should return something like this:<br>\n`\n==> Monitoring evaluation \"0fd02bb5\"\n
-    \   Evaluation triggered by job \"chat-app\"\n    Evaluation within deployment:
-    \"fa80df0c\"\n    Allocation \"7633b926\" created: node \"14e04978\", group \"chat-app\"\n
-    \   Evaluation status changed: \"pending\" -> \"complete\"\n==> Evaluation \"0fd02bb5\"
-    finished with status \"complete\"\n`<br>\n\nIf you look at the chat-app job in
-    the Nomad UI, you will see that there are 4 allocations running. You will also
-    see an orange \"Promote Canary\" button as in the last challenge. Additionally,
-    the active deployment will eventually show \"1/1\" Canaries, 1 Placed, 3 Desired,
-    and 1 Healthy allocation.\n\nThe fact that the active deployment only has 1 healthy
-    allocation might worry you, but this is actually ok; it just means that Nomad
-    still plans on deploying 2 more allocations with the new version of the app if
-    you do promote the canary. In other words, since the \"count\" of the \"chat-app\"
-    task group is 3, Nomad will always want to deploy 3 allocations as part of any
-    deployment of the job. By specifying 1 canary, you forced Nomad to delay the other
-    2 allocations.\n\nCheck the status of the \"chat-app\" job by running this command:\n```\nnomad
-    job status chat-app\n```\nThe \"Deployed\" section should show \"false\" in the
-    \"Promoted\" column along with 3 desired, 1 canary, 1 placed, and (eventually)
-    1 healthy instances, agreeing with what the active deployment in the Nomad UI
-    showed. The \"Allocations\" section at the bottom should show 4 running and 6
-    stopped allocations. The latter are from when you did the rolling and blue/green
-    updates in the last two challenges.\n\nEdit the \"mongodb.nomad\" job specification
-    file on the \"Jobs\" tab, making the following changes:\n\n 1. Change the out
-    the current Constraint stanza \n     '<br>\n     constraint {\n     distinct_hosts
-    = true\n     }\n     with the constraint stanza\n     ```\n     constraint {\n
-    \    attribute = \"${attr.platform.gce.machine-type}\"\n     value     = \"n1-standard-2\"\n
-    \    }\n     ```\n\n\n\nTogether, this challenge and the previous one show that
-    you can test out changes to an application with Nomad and then either promote
-    the changes or roll them back. The choice is yours.\n\nCongratulations on completing
-    the Nomad Job Update Strategies track!"
+  assignment: |-
+    In this challenge, you will change out the Spread stanza with the Constraint stanza demonstrating how we can bind jobs to hosts in other ways.
+
+
+    Please navigate back to the /root/nomad/jobs directory on the "Server" tab again with this command:
+    ```
+    cd /root/nomad/jobs
+    ```
+
+    Edit the "chat-app.nomad" job specification file on the "Jobs" tab, making the following changes:
+
+    --edited this out for now  1. Change the count to 4
+          `count = 4`
+      1. Change the out the Spread stanza <br>
+          `
+          spread {
+          attribute = "${node.unique.name}"
+          }
+        ` <br>
+        With this new Constraint stanza
+        ```
+        constraint
+          {
+          attribute = "${attr.platform.gce.machine-type}"
+          value     = "n1-standard-1"
+          }
+        ```
+    Now, check what would happen if you redeployed the "chat-app" job with this command on the "Server" tab:
+    ```
+    nomad job
+    plan chat-app.nomad
+    ```
+
+    This should return something like this:<br>
+    `
+     +/-
+    Job: "chat-app"
+     +/- Task Group: "chat-app" (1 create/destroy update, 2 ignore)
+     + Constraint {
+         LTarget: ""
+       + Operand: "distinct_hosts"
+       + RTarget:
+    "true" }
+       Task: "chat-app"
+       Task: "connect-proxy-chat-app"
+    `<br>
+
+    The plan indicates that Nomad would update 1 based on increasing the count and Go ahead and re-run the "chat-app" job with this command:
+    ```
+    nomad job run chat-app.nomad
+    ```
+    This should return something like this:<br>
+    `
+    ==> Monitoring evaluation "0fd02bb5"
+        Evaluation triggered by job "chat-app"
+        Evaluation within deployment: "fa80df0c"
+        Allocation "7633b926" created: node "14e04978", group "chat-app"
+        Evaluation status changed: "pending" -> "complete"
+    ==> Evaluation "0fd02bb5" finished with status "complete"
+    `<br>
+    If you look at the chat-app job in the Nomad UI, you will see that there are 4 allocations running.
   notes:
   - type: text
     contents: In this challenge, you will do Update the number of chat apps and change
@@ -236,4 +312,4 @@ challenges:
     port: 8080
   difficulty: basic
   timelimit: 3600
-checksum: "9879594043874361883"
+checksum: "2770340027653176769"
