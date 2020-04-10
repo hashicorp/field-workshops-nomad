@@ -141,6 +141,7 @@ name: lab-nomad-governance
 * You'll do this using the Instruqt track "Nomad Host Volumes" at this URL:<br>
 https://play.instruqt.com/hashicorp/tracks/nomad-host-volumes
 * To explore using Nomad with Portworx, please see the [Stateful Workloads with Portworx](https://learn.hashicorp.com/nomad/stateful-workloads/portworx) learn track.
+* To explore using Nomad with CSI plugins, please see the [Stateful Workloads with Container Storage Interface](https://learn.hashicorp.com/nomad/stateful-workloads/csi-volumes) learn track.
 
 ???
 * Now, you can explore Nomad host volumes hands-on
