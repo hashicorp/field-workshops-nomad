@@ -178,6 +178,7 @@ sleep 15
 
 systemctl start nomad
 
-sleep 45
+apt-get -y update
+apt install -y --fix-missing mysql-client-core-5.7
 
 exit 0
