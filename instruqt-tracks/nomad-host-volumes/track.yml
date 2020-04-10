@@ -1,0 +1,119 @@
+slug: nomad-host-volumes
+id: rhofit3bdc0m
+type: track
+title: Nomad Host Volumes
+teaser: |
+  Learn how Nomad host volumes support stateful workloads.
+description: |-
+  Some Nomad workloads need to persist data that will still be available if the job that runs the workloads are stopped and restarted.
+
+  Nomad supports stateful workloads with 3 different options:
+    * [Nomad Host Volumes](https://nomadproject.io/docs/configuration/client/#host_volume-stanza) that are managed by Nomad and can be used with any Nomad task driver
+    * [Docker Volume Drivers](https://docs.docker.com/engine/extend/plugins_volume/#create-a-volumedriver) such as Portworx that are externally managed and can only be used with the Docker task driver
+    * [CSI Plugins](https://github.com/container-storage-interface/spec/blob/master/spec.md) that are also externally managed but can be used with any Nomad task driver.
+
+  This track will guide you through using Nomad Host Volumes to persist data for a MySQL database. It is based on the [Stateful Workloads with Nomad Host Volumes](https://learn.hashicorp.com/nomad/stateful-workloads/host-volumes) guide.
+
+  Before running this track, we suggest you run the [Nomad Basics](https://play.instruqt.com/hashicorp/tracks/nomad-basics) track.
+icon: https://storage.googleapis.com/instruqt-hashicorp-tracks/logo/nomad.png
+tags:
+- Nomad
+- stateful
+- host volumes
+- storage
+owner: hashicorp
+developers:
+- roger@hashicorp.com
+private: true
+published: false
+challenges:
+- slug: verify-nomad-cluster-health
+  id: oyncgsln93wn
+  type: challenge
+  title: Verify the Health of Your Nomad Cluster
+  teaser: |
+    Verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts.
+  assignment: |-
+    In this challenge, you will verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
+
+    The cluster is running 1 Nomad/Consul server and 3 Nomad/Consul clients with Nomad 0.11.0 and Consul 1.7.2.
+
+    First, verify that all 4 Consul agents are running and connected to the cluster by running this command on the "Server" tab:
+    ```
+    consul members
+    ```
+    You should see 4 Consul agents with the "alive" status.
+
+    Check that the Nomad server is running by running this command on the "Server" tab:
+    ```
+    nomad server members
+    ```
+    You should see 1 Nomad server with the "alive" status.
+
+    Check the status of the Nomad client nodes by running this command on the "Server" tab:
+    ```
+    nomad node status
+    ```
+    You should see 3 Nomad clients with the "ready" status.
+
+    You can also check the status of the Nomad server and clients in the Nomad and Consul UIs.
+
+    In the next challenge, you will configure a Nomad host volumme on one of the Nomad clients.
+  notes:
+  - type: text
+    contents: |-
+      Nomad supports stateful workloads with 3 different options:
+        * [Nomad Host Volumes](https://nomadproject.io/docs/configuration/client/#host_volume-stanza) that are managed by Nomad and can be used with any Nomad task driver
+        * [Docker Volume Drivers](https://docs.docker.com/engine/extend/plugins_volume/#create-a-volumedriver) such as Portworx that are externally managed and can only be used with the Docker task driver
+        * [CSI Plugins](https://github.com/container-storage-interface/spec/blob/master/spec.md) that are also externally managed but can be used with any Nomad task driver.
+
+      In this track, you will use Nomad Host Volumes to persist data for a MySQL database.
+  - type: text
+    contents: |-
+      In this challenge, you will verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
+
+      In later challenges, you will configure a Nomad host volume on one of the Nomad clients, run a MySQL database in a Nomad job that uses it, add some data to the database, stop and purge the job, re-run the job, and verify that the data you added is still present.
+  tabs:
+  - title: Server
+    type: terminal
+    hostname: nomad-server-1
+  - title: Nomad UI
+    type: service
+    hostname: nomad-server-1
+    port: 4646
+  difficulty: basic
+  timelimit: 600
+- slug: configure-host-volume
+  id: wllpfxtrtvqt
+  type: challenge
+  title: Configure a Nomad Host Volume
+  teaser: |
+    Configure a Nomad host volume on one client.
+  assignment: |-
+    In this challenge, you will configure a Nomad host volume on one of the Nomad clients, nomad-client-1.
+
+    In the next challenge, you will run a job that deploys a MySQL database that uses the host volume.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will configure a Nomad host volume on one of the Nomad clients, nomad-client-1.
+
+      In the next challenge, you will run a job that deploys a MySQL database that uses the host volume.
+  tabs:
+  - title: Jobs
+    type: code
+    hostname: nomad-server-1
+    path: /root/nomad/jobs/
+  - title: Server
+    type: terminal
+    hostname: nomad-server-1
+  - title: Client 1
+    type: terminal
+    hostname: nomad-client-1
+  - title: Nomad UI
+    type: service
+    hostname: nomad-server-1
+    port: 4646
+  difficulty: basic
+  timelimit: 3600
+checksum: "7769899000747107606"

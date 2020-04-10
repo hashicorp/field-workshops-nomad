@@ -48,10 +48,11 @@ name: types-of-workload
 name: nomad-storage-volume-options
 # Storage Volume Options
 
-* Nomad 0.11 allows mounting persistant storage volumes in 3 ways:
-  * Local Storage Volumes which can be exposed to Nomad using [Host Volume Mounts](https://nomadproject.io/docs/configuration/client/#host_volume-stanza)
-  * Remote Storage Volumes which can be exposed to Nomad jobs using [Docker Volume Drivers](https://nomadproject.io/docs/drivers/docker/#inlinecode-volumes-16)
-  * Other remote storage options which can be exposed to Nomad jobs using [Container Storage Interface (CSI)](https://github.com/container-storage-interface/spec/blob/master/spec.md) plugins.
+* Nomad 0.11 allows mounting persistant storage in 3 ways:
+  * [Nomad Host Volumes](https://nomadproject.io/docs/configuration/client/#host_volume-stanza) deployed to Nomad clients and managed by Nomad.
+  * [Docker Volume Drivers](https://nomadproject.io/docs/drivers/docker/#inlinecode-volumes-16) such as Portworx that are deployed to Nomad clients but are externally managed.
+  * [Container Storage Interface (CSI)](https://github.com/container-storage-interface/spec/blob/master/spec.md) plugins that expose externally managed storage.
+* The first and third can be used with all Nomad task drivers, but the second can only be used with the Docker task driver.
 
 ???
 * Nomad 0.11 offers three choices for mounting persistent data volumes: Host Volumes, Docker Volume Drivers, and CSI plugins.
