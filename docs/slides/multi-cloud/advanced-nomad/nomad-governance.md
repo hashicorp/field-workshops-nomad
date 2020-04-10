@@ -1,9 +1,9 @@
-name: chapter-5-title
+name: chapter-title
 class: title, shelf, no-footer, fullbleed
 background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/bkgs/HashiCorp-Title-bkg.jpeg)
 count: false
 
-# Chapter 5
+# Chapter 6
 ## Nomad Enterprise Governance and Policy
 
 ![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
@@ -25,6 +25,7 @@ name: chapter-5-topics
 * Namespaces
 * Resource Quotas
 * Sentinel Policies
+* Audit Logging
 
 ???
 * The Nomad Enterprise Governance and Policy module includes Namespaces, Resource Quotas, and Sentinel Policies.
@@ -155,6 +156,16 @@ main = rule {
 * This is a Nomad Sentinel policy that only allows the Docker and Java task drivers to be used.
 
 ---
+name: nomad-enterprise-audit-logging
+# Nomad Enterprise Audit Logging
+* Nomad Enterprise's [Audit Logging](https://nomadproject.io/docs/enterprise/#audit-logging) provides Nomad administrators a complete set of records for all user-issued actions in Nomad.
+* Nomad Enteprise customers can proactively identify access anomalies, ensure enforcement of their security policies, and diagnose cluster behavior by viewing preceding user operations.
+* Each audit event is captured with relevant request and response information in a JSON format that is easily digestibile and familiar to operators
+
+???
+* Finally, we want to talk about Nomad Enterprise's audit logging that was added in Nomad 0.11.0.
+
+---
 name: lab-nomad-governance
 # 👩‍💻 Nomad Enterprise Governance Lab
 * In this lab, you'll learn how to use Nomad Enterprise's governance capabilities including namespaces, resource quotas, and Sentinel policies.
@@ -163,16 +174,16 @@ name: lab-nomad-governance
 https://play.instruqt.com/hashicorp/tracks/nomad-governance
 
 ???
-* Now, you can do explore Nomad namespaces, resource quotas, and Sentinel policies hands-on
+* Now, you can explore Nomad namespaces, resource quotas, and Sentinel policies hands-on
 * You'll be running the Instruqt track "Nomad Enterprise Governance"
 
 ---
-name: chapter-5-Summary
-# 📝 Chapter 5 Summary
+name: chapter-Summary
+# 📝 Chapter 6 Summary
 
-In this section you did the following:
-* Learned about Nomad Enterprise's governance features including namespaces, resource quotas, and Sentinel policies.
-* Actually worked with all 3 of those constructs and Nomad ACLs in an Instruqt lab.
+In this chapter you did the following:
+* Learned about Nomad Enterprise's governance features including namespaces, resource quotas, Sentinel policies, and audit logging.
+* Actually worked with the first 3 of these constructs and Nomad ACLs in an Instruqt lab.
 
 ???
-* You now know a lot more about Nomad Enterprise's governance features than you did an hour ago.
+* You now know a lot more about Nomad Enterprise's governance features than you did yesterday.

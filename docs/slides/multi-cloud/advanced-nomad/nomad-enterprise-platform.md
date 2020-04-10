@@ -1,9 +1,9 @@
-name: chapter-5-title
+name: chapter-title
 class: title, shelf, no-footer, fullbleed
 background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/bkgs/HashiCorp-Title-bkg.jpeg)
 count: false
 
-# Chapter 4
+# Chapter 5
 ## Nomad Enterprise Platform
 
 ![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
@@ -130,3 +130,16 @@ name: Nomad Redundancy Zones
 - Redundancy Zones allows servers to be associated with a zone, and enables clusters to communicate across zones
 - Without Redundancy Zones, each Zone would have an independent cluster, or just forego server redundancy
 - Using Nomad Autopilot with Redundancy Zones ensures cluster operation continuity in the event of zone failures
+
+---
+name: chapter-Summary
+# 📝 Chapter 5 Summary
+
+In this chapter you did the following:
+* Learned about the features of the Nomad Enterprise Platform:
+  * Automated Upgrades
+  * Enhanced Read Scalability
+  * Redundancy Zones
+
+???
+* You now know a lot more about the Nomad Enterprise Platform than you did yesterday.
