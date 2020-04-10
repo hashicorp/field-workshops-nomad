@@ -1,0 +1,134 @@
+slug: nomad-and-portworx
+id: h7wajhkey5qc
+type: track
+title: Nomad Integration With Portworx
+teaser: |
+  Learn how Nomad and Portworx support stateful workloads deployed by Nomad jobs.
+description: |-
+  Some Nomad workloads need to persist data that will still be available if the job that runs the workloads are stopped and restarted.
+
+  Nomad supports stateful workloads with 3 different options:
+    * [Nomad Host Volumes](https://nomadproject.io/docs/configuration/client/#host_volume-stanza) that are managed by Nomad and can be used with any Nomad task driver
+    * [Docker Volume Drivers](https://docs.docker.com/engine/extend/plugins_volume/#create-a-volumedriver) such as Portworx that are externally managed and can only be used with the Docker task driver
+    * [CSI Plugins](https://github.com/container-storage-interface/spec/blob/master/spec.md) that are also externally managed but can be used with any Nomad task driver.
+
+  This track will guide you through using a [Docker Volume Driver](https://nomadproject.io/docs/drivers/docker/#inlinecode-volumes-16) and [Portworx](https://docs.portworx.com/install-with-other/nomad) to persist data for an HA MySQL database deployed by Nomad. It is based on the [Stateful Workloads with Portworx](https://learn.hashicorp.com/nomad/stateful-workloads/portworx) guide.
+
+  Before running this track, we suggest you run the [Nomad Basics](https://play.instruqt.com/hashicorp/tracks/nomad-basics) track.
+icon: https://storage.googleapis.com/instruqt-hashicorp-tracks/logo/nomad.png
+tags:
+- Nomad
+- stateful
+- Portworx
+- storage
+owner: hashicorp
+developers:
+- roger@hashicorp.com
+- tharris@hashicorp.com
+private: true
+published: false
+challenges:
+- slug: verify-nomad-cluster-health
+  id: ap4o4x7mtxn9
+  type: challenge
+  title: Verify the Health of Your Nomad Cluster
+  teaser: |
+    Verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts.
+  assignment: |-
+    In this challenge, you will verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
+
+    The cluster is running 1 Nomad/Consul server and 3 Nomad/Consul clients with Nomad 0.11.0 and Consul 1.7.2.
+
+    First, verify that all 4 Consul agents are running and connected to the cluster by running this command on the "Server" tab:
+    ```
+    consul members
+    ```
+    You should see 4 Consul agents with the "alive" status.
+
+    Check that the Nomad server is running by running this command on the "Server" tab:
+    ```
+    nomad server members
+    ```
+    You should see 1 Nomad server with the "alive" status.
+
+    Check the status of the Nomad client nodes by running this command on the "Server" tab:
+    ```
+    nomad node status
+    ```
+    You should see 3 Nomad clients with the "ready" status.
+
+    You can also check the status of the Nomad server and clients in the Nomad and Consul UIs.
+
+    In the next challenge, you will do <SOME THINGS\>.
+  notes:
+  - type: text
+    contents: |-
+      Nomad supports stateful workloads with 3 different options:
+        * [Nomad Host Volumes](https://nomadproject.io/docs/configuration/client/#host_volume-stanza) that are managed by Nomad and can be used with any Nomad task driver
+        * [Docker Volume Drivers](https://docs.docker.com/engine/extend/plugins_volume/#create-a-volumedriver) such as Portworx that are externally managed and can only be used with the Docker task driver
+        * [CSI Plugins](https://github.com/container-storage-interface/spec/blob/master/spec.md) that are also externally managed but can be used with any Nomad task driver.
+
+      In this track, you will use a Docker volume driver and [Portworx](https://docs.portworx.com/install-with-other/nomad) to persist data for an HA MySQL database.
+  - type: text
+    contents: |-
+      In this challenge, you will verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
+
+      In later challenges, you will do <SOME THINGS\>
+  tabs:
+  - title: Server
+    type: terminal
+    hostname: nomad-server-1
+  - title: Nomad UI
+    type: service
+    hostname: nomad-server-1
+    port: 4646
+  difficulty: basic
+  timelimit: 600
+- slug: install-portworx
+  id: jndu9wxvuyj6
+  type: challenge
+  title: Install Portworx on the Nomad Clients
+  teaser: |
+    Install Portworx on the Nomad clients.
+  assignment: |-
+    In this challenge, you will deploy Portworx on all 3 Nomad clients.
+
+    In the next challenge, you will do <SOMETHING\>.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will deploy Portworx on all 3 Nomad clients.
+
+      In the next challenge, you will do <SOME THINGS\>.
+  tabs:
+  - title: Files
+    type: code
+    hostname: nomad-server-1
+    path: /root/
+  - title: Server
+    type: terminal
+    hostname: nomad-server-1
+  - title: Client 1
+    type: terminal
+    hostname: nomad-client-1
+  - title: Client 2
+    type: terminal
+    hostname: nomad-client-2
+  - title: Client 3
+    type: terminal
+    hostname: nomad-client-3
+  - title: Nomad UI
+    type: service
+    hostname: nomad-server-1
+    port: 4646
+  - title: Cloud CLI
+    type: terminal
+    hostname: cloud-client
+  - title: Cloud Links
+    type: service
+    hostname: cloud-client
+    path: /
+    port: 80
+  difficulty: basic
+  timelimit: 3600
+checksum: "4428617181164819785"
