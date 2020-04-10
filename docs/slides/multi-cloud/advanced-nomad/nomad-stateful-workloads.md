@@ -1,16 +1,16 @@
-name: chapter-3-title
+name: chapter-title
 class: title, shelf, no-footer, fullbleed
 background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/bkgs/HashiCorp-Title-bkg.jpeg)
 count: false
 
-# Chapter 3
+# Chapter 4
 ## Stateful Workloads with Nomad
 
 ![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
 
 ???
 * This chapter covers running stateful workloads with Nomad.
-* It includes using Nomad Host Volumes and Docker volume drivers to access external data storage solutions like  Portworx.
+* It includes using Nomad Host Volumes, Docker volume drivers, and Container Storage Interface (CSI) plugins.
 
 ---
 layout: true
@@ -26,6 +26,7 @@ name: chapter-3-topics
 * Stateful Workloads Overview
 * Using Nomad Host Volumes
 * Using [Portworx](https://docs.portworx.com/install-with-other/nomad) with a Docker Volume Driver
+* Using Container Storage Interface (CSI) plugins
 * Stateful Workloads Hands-on Lab
 
 ---
@@ -47,14 +48,13 @@ name: types-of-workload
 name: nomad-storage-volume-options
 # Storage Volume Options
 
-* Nomad 0.10 allows mounting persistant storage volumes in 2 ways:
+* Nomad 0.11 allows mounting persistant storage volumes in 3 ways:
   * Local Storage Volumes which can be exposed to Nomad using [Host Volume Mounts](https://nomadproject.io/docs/configuration/client/#host_volume-stanza)
   * Remote Storage Volumes which can be exposed to Nomad jobs using [Docker Volume Drivers](https://nomadproject.io/docs/drivers/docker/#inlinecode-volumes-16)
-* Nomad 0.11 will support additional storage providers through [Container Storage Interface (CSI)](https://github.com/container-storage-interface/spec/blob/master/spec.md) plugins.
+  * Other remote storage options which can be exposed to Nomad jobs using [Container Storage Interface (CSI)](https://github.com/container-storage-interface/spec/blob/master/spec.md) plugins.
 
 ???
-* Nomad 0.10 offers two choices for mounting persistent data volumes: Host Volumes and Docker Volume Drivers.
-* Nomad 0.11 will support additional storage providers through CSI plugins.
+* Nomad 0.11 offers three choices for mounting persistent data volumes: Host Volumes, Docker Volume Drivers, and CSI plugins.
 
 ---
 name: nomad-host-volumes
@@ -125,6 +125,16 @@ name: using-docker-volume-drivers
 * Nomad does not manage the storage pools or replication of data in these external storage solutions.
 
 ---
+name: csi-plugins
+class: compact
+# Using CSI Plugins
+* Nomad 0.11.0 added support for [Container Storage Interface (CSI)](https://github.com/container-storage-interface/spec/blob/master/spec.md) plugins.
+* You can run CSI plugins as Nomad jobs that mount volumes created by your storage providers.
+* Examples include AWS EBS volumes, Azure disks, and GCP persistent disks.
+* Since the CSI plugins are written by the storage vendors, any CSI plugin that supports Kubernetes can also be used with Nomad.
+* Since the CSI plugins are run as Nomad jobs and told about volumes they should manage with the `nomad volume register` command, no configuration changes are needed on Nomad clients.
+
+---
 name: lab-nomad-governance
 # 👩‍💻 Nomad Host Volumes Lab
 * In this lab, you'll learn how to use Nomad host volumes.
@@ -137,14 +147,15 @@ https://play.instruqt.com/hashicorp/tracks/nomad-host-volumes
 * You'll be running the Instruqt track "Nomad Host Volumes"
 
 ---
-name: chapter-3-Summary
-# 📝 Chapter 3 Summary
+name: chapter-Summary
+# 📝 Chapter 4 Summary
 
-In this section you did the following:
+In this chapter you did the following:
 * Learned about Nomad's options to run stateful workloads including:
   * Using Nomad host volumes with any task driver
   * Using Docker volume drivers with the Docker driver
+  * Using CSI plugins with external storage volumes
 * Actually worked with Nomad host volumes in an Instruqt lab.
 
 ???
-* You now know a lot more about Nomad's persistent storage options than you did an hour ago.
+* You now know a lot more about Nomad's persistent storage options than you did yesterday.
