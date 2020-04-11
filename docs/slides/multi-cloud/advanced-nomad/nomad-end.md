@@ -27,8 +27,8 @@ name: thank-you
 * For more information on Nomad, please refer to the following links:
   * https://www.nomadproject.io
   * https://www.nomadproject.io/docs/index.html
-  * https://www.nomadproject.io/guides/index.html
-  * https://www.nomadproject.io/api/index.html
+  * https://nomadproject.io/docs/enterprise/
+  * https://learn.hashicorp.com/nomad
 
 ???
 * Thank the students for their participation
