@@ -21,8 +21,8 @@ if [ $nomad_servers -ne 1 ]; then
 fi
 
 nomad_clients=$(nomad node status | grep ready | wc -l)
-if [ $nomad_clients -ne 4 ]; then
-  echo "There are not 4 running Nomad clients."
+if [ $nomad_clients -ne 3 ]; then
+  echo "There are not 3 running Nomad clients."
   exit 1
 fi
 

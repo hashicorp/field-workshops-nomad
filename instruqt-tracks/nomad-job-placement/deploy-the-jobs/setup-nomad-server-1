@@ -12,10 +12,14 @@ job "webapp" {
   group "webapp" {
     count = 3
 
+    spread {
+      attribute = "\${node.unique.name}"
+    }
+
     task "server" {
       env {
-        PORT    = "${NOMAD_PORT_http}"
-        NODE_IP = "${NOMAD_IP_http}"
+        PORT    = "\${NOMAD_PORT_http}"
+        NODE_IP = "\${NOMAD_IP_http}"
       }
 
       driver = "docker"
@@ -25,6 +29,9 @@ job "webapp" {
       }
 
       resources {
+        cpu    = 750
+        memory = 24
+
         network {
           mbits = 10
           port  "http"{}
@@ -65,7 +72,7 @@ job "traefik" {
     task "traefik" {
       constraint
       {
-        attribute = "${attr.platform.gce.machine-type}"
+        attribute = "\${attr.platform.gce.machine-type}"
         value     = "n1-standard-2"
       }
       driver = "docker"

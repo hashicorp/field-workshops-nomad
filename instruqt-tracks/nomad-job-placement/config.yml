@@ -24,9 +24,3 @@ virtualmachines:
   environment:
     CONSUL_HTTP_ADDR: nomad-client-3:8500
   machine_type: n1-standard-1
-- name: nomad-client-4
-  image: instruqt-hashicorp/hashistack-0-5-0
-  shell: /bin/bash -l
-  environment:
-    CONSUL_HTTP_ADDR: nomad-client-4:8500
-  machine_type: n1-standard-1

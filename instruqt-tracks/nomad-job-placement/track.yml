@@ -4,9 +4,9 @@ type: track
 title: Nomad Advanced Job Placement
 teaser: Explore Nomad Job Placement strategies with Constraints, Affinities, and Spread
 description: |-
-  This track will show how to use Nomad's Job Placement with Constraints, Affinities, and Spread to demonstrate the complexity with wihch you can control your job placement.
+  This track will show how to use Nomad's Job Placement with Constraints, Affinities, and Spread to demonstrate the complexity with which you can control your job placement.
 
-  In this track you will deploy a nomad cluster with a WebApp and [Trafek](https://containo.us/traefik/) for networking.
+  In this track you will deploy a nomad cluster with a WebApp and [Traefik](https://containo.us/traefik/) for networking.
 
   Before running this track, we suggest you run the [Nomad Basics](https://instruqt.com/hashicorp/tracks/nomad-basics) and [Nomad Simple Cluster](https://instruqt.com/hashicorp/tracks/nomad-simple-cluster) tracks.
 icon: https://storage.googleapis.com/instruqt-frontend/img/tracks/default.png
@@ -57,14 +57,11 @@ challenges:
     contents: |-
       In this challenge, you will verify the health of the Nomad Enterprise cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
 
-      In later challenges, you will run a nomad job for a "webapp" and a "traefik" jobs and update them using Nomad Job Placement stanzas Constraint, Affinity, and  Spread.
+      In later challenges, you will run a nomad job for a "webapp" and a "traefik" jobs and update them using Nomad Job Placement stanzas Constraint, Affinity, and Spread.
   tabs:
   - title: Server
     type: terminal
     hostname: nomad-server-1
-  - title: Client
-    type: terminal
-    hostname: nomad-client-1
   - title: Consul UI
     type: service
     hostname: nomad-server-1
@@ -82,100 +79,118 @@ challenges:
   teaser: |
     Deploy a WebApp and Traefik
   assignment: |-
-    In this challenge, we will introduce Traefik ![alt text](https://containo.us/assets/img/traefik-logo.svg)
+    ![alt text](https://containo.us/assets/img/traefik-logo.svg)<br>
+    In this challenge, we will introduce Traefik to be used as a proxy for our webapps.
 
+    You will deploy a webapp with 3 instances and Traefik to enable communications.
 
-    You will deploy a WebApp with 3 instances and Traefik to enable communications.
+    ## Inspect the Nomad Jobs.
+    Lets begin by inspecting the Nomad jobs and getting familiar with what's going to be deployed.
 
-    ##
-    Run the webapp.nomad Job
-    Inspect the "webapp.nomad" job specification file
-    on the "Jobs" tab. This will deploy a WebApp.
+    ### Inspect webapp.nomad
+    Inspect the "webapp.nomad" job specification file on the "Jobs" tab. This will deploy 3 webapps to our Nomad cluster.
+    <br>
 
-    Navigate to the /root/nomad/jobs
-    directory on the "Server" tab with this command:
+    One instance of the webapp task group will be deployed to each Nomad client because of the job's use of the "spread" stanza:<br>
+    `
+    spread {
+      attribute = "\${node.unique.name}"
+    }
+    `<br>
+
+    Nomad selects a dynamic port for each webapp, in order to obtain those dynamic values, this job uses [variable interpolation](https://nomadproject.io/docs/runtime/interpolation/) for getting the port and the IP of each running webapp. This is achieved in combination with the [port parameters](https://nomadproject.io/docs/job-specification/network/#port-parameters) in the network stanza.
+
+    ## Run the webapp.nomad Job
+    Navigate to the /root/nomad/jobs directory on the "Server" tab with this command:
     ```
     cd /root/nomad/jobs
     ```
 
-    Run
-    the "webapp.nomad" job with this command on the "Server" tab:
+    Run the "webapp.nomad" job with this command on the "Server" tab:
     ```
     nomad job run webapp.nomad
     ```
     This should return something like this:<br>
     `
-    ==>
-    Monitoring evaluation "e86a91bb"
-    Evaluation triggered by job "demo-webapp"
-    Evaluation
-    within deployment: "92da48d4"
-    Allocation "1feff487" created: node "530789ff",
-    group "demo"
-    Allocation "e8082da6" created: node "21d0cdba", group "demo"
-    Allocation
-    "1a423ab1" created: node "edca4722", group "demo"
-    Evaluation status changed:
-    "pending" -> "complete"
-    ==> Evaluation "e86a91bb" finished with status
-    "complete"
+    ==> Monitoring evaluation "a05672bc"
+    Evaluation triggered by job "webapp"
+    Evaluation within deployment: "5692a28d"
+    Allocation "6bc9d9e6" created: node "33fd8505", group "webapp"
+    Allocation "1b90c684" created: node "3006bb6d", group "webapp"
+    Allocation "56b0671c" created: node "2f4a35ac", group "webapp"
+    Evaluation status changed: "pending" -> "complete"
+    ==> Evaluation "a05672bc" finished with status "complete"
     `<br>
 
-    You can check the job in the Nomad UI after waiting 15-30
-    seconds, clicking the Instruqt refresh button above the Nomad UI, and then selecting
-    the "webapp" job. You might need to make your browser window a bit wider to
-    see the UI properly and so that the Instruqt buttons do not overlap the Nomad
-    UI tab. You could also click the rectangular button next to the refresh button
-    to hide this assignment. After no more than 1 minute, you should see that the
-    job has 1 healthy allocation.
+    ### Monitoring progress of the webapp job deployment
+    For a UI view of the progress you can check the job in the "Nomad UI" tab and after waiting 15-30
+    seconds if you don't see any changes in the Nomad jobs page, you can try clicking the Instruqt refresh button above the Nomad UI, and then select
+    the "webapp" job.
+    <br>
+    You might need to make your browser window a bit wider to see the UI properly and so that the Instruqt buttons do not overlap the "Nomad UI" tab.
+    <br>
+    You could also click the rectangular button next to the refresh button to hide this assignment. After no more than 1 minute, you should see that the job has 3 healthy allocation.
 
-    Alternatively, you can run the command:
+    Alternatively, to view the status in the CLI, you can run the command:
     ```
     nomad job status webapp
     ```
-    on the "Server" tab to check the status of the "webapp" jobs and validate that the "webapp" task group is healthy.
+    on the "Server" tab to check the status of the "webapp" jobs and validate that the "webapp" task group shows 3 healthy healthy.
+    <br>
+    You can also inspect the "Consul UI" tab to see the health of the webapps that are running as services in Consul.
 
-    ## Run the traefik.nomad
-    Job Inspect the "traefik.nomad" job specification file on the "Jobs" tab. This will deploy Traefik.
+    ### Inspect traefik.nomad
+    Inspect the "traefik.nomad" job specification file on the "Jobs" tab. This will deploy a Traefik container that will proxy all requests to the webapps on 8080 to their dynamic ports allocated by Nomad.
+    <br>
+    This job is utilizing the [constraints config](https://docs.traefik.io/providers/consul-catalog/#constraints) for Consul Catalog in Traefik.
+    <br>
+    `constraints = ["tag==service"]`
 
+
+    If you take a look back at the webapp.nomad on line 30 you will see the tags being applied.
+    <br>
+    `
+    tags = [
+          "traefik.tags=service",
+          "traefik.frontend.rule=PathPrefixStrip:/myapp",
+        ]
+    `<br>
+
+    ## Run the traefik.nomad Job
     Run the "traefik.nomad" job with this command on the "Server" tab:
     ```
     nomad job run traefik.nomad
     ```
-    This should return something like this:<br>
+    This should return something like this:
+    <br>
     `
-    ==> Monitoring evaluation "21f6eb47"
-    Evaluation
-    triggered by job "traefik"
-    Evaluation within deployment: "14c4b0cc"
-    Allocation
-    "9a123921" created: node "edca4722", group "traefik"
-    Evaluation status
-    changed: "pending" -> "complete"
-    ==> Evaluation "21f6eb47" finished with
-    status "complete"
+    ==> Monitoring evaluation "6765c131"
+    Evaluation triggered by job "traefik"
+    Evaluation within deployment: "d15e6190"
+    Allocation "0e36e38a" created: node "44d88b4b", group "traefik"
+    Evaluation status changed: "pending" -> "complete"
+    ==> Evaluation "6765c131" finished with status "complete"
     `<br>
 
-    You can check the job in the Nomad UI after waiting
-    15-30 seconds, clicking the Instruqt refresh button above the Nomad UI, and then
-    selecting the "traefik" job. You might need to make your browser window a bit
-    wider to see the UI properly and so that the Instruqt buttons do not overlap the
-    Nomad UI tab. You could also click the rectangular button next to the refresh
-    button to hide this assignment. After no more than 1 minute, you should see that
-    the job has 1 healthy allocation.
+    For a UI view of the progress you can check the job in the "Nomad UI" tab and after waiting 15-30
+    seconds if you don't see any changes in the Nomad jobs page, you can try clicking the Instruqt refresh button above the Nomad UI, and then select
+    the "traefik" job.
+    <br>
+    You might need to make your browser window a bit wider to see the UI properly and so that the Instruqt buttons do not overlap the "Nomad UI" tab.
+    <br>
+    You could also click the rectangular button next to the refresh button to hide this assignment. After no more than 1 minute, you should see that the job has 1 healthy allocation.
 
     Alternatively, you can run the command:
     ```
-    nomad
-    job status traefik
+    nomad job status traefik
     ```
-    on the "Server" tab to check the status of the "traefik" job and validate that the "REPLACEME" task group is healthy.
+    on the "Server" tab to check the status of the "traefik" job and validate that the "traefik" task group is healthy.
   notes:
   - type: text
     contents: |-
       In this challenge, you will deploy a webapp and Traefik
 
-      In later challenges, you will run `UPDATETHIS`
+      In later challenges, you will learn about Constraints and Affinities .
   tabs:
   - title: Jobs
     type: code
@@ -184,18 +199,12 @@ challenges:
   - title: Server
     type: terminal
     hostname: nomad-server-1
-  - title: Client
+  - title: Client1
     type: terminal
     hostname: nomad-client-1
-  - title: Client
+  - title: Client2
     type: terminal
     hostname: nomad-client-2
-  - title: Client
-    type: terminal
-    hostname: nomad-client-3
-  - title: Client
-    type: terminal
-    hostname: nomad-client-4
   - title: Consul UI
     type: service
     hostname: nomad-server-1
@@ -312,4 +321,4 @@ challenges:
     port: 8080
   difficulty: basic
   timelimit: 3600
-checksum: "2770340027653176769"
+checksum: "2574787986773270289"
