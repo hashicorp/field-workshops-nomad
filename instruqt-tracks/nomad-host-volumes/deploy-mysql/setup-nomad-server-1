@@ -1,0 +1,64 @@
+#!/bin/bash -l
+
+cat <<-EOF > /root/nomad/mysql.nomad
+job "mysql-server" {
+  datacenters = ["dc1"]
+  type        = "service"
+
+  group "mysql-server" {
+    count = 1
+
+    volume "mysql_volume" {
+      type      = "host"
+      read_only = false
+      source    = "mysql"
+    }
+
+    task "mysql-server" {
+      driver = "docker"
+
+      volume_mount {
+        volume      = "mysql_volume"
+        destination = "/var/lib/mysql"
+        read_only   = false
+      }
+
+      env = {
+        "MYSQL_ROOT_PASSWORD" = "password"
+      }
+
+      config {
+        image = "rberlind/mysql-demo:latest"
+
+        port_map {
+          db = 3306
+        }
+      }
+
+      resources {
+        cpu    = 500
+        memory = 1024
+
+        network {
+          port "db" {
+            static = 3306
+          }
+        }
+      }
+
+      service {
+        name = "mysql-server"
+        port = "db"
+
+        check {
+          type     = "tcp"
+          interval = "10s"
+          timeout  = "2s"
+        }
+      }
+    }
+  }
+}
+EOF
+
+exit 0

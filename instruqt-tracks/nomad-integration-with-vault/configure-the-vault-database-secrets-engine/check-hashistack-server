@@ -6,8 +6,7 @@ grep -q "vault secrets enable database" /root/.bash_history || fail-message "You
 
 database_enabled=$(vault secrets list | grep database | wc -l)
 if [ "$database_enabled" -ne "1" ]; then
-  echo "You have not yet enabled Vault's database secrets engine yet."
-  exit 1
+  fail-message "You have not yet enabled Vault's database secrets engine yet."
 fi
 
 grep -q "vault write database/config/postgresql @connection.json" /root/.bash_history || fail-message "You haven't created the database connection yet."
@@ -18,16 +17,14 @@ grep -q "vault read database/creds/accessdb" /root/.bash_history || fail-message
 
 can_read_db_creds=$(vault read database/creds/accessdb | grep username | wc -l)
 if [ "$can_read_db_creds" -ne "1" ]; then
-  echo "The accessdb database credentials cannot be read yet."
-  exit 1
+  fail-message "The accessdb database credentials cannot be read yet."
 fi
 
 grep -q "vault policy write access-tables access-tables-policy.hcl" /root/.bash_history || fail-message "You haven't created the access-table policy yet."
 
 vault policy read access-tables
 if [ "$?" -ne "0" ]; then
-  echo "The Vault policy access-tables does not exist yet."
-  exit 1
+  fail-message "The Vault policy access-tables does not exist yet."
 fi
 
 exit 0

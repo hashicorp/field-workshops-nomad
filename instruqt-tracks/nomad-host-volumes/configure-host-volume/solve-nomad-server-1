@@ -1,7 +1,0 @@
-#!/bin/bash -l
-
-#Enable bash history
-HISTFILE=~/.bash_history
-set -o history
-
-exit 0

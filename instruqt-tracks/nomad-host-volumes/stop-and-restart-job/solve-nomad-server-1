@@ -1,0 +1,31 @@
+#!/bin/bash -l
+
+#Enable bash history
+HISTFILE=/root/.bash_history
+set -o history
+
+# Change Directory
+cd /root/nomad
+
+# Stop and Purge the Job
+nomad job stop -purge mysql-server
+
+# Sleep
+sleep 30
+
+# Check Nomad's status
+nomad status
+
+# Rerun the mysql.nomad Job
+nomad job run mysql.nomad
+
+# Sleep
+sleep 60
+
+# Check the status of the Job
+nomad job status mysql-server
+
+# Run query against the Database
+mysql -h mysql-server.service.consul -u web -ppassword -D itemcollection -s -N -e "select * from items"
+
+exit 0

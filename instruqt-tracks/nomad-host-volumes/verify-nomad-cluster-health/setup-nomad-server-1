@@ -22,26 +22,6 @@ consul {
 }
 EOF
 
-# Write Copy of Nomad Server 1 Config
-cat <<-EOF > /root/nomad/nomad-server1.hcl
-# Setup data dir
-data_dir = "/tmp/nomad/server1"
-
-# Give the agent a unique name.
-name = "server1"
-
-# Enable the server
-server {
-  enabled = true
-  bootstrap_expect = 1
-}
-
-# Consul configuration
-consul {
-  address = "nomad-server-1:8500"
-}
-EOF
-
 # Write Consul Server 1 Config
 cat <<-EOF > /etc/consul.d/consul-server1.json
 {
@@ -52,132 +32,37 @@ cat <<-EOF > /etc/consul.d/consul-server1.json
   "node_name": "server1",
   "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
   "client_addr": "0.0.0.0",
-  "bootstrap_expect": 1
-}
-EOF
-
-# Write Copy of Consul Server 1 Config
-cat <<-EOF > /root/nomad/consul-server1.json
-{
-  "server": true,
-  "ui": true,
-  "log_level": "INFO",
-  "data_dir": "/tmp/consul/server1",
-  "node_name": "server1",
-  "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
-  "client_addr": "0.0.0.0",
-  "bootstrap_expect": 1
-}
-EOF
-
-# Write Nomad Client 1 Config
-cat <<-EOF > /root/nomad/nomad-client1.hcl
-# Setup data dir
-data_dir = "/tmp/nomad/client1"
-
-# Give the agent a unique name.
-name = "client1"
-
-# Enable the client
-client {
-  enabled = true
-}
-
-# Consul configuration
-consul {
-  address = "nomad-client-1:8500"
-}
-EOF
-
-# Write Consul Client 1 Config
-cat <<-EOF > /root/nomad/consul-client1.json
-{
-  "ui": true,
-  "log_level": "INFO",
-  "data_dir": "/tmp/consul/client1",
-  "node_name": "client1",
-  "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
-  "client_addr": "0.0.0.0",
-  "retry_join": [
-    "nomad-server-1"
+  "bootstrap_expect": 1,
+  "recursors": [
+    "10.64.0.254"
   ]
 }
 EOF
 
-# Write Nomad Client 2 Config
-cat <<-EOF > /root/nomad/nomad-client2.hcl
-# Setup data dir
-data_dir = "/tmp/nomad/client2"
-
-# Give the agent a unique name.
-name = "client2"
-
-# Enable the client
-client {
-  enabled = true
-}
-
-# Consul configuration
-consul {
-  address = "nomad-client-2:8500"
-}
-EOF
-
-# Write Consul Client 2 Config
-cat <<-EOF > /root/nomad/consul-client2.json
-{
-  "ui": true,
-  "log_level": "INFO",
-  "data_dir": "/tmp/consul/client2",
-  "node_name": "client2",
-  "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
-  "client_addr": "0.0.0.0",
-  "retry_join": [
-    "nomad-server-1"
-  ]
-}
-EOF
-
-# Write Nomad Client 3 Config
-cat <<-EOF > /root/nomad/nomad-client3.hcl
-# Setup data dir
-data_dir = "/tmp/nomad/client3"
-
-# Give the agent a unique name.
-name = "client3"
-
-# Enable the client
-client {
-  enabled = true
-}
-
-# Consul configuration
-consul {
-  address = "nomad-client-3:8500"
-}
-EOF
-
-# Write Consul Client 3 Config
-cat <<-EOF > /root/nomad/consul-client3.json
-{
-  "ui": true,
-  "log_level": "INFO",
-  "data_dir": "/tmp/consul/client3",
-  "node_name": "client3",
-  "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
-  "client_addr": "0.0.0.0",
-  "retry_join": [
-    "nomad-server-1"
-  ]
-}
-EOF
-
+# Start Consul
 systemctl start consul
 
+# Sleep
 sleep 15
 
+# Configure Resolved and iptables
+cat <<-EOF > /etc/systemd/resolved.conf.d/consul.conf
+[Resolve]
+DNS=127.0.0.1
+Domains=~consul
+EOF
+iptables -t nat -A OUTPUT -d localhost -p udp -m udp --dport 53 -j REDIRECT --to-ports 8600
+iptables -t nat -A OUTPUT -d localhost -p tcp -m tcp --dport 53 -j REDIRECT --to-ports 8600
+systemctl restart systemd-resolved
+
+# Start Nomad
 systemctl start nomad
 
-sleep 45
+# Install MySQL Client 5.7
+apt-get -y update
+apt install -y --fix-missing mysql-client-core-5.7
+
+# Sleep
+sleep 30
 
 exit 0

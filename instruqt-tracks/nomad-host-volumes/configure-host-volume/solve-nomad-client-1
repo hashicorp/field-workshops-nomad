@@ -1,0 +1,19 @@
+#!/bin/bash -l
+
+#Enable bash history
+HISTFILE=~/.bash_history
+set -o history
+
+# Create Data Directory
+mkdir -p /opt/mysql/data
+
+# Restart Nomad client
+systemctl restart nomad
+
+# Sleep
+sleep 30
+
+# Check Node Status
+nomad node status -short -self
+
+exit 0
