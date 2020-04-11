@@ -1,4 +1,4 @@
-slug: nomad-update-strategies-nginx
+slug: nomad-update-strategies
 id: orxif8plq08a
 type: track
 title: Nomad Job Update Strategies
@@ -633,4 +633,4 @@ challenges:
     port: 8080
   difficulty: basic
   timelimit: 600
-checksum: "16282028616797495206"
+checksum: "4512318967536429794"

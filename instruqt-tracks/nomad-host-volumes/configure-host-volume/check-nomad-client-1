@@ -1,0 +1,16 @@
+#!/bin/bash -l
+
+set -e
+
+grep -q "mkdir -p /opt/mysql/data" /root/.bash_history || fail-message "You have not created the directory /opt/mysql/data on Nomad Client 1 yet."
+
+grep -q "systemctl restart nomad" /root/.bash_history || fail-message "You have not restarted Nomad Client 1 yet."
+
+grep -q "nomad node status -short -self" /root/.bash_history || fail-message "You have not checked the status of Nomad Client 1 yet."
+
+mysql_volume=$(nomad node status -short -self | grep "Host Volumes" | grep "mysql" | wc -l)
+if [ $mysql_volume -ne 1 ]; then
+  fail-message "The mysql host volume is not yet loaded on Nomad Client 1"
+fi
+
+exit 0

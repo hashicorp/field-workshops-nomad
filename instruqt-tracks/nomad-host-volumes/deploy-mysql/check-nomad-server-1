@@ -1,0 +1,16 @@
+#!/bin/bash -l
+
+set -e
+
+grep -q "cd /root/nomad" /root/.bash_history || fail-message "You have not navigated to the /root/nomad directory on the Server yet."
+
+grep -q "nomad job run mysql.nomad" /root/.bash_history || fail-message "You have not run the mysql.nomad job on the Server yet."
+
+grep -q "nomad job status mysql-server" /root/.bash_history || fail-message "You have not checked the status of the mysql-server job on the Server yet."
+
+mysql_job_status=$(nomad job status -short mysql-server | grep Status | grep running | wc -l)
+if [ $mysql_job_status -ne 1 ]; then
+  fail-message "The mysql-server job is not running."
+fi
+
+exit 0

@@ -8,8 +8,7 @@ grep -q "nomad status database" /root/.bash_history || fail-message "You haven't
 
 database_status=$(nomad status database | grep "Status .* running" | wc -l)
 if [ "$database_status" -ne "1" ]; then
-  echo "The Nomad database job is not running yet."
-  exit 1
+  fail-message "The Nomad database job is not running yet."
 fi
 
 exit 0

@@ -30,14 +30,30 @@ cat <<-EOF > /etc/consul.d/consul-client2.json
   "client_addr": "0.0.0.0",
   "retry_join": [
     "nomad-server-1"
+  ],
+  "recursors": [
+    "10.64.0.254"
   ]
 }
 EOF
 
+# Start Consul
 systemctl start consul
 
+# Sleep
 sleep 15
 
+# Configure Resolved and iptables
+cat <<-EOF > /etc/systemd/resolved.conf.d/consul.conf
+[Resolve]
+DNS=127.0.0.1
+Domains=~consul
+EOF
+iptables -t nat -A OUTPUT -d localhost -p udp -m udp --dport 53 -j REDIRECT --to-ports 8600
+iptables -t nat -A OUTPUT -d localhost -p tcp -m tcp --dport 53 -j REDIRECT --to-ports 8600
+systemctl restart systemd-resolved
+
+# Start Nomad
 systemctl start nomad
 
 exit 0

@@ -24,15 +24,15 @@ tags:
 owner: hashicorp
 developers:
 - roger@hashicorp.com
-private: true
-published: false
+private: false
+published: true
 challenges:
 - slug: verify-nomad-cluster-health
   id: oyncgsln93wn
   type: challenge
   title: Verify the Health of Your Nomad Cluster
   teaser: |
-    Verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts.
+    Verify the health of the Nomad cluster that has been deployed for you.
   assignment: |-
     In this challenge, you will verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
 
@@ -62,7 +62,7 @@ challenges:
   notes:
   - type: text
     contents: |-
-      Nomad supports stateful workloads with 3 different options:
+      Nomad supports stateful workloads with 3 options:
         * [Nomad Host Volumes](https://nomadproject.io/docs/configuration/client/#host_volume-stanza) that are managed by Nomad and can be used with any Nomad task driver
         * [Docker Volume Drivers](https://docs.docker.com/engine/extend/plugins_volume/#create-a-volumedriver) such as Portworx that are externally managed and can only be used with the Docker task driver
         * [CSI Plugins](https://github.com/container-storage-interface/spec/blob/master/spec.md) that are also externally managed but can be used with any Nomad task driver.
@@ -82,7 +82,7 @@ challenges:
     hostname: nomad-server-1
     port: 4646
   difficulty: basic
-  timelimit: 600
+  timelimit: 300
 - slug: configure-host-volume
   id: wllpfxtrtvqt
   type: challenge
@@ -90,20 +90,163 @@ challenges:
   teaser: |
     Configure a Nomad host volume on one client.
   assignment: |-
-    In this challenge, you will configure a Nomad host volume on one of the Nomad clients, nomad-client-1.
+    In this challenge, you will configure a Nomad host volume on one of the Nomad clients, nomad-client-1, to persistently store data from a MySQL database.
+
+    Begin by inspecting the new version of the first Nomad client's configuration file, "nomad-client1.hcl" on the "Nomad 1 Config" tab. Alternatively, you could run `cat /etc/nomad.d/nomad-client1.hcl` on the "Client 1" tab.
+
+    You will see that the setup script for this challenge has added the following stanza under the `client` stanza:
+    ```
+    host_volume "mysql" {
+      path      = "/opt/mysql/data"
+      read_only = false
+    }
+    ```
+
+    This tells Nomad that it should make a host volume with the name `mysql` on the path "/opt/mysql/data" available to jobs allocations deployed to Nomad Client 1. Setting `read_only` to `false` means that tasks will be able to write data to the host volume.
+
+    Note that we are only adding the `host_volume` stanza on Client 1. As a consequence, when a task group of a job indicates that it wants to use the `mysql` host volume, that task group will be deployed to Client 1. This ensures that if we stop and re-run a job, it will still be able to find the data that it had persisted to the host volume.
+
+    A host volume with a specific name should only be deployed to one Nomad client unless an external tool is used to replicate data between host volumes with the same name on different clients.
+
+    Next, please create the directory needed by the host volume by running this command on the "Client 1" tab:
+    ```
+    mkdir -p /opt/mysql/data
+    ```
+
+    Restart Nomad Client 1 with this command:
+    ```
+    systemctl restart nomad
+    ```
+
+    Finally, after waiting about 15 seconds check that the host volume has been loaded by the client:
+    ```
+    nomad node status -short -self
+    ```
+
+    This will return something like the following:<br>
+    `
+    ID              = 6665b0c4-31e8-0e0c-2ab2-618acae820f2
+    Name            = client1
+    Class           = <none>
+    DC              = dc1
+    Drain           = false
+    Eligibility     = eligible
+    Status          = ready
+    CSI Controllers = <none>
+    CSI Drivers     = <none>
+    Host Volumes    = mysql
+    CSI Volumes     = <none>
+    Drivers         = docker,exec
+    `<br>
+
+    Verify that "mysql" is listed in the "Host Volumes" row.
+
+    Please visit the Nomad UI, select "Clients" on the left-side menu, select the row with "client1", and scroll down. You will see that the client1 node has the "mysql" host volume listed with source "/opt/mysql/data". (If you don't see the left-side menu, make your browser window wider or hide the Instruqt assignment by clicking the picture frame icon next to the refresh icon to the right of the Nomad UI tab.)
+
+    Please record the ID of the "client1" node which is at the top of the current screen next to "Clients". When you run the job that deploys the MySQL database before and after writing data to it, you will be asked to check that the ID of the node to which the job's allocation is deployed matches this ID.
+
+    Note that the Nomad UI has a Storage menu on the left-hand menu, but this is for volumes mounted by CSI plugins. So, you will not see your host volume under it.
 
     In the next challenge, you will run a job that deploys a MySQL database that uses the host volume.
   notes:
   - type: text
     contents: |-
-      In this challenge, you will configure a Nomad host volume on one of the Nomad clients, nomad-client-1.
+      In this challenge, you will configure a [Nomad Host Volume](https://nomadproject.io/docs/configuration/client/#host_volume-stanza) on one of the Nomad clients, nomad-client-1.
 
-      In the next challenge, you will run a job that deploys a MySQL database that uses the host volume.
+      By configuring the host volume on a single Nomad client, we ensure that Nomad will schedule any task group that wants to use this host volume on the client that has it.
   tabs:
-  - title: Jobs
+  - title: Nomad 1 Config
+    type: code
+    hostname: nomad-client-1
+    path: /etc/nomad.d/nomad-client1.hcl
+  - title: Client 1
+    type: terminal
+    hostname: nomad-client-1
+  - title: Nomad UI
+    type: service
+    hostname: nomad-server-1
+    port: 4646
+  difficulty: basic
+  timelimit: 600
+- slug: deploy-mysql
+  id: 1y2xzn7fqj6i
+  type: challenge
+  title: Deploy a MySQL Database
+  teaser: |
+    Run a Nomad job that deploys a MySQL database.
+  assignment: |-
+    In this challenge, you will run a Nomad job that deploys a MySQL database that uses the host volume you configured in the last challenge.
+
+    Begin by inspecting the "mysql.nomad" job specification file on the "Nomad Job" tab. Alternatively, you could run `cat /root/nomad/mysql.nomad` on the "Server" tab.
+
+    Note that the task group, "mysql-server", includes the following [volume](https://nomadproject.io/docs/job-specification/volume/) stanza:
+    ```
+    volume "mysql_volume" {
+      type      = "host"
+      read_only = false
+      source    = "mysql"
+    }
+    ```
+    Setting the `type` to "host" and `source` to "mysql" tells Nomad that the task group wants to use a host volume called "mysql". (The other choice for `type` is "csi" which indicates that a CSI plugin should be used.)
+
+    As mentioned in the previous challenge, Nomad will deploy the "mysql-server" task group to Nomad Client 1 since that is the only client that has mounted the "mysql" host volume.
+
+    The job's "mysql-server" task includes the following [volume_mount](https://nomadproject.io/docs/job-specification/volume_mount/) stanza:
+    ```
+    volume_mount {
+      volume      = "mysql_volume"
+      destination = "/var/lib/mysql"
+      read_only   = false
+    }
+    ```
+    Setting `volume` to "mysql_volume" tells Nomad that the task wants to use the volume "mysql_volume" that the job added to the task's task group.
+
+    Additionally, the `destination` parameter tells Nomad to mount the host volume on the path "/var/lib/mysql" inside the task's allocation (which in this case means inside the Docker container running MySQL). Note that this path is different from the path of the host volume on the Nomad client itself which is "/opt/mysql/data".
+
+    Setting `read_only` to `false` allows the task to write to the host volume. Note that some tasks might be allowed to write data while other tasks might only be allowed to read data from a particular host volume. However, if a host volume had its `read_only` parameter set to `true`, then no tasks could write to it.
+
+    Next, navigate to the root/nomad directory by running this command on the "Server" tab:
+    ```
+    cd /root/nomad
+    ```
+
+    Now, please run the "mysql.nomad" job by running this command on the "Server" tab:
+    ```
+    nomad job run mysql.nomad
+    ```
+
+    After waiting about 15 seconds, please check the status of the job on the "Server" tab with this command:
+    ```
+    nomad job status mysql-server
+    ```
+    The Status field in the first section should show that the job is running. You should also see that there is 1 healthy instance of the "mysql-server" task group in the "Deployed" section and that a single allocation is running in the "Allocations" section.
+
+    Please inspect the ID of the node that the allocation was deployed to and compare it to the ID of the client1 node that you recorded earlier. They should match. (If you forgot to record the ID of the client1 node, you can visit the Clients section of the Nomad UI again.)
+
+    You can also check the status of the job in the Nomad UI, but you might need to click the Instruqt refresh icon after selecting that tab. You should see a single running allocation with a single task.
+
+    If you click on the "mysql-server" task group of the job in the UI and scroll down, you will see a "Volume Requirements" section which shows that the "mysql_volume" with source "mysql" is required and has permissions "Read/Write".
+
+    If you click on the allocation, click on the "mysql-server" task, and scroll down, you will see that the "mysql_volume" volume is exposed on the destination, "var/lib/mysql".
+
+    Finally, you should check that data has been written to the /opt/mysql/data on the "Client 1" tab with this command:
+    ```
+    ls /opt/mysql/data
+    ```
+    You should see various files listed in what had been an empty directory.
+
+    In the next challenge, you will write some data to the MySQL database.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will run a Nomad job that deploys a MySQL database that uses the host volume you configured in the last challenge.
+
+      You will learn how to give a task group in a job access to a specific host volume and how to expose the host volume to tasks.
+  tabs:
+  - title: Nomad Job
     type: code
     hostname: nomad-server-1
-    path: /root/nomad/jobs/
+    path: /root/nomad/mysql.nomad
   - title: Server
     type: terminal
     hostname: nomad-server-1
@@ -115,5 +258,152 @@ challenges:
     hostname: nomad-server-1
     port: 4646
   difficulty: basic
-  timelimit: 3600
-checksum: "17268037755626782397"
+  timelimit: 600
+- slug: write-data
+  id: ila85jhq08rm
+  type: challenge
+  title: Write Data to the MySQL Database
+  teaser: |
+    Write some data to the MySQL database.
+  assignment: |-
+    In this challenge, you will examine the tables and data of the MySQL database that your Nomad job is running. You will then write some data to the MySQL database.
+
+    Start by connecting to the MySQL database by running this command on the "Client 1" tab:
+    ```
+    mysql -h mysql-server.service.consul -u web -ppassword -D itemcollection
+    ```
+    This is using the DNS, "mysql-server.service.consul", that was registered by the job in Consul, the username "web", the password "password", and the database "itemcollection".
+
+    You should end up with a `mysql>` prompt that will allow you to issue the SQL commands below.
+
+    Check the tables in the "itemcollection" database with this command:
+    ```
+    show tables;
+    ```
+    This should show this:<br>
+    `
+    +--------------------------+
+    | Tables_in_itemcollection |
+    +--------------------------+
+    | items                    |
+    +--------------------------+
+    1 row in set (0.00 sec)
+    `<br>
+
+    Next, read the rows of the table with this query:
+    ```
+    select * from items;
+    ```
+    This should return this:<br>
+    `
+    +----+----------+
+    | id | name     |
+    +----+----------+
+    |  1 | bike     |
+    |  2 | baseball |
+    |  3 | chair    |
+    +----+----------+
+    3 rows in set (0.00 sec)
+    `<br>
+
+    Please insert an item into the table with this command:
+    ```
+    INSERT INTO items (name) VALUES ('glove');
+    ```
+    This should return "Query OK, 1 row affected (0.00 sec)".
+
+    If you want, run the query, `select * from items;`, again to verify that "glove" is now in the "items" table.
+
+    The new row (and any others you might add) should all be visible in the next challenge after you stop and restart the job.
+
+    Quit MySQL by typing `exit`.
+
+    In the next challenge, you will stop and re-run the "mysql-server" job and verify that the data you wrote is still in the database table.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will examine the tables and data of the MySQL database that your Nomad job is running.
+
+      You will then write some data to a table in the MySQL database. This data should still be in the database table in the next challenge after you stop and re-run the job.
+  tabs:
+  - title: Client 1
+    type: terminal
+    hostname: nomad-client-1
+  - title: Nomad UI
+    type: service
+    hostname: nomad-server-1
+    port: 4646
+  difficulty: basic
+  timelimit: 600
+- slug: stop-and-restart-job
+  id: freg9t9uv8f6
+  type: challenge
+  title: Stop and Restart the Database Job
+  teaser: |
+    Stop and restart the job that ran the database and validate that the item you added is still in the database.
+  assignment: |-
+    In this challenge, you will stop and re-run the "mysql-server" job and verify that the item you added is still in the database table.
+
+    First, stop and purge the "mysql-server" job by running the following command on the "Server" tab:
+    ```
+    nomad job stop -purge mysql-server
+    ```
+    The `-purge` option removes the job completely so that it will not show up in the Nomad UI or in any status commands.
+
+    After 10 seconds, verify that no jobs are running:
+    ```
+    nomad status
+    ```
+    This should return "No running jobs".
+
+    If you refresh the Nomad UI, you can confirm that there are no longer any jobs listed.
+
+    Navigate to the /root/nomad directory with this command:
+    ```
+    cd /root/nomad
+    ```
+
+    Re-run the job with this command:
+    ```
+    nomad run mysql.nomad
+    ```
+
+    After waiting 30 seconds, verify that the job has been successfully deployed with this command:
+    ```
+    nomad job status mysql-server
+    ```
+    The Status field in the first section should show that the job is running. You should also see that there is 1 healthy instance of the "mysql-server" task group in the "Deployed" section and that a single allocation is running in the "Allocations" section.
+
+    Please inspect the ID of the node that the allocation was deployed to and compare it to the ID of the client1 node that you recorded earlier. They should match. If so, this proves that the "mysql-server" task group was deployed to the same Nomad client (client1) both times that you ran the job.
+
+    Finally, connect to the MySQL database by running this command on the "Server" tab:
+    ```
+    mysql -h mysql-server.service.consul -u web -ppassword -D itemcollection
+    ```
+
+    Then run the same query you ran earlier:
+    ```
+    select * from items;
+    ```
+    You should see the row with "glove" that you added in the last challenge. This proves that the MySQL data written by the "mysql.nomad" job was correctly persisted and is still available to the job after being stopped, purged, and re-run.
+
+    Quit MySQL by typing `exit`.
+
+    Congratulations on completing the Nomad Host Volumes track.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will stop and re-run the "mysql-server" job and verify that the item you added is still in the database table.
+
+      When the job is restarted, it will be run on the first Nomad client again because that is the only client that has the "mysql" host volume deployed.
+  tabs:
+  - title: Server
+    type: terminal
+    hostname: nomad-server-1
+  - title: Nomad UI
+    type: service
+    hostname: nomad-server-1
+    port: 4646
+  difficulty: basic
+  timelimit: 600
+checksum: "11146245147824710040"

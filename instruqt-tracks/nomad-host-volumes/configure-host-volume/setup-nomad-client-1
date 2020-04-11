@@ -1,0 +1,32 @@
+#!/bin/bash -l
+
+set -e
+
+rm /root/.bash_history
+touch /root/.bash_history
+
+# Write Nomad Client 1 Config
+cat <<-EOF > /etc/nomad.d/nomad-client1.hcl
+# Setup data dir
+data_dir = "/tmp/nomad/client1"
+
+# Give the agent a unique name.
+name = "client1"
+
+# Enable the client
+client {
+  enabled = true
+
+  host_volume "mysql" {
+    path      = "/opt/mysql/data"
+    read_only = false
+  }
+}
+
+# Consul configuration
+consul {
+  address = "nomad-client-1:8500"
+}
+EOF
+
+exit 0

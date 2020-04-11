@@ -6,32 +6,28 @@ grep -q "nomad server members" /root/.bash_history || fail-message "You haven't 
 
 nomad_servers=$(nomad server members | grep alive | wc -l)
 if [ "$nomad_servers" -lt "1" ]; then
-  echo "The command 'nomad server members' did not show an alive server. Something went wrong"
-  exit 1
+  fail-message "The command 'nomad server members' did not show an alive server. Something went wrong"
 fi
 
 grep -q "nomad node status" /root/.bash_history || fail-message "You haven't checked the status of the Nomad client nodes yet."
 
 nomad_clients=$(nomad node status | grep ready | wc -l)
 if [ "$nomad_clients" -lt "2" ]; then
-  echo "The command 'nomad node status' did not show 2 ready clients. Something went wrong"
-  exit 1
+  fail-message "The command 'nomad node status' did not show 2 ready clients. Something went wrong"
 fi
 
 grep -q "consul members" /root/.bash_history || fail-message "You haven't checked the status of the Consul server yet."
 
 consul_members=$(consul members | grep alive | wc -l)
 if [ "$consul_members" -lt "3" ]; then
-  echo "The command 'consul members' did not show 3 alive nodes. Something went wrong"
-  exit 1
+  fail-message "The command 'consul members' did not show 3 alive nodes. Something went wrong"
 fi
 
 grep -q "vault status" /root/.bash_history || fail-message "You haven't checked the status of the Vault server yet."
 
 vault_seal_status=$(vault status | grep Sealed | grep false | wc -l)
 if [ "$vault_seal_status" -ne "1" ]; then
-  echo "Vault is not running. Something went wrong"
-  exit 1
+  fail-message "Vault is not running. Something went wrong"
 fi
 
 exit 0

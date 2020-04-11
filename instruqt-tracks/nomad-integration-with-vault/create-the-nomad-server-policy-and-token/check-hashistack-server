@@ -8,16 +8,14 @@ grep -q "vault policy write nomad-server nomad-server-policy.hcl" /root/.bash_hi
 
 vault policy read nomad-server
 if [ "$?" -ne "0" ]; then
-  echo "The Vault policy nomad-server does not exist yet."
-  exit 1
+  fail-message "The Vault policy nomad-server does not exist yet."
 fi
 
 grep -q "vault token create -policy nomad-server -period 72h -orphan > /root/hashistack/nomad/nomad-token.txt" /root/.bash_history || fail-message "You haven't created your Nomad token yet."
 
 nomad_token=$(cat /root/hashistack/nomad/nomad-token.txt | grep nomad-server | wc -l)
 if [ "$nomad_token" -lt "2" ]; then
-  echo "The Nomad Vault token does not appear to have been generated correctly yet."
-  exit 1
+  fail-message "The Nomad Vault token does not appear to have been generated correctly yet."
 fi
 
 exit 0
