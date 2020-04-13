@@ -37,21 +37,35 @@ challenges:
   assignment: |-
     In this challenge, you will verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
 
-    The cluster is running 1 Nomad/Consul server and 3 Nomad/Consul clients with Nomad 0.11.0 and Consul 1.7.2.
+    The cluster is running 1 Nomad/Consul server and 3 Nomad/Consul clients with Nomad 0.11.0 and Consul 1.7.2. These VMs have been created in a GCP project within this Instruqt track.
 
-    First, verify that all 4 Consul agents are running and connected to the cluster by running this command on the "Server" tab:
+    First, determine the public IP of your Nomad server by running this command on the "Cloud CLI" tab:
+    ```
+    echo $nomad_server_ip
+    ```
+
+    You can visit the Nomad UI in any browser tab outside the Instruqt tab with the URL, `http://<NOMAD_IP>:4646` where <NOMAD_IP\> is the value of $nomad_server_ip.
+
+    You can visit the Consul UI in any browser tab outside the Instruqt tab with the URL, `http://<NOMAD_IP>:8500` where <NOMAD_IP\> is the value of $nomad_server_ip.
+
+    Next, SSH to the Nomad server with this command:
+    ```
+    gcloud compute ssh nomad-server-1 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no
+    ```
+
+    Now, verify that all 4 Consul agents are running and connected to the cluster by running this command on the "Cloud CLI" tab:
     ```
     consul members
     ```
-    You should see 4 Consul agents with the "alive" status.
+    You should see 4 Consul agents with the "alive" status including 1 server and 3 clients.
 
-    Check that the Nomad server is running by running this command on the "Server" tab:
+    Check that the Nomad server is running by running this command on the "Cloud CLI" tab:
     ```
     nomad server members
     ```
     You should see 1 Nomad server with the "alive" status.
 
-    Check the status of the Nomad client nodes by running this command on the "Server" tab:
+    Check the status of the Nomad client nodes by running this command on the "Cloud CLI" tab:
     ```
     nomad node status
     ```
@@ -59,7 +73,7 @@ challenges:
 
     You can also check the status of the Nomad server and clients in the Nomad and Consul UIs.
 
-    In the next challenge, you will do <SOME THINGS\>.
+    In the next challenge, you will run a Nomad job that will install Portworx on all 3 Nomad clients.
   notes:
   - type: text
     contents: |-
@@ -75,15 +89,16 @@ challenges:
 
       In later challenges, you will do <SOME THINGS\>
   tabs:
-  - title: Server
+  - title: Cloud CLI
     type: terminal
-    hostname: nomad-server-1
-  - title: Nomad UI
+    hostname: cloud-client
+  - title: Cloud Links
     type: service
-    hostname: nomad-server-1
-    port: 4646
+    hostname: cloud-client
+    path: /
+    port: 80
   difficulty: basic
-  timelimit: 600
+  timelimit: 7200
 - slug: install-portworx
   id: jndu9wxvuyj6
   type: challenge
@@ -101,26 +116,6 @@ challenges:
 
       In the next challenge, you will do <SOME THINGS\>.
   tabs:
-  - title: Files
-    type: code
-    hostname: nomad-server-1
-    path: /root/
-  - title: Server
-    type: terminal
-    hostname: nomad-server-1
-  - title: Client 1
-    type: terminal
-    hostname: nomad-client-1
-  - title: Client 2
-    type: terminal
-    hostname: nomad-client-2
-  - title: Client 3
-    type: terminal
-    hostname: nomad-client-3
-  - title: Nomad UI
-    type: service
-    hostname: nomad-server-1
-    port: 4646
   - title: Cloud CLI
     type: terminal
     hostname: cloud-client
@@ -131,4 +126,4 @@ challenges:
     port: 80
   difficulty: basic
   timelimit: 3600
-checksum: "8370503454957079640"
+checksum: "16403737712222275309"

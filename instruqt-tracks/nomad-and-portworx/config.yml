@@ -5,37 +5,8 @@ containers:
   shell: /bin/bash -l
   ports:
   - 80
-virtualmachines:
-- name: nomad-server-1
-  image: instruqt-hashicorp/hashistack-0-6-0
-  shell: /bin/bash -l
-  environment:
-    CONSUL_HTTP_ADDR: nomad-server-1:8500
-  machine_type: n1-standard-1
-- name: nomad-client-1
-  image: instruqt-hashicorp/hashistack-0-6-0
-  shell: /bin/bash -l
-  environment:
-    CONSUL_HTTP_ADDR: nomad-client-1:8500
-  machine_type: n1-standard-1
-- name: nomad-client-2
-  image: instruqt-hashicorp/hashistack-0-6-0
-  shell: /bin/bash -l
-  environment:
-    CONSUL_HTTP_ADDR: nomad-client-2:8500
-  machine_type: n1-standard-1
-- name: nomad-client-3
-  image: instruqt-hashicorp/hashistack-0-6-0
-  shell: /bin/bash -l
-  environment:
-    CONSUL_HTTP_ADDR: nomad-client-3:8500
-  machine_type: n1-standard-1
 gcp_projects:
 - name: nomad
   services:
   - cloudresourcemanager.googleapis.com
   - compute.googleapis.com
-aws_accounts:
-- name: nomad
-  managed_policies:
-  - arn:aws:iam::aws:policy/AmazonEC2FullAccess
