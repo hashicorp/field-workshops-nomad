@@ -4,4 +4,22 @@
 HISTFILE=~/.bash_history
 set -o history
 
+# Run portworx.nomad Job
+gcloud compute ssh nomad-server-1 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "cd /root/nomad && nomad job run portworx.nomad"
+
+# Sleep
+sleep 180
+
+# Determine first Node ID and name
+first_portworx_node_id=$(gcloud compute ssh nomad-server-1 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "nomad job status portworx | grep Allocations -A5 | grep running | cut -d' ' -f3 | head -n 1")
+first_portworx_client_name=$(gcloud compute ssh nomad-server-1 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "nomad node status | grep $first_portworx_node_id | cut -d' ' -f5")
+client_number=$(echo $first_portworx_client_name | cut -d't' -f2)
+first_client_name="nomad-client-$client_number"
+
+# Export first_client_name on Cloud Client
+echo "export first_client_name=$first_client_name" >> /root/.bashrc
+
+# Create the Portworx MySQL volume
+gcloud compute ssh $first_client_name --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "pxctl volume create -s 10 -r 2 mysql"
+
 exit 0
