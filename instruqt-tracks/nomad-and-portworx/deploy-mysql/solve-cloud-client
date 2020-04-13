@@ -1,0 +1,13 @@
+#!/bin/bash -l
+
+#Enable bash history
+HISTFILE=~/.bash_history
+set -o history
+
+# Run mysql.nomad Job
+gcloud compute ssh nomad-server-1 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "cd /root/nomad && nomad job run mysql.nomad"
+
+# Sleep
+sleep 75
+
+exit 0

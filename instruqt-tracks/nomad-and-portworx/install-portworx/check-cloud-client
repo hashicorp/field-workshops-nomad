@@ -1,0 +1,34 @@
+#!/bin/bash -l
+
+set -e
+
+portworx_status=$(gcloud compute ssh nomad-server-1 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "nomad job status portworx | grep Deployed -A2 | grep 'portworx    true         2        2       2' | wc -l")
+
+if [ $portworx_status -ne 1 ]; then
+  fail-message "'nomad job status portworx' does not show 2 healthy allocations of the portworx job."
+fi
+
+portworx_allocations=$(gcloud compute ssh nomad-server-1 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "nomad job status portworx | grep Allocations -A5 | grep running | cut -d' ' -f1")
+
+ready_nodes=0
+for allocation in $portworx_allocations
+do
+  alloc_ready=$(gcloud compute ssh nomad-server-1 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "nomad alloc logs $allocation | grep 'PX is ready on Node' | wc -l")
+  ready_nodes=$((ready_nodes + alloc_ready))
+done
+
+if [ $ready_nodes -ne 2 ]; then
+  fail-message "At least one of the Portworx allocations did not show 'PX is ready on Node' message."
+fi
+
+mysql_volume_status=$(gcloud compute ssh $first_client_name --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "pxctl volume inspect mysql | grep Size | grep 10 | wc -l")
+
+if [ $mysql_volume_status -ne 1 ]; then
+  fail-message "The Portworx mysql volume does not appear to have been created yet."
+fi
+
+
+
+
+
+exit 0
