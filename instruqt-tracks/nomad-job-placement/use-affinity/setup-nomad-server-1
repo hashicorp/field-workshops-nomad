@@ -10,7 +10,7 @@ job "webapp" {
   datacenters = ["dc1"]
 
   group "webapp" {
-    count = 21
+    count = 6
 
     spread {
       attribute = "\${node.unique.name}"

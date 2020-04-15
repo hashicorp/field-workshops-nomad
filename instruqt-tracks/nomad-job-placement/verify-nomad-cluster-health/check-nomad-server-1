@@ -9,8 +9,8 @@ grep -q "nomad server members" /root/.bash_history || fail-message "You have not
 grep -q "nomad node status" /root/.bash_history || fail-message "You have not run 'nomad node status' on the Server yet."
 
 consul_clients=$(consul members | grep alive | wc -l)
-if [ $consul_clients -ne 5 ]; then
-  echo "There are not 5 running Consul clients."
+if [ $consul_clients -ne 4 ]; then
+  echo "There are not 4 running Consul clients."
   exit 1
 fi
 

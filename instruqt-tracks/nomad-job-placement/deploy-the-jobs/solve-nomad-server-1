@@ -7,22 +7,22 @@ set -o history
 # Change directory
 cd /root/nomad/jobs
 
-# Run mongodb Job
+# Run webapp Job
 nomad job run webapp.nomad
 
 # Sleep
 sleep 30
 
-# Check mongodb job Status
+# Check webapp job Status
 nomad job status webapp
 
-# Run chat-app Job
+# Run traefik Job
 nomad job run traefik.nomad
 
 # Sleep
-sleep 120
+sleep 12
 
-# Check chat-app Status
+# Check traefik Status
 nomad job status traefik
 
 exit 0

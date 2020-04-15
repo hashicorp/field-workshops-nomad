@@ -75,28 +75,21 @@ challenges:
 - slug: deploy-the-jobs
   id: ak0ehohkwlsk
   type: challenge
-  title: Deploy the WebApp and Traefik
+  title: Deploy the WebApp and Traefik Jobs
   teaser: |
-    Deploy a WebApp and Traefik
+    Deploy a WebApp and Traefik job
   assignment: |-
     ![alt text](https://containo.us/assets/img/traefik-logo.svg)<br>
     In this challenge, we will introduce Traefik to be used as a proxy for our webapps.
 
-    You will deploy a webapp with 3 instances and Traefik to enable communications.
+    You will deploy a webapp with 6 instances and Traefik to enable communications.
 
     ## Inspect the Nomad Jobs.
     Lets begin by inspecting the Nomad jobs and getting familiar with what's going to be deployed.
 
-    ### Inspect webapp.nomad
-    Inspect the "webapp.nomad" job specification file on the "Jobs" tab. This will deploy 3 webapps to our Nomad cluster.
+    ## Inspect webapp.nomad
+    Inspect the "webapp.nomad" job specification file on the "Jobs" tab. This will deploy 6 webapps to our Nomad cluster.
     <br>
-
-    One instance of the webapp task group will be deployed to each Nomad client because of the job's use of the "spread" stanza:<br>
-    `
-    spread {
-      attribute = "\${node.unique.name}"
-    }
-    `<br>
 
     Nomad selects a dynamic port for each webapp, in order to obtain those dynamic values, this job uses [variable interpolation](https://nomadproject.io/docs/runtime/interpolation/) for getting the port and the IP of each running webapp. This is achieved in combination with the [port parameters](https://nomadproject.io/docs/job-specification/network/#port-parameters) in the network stanza.
 
@@ -129,18 +122,18 @@ challenges:
     <br>
     You might need to make your browser window a bit wider to see the UI properly and so that the Instruqt buttons do not overlap the "Nomad UI" tab.
     <br>
-    You could also click the rectangular button next to the refresh button to hide this assignment. After no more than 1 minute, you should see that the job has 3 healthy allocation.
+    You could also click the rectangular button next to the refresh button to hide this assignment. After no more than 1 minute, you should see that the job has 6 healthy allocation.
 
     Alternatively, to view the status in the CLI, you can run the command:
     ```
     nomad job status webapp
     ```
-    on the "Server" tab to check the status of the "webapp" jobs and validate that the "webapp" task group shows 3 healthy healthy.
-    <br>
-    You can also inspect the "Consul UI" tab to see the health of the webapps that are running as services in Consul.
+    on the "Server" tab to check the status of the "webapp" jobs and validate that the "webapp" task group shows 6 healthy jobs.
+    <br><br>
+    You can also inspect the "Consul UI" tab to see the health of the webapps that are running as services in Consul. Click on the webapp service and take note of how the jobs are spread across the clients.
 
-    ### Inspect traefik.nomad
-    Inspect the "traefik.nomad" job specification file on the "Jobs" tab. This will deploy a Traefik container that will proxy all requests to the webapps on 8080 to their dynamic ports allocated by Nomad.
+    Inspect the "traefik.nomad" job specification file on the "Jobs" tab.<br> This will deploy a Traefik container that will proxy all requests to the webapps on 8080 to their dynamic ports allocated by Nomad.
+    <br>
     <br>
     This job is utilizing the [constraints config](https://docs.traefik.io/providers/consul-catalog/#constraints) for Consul Catalog in Traefik.
     <br>
@@ -151,9 +144,9 @@ challenges:
     <br>
     `
     tags = [
-          "traefik.tags=service",
-          "traefik.frontend.rule=PathPrefixStrip:/myapp",
-        ]
+    "traefik.tags=service",
+    "traefik.frontend.rule=PathPrefixStrip:/myapp",
+    ]
     `<br>
 
     ## Run the traefik.nomad Job
@@ -185,6 +178,8 @@ challenges:
     nomad job status traefik
     ```
     on the "Server" tab to check the status of the "traefik" job and validate that the "traefik" task group is healthy.
+    <br><br>
+    You can also load the Traefik UI and now see the 6 instances of the webapp registered with Traefik.
   notes:
   - type: text
     contents: |-
@@ -199,12 +194,6 @@ challenges:
   - title: Server
     type: terminal
     hostname: nomad-server-1
-  - title: Client1
-    type: terminal
-    hostname: nomad-client-1
-  - title: Client2
-    type: terminal
-    hostname: nomad-client-2
   - title: Consul UI
     type: service
     hostname: nomad-server-1
@@ -225,17 +214,12 @@ challenges:
     In this challenge, you will use the Spread stanza to demonstrate how we can increase the failure tolerance of their applications by specifying a node attribute that allocations should be spread over.
     This allows operators to spread allocations over attributes such as datacenter, availability zone, or even rack in a physical datacenter. By default, when using spread the scheduler will attempt to place allocations equally among the available values of the given target.
 
-    Please navigate back to the /root/nomad/jobs directory on the "Server" tab again with this command:
-    ```
-    cd /root/nomad/jobs
-    ```
-
     Edit the "webapp.nomad" job specification file on the "Jobs" tab, making the following changes:
     <br><br>
     Find the config line that says
     <br>
     `count = 6`
-    <br>
+    <br><br>
     Add the Spread stanza after the count line: <br>
     ```
       spread {
@@ -243,12 +227,18 @@ challenges:
       }
     ```
     <br>
-    Now, check what would happen if you redeployed the "webapp" job with this command on the "Server" tab:<br>
+    Please navigate back to the /root/nomad/jobs directory on the "Server" tab again with this command:
+    ```
+    cd /root/nomad/jobs
+    ```
+
+    Now, check what would happen if you redeployed the webapp job with this command on the "Server" tab:
     ```
     nomad job plan webapp.nomad
-    ```<br>
+    ```
 
     The output of this command will vary based on how Nomad decided to spread the nodes across the hosts. Normally this output will declare that it will create/destroy some Task/Task Group in order to now ballance out the workload.
+    <br>
     <br>
     You can view the current client workload allocations that have registered with Consul in order to see how the workloads are distributed. Navigate to the "Consul UI" Tab and click on the webapp service and take note of the "Node" column in the output.
     <br>
@@ -267,7 +257,7 @@ challenges:
     Evaluation status changed: "pending" -> "complete"
     ==> Evaluation "cd1d28a8" finished with status "complete"
     `<br>
-    You can again for to the Consul UI and see the webapp allocations changing in real time. When all jobs have registered and are marked as healthy from Consul you should now see 2 webapp jobs distributed evenly on each client.
+    Now go back to the Consul UI and see the webapp allocations changing in real time. When all jobs have registered and are marked as healthy from Consul you should now see 2 webapp jobs distributed evenly on each client.
     <br>
     If you look at the webapp job in the Nomad UI, you will see that there are 6 allocations running.
   notes:
@@ -291,20 +281,24 @@ challenges:
     type: service
     hostname: nomad-server-1
     port: 4646
-  - title: webapp 1
-    type: service
-    hostname: nomad-client-1
-    port: 8080
   difficulty: basic
-  timelimit: 3600
+  timelimit: 1600
 - slug: use-constraint
   id: uowivhtikmoz
   type: challenge
-  title: Add the Constraint stanza to Traefik to bind it to a host.
+  title: Add the Constraint Stanza
   teaser: |
-    Use the Constraint stanza to pin Traefik workload to a specific type host.
+    Use the Constraint stanza to pin Traefik job to a specific host type.
   assignment: |-
-    In this challenge, use the Constraint stanza to allows restricting the set of eligible nodes. We will be using a Constraint that filters on [attributes](https://www.nomadproject.io/docs/runtime/interpolation), but you could also use [client metadata](https://www.nomadproject.io/docs/configuration/client#custom-metadata-network-speed-and-node-class) as filters as well.
+    The scenerio for this challenge is that your webapp back end has scaled up to 21 jobs for an event<br><br>
+    In this challenge, use the Constraint stanza to allow restricting the set of eligible nodes, in this case Traefik to one host type. We will be using a Constraint that filters on [attributes](https://www.nomadproject.io/docs/runtime/interpolation), but you could also use [client metadata](https://www.nomadproject.io/docs/configuration/client#custom-metadata-network-speed-and-node-class) as filters as well.<br><br>
+    For this challenge we will be utilizing the underlying host machine type to choose where to run Traefik. The machine types are as follows:<br>
+    `
+    client1 = n1-standard-2
+    client2 = n1-standard-1
+    client3 = n1-standard-1
+    `<br>
+    <br>
 
 
     Please navigate back to the /root/nomad/jobs directory on the "Server" tab again with this command:
@@ -312,18 +306,39 @@ challenges:
     cd /root/nomad/jobs
     ```
 
-    Edit the "traefik.nomad" job specification file on the "Jobs" tab, making the following changes:
+    Let's simulate a load and let's increase the `count` stanza to 21.<br>
+    ```
+    count = 21
+    ```
+
+    Now let's restart the webapp job and get our 21 webapps up and running.<br>
+    ```
+    nomad job run webapp.nomad
+    ```
+
+    Check the Nomad UI and ensure the webapp jobs are all succesful.<br>
     <br>
-    Find the line in with teh task definition<br>
-    `task "traefik" {`<br>
-    and add the constraint after that.<br>
-    Add this new Constraint stanza
+
+
+    Go back to the "Server" tab and let's stop both jobs.<br>
+    ```
+    nomad job stop traefik
+    nomad job stop webapp
+    ```
+    <br>
+
+    Edit the "traefik.nomad" job specification file on the "Jobs" tab, making the following changes: <br>
+    <br>
+    Find the line in with the task definition<br>
+    `task "traefik"` <br>
+    and add the constraint after that. this will make this constraint specific to the task and not the task group like the webapp job. <br><br>
+    Add this new Constraint stanza:
     ```
     constraint
-      {
-      attribute = "${attr.platform.gce.machine-type}"
-      value     = "n1-standard-2"
-      }
+    {
+    attribute = "${attr.platform.gce.machine-type}"
+    value     = "n1-standard-2"
+    }
     ```
     Now, check what would happen if you redeployed the "traefik" job with this command on the "Server" tab:
     ```
@@ -332,20 +347,46 @@ challenges:
 
     This should return something like this:<br>
     `
-    REPLACE ME WITH OUTPUT
-    `<br>
+    +/- Job: "traefik"
+    +/- Task Group: "traefik" (1 create/destroy update)
+      +/- Task: "traefik" (forces in-place update)
+        + Constraint {
+          + LTarget: "${attr.platform.gce.machine-type}"
+          + Operand: "="
+          + RTarget: "n1-standard-2"
+          }
+    ` <br>
 
-    The plan indicates that Nomad would update 1 based on forcing the alocation over to a n1-standard-2 node.
+    The plan indicates that Nomad would update 1 job based on forcing the allocation over to a n1-standard-2 node that's running client1.
     ```
     nomad job run traefik.nomad
     ```
     This should return something like this:<br>
     `
-    REPLACE ME WITH OUTPUT
-        Evaluation status changed: "pending" -> "complete"
-    ==> Evaluation "0fd02bb5" finished with status "complete"
-    `<br>
-    If you look at the traefik job in the Nomad UI, you will see that there is 1 allocation running.
+    ==> Monitoring evaluation "63a2e467"
+    Evaluation triggered by job "traefik"
+    Evaluation within deployment: "662516d9"
+    Allocation "b42c964c" created: node "99187f90", group "traefik"
+    Evaluation status changed: "pending" -> "complete"
+    ==> Evaluation "63a2e467" finished with status "complete"
+    ` <br>
+    If you look at the traefik job in the Nomad UI, you will see that there is 1 allocation running.  Also, if you look in the Consul UI you will see that it is running on client1 which is the n1-standard-2 host.<br>
+    <br>
+    Now let's start the webapp job again:<br>
+    ```
+    nomad job run webapp.nomad
+    ``` <br>
+    <br>
+    Notice that the output says:<br>
+    ```
+    ==> Evaluation "d5d0e525" finished with status "complete" but failed to place all allocations:
+    Task Group "webapp" (failed to place 1 allocation):
+      * Resources exhausted on 3 nodes
+      * Dimension "memory" exhausted on 3 nodes
+      Evaluation "41a43c35" waiting for additional capacity to place remainder
+    ``` <br>
+    This indicates that because of our Constraining the traefik job to client1 we have now reduced the amount of process that can run on client1 and we are not able to place 1 allocation.<br>
+    In our next challenge we use the Affinity stanza to let Nomad decide where to run the jobs most effectivly.
   notes:
   - type: text
     contents: In this challenge, you will do Update the Traefik job to run on a specific
@@ -371,5 +412,85 @@ challenges:
     hostname: nomad-client-1
     port: 8081
   difficulty: basic
+  timelimit: 1600
+- slug: use-affinity
+  id: abyv4gnhdsia
+  type: challenge
+  title: Add the Affinity Stanza
+  teaser: |
+    Use the Affinity stanza to let Nomad decide if Traefik job should run on a specific host type.
+  assignment: |-
+    In this challenge, use the Affinity stanza to let Nomad decied where the job should run. The affinity stanza allows operators to express placement preference for a set of nodes. Affinities may be expressed on attributes or client metadata. Additionally affinities may be specified at the job, group, or task levels for ultimate flexibility.
+
+    For this challenge we will be utilizing the underlying host machine type to choose where to run Traefik. The machine types are as follows:<br>
+    `
+    client1 = n1-standard-2
+    client2 = n1-standard-1
+    client3 = n1-standard-1
+    `<br>
+    <br>
+
+
+    Please navigate back to the /root/nomad/jobs directory on the "Server" tab again with this command:
+    ```
+    cd /root/nomad/jobs
+    ```
+    <br><br>
+    Let's stop all the jobs again:<br>
+    ```
+    nomad job stop webapp
+    nomad job stop traefik
+    ```<br>
+    <br>
+
+    Now let's startup the webapp job again and get those jobs running:<br>
+    ```
+    nomad job run webapp.nomad
+    ```<br>
+    These should all deploy and spread their load across the clients. You can view the Nomad UI and see whan all jobs are healthy.<br>
+    <br>
+
+    Edit the "traefik.nomad" job specification file on the "Jobs" tab, changing the `constraint` to `affinity`:
+    <br>
+    ```
+    affinity
+      {
+      attribute = "${attr.platform.gce.machine-type}"
+      value     = "n1-standard-2"
+      }
+    ```
+    <br><br>
+    Now run the traefik job:<br>
+    ```
+    nomad job run traefik.nomad
+    ```
+    If you look at the traefik job in the Nomad UI, you will see that there is 1 allocation running and based on our Affinity stanza Nomad has evaluated if the job can run on client1, and if not has placed the job elsewhere. You results may vary from others based on Nomads decisions.
+    ## Explination of exhausted clients
+    The explination behind why we exhausted the clients memory allocation and could not deploy all the jobs is related to us forcing Nomad to use our logic rather than just relying on Nomad's Scoring system which is primarily based on bin packing, which is used to optimize the resource utilization and density of applications.<br>
+  notes:
+  - type: text
+    contents: In this challenge, you will do Update the Traefik job to let Nomad decide
+      where it runs.
+  tabs:
+  - title: Jobs
+    type: code
+    hostname: nomad-server-1
+    path: /root/nomad/jobs/
+  - title: Server
+    type: terminal
+    hostname: nomad-server-1
+  - title: Consul UI
+    type: service
+    hostname: nomad-server-1
+    port: 8500
+  - title: Nomad UI
+    type: service
+    hostname: nomad-server-1
+    port: 4646
+  - title: Traefik UI
+    type: service
+    hostname: nomad-client-3
+    port: 8081
+  difficulty: basic
   timelimit: 3600
-checksum: "5121767812337620124"
+checksum: "1432891199865093435"
