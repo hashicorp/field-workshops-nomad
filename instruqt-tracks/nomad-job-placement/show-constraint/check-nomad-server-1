@@ -1,7 +1,0 @@
-#!/bin/bash -l
-
-set -e
-
-grep -q "cd /root/nomad/jobs" /root/.bash_history || fail-message "You have not navigated to /root/nomad/jobs on the Nomad server yet."
-
-exit 0

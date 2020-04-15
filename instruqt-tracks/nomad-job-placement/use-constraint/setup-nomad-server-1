@@ -10,7 +10,11 @@ job "webapp" {
   datacenters = ["dc1"]
 
   group "webapp" {
-    count = 6
+    count = 3
+
+    spread {
+      attribute = "\${node.unique.name}"
+    }
 
     task "server" {
       env {

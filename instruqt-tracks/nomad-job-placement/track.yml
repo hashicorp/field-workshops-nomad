@@ -1,4 +1,4 @@
-slug: job-placement-with-constraints-affinities-and-spread
+slug: job-placement
 id: ypw13j54qi0v
 type: track
 title: Nomad Advanced Job Placement
@@ -29,7 +29,7 @@ challenges:
   assignment: |-
     In this challenge, you will verify the health of the Nomad Enterprise cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
 
-    The cluster is running 1 Nomad/Consul server and 3 Nomad/Consul clients. The [Consul Connect integration](https://nomadproject.io/guides/integrations/consul-connect) has been enabled on the server and clients since the chatapp uses it to talk to the MongoDB database. Additionally, a Nomad [host volume](https://nomadproject.io/docs/configuration/client/#host_volume-stanza) called "mongodb_mount" has been configured on the clients under the /opt/mongodb/data directory so that MongoDB can persist its data.
+    The cluster is running 1 Nomad/Consul server and 3 Nomad/Consul clients.
 
     First, verify that all 4 Consul agents are running and connected to the cluster by running this command on the "Server" tab:
     ```
@@ -213,84 +213,68 @@ challenges:
     type: service
     hostname: nomad-server-1
     port: 4646
-  - title: Traefik UI
-    type: service
-    hostname: nomad-client-1
-    port: 8081
   difficulty: basic
-  timelimit: 3600
-- slug: show-constraint
-  id: lnfmntfw6so3
+  timelimit: 1600
+- slug: use-spread
+  id: sovmjupmykql
   type: challenge
-  title: Change the Spread stanza to Constraint
+  title: Use the Spread stanza
   teaser: |
-    Change the Spread stanza to Constraint and get nodes to run on same instances
+    Use the Spread stanza to distribute load across your Nomad fleet
   assignment: |-
-    In this challenge, you will change out the Spread stanza with the Constraint stanza demonstrating how we can bind jobs to hosts in other ways.
-
+    In this challenge, you will use the Spread stanza to demonstrate how we can increase the failure tolerance of their applications by specifying a node attribute that allocations should be spread over.
+    This allows operators to spread allocations over attributes such as datacenter, availability zone, or even rack in a physical datacenter. By default, when using spread the scheduler will attempt to place allocations equally among the available values of the given target.
 
     Please navigate back to the /root/nomad/jobs directory on the "Server" tab again with this command:
     ```
     cd /root/nomad/jobs
     ```
 
-    Edit the "chat-app.nomad" job specification file on the "Jobs" tab, making the following changes:
-
-    --edited this out for now  1. Change the count to 4
-          `count = 4`
-      1. Change the out the Spread stanza <br>
-          `
-          spread {
-          attribute = "${node.unique.name}"
-          }
-        ` <br>
-        With this new Constraint stanza
-        ```
-        constraint
-          {
-          attribute = "${attr.platform.gce.machine-type}"
-          value     = "n1-standard-1"
-          }
-        ```
-    Now, check what would happen if you redeployed the "chat-app" job with this command on the "Server" tab:
+    Edit the "webapp.nomad" job specification file on the "Jobs" tab, making the following changes:
+    <br><br>
+    Find the config line that says
+    <br>
+    `count = 6`
+    <br>
+    Add the Spread stanza after the count line: <br>
     ```
-    nomad job
-    plan chat-app.nomad
+      spread {
+      attribute = "${node.unique.name}"
+      }
     ```
-
-    This should return something like this:<br>
-    `
-     +/-
-    Job: "chat-app"
-     +/- Task Group: "chat-app" (1 create/destroy update, 2 ignore)
-     + Constraint {
-         LTarget: ""
-       + Operand: "distinct_hosts"
-       + RTarget:
-    "true" }
-       Task: "chat-app"
-       Task: "connect-proxy-chat-app"
-    `<br>
-
-    The plan indicates that Nomad would update 1 based on increasing the count and Go ahead and re-run the "chat-app" job with this command:
+    <br>
+    Now, check what would happen if you redeployed the "webapp" job with this command on the "Server" tab:<br>
     ```
-    nomad job run chat-app.nomad
+    nomad job plan webapp.nomad
+    ```<br>
+
+    The output of this command will vary based on how Nomad decided to spread the nodes across the hosts. Normally this output will declare that it will create/destroy some Task/Task Group in order to now ballance out the workload.
+    <br>
+    You can view the current client workload allocations that have registered with Consul in order to see how the workloads are distributed. Navigate to the "Consul UI" Tab and click on the webapp service and take note of the "Node" column in the output.
+    <br>
+    <br>
+
+    Now let's run the job and see the changes in effect.
+    ```
+    nomad job run webapp.nomad
     ```
     This should return something like this:<br>
     `
-    ==> Monitoring evaluation "0fd02bb5"
-        Evaluation triggered by job "chat-app"
-        Evaluation within deployment: "fa80df0c"
-        Allocation "7633b926" created: node "14e04978", group "chat-app"
-        Evaluation status changed: "pending" -> "complete"
-    ==> Evaluation "0fd02bb5" finished with status "complete"
+    ==> Monitoring evaluation "cd1d28a8"
+    Evaluation triggered by job "webapp"
+    Evaluation within deployment: "f374d3b9"
+    Allocation "cf30600e" created: node "e248cdaf", group "webapp"
+    Evaluation status changed: "pending" -> "complete"
+    ==> Evaluation "cd1d28a8" finished with status "complete"
     `<br>
-    If you look at the chat-app job in the Nomad UI, you will see that there are 4 allocations running.
+    You can again for to the Consul UI and see the webapp allocations changing in real time. When all jobs have registered and are marked as healthy from Consul you should now see 2 webapp jobs distributed evenly on each client.
+    <br>
+    If you look at the webapp job in the Nomad UI, you will see that there are 6 allocations running.
   notes:
   - type: text
-    contents: In this challenge, you will do Update the number of chat apps and change
-      out thea Spread stanza with the Constraint stanza. You will also pin the DB
-      server to one host based on Constraint.
+    contents: In this challenge, you will do Update the logic that is choosing how
+      to distribute the workloads to use the Spread stanza to evenly distribute across
+      the Nomad fleet.
   tabs:
   - title: Jobs
     type: code
@@ -307,18 +291,85 @@ challenges:
     type: service
     hostname: nomad-server-1
     port: 4646
-  - title: Chat 1
+  - title: webapp 1
     type: service
     hostname: nomad-client-1
     port: 8080
-  - title: Chat 2
-    type: service
-    hostname: nomad-client-2
-    port: 8080
-  - title: Chat 3
-    type: service
-    hostname: nomad-client-3
-    port: 8080
   difficulty: basic
   timelimit: 3600
-checksum: "2574787986773270289"
+- slug: use-constraint
+  id: uowivhtikmoz
+  type: challenge
+  title: Add the Constraint stanza to Traefik to bind it to a host.
+  teaser: |
+    Use the Constraint stanza to pin Traefik workload to a specific type host.
+  assignment: |-
+    In this challenge, use the Constraint stanza to allows restricting the set of eligible nodes. We will be using a Constraint that filters on [attributes](https://www.nomadproject.io/docs/runtime/interpolation), but you could also use [client metadata](https://www.nomadproject.io/docs/configuration/client#custom-metadata-network-speed-and-node-class) as filters as well.
+
+
+    Please navigate back to the /root/nomad/jobs directory on the "Server" tab again with this command:
+    ```
+    cd /root/nomad/jobs
+    ```
+
+    Edit the "traefik.nomad" job specification file on the "Jobs" tab, making the following changes:
+    <br>
+    Find the line in with teh task definition<br>
+    `task "traefik" {`<br>
+    and add the constraint after that.<br>
+    Add this new Constraint stanza
+    ```
+    constraint
+      {
+      attribute = "${attr.platform.gce.machine-type}"
+      value     = "n1-standard-2"
+      }
+    ```
+    Now, check what would happen if you redeployed the "traefik" job with this command on the "Server" tab:
+    ```
+    nomad job plan traefik.nomad
+    ```
+
+    This should return something like this:<br>
+    `
+    REPLACE ME WITH OUTPUT
+    `<br>
+
+    The plan indicates that Nomad would update 1 based on forcing the alocation over to a n1-standard-2 node.
+    ```
+    nomad job run traefik.nomad
+    ```
+    This should return something like this:<br>
+    `
+    REPLACE ME WITH OUTPUT
+        Evaluation status changed: "pending" -> "complete"
+    ==> Evaluation "0fd02bb5" finished with status "complete"
+    `<br>
+    If you look at the traefik job in the Nomad UI, you will see that there is 1 allocation running.
+  notes:
+  - type: text
+    contents: In this challenge, you will do Update the Traefik job to run on a specific
+      host type in the cloud provider.
+  tabs:
+  - title: Jobs
+    type: code
+    hostname: nomad-server-1
+    path: /root/nomad/jobs/
+  - title: Server
+    type: terminal
+    hostname: nomad-server-1
+  - title: Consul UI
+    type: service
+    hostname: nomad-server-1
+    port: 8500
+  - title: Nomad UI
+    type: service
+    hostname: nomad-server-1
+    port: 4646
+  - title: Traefik UI
+    type: service
+    hostname: nomad-client-1
+    port: 8081
+  difficulty: basic
+  timelimit: 3600
+checksum: "5121767812337620124"

@@ -10,7 +10,7 @@ job "webapp" {
   datacenters = ["dc1"]
 
   group "webapp" {
-    count = 6
+    count = 3
 
     task "server" {
       env {
@@ -66,6 +66,7 @@ job "traefik" {
     count = 1
 
     task "traefik" {
+      constraint
 
       driver = "docker"
       config {
