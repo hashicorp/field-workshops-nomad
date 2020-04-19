@@ -365,7 +365,7 @@ challenges:
 
     Re-run the job with this command:
     ```
-    nomad run mysql.nomad
+    nomad job run mysql.nomad
     ```
 
     After waiting 30 seconds, verify that the job has been successfully deployed with this command:
@@ -406,4 +406,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 600
-checksum: "11146245147824710040"
+checksum: "17349170104771536366"

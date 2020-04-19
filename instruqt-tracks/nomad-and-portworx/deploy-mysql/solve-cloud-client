@@ -8,6 +8,6 @@ set -o history
 gcloud compute ssh nomad-server-1 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "cd /root/nomad && nomad job run mysql.nomad"
 
 # Sleep
-sleep 75
+sleep 120
 
 exit 0
