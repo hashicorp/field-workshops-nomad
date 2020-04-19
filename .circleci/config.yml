@@ -348,7 +348,7 @@ jobs:
               echo "Instruqt track test failed three times."
               exit 1
             fi
-  instruqt-test-nomad-host-volumes:
+  instruqt-test-nomad-and-portworx:
     docker:
       - image: ubuntu:latest
     steps:
@@ -484,7 +484,7 @@ workflows:
           filters:
             branches:
               only: master
-      - instruqt-test-nomad-host-volumes:
+      - instruqt-test-nomad-and-portworx:
           requires:
             - instruqt-validate
           filters:
@@ -530,7 +530,7 @@ workflows:
       - instruqt-test-nomad-host-volumes:
           requires:
             - instruqt-validate
-      - instruqt-test-nomad-host-volumes:
+      - instruqt-test-nomad-and-portworx:
           requires:
             - instruqt-validate
       - instruqt-test-nomad-governance:
