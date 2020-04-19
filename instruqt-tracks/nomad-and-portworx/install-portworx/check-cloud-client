@@ -21,6 +21,12 @@ if [ $ready_nodes -ne 2 ]; then
   fail-message "At least one of the Portworx allocations did not show 'PX is ready on Node' message."
 fi
 
+# Determine first Node ID and name
+first_portworx_node_id=$(gcloud compute ssh nomad-server-1 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "nomad job status portworx | grep Allocations -A5 | grep running | cut -d' ' -f3 | head -n 1")
+first_portworx_client_name=$(gcloud compute ssh nomad-server-1 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "nomad node status | grep $first_portworx_node_id | cut -d' ' -f5")
+client_number=$(echo $first_portworx_client_name | cut -d't' -f2)
+first_client_name="nomad-client-$client_number"
+
 mysql_volume_status=$(gcloud compute ssh $first_client_name --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "pxctl volume inspect mysql | grep Size | grep 10 | wc -l")
 
 if [ $mysql_volume_status -ne 1 ]; then

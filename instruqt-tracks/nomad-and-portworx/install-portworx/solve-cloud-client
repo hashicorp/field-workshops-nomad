@@ -16,9 +16,6 @@ first_portworx_client_name=$(gcloud compute ssh nomad-server-1 --zone europe-wes
 client_number=$(echo $first_portworx_client_name | cut -d't' -f2)
 first_client_name="nomad-client-$client_number"
 
-# Export first_client_name on Cloud Client
-echo "export first_client_name=$first_client_name" >> /root/.bashrc
-
 # Create the Portworx MySQL volume
 gcloud compute ssh $first_client_name --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "pxctl volume create -s 10 -r 2 mysql"
 
