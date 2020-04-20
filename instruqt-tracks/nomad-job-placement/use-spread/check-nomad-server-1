@@ -2,15 +2,12 @@
 
 set -e
 
-#
 grep -q "cd /root/nomad/jobs" /root/.bash_history || fail-message "You have not navigated to /root/nomad/jobs on the Nomad server yet."
 
-grep -q "nomad job run webapp.nomad" /root/.bash_history || fail-message "You have not run the webapp.nomad job on the Nomad server yet."
+grep -q "spread" /root/nomad/jobs/webapp.nomad || fail-message "You have not added the spread stanza to the traefik.nomad job on the Nomad server yet."
 
-grep -q "nomad job status webapp" /root/.bash_history || fail-message "You have not checked the status of the mongodb job with the CLI on the Nomad server yet."
+fgrep -q "\${node.unique.name}" /root/nomad/jobs/webapp.nomad || fail-message "You have not added '${node.unique.name}' to the spread stanza yet."
 
-grep -q "nomad job run traefik.nomad" /root/.bash_history || fail-message "You have not run the traefik.nomad job on the Nomad server yet."
-
-grep -q "nomad job status traefik" /root/.bash_history || fail-message "You have not checked the status of the traefik job on the Nomad server yet."
+grep -q "nomad job run webapp.nomad" /root/.bash_history || fail-message "You have not re-run the webapp.nomad job on the Nomad server yet."
 
 exit 0

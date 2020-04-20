@@ -7,22 +7,23 @@ set -o history
 # Change directory
 cd /root/nomad/jobs
 
-# Run webapp Job
-nomad job run webapp.nomad
+# Add a constraint stanza
+sed -i 's/count = 1/count = 1\n\n\t\tconstraint {\n\t\t\tattribute = "${node.unique.name}"\n\t\t\tvalue     = "client1"\n\t\t}/g' traefik.nomad
 
-# Sleep
-sleep 30
-
-# Check webapp job Status
-nomad job status webapp
-
-# Run traefik Job
+# Re-run the traefik Job
 nomad job run traefik.nomad
 
 # Sleep
-sleep 120
+sleep 60
 
-# Check traefik Status
-nomad job status traefik
+# Determine the url of the first webapp allocation
+first_allocation=$(nomad job status webapp | grep Allocations -A2 | grep webapp | cut -d' ' -f1)
+first_allocation_url=$(nomad alloc status $first_allocation | grep http | cut -d' ' -f12)
+
+# Curl the first webapp allocation
+curl $first_allocation_url
+
+# Curl via Traefik
+curl http://nomad-client-1:8080/myapp
 
 exit 0

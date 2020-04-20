@@ -5,12 +5,22 @@ set -e
 #
 grep -q "cd /root/nomad/jobs" /root/.bash_history || fail-message "You have not navigated to /root/nomad/jobs on the Nomad server yet."
 
-grep -q "nomad job run webapp.nomad" /root/.bash_history || fail-message "You have not run the webapp.nomad job on the Nomad server yet."
+grep -qL "spread" /root/nomad/jobs/webapp.nomad && fail-message "You have not removed the spread stanza from the webapp.nomad job on the Nomad server yet."
 
-grep -q "nomad job status webapp" /root/.bash_history || fail-message "You have not checked the status of the mongodb job with the CLI on the Nomad server yet."
+grep -q "affinity" /root/nomad/jobs/webapp.nomad || fail-message "You have not added the affinity stanza to the webapp.nomad job on the Nomad server yet."
 
-grep -q "nomad job run traefik.nomad" /root/.bash_history || fail-message "You have not run the traefik.nomad job on the Nomad server yet."
+fgrep -q "\${attr.platform.gce.machine-type}" /root/nomad/jobs/webapp.nomad || fail-message "You have not added '${attr.platform.gce.machine-type}' to the affinity stanza yet."
 
-grep -q "nomad job status traefik" /root/.bash_history || fail-message "You have not checked the status of the traefik job on the Nomad server yet."
+fgrep -q "n1-standard-2" /root/nomad/jobs/webapp.nomad || fail-message "You have not added 'n1-standard-2' to the affinity stanza yet."
+
+fgrep -q "weight" /root/nomad/jobs/webapp.nomad || fail-message "You have not added 'weight' to the affinity stanza yet."
+
+grep -q "nomad job stop -purge webapp" /root/.bash_history || fail-message "You have not stopped and purged the webapp job on the Nomad server yet."
+
+grep -q "nomad job run webapp.nomad" /root/.bash_history || fail-message "You have not re-run the webapp.nomad job on the Nomad server yet."
+
+grep -q "nomad job status webapp" /root/.bash_history || fail-message "You have not checked the status of the webapp job with the CLI on the Nomad server yet."
+
+grep -q "nomad alloc status -verbose" /root/.bash_history || fail-message "You have not checked the verbose status of one of the allocations of the webapp job with the CLI on the Nomad server yet."
 
 exit 0

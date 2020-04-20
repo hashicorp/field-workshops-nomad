@@ -11,7 +11,7 @@ cd /root/nomad/jobs
 nomad job run webapp.nomad
 
 # Sleep
-sleep 30
+sleep 60
 
 # Check webapp job Status
 nomad job status webapp
@@ -20,7 +20,7 @@ nomad job status webapp
 nomad job run traefik.nomad
 
 # Sleep
-sleep 12
+sleep 60
 
 # Check traefik Status
 nomad job status traefik

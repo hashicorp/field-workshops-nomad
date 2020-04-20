@@ -5,12 +5,14 @@ set -e
 #
 grep -q "cd /root/nomad/jobs" /root/.bash_history || fail-message "You have not navigated to /root/nomad/jobs on the Nomad server yet."
 
-grep -q "nomad job run webapp.nomad" /root/.bash_history || fail-message "You have not run the webapp.nomad job on the Nomad server yet."
+grep -q "constraint" /root/nomad/jobs/traefik.nomad || fail-message "You have not added the constraint stanza to the traefik.nomad job on the Nomad server yet."
 
-grep -q "nomad job status webapp" /root/.bash_history || fail-message "You have not checked the status of the mongodb job with the CLI on the Nomad server yet."
+fgrep -q "\${node.unique.name}" /root/nomad/jobs/traefik.nomad || fail-message "You have not added '${node.unique.name}' to the constraint stanza yet."
 
-grep -q "nomad job run traefik.nomad" /root/.bash_history || fail-message "You have not run the traefik.nomad job on the Nomad server yet."
+fgrep -q "client1" /root/nomad/jobs/traefik.nomad || fail-message "You have not added 'client1' to the constraint yet."
 
-grep -q "nomad job status traefik" /root/.bash_history || fail-message "You have not checked the status of the traefik job on the Nomad server yet."
+grep -q "nomad job run traefik.nomad" /root/.bash_history || fail-message "You have not re-run the traefik.nomad job on the Nomad server yet."
+
+grep -q "curl http://nomad-client-1:8080/myapp" /root/.bash_history || fail-message "You have not used 'curl' against one of the web app allocations on the Nomad server yet."
 
 exit 0
