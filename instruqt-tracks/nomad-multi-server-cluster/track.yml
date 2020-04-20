@@ -27,8 +27,8 @@ challenges:
   id: 7kmuc2a1yqge
   type: challenge
   title: Bootstrap a Nomad Cluster Manually
-  teaser: Bootstrap a Nomad cluster with 3 servers and 2 Nomad clients using manual
-    clustering.
+  teaser: |
+    Bootstrap a Nomad cluster with 3 servers and 2 Nomad clients using manual clustering.
   assignment: |-
     In this challenge, you will bootstrap a Nomad cluster with 3 servers and 2 Nomad clients using manual clustering.
 
@@ -401,4 +401,4 @@ challenges:
     port: 9002
   difficulty: basic
   timelimit: 1200
-checksum: "1784007121523687210"
+checksum: "5255244368384016527"

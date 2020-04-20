@@ -30,7 +30,7 @@ challenges:
   type: challenge
   title: Verify the Health of Your Nomad Cluster
   teaser: |
-    Verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts.
+    Verify the health of the Nomad cluster that has been deployed for you.
   assignment: |-
     In this challenge, you will verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
 
@@ -633,4 +633,4 @@ challenges:
     port: 8080
   difficulty: basic
   timelimit: 600
-checksum: "4512318967536429794"
+checksum: "638890923098356148"
