@@ -24,7 +24,7 @@ tags:
 owner: hashicorp
 developers:
 - roger@hashicorp.com
-private: true
+private: false
 published: true
 challenges:
 - slug: verify-nomad-cluster-health
@@ -32,7 +32,7 @@ challenges:
   type: challenge
   title: Verify the Health of Your Nomad Cluster
   teaser: |
-    Verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts.
+    Verify the health of the Nomad cluster that has been deployed for you.
   assignment: |-
     In this challenge, you will verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
 
@@ -436,4 +436,4 @@ challenges:
     port: 80
   difficulty: basic
   timelimit: 600
-checksum: "12144440191188914594"
+checksum: "3638753123550114650"
