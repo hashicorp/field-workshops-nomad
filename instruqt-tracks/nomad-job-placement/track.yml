@@ -221,8 +221,8 @@ challenges:
     ```
 
     ## Edit the traefik.nomad Job Specification
-    Edit the "traefik.nomad" job specification file on the "Jobs" tab, making the following changes: <br>
-    <br>
+    Edit the "traefik.nomad" job specification file on the "Jobs" tab, making the following changes:
+
     Find the line with `count = 1` and add the following constraint stanza after it:
     ```
     constraint {
@@ -405,7 +405,6 @@ challenges:
     client2: n1-standard-1
     client3: n1-standard-1
     `<br>
-    <br>
 
     Please navigate back to the /root/nomad/jobs directory on the "Server" tab again with this command:
     ```
@@ -499,4 +498,4 @@ challenges:
     port: 8080
   difficulty: basic
   timelimit: 600
-checksum: "10188864391620149351"
+checksum: "11263529465167044908"
