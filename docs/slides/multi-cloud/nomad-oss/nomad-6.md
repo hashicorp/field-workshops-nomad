@@ -1,15 +1,16 @@
-name: nomad-chapter-4-title
+name: nomad-chapter-6-title
 class: title, shelf, no-footer, fullbleed
 background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/bkgs/HashiCorp-Title-bkg.jpeg)
 count: false
 
 # Chapter 6
-## Monitoring Nomad Jobs
+## Running a Multi-Server Nomad/Consul Cluster
 
 ![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
 
 ???
-* In this chapter, we'll discuss how to monitor Nomad jobs including their allocations, evaluations, task groups, and tasks.
+* In this chapter, we'll discuss Nomad clustering options.
+* You'll run another Instruqt lab in which you will run a multi-server cluster that uses both Nomad and Consul.
 
 ---
 layout: true
@@ -23,174 +24,188 @@ layout: true
 name: chapter-6-topics
 # Chapter 6 Topics
 
-* Using the Nomad CLI to:
-  * Inspect Jobs, Allocations, and Evaluations
-  * View Allocation Logs
-* Using the Nomad UI to do the same
+1. Nomad Clustering Options
+1. Nomad's Integration with Consul
+1. Nomad Multi-Server Cluster Lab
+  * Bootstrap a Nomad Cluster Manually
+  * Bootstrap a Nomad Cluster with Consul
+  * Run a Job that Registers Tasks with Consul and Secures Their Communication with Consul Connect
+
 
 ???
-* In this chapter, we'll discuss how to monitor Nomad jobs including their allocations, evaluations, task groups, and tasks.
+* This is our topics slide.
 
 ---
-name: inspect-job
-class: compact, smaller
-# Inspect a Job
+name: nomad-clustering-options
+# Nomad Clustering Options
+* Nomad has 3 clustering options:
+  * [Manual Clustering](https://www.nomadproject.io/guides/operations/cluster/manual.html):
+      * Uses known IP or DNS addresses
+  * [Automated Clustering with Consul](https://www.nomadproject.io/guides/operations/cluster/automatic.html)
+      * Uses a Consul cluster running on same servers.
+  * [Clustering with Cloud Auto-Joining](https://www.nomadproject.io/guides/operations/cluster/cloud_auto_join.html)
+      * Uses cloud tags from AWS, Azure, and GCP
 
-To inspect the status of the job with the Nomad CLI, run:<br>
-`nomad job status <job_id>`<br>
-```output
-*nomad job status redis
- ID            = redis
- Name          = redis
- Type          = service
- Status        = running
- ...
-Allocations
-ID        Node ID   Task Group  Version  Desired  Status   Created  Modified
-*081459da  234c769f  cache       0        run      running  2m ago   2m ago
+???
+* Nomad provides 3 ways of bootstrapping clusters
+
+---
+name:  nomad-integration-with-consul
+# Nomad's Native Integration with Consul
+* Automatic Clustering of Servers and Clients
+* Service Discovery for Tasks and Jobs
+* Dynamic Configuration for applications
+* Secure communication between jobs and task groups using Consul Connect
+
+???
+*  Nomad Servers and Clients can automatically find each other within the network, minimizing configuration and being more address-flexible.
+*  Consul enables application service nodes to be automatically discoverable within the cluster
+*  Configuration files can be dynamically created utilizing environment variables or even Vault secrets with templating
+*  Consul Connect can secure communication between services deployed in public or private clouds.
+
+---
+name: nomad-consul-config
+# Configuring Nomad to Use Consul
+* Installing the Nomad agent does not install the Consul agent.
+* But, if the Consul agent is present and using the standard port, 8500, the Nomad agent will automatically find and connect to it.
+* Additionally, the Nomad agent wil advertise its services to Consul.
+* However, if you have enabled Nomad's ACLs and TLS, you will have to do some additional of each agent's `consul` stanza.
+  * See https://www.nomadproject.io/docs/configuration/consul.html for details.
+
+???
+* Each Nomad agent will automatically connect to the local Consul agent if one is running.
+
+---
+name: nomad-service-stanza
+class: smaller
+# Registering Nomad Tasks with Consul
+* The `service` stanza of the Nomad job specification file is used to register Nomad tasks as Consul services and configure health checks.
+
+```hcl
+service {
+  name = "load-balancer"
+  check {
+    type     = "http"
+    port     = "lb"
+    path     = "/_healthz"
+    interval = "5s"
+    timeout  = "2s"
+  }
+}
 ```
-The output here is abbreviated but shows the ID of a running allocation, which can then be inspected.
+
 ???
-* This is the command to inspect the status of a job.
+* The `service` stanza of the Nomad job specification file is used to register Nomad tasks as Consul services.
+* See https://www.nomadproject.io/docs/job-specification/service.html for details.
 
 ---
-name: inspect-allocation
-class: compact, smaller
-# Inspect an Allocation
-To inspect an allocation with the Nomad CLI, run:<br>
-`nomad alloc status <allocation_id>` <br>
-```output
-*nomad alloc status 081459da
-*ID                  = 081459da
-Eval ID             = 13ebb66d
-Name                = redis.cache[0]
-*Node ID             = 234c769f
-*Node Name           = nomad-client-1
-Job ID              = redis
+name: nomad-and-consul-template
+class: smaller
+# Dynamic Templating
+* Nomad has native integration with [Consul-Template](https://github.com/hashicorp/consul-template), which allows templating of files using Consul's key/value store, Vault secrets, and environment variables.
+
+```hcl
+template {
+  data = <<EOH
+  ---
+    bind_port:   {{ env "NOMAD_PORT_db" }}
+    scratch_dir: {{ env "NOMAD_TASK_DIR" }}
+    node_id:     {{ env "node.unique.id" }}
+    service_key: {{ key "service/my-key" }}
+  EOH
+  destination = "local/file.yml"
+}
 ```
-Note that we used the *Allocation ID* from the output of the job status command and can see which node the allocation is running on.<br>
-We also see the ID of the evaluation that scheduled the allocation.
 
 ???
-* This is the command to inspect the status of an allocation.
+* Nomad also provides templating using Consul Template
+* In this example, the local file, file.yml, will include some interpolated environment variables of the Nomad task and the contents of the service/my-key from Consul's key/value store.
 
 ---
-name: inspect-allocation
-class: compact, smaller
-# Inspect an Evaluation
-To inspect an evaluation with the Nomad CLI, run: <br>
-`nomad eval status <evaluation_id>` <br>
-```output
-*nomad eval status 13ebb66d
-ID                 = 13ebb66d
-Create Time        = 1m27s ago
-Status             = complete
-Type               = service
-Job ID             = redis
-Priority           = 50
-*Placement Failures = false
-```
-Note that we used the *Eval ID* from the output of the allocation status command.<br>
-We also can verify that there were no placement failures.
+name: nomad-and-consul-connect
+class: smaller
+# Nomad and Consul Connect
+* Nomad includes native integration with [Consul Connect](https://www.consul.io/docs/connect/index.html) too.
+* Consul Connect provides service-to-service connection authorization and encryption using mutual TLS.
+* Applications can use sidecar proxies in a service mesh configuration without any awareness of Consul Connect.
+* Nomad's integration with Consul Connect provides secure communications between Nomad task groups.
+* This includes a new networking mode for jobs that allows all tasks in a task group to share their networking stack.
+* When enabled, Nomad automatically launches [Envoy](https://www.envoyproxy.io) proxies used by Consul Connect.
+
+
+
 
 ???
-* This is the command to inspect the status of an allocation.
+* Nomad also has native integration for Consul Connect
 
 ---
-name: show-task-logs
-class: compact, smaller
-# View Task Logs
-To view the logs for a task with the Nomad CLI, run: <br>
-`nomad alloc logs <allocation_id> <task>` <br>
-```output
-*nomad alloc logs 081459da redis
-1:C 10 Jan 16:05:30.456 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
-                _._
-           _.-``__ ''-._
-      _.-``    `.  `_.  ''-._           Redis 3.2.12 (00000000/0) 64 bit
-  .-`` .-```.  ```\/    _.,_ ''-._
- (    '      ,       .-`  | `,    )     Running in standalone mode
- |`-._`-...-` __...-.``-._|'` _.-'|     Port: 6379
- |    `-._   `._    /     _.-'    |     PID: 1
-```
-Note that we again used the *Allocation ID* from the output of the job status command.
+name: lab-nomad-multi-server-cluster
+# 👩‍💻 Nomad Multi-Server Cluster Lab
+* In this lab, you'll configure a Nomad cluster with multiple servers.
+* First, you'll use Nomad's manual clustering option.
+* You'll then use Consul to enable automatic clustering.
+* You'll then run a job that registers its tasks as Consul sevices and uses Consul Connect.
+* You'll see how the tasks find each other with Consul's service discovery.
+* You'll do all this in the "Nomad Multi-Server Cluster" Instruqt track:
+https://instruqt.com/hashicorp/tracks/nomad-multi-server-cluster.
 
 ???
-* This is the command to view logs for a task.
+* Now, you will run the Instruqt lab "Nomad Multi-Server Cluster"
 
 ---
-name: monitor-with-ui
-# Monitoring Nomad with the Nomad UI
-* The following slides show how the Nomad UI can be used to monitor:
-  * Jobs
-  * Allocations
-  * Task Groups
-  * Tasks (including their logs)
+name: lab-challenge-6.1
+# 👩‍💻 Lab Challenge 6.1: Bootstrap Cluster Manually
+* In this challenge, you will bootstrap a cluster manually.
+* Start the "Nomad Multi-Server Cluster" track by clicking the "Bootstrap a Nomad Cluster Manually" challenge of the track.
+* Instructions
+  * While the challenge is loading, read the notes in both screens.
+  * Click the green "Start" button to start the first challenge.
+  * Follow the instructions on the right side of the challenge.
+  * After completing all the steps, click the green "Check" button to see if you did everything right.
+  * You can also click the "Check" button for reminders.
 
 ???
-* The Nomad UI can also be used to monitor Nomad
+* Give the students some instructions for starting their first challenge.
+* This also includes instructions for checking that they did everything right.
+* Students can also click the green "Check" button to get reminded of what they should do next.
 
 ---
-name: nomad-ui-job-high-level
-# List of Nomad Jobs
-.center[![:scale 100%](images/Nomad-Job_Status-Highlevel.png)]
+name: lab-challenge-6.2
+# 👩‍💻 Lab Challenge 6.2: Bootstrap with Consul
+
+* In this challenge, you'll bootstrap the Nomad cluster with Consul.
+* Instructions:
+  * Click the "Bootstrap a Nomad Cluser with Consul" challenge of the "Nomad Multi-Server Cluster" track.
+  * Then click the green "Start" button.
+  * Follow the challenge's instructions.
+  * Click the green "Check" button when finished.
 
 ???
-* This is a screenshot showing the list of jobs in the Nomad UI.
+* In this challenge, you will bootstrap a Nomad cluster using Consul.
 
 ---
-name: nomad-ui-job-with-deployments
-# Nomad Job with Deployments
-.center[![:scale 70%](images/Nomad-Job-with-Deployments.png)]
+name: lab-challenge-6.3
+# 👩‍💻 Lab Challenge 6.3: Run a Consul-enabled Job
+
+* In this challenge, you'll run a job that registers tasks as Consul services and uses Consul Connect for secure communication.
+* Instructions:
+    * Click the "Run Consul-enabled Job" challenge of the "Nomad Multi-Server Cluster" track.
+    * Then click the green "Start" button.
+    * Follow the challenge's instructions.
+    * Click the green "Check" button when finished.
 
 ???
-* This is a screenshot showing a job and its deployments in the Nomad UI.
+* In this challenge, you will run a Nomad job that registers its tasks with Consul and uses Consul Connect.
+* You will then see how the tasks find each other using Consul's service discovery and communicate securely.
 
 ---
-name: nomad-ui-job-with-task-groups-and-allocations
-# Nomad Job with Task Groups and Allocations
-.center[![:scale 80%](images/Nomad-Job-with-task-groups-allocations.png)]
-
-???
-* This is a screenshot showing task groups and allocations for a job in the Nomad UI.
-
----
-name: nomad-ui-task-group
-# Nomad Task Group
-.center[![:scale 70%](images/Nomad-task-group.png)]
-
-???
-* This is a screenshot showing a task group of a job in the Nomad UI.
-
----
-name: nomad-ui-task-group-status-and-task
-# Nomad Task Group Status and Task
-.center[![:scale 70%](images/Nomad-task-group-status-and-task.png)]
-
-???
-* This is a screenshot showing the status of a task group and its tasks in the Nomad UI.
-
----
-name: nomad-ui-task
-# Nomad Task
-.center[![:scale 68%](images/Nomad-task.png)]
-
-???
-* This is a screenshot showing the status of a task in the Nomad UI.
-
----
-name: nomad-ui-task-logs
-# Nomad Task Logs
-.center[![:scale 80%](images/Nomad-task-logs.png)]
-
-???
-* This is a screenshot showing the logs of a task in the Nomad UI.
-
----
-name: chapter-6-summary
+name: chapter-6-Summary
 # 📝 Chapter 6 Summary
-In this chapter, you learned about:
-* Using the Nomad CLI to:
-  * Inspect Jobs, Allocations, and Evaluations
-  * View Allocation Logs
-* Using the Nomad UI to do the same
+
+In this chapter, you learned:
+* How to bootstrap a Nomad cluster manually and with Consul
+* How Nomad can register tasks of jobs with Consul
+* How Nomad can automatically run Consul Connect proxies to make communications between tasks more secure.
+
+???
+* Summarize what we covered in the chapter

@@ -1,4 +1,4 @@
-slug: nomad-update-strategies-nginx
+slug: nomad-update-strategies
 id: orxif8plq08a
 type: track
 title: Nomad Job Update Strategies
@@ -28,11 +28,11 @@ challenges:
 - slug: verify-nomad-cluster-health
   id: d0jmzi59u4th
   type: challenge
-  title: Verify the Health of Your Nomad Enterprise Cluster
+  title: Verify the Health of Your Nomad Cluster
   teaser: |
-    Verify the health of the Nomad Enterprise cluster that has been deployed for you by the track's setup scripts.
+    Verify the health of the Nomad cluster that has been deployed for you.
   assignment: |-
-    In this challenge, you will verify the health of the Nomad Enterprise cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
+    In this challenge, you will verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
 
     The cluster is running 1 Nomad/Consul server and 3 Nomad/Consul clients. The [Consul Connect integration](https://nomadproject.io/guides/integrations/consul-connect) has been enabled on the server and clients since the chatapp uses it to talk to the MongoDB database. Additionally, a Nomad [host volume](https://nomadproject.io/docs/configuration/client/#host_volume-stanza) called "mongodb_mount" has been configured on the clients under the /opt/mongodb/data directory so that MongoDB can persist its data.
 
@@ -56,11 +56,11 @@ challenges:
 
     You can also check the status of the Nomad server and clients in the Nomad and Consul UIs.
 
-    In the next challenge, you will configure Nomad Enterprise namespaces and resource quotas.
+    In the next challenge, you will will run "mongodb", "chat-app", and "nginx" jobs.
   notes:
   - type: text
     contents: |-
-      In this challenge, you will verify the health of the Nomad Enterprise cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
+      In this challenge, you will verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
 
       In later challenges, you will run "mongodb", "chat-app", and "nginx" jobs and update the second using rolling, blue/green, and canary update strategies. NGINX will be used as a load balancer that will forward requests to instances of the "chat" application which will store its messages in a single MongoDB database.
   tabs:
@@ -633,4 +633,4 @@ challenges:
     port: 8080
   difficulty: basic
   timelimit: 600
-checksum: "10290034433640436544"
+checksum: "638890923098356148"

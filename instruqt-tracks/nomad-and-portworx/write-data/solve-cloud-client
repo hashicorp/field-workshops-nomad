@@ -1,0 +1,10 @@
+#!/bin/bash -l
+
+#Enable bash history
+HISTFILE=~/.bash_history
+set -o history
+
+# Connect to the MySQL Database and Insert item
+gcloud compute ssh nomad-server-1 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "mysql -h mysql-server.service.consul -u web -ppassword -D itemcollection -e \"INSERT INTO items (name) VALUES ('glove');\""
+
+exit 0

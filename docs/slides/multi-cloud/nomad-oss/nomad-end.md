@@ -20,6 +20,19 @@ layout: true
 ]
 
 ---
+name: more-nomad-labs
+# More Nomad Labs
+* There are more Nomad Instruqt tracks available here:
+https://play.instruqt.com/hashicorp/topics/nomad-workshops
+* If you finished the 4 labs in this workshop early, we recommend any of the following tracks:
+  * [Nomad Advanced Job Placement](https://play.instruqt.com/hashicorp/tracks/nomad-job-placement)
+  * [Nomad Job Update Strategies](https://play.instruqt.com/hashicorp/tracks/nomad-update-strategies)
+  * [Nomad Integration with Vault](https://play.instruqt.com/hashicorp/tracks/nomad-integration-with-vault)
+
+???
+* Here are some additional Nomad Instruqt tracks you can try if you have extra time.
+* These and others are covered in the Advanced Nomad Workshop.
+---
 name: thank-you
 # Thank You for Participating!
 .center[![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)]
@@ -27,8 +40,8 @@ name: thank-you
 * For more information on Nomad, please refer to the following links:
   * https://www.nomadproject.io
   * https://www.nomadproject.io/docs/index.html
-  * https://www.nomadproject.io/guides/index.html
   * https://www.nomadproject.io/api/index.html
+  * https://learn.hashicorp.com/nomad
 
 ???
 * Thank the students for their participation

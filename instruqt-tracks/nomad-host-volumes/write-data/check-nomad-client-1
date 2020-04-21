@@ -1,0 +1,13 @@
+#!/bin/bash -l
+
+set -e
+
+grep -q "mysql -h mysql-server.service.consul -u web -ppassword -D itemcollection" /root/.bash_history || fail-message "You have not connected to the MySQL database on Nomad Client 1 yet."
+
+glove_result=$(mysql -h mysql-server.service.consul -u web -ppassword -D itemcollection -s -N -e "select count(*) from items where name='glove';")
+
+if [ $glove_result -ne 1 ]; then
+  fail-message "The MySQL table does not contain 'glove'."
+fi
+
+exit 0

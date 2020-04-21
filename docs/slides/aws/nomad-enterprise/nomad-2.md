@@ -3,13 +3,13 @@ class: title, shelf, no-footer, fullbleed
 background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/bkgs/HashiCorp-Title-bkg.jpeg)
 count: false
 
-# Nomad Enterprise Workshop
-## Part 2 of the Nomad Enterprise Workshop.
+# Advanced Nomad Workshop
+## Part 2 of the Advanced Nomad Workshop.
 
 ![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
 
 ???
-This is a title slide for the skeleton of a second part of a Nomad Enterprise workshop.
+This is a title slide for the skeleton of a second part of a Advanced Nomad Workshop.
 
 ---
 name: nomad-logo
