@@ -1,0 +1,19 @@
+#!/bin/bash -l
+
+#Enable bash history
+HISTFILE=~/.bash_history
+set -o history
+
+# Change directory
+cd /root/nomad/jobs
+
+# Edit the webapp.nomad job specification
+sed -i 's/count = 6/count = 6\n\n\t\tspread {\n\t\t\tattribute = "${node.unique.name}"\n\t\t}/g' webapp.nomad
+
+# Re-run the webapp.nomad Job
+nomad job run webapp.nomad
+
+# Sleep
+sleep 60
+
+exit 0

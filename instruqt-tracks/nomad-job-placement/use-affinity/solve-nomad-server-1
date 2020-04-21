@@ -1,0 +1,32 @@
+#!/bin/bash -l
+
+#Enable bash history
+HISTFILE=~/.bash_history
+set -o history
+
+# Change directory
+cd /root/nomad/jobs
+
+# Edit the webapp.nomad job specification
+sed -i '6,9d' webapp.nomad
+sed -i 's/count = 6/count = 6\n\n\t\taffinity {\n\t\t\tattribute = "${attr.platform.gce.machine-type}"\n\t\t\tvalue     = "n1-standard-2"\n\t\t\tweight    = 100\n\t\t}/g' webapp.nomad
+
+# Stop and purge the webapp job
+nomad job stop -purge webapp
+
+# Re-run webapp Job
+nomad job run webapp.nomad
+
+# Sleep
+sleep 60
+
+# Check webapp job Status
+nomad job status webapp
+
+# Determine the url of the first webapp allocation
+first_allocation=$(nomad job status webapp | grep Allocations -A2 | grep webapp | cut -d' ' -f1)
+
+# Get verbose details for the allocation
+nomad alloc status -verbose $first_allocation
+
+exit 0

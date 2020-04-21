@@ -1,0 +1,9 @@
+#!/bin/bash -l
+
+set -e
+
+# Purge history
+rm /root/.bash_history
+touch /root/.bash_history
+
+exit 0
