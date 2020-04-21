@@ -183,7 +183,7 @@ challenges:
       <b>Create a Vault Token Role</b>
       <hr />
 
-      At this point, you must create a [Vault Token Role](https://www.vaultproject.io/api-docs/auth/token/#createupdate-token-role) that Nomad can give to jobs that it runs. The token role allows you to restrict which Vault policies can be used by Nomad jobs, limiting the Vault secrets the jobs can read.
+      At this point, you must create a [Vault Token Role](https://www.vaultproject.io/api-docs/auth/token#create-update-token-role) that Nomad can give to jobs that it runs. The token role allows you to restrict which Vault policies can be used by Nomad jobs, limiting the Vault secrets the jobs can read.
   - type: text
     contents: |-
       We will use the following token role:
@@ -579,4 +579,4 @@ challenges:
     port: 3000
   difficulty: basic
   timelimit: 600
-checksum: "9641610794828663918"
+checksum: "11704517051229875481"

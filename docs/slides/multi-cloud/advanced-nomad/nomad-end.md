@@ -20,6 +20,14 @@ layout: true
 ]
 
 ---
+name: more-nomad-labs
+# More Nomad Labs
+* There are more Nomad Instruqt tracks available if you finished the other tracks early.
+* The following labs explore other options for running stateful workloads in Nomad:
+  * [Nomad Integration with Portworx](https://play.instruqt.com/hashicorp/tracks/nomad-and-portworx)
+  * [Nomad CSI Plugins](https://play.instruqt.com/hashicorp/tracks/nomad-and-csi-plugins)
+
+---
 name: thank-you
 # Thank You for Participating!
 .center[![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)]

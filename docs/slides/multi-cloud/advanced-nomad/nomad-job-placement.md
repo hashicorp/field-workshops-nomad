@@ -3,7 +3,7 @@ class: title, shelf, no-footer, fullbleed
 background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/bkgs/HashiCorp-Title-bkg.jpeg)
 count: false
 
-# Chapter 1
+# Chapter 2
 ## Nomad Job Placement and Variable Interpolation
 
 ![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
@@ -294,7 +294,7 @@ https://play.instruqt.com/hashicorp/tracks/nomad-job-placement
 * You'll be running the Instruqt track "Nomad Job Placement"
 ---
 name: chapter-Summary
-# 📝 Chapter 1 Summary
+# 📝 Chapter 2 Summary
 
 In this chapter you did the following:
 * Learned about Nomad's job placement options (constraint, affinity, and spread) and variable interpolation.

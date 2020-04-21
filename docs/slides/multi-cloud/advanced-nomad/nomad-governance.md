@@ -3,7 +3,7 @@ class: title, shelf, no-footer, fullbleed
 background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/bkgs/HashiCorp-Title-bkg.jpeg)
 count: false
 
-# Chapter 6
+# Chapter 7
 ## Nomad Enterprise Governance and Policy
 
 ![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
@@ -20,7 +20,7 @@ layout: true
 ]
 
 ---
-name: chapter-5-topics
+name: chapter-7-topics
 # Nomad Governance and Policy Features
 * Namespaces
 * Resource Quotas
@@ -179,7 +179,7 @@ https://play.instruqt.com/hashicorp/tracks/nomad-governance
 
 ---
 name: chapter-Summary
-# 📝 Chapter 6 Summary
+# 📝 Chapter 7 Summary
 
 In this chapter you did the following:
 * Learned about Nomad Enterprise's governance features including namespaces, resource quotas, Sentinel policies, and audit logging.

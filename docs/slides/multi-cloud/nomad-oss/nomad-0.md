@@ -56,9 +56,8 @@ name: workshop-topics
 1. Interacting with Nomad
 1. Nomad Jobs and Drivers
 1. Running Nomad Clusters and Jobs
-1. Nomad Monitoring and Logging
 1. Running Multi-Server Nomad/Consul Clusters
-1. Nomad Security
+1. Monitoring Nomad Jobs
 
 ???
 The topics for the workshop
@@ -69,10 +68,11 @@ name: instruqt-tracks
 * This workshop uses [Instruqt](https://instruqt.com) for hands-on labs.
 * Instruqt labs are run in "tracks" that are divided into "challenges".
 * This workshop uses the following tracks:
-    1. https://instruqt.com/hashicorp/tracks/nomad-basics
-    1. https://instruqt.com/hashicorp/tracks/nomad-simple-cluster
-    1. https://instruqt.com/hashicorp/tracks/nomad-multi-server-cluster
-    1. https://instruqt.com/hashicorp/tracks/nomad-acls
+    1. https://play.instruqt.com/hashicorp/tracks/nomad-basics
+    1. https://play.instruqt.com/hashicorp/tracks/nomad-simple-cluster
+    1. https://play.instruqt.com/hashicorp/tracks/nomad-multi-server-cluster
+    1. https://play.instruqt.com/hashicorp/tracks/nomad-monitoring
 
 ???
 * Links to the Instruqt tracks used in this workshop
+* Other tracks are listed at the end of the slides for those who finish these 3 early.

@@ -49,6 +49,7 @@ name: Introductions
 name: workshop-topics
 # Workshop Topics
 
+1. Nomad Security
 1. Nomad Job Placement and Variable Interpolation
 1. Nomad Job Update Strategies
 1. Nomad Integration with Vault Using Templates
@@ -65,12 +66,13 @@ class: compact
 # Lab Environment Used
 * This workshop uses [Instruqt](https://instruqt.com) for hands-on labs.
 * Instruqt labs are run in "tracks" that are divided into "challenges".
-* This workshop uses the following tracks (with more to be added):
-    1. https://play.instruqt.com/hashicorp/tracks/nomad-job-placement
-    1. https://play.instruqt.com/hashicorp/tracks/nomad-update-strategies
-    1. https://play.instruqt.com/hashicorp/tracks/nomad-integration-with-vault
-    1. https://play.instruqt.com/hashicorp/tracks/nomad-host-volumes
-    1. https://play.instruqt.com/hashicorp/tracks/nomad-governance
+* Here are the tracks you will use:
+  * https://instruqt.com/hashicorp/tracks/nomad-acls
+  * https://instruqt.com/hashicorp/tracks/nomad-job-placement
+  * https://instruqt.com/hashicorp/tracks/nomad-update-strategies
+  * https://instruqt.com/hashicorp/tracks/nomad-integration-with-vault
+  * https://instruqt.com/hashicorp/tracks/nomad-host-volumes
+  * https://instruqt.com/hashicorp/tracks/nomad-governance
 
 ???
-* Links to the Instruqt tracks used in this workshop
+* This workshop uses labs run in Instruqt
