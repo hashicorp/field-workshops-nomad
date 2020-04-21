@@ -3,7 +3,7 @@ class: title, shelf, no-footer, fullbleed
 background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/bkgs/HashiCorp-Title-bkg.jpeg)
 count: false
 
-# Chapter 4
+# Chapter 5
 ## Stateful Workloads with Nomad
 
 ![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
@@ -21,13 +21,16 @@ layout: true
 ]
 
 ---
-name: chapter-3-topics
+name: chapter-5-topics
 # Stateful Workloads with Nomad
 * Stateful Workloads Overview
 * Using Nomad Host Volumes
 * Using [Portworx](https://docs.portworx.com/install-with-other/nomad) with a Docker Volume Driver
 * Using Container Storage Interface (CSI) plugins
 * Stateful Workloads Hands-on Lab
+
+???
+* Here are the topics we will cover in this chapter.
 
 ---
 name: types-of-workload
@@ -150,7 +153,7 @@ https://play.instruqt.com/hashicorp/tracks/nomad-host-volumes
 
 ---
 name: chapter-Summary
-# 📝 Chapter 4 Summary
+# 📝 Chapter 5 Summary
 
 In this chapter you did the following:
 * Learned about Nomad's options to run stateful workloads including:

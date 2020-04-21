@@ -3,7 +3,7 @@ class: title, shelf, no-footer, fullbleed
 background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/bkgs/HashiCorp-Title-bkg.jpeg)
 count: false
 
-# Chapter 2
+# Chapter 3
 ## Nomad Job Update Strategies
 
 ![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
@@ -180,7 +180,7 @@ https://play.instruqt.com/hashicorp/tracks/nomad-update-strategies
 
 ---
 name: chapter-Summary
-# 📝 Chapter 2 Summary
+# 📝 Chapter 3 Summary
 
 In this chapter you did the following:
 * Learned about Nomad's job update strategies:
