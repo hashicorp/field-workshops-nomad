@@ -1,0 +1,12 @@
+#!/bin/bash -l
+
+# Create Nomad Server
+gcloud compute instances create nomad-server-1 --image-project=instruqt-hashicorp --image=windows-test --zone=europe-west1-b --tags=nomad --machine-type=n1-standard-2
+
+# Sleep
+sleep 60
+
+# Export public IP of server
+echo "export nomad_server_ip=$(gcloud compute instances list | grep nomad-server-1 | cut -d' ' -f23)" >> /root/.bashrc
+
+exit 0
