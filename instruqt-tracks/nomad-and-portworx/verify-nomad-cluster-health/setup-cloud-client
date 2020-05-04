@@ -30,7 +30,7 @@ gcloud compute firewall-rules create nomad-allow-inbound-serf --allow tcp:4648 -
 # Create /root/nomad on Cloud Client
 mkdir /root/nomad
 
-# Create /root/noamd on Nomad Server
+# Create /root/nomad on Nomad Server
 gcloud compute ssh nomad-server-1 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "mkdir /root/nomad"
 
 ### Consul Server 1 ###

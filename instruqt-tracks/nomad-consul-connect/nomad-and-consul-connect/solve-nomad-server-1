@@ -1,0 +1,13 @@
+#!/bin/bash -l
+
+# Navigate to /root/nomad directory
+cd nomad
+
+# Run the connect.nomad Job
+echo -e "nomad job run connect.nomad" >> /root/.bash_history
+nomad job run connect.nomad
+
+# Sleep
+sleep 60
+
+exit 0
