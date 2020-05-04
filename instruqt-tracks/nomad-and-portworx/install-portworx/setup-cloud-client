@@ -105,7 +105,7 @@ job "portworx" {
 }
 EOF
 
-# SCP portworx.noamd to Nomad Server
+# SCP portworx.nomad to Nomad Server
 gcloud compute scp /root/nomad/portworx.nomad nomad-server-1:/root/nomad/portworx.nomad --strict-host-key-checking no --zone "europe-west1-b"
 
 exit 0
