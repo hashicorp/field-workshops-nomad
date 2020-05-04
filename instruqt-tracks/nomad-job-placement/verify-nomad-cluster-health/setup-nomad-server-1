@@ -215,9 +215,6 @@ echo 1 > /proc/sys/net/bridge/bridge-nf-call-iptables
 # Start Consul
 systemctl start consul
 
-#update and install dnsutils
-apt update&&apt -y install dnsutils
-
 # Sleep
 sleep 15
 
