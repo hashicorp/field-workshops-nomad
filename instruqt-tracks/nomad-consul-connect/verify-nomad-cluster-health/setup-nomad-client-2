@@ -50,13 +50,10 @@ echo 1 > /proc/sys/net/bridge/bridge-nf-call-arptables
 echo 1 > /proc/sys/net/bridge/bridge-nf-call-ip6tables
 echo 1 > /proc/sys/net/bridge/bridge-nf-call-iptables
 
-# Start Consul
 systemctl start consul
 
-# Sleep
 sleep 15
 
-# Start Nomad
 systemctl start nomad
 
 exit 0
