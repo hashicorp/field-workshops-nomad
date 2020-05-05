@@ -1,0 +1,83 @@
+slug: nomad-on-windows
+id: m4sfchjwb8om
+type: track
+title: Nomad on Windows
+teaser: Run Nomad and Consul Cluster on Windows.
+description: |
+  Run a Nomad/Consul cluster on Windows Server 2019.
+icon: https://storage.googleapis.com/instruqt-hashicorp-tracks/logo/nomad.png
+tags:
+- nomad
+- windows
+owner: hashicorp
+developers:
+- roger@hashicorp.com
+private: true
+published: true
+challenges:
+- slug: verify-nomad-cluster-health
+  id: gkyrdoguwa1q
+  type: challenge
+  title: Verify the Health of Your Nomad Cluster
+  teaser: |
+    Verify the health of the Nomad cluster that has been deployed for you.
+  assignment: |-
+    In this challenge, you will verify the health of the Nomad cluster that has been deployed for you on Windows Server 2019 VMs by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
+
+    You can visit the Google Cloud Console for the GCP project of your instance of the Instruqt track by selecting the "Google Console Link" tab, right-clicking the Project ID for the "nomad" Google cloud project, and then opening the console in a new tab or window. If you already have your own GCP account, it will be easier to use an incognito window. Either way, you will have to paste the Email and then the Password from the "Google Console Link" tab into the dialog screens that will be displayed. You will then have to click an "Accept" button. Finally, after the Google Cloud Console is displayed, you will have to click a checkbox and agree to the terms of service by clicking the "Agree and Continue" button.
+
+    You can see the VMs that were created for you by clicking the icon with 3 horizontal bars in the upper left corner of the console, selecting the "Compute Engine" menu, and then selecting "VM Instances".
+
+    The cluster is running 1 Nomad/Consul server and 3 Nomad/Consul clients with Nomad 0.11.0 and Consul 1.7.2. These VMs have been created in a GCP project within this Instruqt track.
+
+    First, determine the public IP of your Nomad server by running this command on the "Google CLI" tab:
+    ```
+    echo $nomad_server_ip
+    ```
+
+    You can visit the Nomad UI in any browser tab outside the Instruqt tab with the URL, `http://<NOMAD_IP>:4646` where <NOMAD_IP\> is the value of $nomad_server_ip.
+
+    You can visit the Consul UI in any browser tab outside the Instruqt tab with the URL, `http://<NOMAD_IP>:8500` where <NOMAD_IP\> is the value of $nomad_server_ip.
+
+    SSH to the Nomad server with this command:
+    ```
+    sshpass -e ssh nomad@$nomad_server_ip
+    ```
+
+    Next, verify that all 4 Consul agents are running and connected to the cluster by running this command on the "Google CLI" tab:
+    ```
+    consul members
+    ```
+    You should see 4 Consul agents with the "alive" status including 1 server and 3 clients.
+
+    Check that the Nomad server is running by running this command on the "Google CLI" tab:
+    ```
+    nomad server members
+    ```
+    You should see 1 Nomad server with the "alive" status.
+
+    Check the status of the Nomad client nodes by running this command on the "Google CLI" tab:
+    ```
+    nomad node status
+    ```
+    You should see 3 Nomad clients with the "ready" status.
+
+    Type `exit` to quit the SSH session.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
+
+      The cluster is running on Windows Server 2019 VMs.
+  tabs:
+  - title: Google CLI
+    type: terminal
+    hostname: cloud-client
+  - title: Google Console Link
+    type: service
+    hostname: cloud-client
+    path: /
+    port: 80
+  difficulty: basic
+  timelimit: 7200
+checksum: "3574291881860395334"
