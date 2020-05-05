@@ -13,7 +13,7 @@ fi
 nomad_servers=$(gcloud compute ssh nomad-server-1 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "nomad server members | grep alive | wc -l")
 
 if [ $nomad_servers -ne 1 ]; then
-  fail-message "'cnomad server members' does not show 1 running Nomad server."
+  fail-message "'nomad server members' does not show 1 running Nomad server."
 fi
 
 nomad_clients=$(gcloud compute ssh nomad-server-1 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "nomad node status | grep ready | wc -l")
