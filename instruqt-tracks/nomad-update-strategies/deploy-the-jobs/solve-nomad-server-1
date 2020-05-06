@@ -17,7 +17,7 @@ sleep 30
 nomad job status mongodb
 
 # Run chat-app Job
-nomad job run chat-app.nomad
+nomad job run chat-app-light-binary.nomad
 
 # Sleep
 sleep 120

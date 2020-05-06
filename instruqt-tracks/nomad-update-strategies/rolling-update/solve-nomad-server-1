@@ -8,10 +8,10 @@ set -o history
 cd /root/nomad/jobs
 
 # Plan chat-app.nomad deployment
-nomad job plan chat-app.nomad
+nomad job plan chat-app-dark-binary.nomad
 
 # Run chat-app.nomad Job
-nomad job run chat-app.nomad
+nomad job run chat-app-dark-binary.nomad
 
 # Sleep
 sleep 120

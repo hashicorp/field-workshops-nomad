@@ -159,8 +159,8 @@ EOT
 }
 EOF
 
-# Write the chatapp.nomad job
-cat <<-EOF > /root/nomad/jobs/chat-app.nomad
+# Write the chat-app-light-binary.nomad job
+cat <<-EOF > /root/nomad/jobs/chat-app-light-binary.nomad
 job "chat-app" {
   datacenters = ["dc1"]
   type = "service"
@@ -172,6 +172,13 @@ job "chat-app" {
       attribute = "\${node.unique.name}"
     }
 
+    update {
+      max_parallel = 1
+      health_check = "checks"
+      min_healthy_time = "15s"
+      healthy_deadline = "2m"
+    }
+
     network {
       mode = "bridge"
       port "http" {
@@ -180,10 +187,17 @@ job "chat-app" {
     }
 
     task "chat-app" {
-      driver = "docker"
+      driver = "exec"
 
       config {
-        image = "lhaig/anon-app:light-0.03"
+        command = "chatapp-light-linux"
+      }
+
+      artifact {
+        source = "https://github.com/GuyBarros/anonymouse-realtime-chat-app/releases/download/0.03/chatapp-light-linux"
+        options {
+          checksum = "md5:55677699984200530a836cf8fdec5bb5"
+        }
       }
 
       env {

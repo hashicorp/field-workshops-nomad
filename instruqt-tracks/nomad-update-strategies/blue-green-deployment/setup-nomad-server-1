@@ -5,4 +5,81 @@ set -e
 rm /root/.bash_history
 touch /root/.bash_history
 
+# Write the chat-app.nomad job
+cat <<-EOF > /root/nomad/jobs/chat-app-light-docker.nomad
+job "chat-app" {
+  datacenters = ["dc1"]
+  type = "service"
+
+  group "chat-app" {
+    count = 3
+
+    spread {
+      attribute = "\${node.unique.name}"
+    }
+
+    update {
+      max_parallel = 1
+      health_check = "checks"
+      min_healthy_time = "15s"
+      healthy_deadline = "2m"
+      canary = 3
+    }
+
+    network {
+      mode = "bridge"
+      port "http" {
+        to = 5000
+      }
+    }
+
+    task "chat-app" {
+      driver = "docker"
+
+      config {
+        image = "lhaig/anon-app:light-0.03"
+      }
+
+      env {
+        "MONGODB_SERVER" = "127.0.0.1"
+        "MONGODB_PORT" = "27017"
+      }
+
+      resources {
+        cpu = 300 # MHz
+        memory = 512 # MB
+      }
+
+    } # end chat-app task
+
+    service {
+      name = "chat-app"
+      tags = ["chat-app"]
+      port = "http"
+      check {
+        name     = "chat-app alive"
+        type     = "http"
+        path     = "/chats"
+        interval = "10s"
+        timeout  = "2s"
+      }
+
+      connect {
+        sidecar_service {
+          tags = ["chat-app-proxy"]
+          proxy {
+            upstreams {
+              destination_name = "mongodb"
+              local_bind_port = 27017
+            }
+          }
+        }
+      } # end connnect
+    } # end service
+
+  } # end chat-app group
+
+}
+EOF
+
 exit 0
