@@ -16,8 +16,7 @@ export NOMAD_TOKEN=$(cat /root/nomad/acls/bootstrap.txt | grep Secret | cut -d' 
 # Check that catalogue job is running
 catalogue_status=$(nomad job status catalogue | grep running | wc -l)
 if [ $catalogue_status -lt 1 ]; then
-  echo "The catalogue job is not running"
-  exit 1
+  fail-message "The catalogue job is not running"
 fi
 
 grep -q "export NOMAD_TOKEN=\$(cat /root/nomad/acls/alice-token.txt | grep Secret | cut -d' ' -f7)" /root/.bash_history || fail-message "You have not set NOMAD_TOKEN to Alice's ACL token on the Server yet."
@@ -38,8 +37,7 @@ grep -q "export NOMAD_TOKEN=\$(cat /root/nomad/acls/charlie-token.txt | grep Sec
 
 override_attempts=$(grep "nomad job run -policy-override webserver-test.nomad" /root/.bash_history | wc -l)
 if [ $override_attempts -lt 2 ]; then
-  echo "Did you forget to have Charlie override the Sentinel violation for the webserver-test.nomad job?"
-  exit 1
+  fail-message "Did you forget to have Charlie override the Sentinel violation for the webserver-test.nomad job?"
 fi
 
 # Set Charlie's ACL token
@@ -48,8 +46,7 @@ export NOMAD_TOKEN=$(cat /root/nomad/acls/charlie-token.txt | grep Secret | cut 
 # Check status of the webserver-test job
 webserver_test_status=$(nomad job status -namespace qa webserver-test | grep running | wc -l)
 if [ $webserver_test_status -ne 3 ]; then
-  echo "The webserver-test job is not running"
-  exit 1
+  fail-message "The webserver-test job is not running"
 fi
 
 exit 0

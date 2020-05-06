@@ -1,0 +1,19 @@
+#!/bin/bash -l
+
+#Enable bash history
+HISTFILE=/root/.bash_history
+set -o history
+
+# Change Directory
+cd /root/nomad
+
+# Run the mysql.nomad Job
+nomad job run mysql.nomad
+
+# Sleep
+sleep 60
+
+# Check the status of the Job
+nomad job status mysql-server
+
+exit 0

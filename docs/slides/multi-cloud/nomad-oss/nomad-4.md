@@ -230,14 +230,17 @@ class: compact, col-2
   - [Java Driver](https://www.nomadproject.io/docs/drivers/java.html)
   - [QEMU Driver](https://www.nomadproject.io/docs/drivers/qemu.html)
 <br>
+<br>
 
 ###  Community Task Drivers
-- There are 5 open source community supported task drivers:
-  - [LXC Driver Driver](https://www.nomadproject.io/docs/drivers/external/lxc.html)
-  - [Singularity Driver](https://www.nomadproject.io/docs/drivers/external/singularity.html)
-  - [Jail Task Driver](https://www.nomadproject.io/docs/drivers/external/jail-task-driver.html)
-  - [Pot Task Driver](https://www.nomadproject.io/docs/drivers/external/pot.html)
-  - [Firecracker Task Driver](https://www.nomadproject.io/docs/drivers/external/firecracker-task-driver.html)
+- There are currently 7 open source community supported task drivers:
+  - [LXC Driver](https://www.nomadproject.io/docs/drivers/external/lxc/)
+  - [Podman Driver](https://www.nomadproject.io/docs/drivers/external/podman/)
+  - [Singularity Driver](https://www.nomadproject.io/docs/drivers/external/singularity/)
+  - [Jail Driver](https://www.nomadproject.io/docs/drivers/external/jail-task-driver/)
+  - [Pot Driver](https://www.nomadproject.io/docs/drivers/external/pot/)
+  - [Firecracker Driver](https://www.nomadproject.io/docs/drivers/external/firecracker-task-driver/)
+  - [Nspawn Driver](https://www.nomadproject.io/docs/drivers/external/nspawn/)
 ]
 
 ???

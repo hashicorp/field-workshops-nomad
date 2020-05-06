@@ -1,0 +1,62 @@
+#!/bin/bash -l
+
+# Write Nomad Client 1 Config
+cat <<-EOF > /etc/nomad.d/nomad-client1.hcl
+# Setup data dir
+data_dir = "/tmp/nomad/client1"
+
+# Give the agent a unique name.
+name = "client1"
+
+# Enable the client
+client {
+  enabled = true
+}
+
+# Consul configuration
+consul {
+  address = "nomad-client-1:8500"
+}
+EOF
+
+# Write Consul Client 1 Config
+cat <<-EOF > /etc/consul.d/consul-client1.json
+{
+  "ui": true,
+  "log_level": "INFO",
+  "data_dir": "/tmp/consul/client1",
+  "node_name": "client1",
+  "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
+  "client_addr": "0.0.0.0",
+  "retry_join": [
+    "nomad-server-1"
+  ],
+  "connect": {
+    "enabled": true
+  },
+  "ports": {
+    "grpc": 8502
+  }
+}
+EOF
+
+# Install CNI plugins
+curl -s -L -o cni-plugins.tgz https://github.com/containernetworking/plugins/releases/download/v0.8.3/cni-plugins-linux-amd64-v0.8.3.tgz
+mkdir -p /opt/cni/bin
+tar -C /opt/cni/bin -xzf cni-plugins.tgz
+
+# Configure iptables
+echo 1 > /proc/sys/net/bridge/bridge-nf-call-arptables
+echo 1 > /proc/sys/net/bridge/bridge-nf-call-ip6tables
+echo 1 > /proc/sys/net/bridge/bridge-nf-call-iptables
+
+# Start Consul
+systemctl start consul
+
+# Sleep
+sleep 15
+
+# Start Nomad
+systemctl start nomad
+
+exit 0

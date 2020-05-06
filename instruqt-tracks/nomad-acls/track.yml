@@ -25,7 +25,7 @@ challenges:
   id: 5efmxtpkfxlm
   type: challenge
   title: Confirm the Agents are running.
-  teaser: Confirming that the Agents are configured and running.
+  teaser: Confirm that the agents are configured and running.
   assignment: |-
     Before we begin securing our Nomad cluster, lets verify that all 3 servers and both clients are running.
 
@@ -88,7 +88,7 @@ challenges:
   id: rfb3dvxmxuyp
   type: challenge
   title: Configure Nomad Server ACLs
-  teaser: Configure Nomad Server ACLs.
+  teaser: Configure Nomad server ACLs.
   assignment: |-
     We need to enable the ACL system for our cluster.
 
@@ -178,7 +178,7 @@ challenges:
   id: ncufcvo3ycxz
   type: challenge
   title: Configure Nomad Client ACLs
-  teaser: Configure Nomad Client ACLs.
+  teaser: Configure Nomad client ACLs.
   assignment: |-
     Now that we have the servers using ACLs, we need to configure the Clients to use them as well.
 
@@ -546,4 +546,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 1800
-checksum: "6155152013242748687"
+checksum: "18324883540139185252"

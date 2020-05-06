@@ -1,0 +1,439 @@
+slug: nomad-and-portworx
+id: h7wajhkey5qc
+type: track
+title: Nomad Integration With Portworx
+teaser: |
+  Learn how Nomad and Portworx support stateful workloads deployed by Nomad jobs.
+description: |-
+  Some Nomad workloads need to persist data that will still be available if the job that runs the workloads are stopped and restarted.
+
+  Nomad supports stateful workloads with 3 different options:
+    * [Nomad Host Volumes](https://nomadproject.io/docs/configuration/client/#host_volume-stanza) that are managed by Nomad and can be used with any Nomad task driver
+    * [Docker Volume Drivers](https://docs.docker.com/engine/extend/plugins_volume/#create-a-volumedriver) such as Portworx that are externally managed and can only be used with the Docker task driver
+    * [CSI Plugins](https://github.com/container-storage-interface/spec/blob/master/spec.md) that are also externally managed but can be used with any Nomad task driver.
+
+  This track will guide you through using a [Docker Volume Driver](https://nomadproject.io/docs/drivers/docker/#inlinecode-volumes-16) and [Portworx](https://docs.portworx.com/install-with-other/nomad) to persist data for an HA MySQL database deployed by Nomad. It is based on the [Stateful Workloads with Portworx](https://learn.hashicorp.com/nomad/stateful-workloads/portworx) guide.
+
+  Before running this track, we suggest you run the [Nomad Basics](https://play.instruqt.com/hashicorp/tracks/nomad-basics) track.
+icon: https://storage.googleapis.com/instruqt-hashicorp-tracks/logo/nomad.png
+tags:
+- Nomad
+- stateful
+- Portworx
+- storage
+owner: hashicorp
+developers:
+- roger@hashicorp.com
+private: false
+published: true
+challenges:
+- slug: verify-nomad-cluster-health
+  id: ap4o4x7mtxn9
+  type: challenge
+  title: Verify the Health of Your Nomad Cluster
+  teaser: |
+    Verify the health of the Nomad cluster that has been deployed for you.
+  assignment: |-
+    In this challenge, you will verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
+
+    The cluster is running 1 Nomad/Consul server and 3 Nomad/Consul clients with Nomad 0.11.0 and Consul 1.7.2. These VMs have been created in a GCP project within this Instruqt track. The Nomad client VMs each were created with an extra empty 20GB [Google Persistent Disk](https://cloud.google.com/persistent-disk) for use by Portworx.
+
+    You can visit the Google Cloud Console for the GCP project of your instance of the Instruqt track by selecting the "Cloud Links" tab, right-clicking the Project ID for the "nomad" Google cloud project, and then opening the console in a new tab or window. If you already have your own GCP account, it will be easier to use an incognito window. Either way, you will have to paste the Email and then the Password from the Cloud Links tab into the dialog screens that will be displayed. You will then have to click an "Accept" button. Finally, after the Google Cloud Console is displayed, you will have to click a checkbox and agree to the terms of service by clicking the "Agree and Continue" button.
+
+    You can see the VMs that were created for you by clicking the icon with 3 horizontal bars in the upper left corner of the console, selecting the "Compute Engine" menu, and then selecting "VM Instances".
+
+    First, determine the public IP of your Nomad server by running this command on the "Cloud CLI" tab:
+    ```
+    echo $nomad_server_ip
+    ```
+
+    You can visit the Nomad UI in any browser tab outside the Instruqt tab with the URL, `http://<NOMAD_IP>:4646` where <NOMAD_IP\> is the value of $nomad_server_ip.
+
+    You can visit the Consul UI in any browser tab outside the Instruqt tab with the URL, `http://<NOMAD_IP>:8500` where <NOMAD_IP\> is the value of $nomad_server_ip.
+
+    Next, SSH to the Nomad server with this command:
+    ```
+    gcloud compute ssh nomad-server-1 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no
+    ```
+
+    Now, verify that all 4 Consul agents are running and connected to the cluster by running this command on the "Cloud CLI" tab:
+    ```
+    consul members
+    ```
+    You should see 4 Consul agents with the "alive" status including 1 server and 3 clients.
+
+    Check that the Nomad server is running by running this command on the "Cloud CLI" tab:
+    ```
+    nomad server members
+    ```
+    You should see 1 Nomad server with the "alive" status.
+
+    Check the status of the Nomad client nodes by running this command on the "Cloud CLI" tab:
+    ```
+    nomad node status
+    ```
+    You should see 3 Nomad clients with the "ready" status.
+
+    You can also check the status of the Nomad server and clients in the Nomad and Consul UIs.
+
+    In the next challenge, you will run a Nomad job that will install Portworx on all 3 Nomad clients.
+  notes:
+  - type: text
+    contents: |-
+      Nomad supports stateful workloads with 3 different options:
+        * [Nomad Host Volumes](https://nomadproject.io/docs/configuration/client/#host_volume-stanza) that are managed by Nomad and can be used with any Nomad task driver
+        * [Docker Volume Drivers](https://docs.docker.com/engine/extend/plugins_volume/#create-a-volumedriver) such as Portworx that are externally managed and can only be used with the Docker task driver
+        * [CSI Plugins](https://github.com/container-storage-interface/spec/blob/master/spec.md) that are also externally managed but can be used with any Nomad task driver.
+
+      In this track, you will use a Docker volume driver and [Portworx](https://docs.portworx.com/install-with-other/nomad) to persist data for an HA MySQL database.
+  - type: text
+    contents: |-
+      In this challenge, you will verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
+
+      In later challenges, you will run a Nomad job that deploys Portworx to your Nomad clients, run a Nomad job that deploys a MySQL database, and verify that data written to MySQL survives stopping and re-running the MySQL job.
+  tabs:
+  - title: Cloud CLI
+    type: terminal
+    hostname: cloud-client
+  - title: Cloud Links
+    type: service
+    hostname: cloud-client
+    path: /
+    port: 80
+  difficulty: basic
+  timelimit: 300
+- slug: install-portworx
+  id: jndu9wxvuyj6
+  type: challenge
+  title: Install Portworx on the Nomad Clients
+  teaser: |
+    Install Portworx on the Nomad clients.
+  assignment: |-
+    In this challenge, you will deploy Portworx on all 3 Nomad clients.
+
+    Begin by SSHing to the Nomad server with this command:
+    ```
+    gcloud compute ssh nomad-server-1 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no
+    ```
+
+    Next, navigate to the /root/nomad directory with by running this command on the "Cloud Client" tab:
+    ```
+    cd /root/nomad
+    ```
+
+    ## Inspect the Portworx Job
+    We have added a "portworx.nomad" job specification file to that directory. You can view it one section at a time by running `more portworx.nomad` and pressing your <space\> bar key to advance. Or you can view it all at once with `cat portworx.nomad` and then scroll up.
+
+    This job will deploy Portworx to 2 of the Nomad clients (since `count` of the "portworx" task group is set to 2) so that it can be used as a [Docker Volume Driver](https://nomadproject.io/docs/drivers/docker/#volume_driver) by tasks that use Nomad's Docker task driver.
+
+    We are intentionally deploying Portworx to only two of the Nomad clients to show that Nomad will only schedule tasks configured to use the "pxd" Docker volume driver to these clients.
+
+    The most interesting part of the job specification for our purposes is the task declaration which indicates that the task does the following:
+      * It sets some environment variables needed by Portworx.
+      * It uses the "portworx/oci-monitor:2.4.0" Docker image.
+      * It specifies some arguments for the Docker container that will run Portworx including `-a` which tells Portworx to use any available, unused, and unmounted drive for its storage and `-k` which tells Portworx to use Consul for its key/value database.
+      * It also specifies "0.0.0.0:9015" as the endpoint to use. Note that port 9015 here matches the static port set in the network stanza and allows Consul to monitor the health of the Portworx containers.
+
+    You can see the full list of arguments that the Portworx OCI Monitor can use on this [page](https://docs.portworx.com/install-with-other/nomad/install-as-a-nomad-job/) which also has the Nomad job specification that ours is based on.
+
+    While the job specification does not say so, Portworx will be exposed to the Docker task driver with the tag, "pxd". You will see this tag used in the MySQL job that you will run in the next challenge.
+
+    ## Run the Portworx Job
+    Run the "portworx.nomad" job with this command:
+    ```
+    nomad job run portworx.nomad
+    ```
+
+    Recall that you can determine the public IP of your Nomad server by running `echo $nomad_server_ip` and that you can visit the Nomad UI in an external tab using the URL, `http://<NOMAD_IP>:8500` where <NOMAD_IP\> is the value of $nomad_server_ip.
+
+    Please visit the Nomad UI and select the "portworx" job on the Jobs menu.  Verify that all allocations eventually become healthy. It will probably take a few minutes.
+
+    Please also check the status of the job with the Nomad CLI:
+    ```
+    nomad job status portworx
+    ```
+    Please note the Allocation and Node IDs at the bottom of the output.
+
+    ## Check the Status of Portworx Allocations
+    For each allocation, run the following command to verify that the deployment of Portworx was successful for that allocation:<br>
+    `
+    nomad alloc logs <allocation> | grep "PX is ready on Node"
+    `<br>
+    where <allocation\> is the allocation ID.
+
+    Determine the Nomad clients that Portworx was deployed to by running
+    ```
+    nomad node status
+    ```
+    and comparing the displayed IDs to the node IDs from the bottom of the `nomad job status portworx` command. (You could also use the Nomad UI.)
+
+    Type `exit` to terminate your SSH session to the Nomad server.
+
+    ## Create Portworx Volumes for MySQL
+    For any single Nomad client to which Portworx was deployed, SSH to that client with a command like this (changing the number of the client if necessary):
+    ```
+    gcloud compute ssh nomad-client-1 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no
+    ```
+
+    Then, run the following command to double-check the status of the Portworx deployment:
+    ```
+    pxctl status
+    ```
+    This should show "Status: PX is operational" on the first line. It should also show 2 nodes under the cluster summary.
+
+    Please create a Portworx volume for MySQL with this command:
+    ```
+    pxctl volume create -s 10 -r 2 mysql
+    ```
+    This should show a message like "Volume successfully created: 542209271313560133".
+
+    Note that we have specified a size of 10GB and a replication factor of 2. This means that Portworx will allocate 10GiB of data for MySQL on each of the two Nomad clients Portworx was deployed to.
+
+    Finally, run this command to check the status of the Portworx volume you just created:
+    ```
+    pxctl volume inspect mysql
+    ```
+    This will confirm that the size of the mysql volume is 10GiB and that it contains replica sets on two nodes.
+
+    In the next challenge, you will do run a second Nomad job that deploys a MySQL database configured to use the Portworx volume.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will deploy Portworx on all 2 of the 3 Nomad clients.
+
+      We are intentionally deploying Portworx to only two of the Nomad clients to show that Nomad will only schedule tasks configured to use the "pxd" Docker volume driver to these clients.
+
+      In the next challenge, you will run a second Nomad job that deploys a MySQL database configured to use the Portworx volume.
+  tabs:
+  - title: Cloud CLI
+    type: terminal
+    hostname: cloud-client
+  - title: Cloud Links
+    type: service
+    hostname: cloud-client
+    path: /
+    port: 80
+  difficulty: basic
+  timelimit: 900
+- slug: deploy-mysql
+  id: to3nhgzhtjj4
+  type: challenge
+  title: Deploy a MySQL Database
+  teaser: |
+    Run a Nomad job that deploys a MySQL database.
+  assignment: |-
+    In this challenge, you will you will run a second Nomad job that deploys a MySQL database configured to use the Portworx volume.
+
+    Recall that you can determine the public IP of your Nomad server by running `echo $nomad_server_ip` and that you can visit the Nomad UI in an external tab using the URL, `http://<NOMAD_IP>:8500` where <NOMAD_IP\> is the value of $nomad_server_ip. We suggest you visit it now so you will have it available later.
+
+    Begin by SSHing to the Nomad server with this command:
+    ```
+    gcloud compute ssh nomad-server-1 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no
+    ```
+
+    Next, navigate to the /root/nomad directory with by running this command on the "Cloud Client" tab:
+    ```
+    cd /root/nomad
+    ```
+
+    ## Inspect the MySQL Job
+    We have added a "mysql.nomad" job specification file to that directory. You can view it one section at a time by running `more mysql.nomad` and pressing your <space\> bar key to advance. Or you can view it all at once with `cat portworx.nomad` and then scroll up.
+
+    This job will deploy MySQL to 1 of the Nomad clients (since `count` of the "mysql-server" task group is set to 1).  Since the "mysql-server" task indicates that it wants to use the "pxd" volume driver, it should be deployed to one of the Nomad client nodes that has Portworx running.
+
+    ## Run the MySQL Job
+    Run the "mysql.nomad" job with this command:
+    ```
+    nomad job run mysql.nomad
+    ```
+
+    Please visit the Nomad UI and select the "mysql-server" job on the Jobs menu.  Verify that the single allocation eventually becomes healthy. It should not take more than 1 minute.
+
+    Additionally, please click the Client ID of the single allocation at the bottom of the screen in the Nomad UI to jump to the screen showing the Nomad client that the "mysql-server" allocation was deployed to. You should see that this client has two allocations, one for Portworx and one for MySQL. This validates that Nomad did schedule the MySQL job to a client that was running Portworx as required by the setting of `volume_driver` to "pxd" in the "mysql-server" task.
+
+    Please also check the status of the job with the Nomad CLI:
+    ```
+    nomad job status mysql-server
+    ```
+    You should see that the "mysql-server" task group in the "Deployed" section has 1 healthy allocation.
+
+    In the next challenge, you will write some data to the MySQL database. In the challenge after that, you will stop and re-run the mysql.nomad job and verify that the data you wrote was successfully persisted.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will you will run a second Nomad job that deploys a MySQL database configured to use the Portworx volume.
+
+      In the remaining challenges, you will write some data to the MySQL database, stop and re-run the mysql.nomad job, and verify that the data you wrote was successfully persisted.
+  tabs:
+  - title: Cloud CLI
+    type: terminal
+    hostname: cloud-client
+  - title: Cloud Links
+    type: service
+    hostname: cloud-client
+    path: /
+    port: 80
+  difficulty: basic
+  timelimit: 600
+- slug: write-data
+  id: 8bnlvcgnijnb
+  type: challenge
+  title: Write Data to the MySQL Database
+  teaser: |
+    Write some data to the MySQL database.
+  assignment: |-
+    In this challenge, you will examine the tables and data of the MySQL database that your Nomad job is running. You will then write some data to the MySQL database.
+
+    Begin by SSHing to the Nomad server with this command:
+    ```
+    gcloud compute ssh nomad-server-1 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no
+    ```
+
+    Connect to the MySQL database by running this command:
+    ```
+    mysql -h mysql-server.service.consul -u web -ppassword -D itemcollection
+    ```
+    This is using the DNS, "mysql-server.service.consul", that was registered by the job in Consul, the username "web", the password "password", and the database "itemcollection".
+
+    You should end up with a `mysql>` prompt that will allow you to issue the SQL commands below.
+
+    Check the tables in the "itemcollection" database with this command:
+    ```
+    show tables;
+    ```
+    This should show this:<br>
+    `
+    +--------------------------+
+    | Tables_in_itemcollection |
+    +--------------------------+
+    | items                    |
+    +--------------------------+
+    1 row in set (0.00 sec)
+    `<br>
+
+    Next, read the rows of the table with this query:
+    ```
+    select * from items;
+    ```
+    This should return this:<br>
+    `
+    +----+----------+
+    | id | name     |
+    +----+----------+
+    |  1 | bike     |
+    |  2 | baseball |
+    |  3 | chair    |
+    +----+----------+
+    3 rows in set (0.00 sec)
+    `<br>
+
+    Please insert an item into the table with this command:
+    ```
+    INSERT INTO items (name) VALUES ('glove');
+    ```
+    This should return "Query OK, 1 row affected (0.00 sec)".
+
+    If you want, run the query, `select * from items;`, again to verify that "glove" is now in the "items" table.
+
+    The new row (and any others you might add) should all be visible in the next challenge after you stop and restart the job.
+
+    Quit MySQL by typing `exit`.
+
+    In the next challenge, you will stop and re-run the "mysql-server" job and verify that the data you wrote is still in the database table.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will examine the tables and data of the MySQL database that your Nomad job is running.
+
+      You will then write some data to a table in the MySQL database. This data should still be in the database table in the next challenge after you stop and re-run the job.
+  tabs:
+  - title: Cloud CLI
+    type: terminal
+    hostname: cloud-client
+  - title: Cloud Links
+    type: service
+    hostname: cloud-client
+    path: /
+    port: 80
+  difficulty: basic
+  timelimit: 600
+- slug: stop-and-restart-mysql
+  id: vyalzdus9seq
+  type: challenge
+  title: Stop and Restart the MySQL Job
+  teaser: |
+    Stop and restart the job that ran MySQL and validate that the item you added is still in the database.
+  assignment: |-
+    In this challenge, you will stop and re-run the "mysql-server" job and verify that the item you added is still in the database table.
+
+    Begin by SSHing to the Nomad server with this command:
+    ```
+    gcloud compute ssh nomad-server-1 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no
+    ```
+
+    Stop and purge the "mysql-server" job by running the following command on the "Cloud Client" tab:
+    ```
+    nomad job stop -purge mysql-server
+    ```
+    The `-purge` option removes the job completely so that it will not show up in the Nomad UI or in any status commands.
+
+    After 10 seconds, verify that no jobs are running:
+    ```
+    nomad status
+    ```
+    This should only show the portworx job running.
+
+    If you refresh the Nomad UI, you can confirm that the "mysql-server" job is no longer running.
+
+    Navigate to the /root/nomad directory with this command:
+    ```
+    cd /root/nomad
+    ```
+
+    Re-run the job with this command:
+    ```
+    nomad job run mysql.nomad
+    ```
+
+    After waiting 30 seconds, verify that the job has been successfully deployed with this command:
+    ```
+    nomad job status mysql-server
+    ```
+    The Status field in the first section should show that the job is running. You should also see that there is 1 healthy instance of the "mysql-server" task group in the "Deployed" section and that a single allocation is running in the "Allocations" section.
+
+    Please inspect the ID of the node that the allocation was deployed to and compare it to the ID of the client1 node that you recorded earlier. They should match. If so, this proves that the "mysql-server" task group was deployed to the same Nomad client (client1) both times that you ran the job.
+
+    Finally, connect to the MySQL database by running this command on the "Cloud Client" tab:
+    ```
+    mysql -h mysql-server.service.consul -u web -ppassword -D itemcollection
+    ```
+
+    Then run the same query you ran earlier:
+    ```
+    select * from items;
+    ```
+    You should see the row with "glove" that you added in the last challenge. This proves that the MySQL data written by the "mysql.nomad" job was correctly persisted and is still available to the job after being stopped, purged, and re-run.
+
+    Quit MySQL by typing `exit`.
+    Quite the SSH session by typeing `exit`.
+    You must quit the SSH session for the script that runs when you click the "Check" button to run correctly.
+
+    Congratulations on completing the Nomad Integration With Portworx track.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will stop and re-run the "mysql-server" job and verify that the item you added is still in the database table.
+
+      When the job is restarted, it will be run on the first Nomad client again because that is the only client that has the "mysql" host volume deployed.
+  tabs:
+  - title: Cloud CLI
+    type: terminal
+    hostname: cloud-client
+  - title: Cloud Links
+    type: service
+    hostname: cloud-client
+    path: /
+    port: 80
+  difficulty: basic
+  timelimit: 600
+checksum: "6947135051653320432"

@@ -1,0 +1,63 @@
+#!/bin/bash -l
+
+# Write Nomad Client 1 Config
+cat <<-EOF > /etc/nomad.d/nomad-client1.hcl
+# Setup data dir
+data_dir = "/tmp/nomad/client1"
+
+# Give the agent a unique name.
+name = "client1"
+
+# Enable the client
+client {
+  enabled = true
+}
+
+# Consul configuration
+consul {
+  address = "nomad-client-1:8500"
+}
+EOF
+
+# Write Consul Client 1 Config
+cat <<-EOF > /etc/consul.d/consul-client1.json
+{
+  "ui": true,
+  "log_level": "INFO",
+  "data_dir": "/tmp/consul/client1",
+  "node_name": "client1",
+  "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
+  "client_addr": "0.0.0.0",
+  "retry_join": [
+    "nomad-server-1"
+  ],
+  "recursors": [
+    "10.64.0.254"
+  ]
+}
+EOF
+
+# Start Consul
+systemctl start consul
+
+# Sleep
+sleep 15
+
+# Configure Resolved and iptables
+cat <<-EOF > /etc/systemd/resolved.conf.d/consul.conf
+[Resolve]
+DNS=127.0.0.1
+Domains=~consul
+EOF
+iptables -t nat -A OUTPUT -d localhost -p udp -m udp --dport 53 -j REDIRECT --to-ports 8600
+iptables -t nat -A OUTPUT -d localhost -p tcp -m tcp --dport 53 -j REDIRECT --to-ports 8600
+systemctl restart systemd-resolved
+
+# Start Nomad
+systemctl start nomad
+
+# Install MySQL Client 5.7
+apt-get -y update
+apt install -y --fix-missing mysql-client-core-5.7
+
+exit 0

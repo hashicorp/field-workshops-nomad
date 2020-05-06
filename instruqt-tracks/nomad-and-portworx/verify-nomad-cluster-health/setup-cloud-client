@@ -1,0 +1,338 @@
+#!/bin/bash -l
+
+# Create Nomad Server
+gcloud compute instances create nomad-server-1 --image-project=instruqt-hashicorp --image=hashistack-0-6-0 --zone=europe-west1-b --boot-disk-size=20GB --tags=nomad-portworx --machine-type=n1-standard-2
+
+# Create Nomad Client 1
+gcloud compute instances create nomad-client-1 --image-project=instruqt-hashicorp --image=hashistack-0-6-0 --zone=europe-west1-b --boot-disk-size=20GB --create-disk=name=portworx-1,size=20GB --tags=nomad-portworx --machine-type=n1-standard-2
+
+# Create Nomad Client 2
+gcloud compute instances create nomad-client-2 --image-project=instruqt-hashicorp --image=hashistack-0-6-0 --zone=europe-west1-b --boot-disk-size=20GB --create-disk=name=portworx-2,size=20GB --tags=nomad-portworx --machine-type=n1-standard-2
+
+# Create Nomad Client 3
+gcloud compute instances create nomad-client-3 --image-project=instruqt-hashicorp --image=hashistack-0-6-0 --zone=europe-west1-b --boot-disk-size=20GB --create-disk=name=portworx-3,size=20GB --tags=nomad-portworx --machine-type=n1-standard-2
+
+# Create Inbound HTTP Rule
+gcloud compute firewall-rules create nomad-allow-inbound-http --allow tcp:4646
+
+# Create Firewall Rules for Consul
+gcloud compute firewall-rules create consul-allow-inbound-http --allow tcp:8500
+gcloud compute firewall-rules create consul-allow-inbound-dns --allow tcp:8600 --allow udp:8600
+gcloud compute firewall-rules create consul-allow-inbound-rpc --allow tcp:8300 --source-tags=nomad-portworx --target-tags=nomad-portworx
+gcloud compute firewall-rules create consul-allow-inbound-lan-serf --allow tcp:8301 --allow udp:8301 --source-tags=nomad-portworx --target-tags=nomad-portworx
+gcloud compute firewall-rules create consul-allow-inbound-wan-serf --allow tcp:8302 --allow udp:8302 --source-tags=nomad-portworx --target-tags=nomad-portworx
+
+# Create Firewall Rules for Nomad
+gcloud compute firewall-rules create nomad-allow-inbound-http --allow tcp:4646
+gcloud compute firewall-rules create nomad-allow-inbound-rpc --allow tcp:4647 --source-tags=nomad-portworx --target-tags=nomad-portworx
+gcloud compute firewall-rules create nomad-allow-inbound-serf --allow tcp:4648 --allow udp:4648 --source-tags=nomad-portworx --target-tags=nomad-portworx
+
+# Create /root/nomad on Cloud Client
+mkdir /root/nomad
+
+# Create /root/nomad on Nomad Server
+gcloud compute ssh nomad-server-1 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "mkdir /root/nomad"
+
+### Consul Server 1 ###
+
+# Write Consul Server Config
+cat <<-EOF > /root/nomad/consul-server1.json
+{
+  "server": true,
+  "ui": true,
+  "log_level": "INFO",
+  "data_dir": "/tmp/consul/server1",
+  "node_name": "server1",
+  "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
+  "client_addr": "0.0.0.0",
+  "bootstrap_expect": 1
+}
+EOF
+
+# SCP Consul Config File to nomad-server-1
+gcloud compute scp /root/nomad/consul-server1.json nomad-server-1:/etc/consul.d/consul-server1.json --strict-host-key-checking no --zone "europe-west1-b"
+
+# Start consul on Server
+gcloud compute ssh nomad-server-1 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "systemctl start consul"
+
+# Sleep
+sleep 15
+
+# Write resolved-consul.conf
+cat <<-EOF > /root/nomad/resolved-consul.conf
+[Resolve]
+DNS=127.0.0.1
+Domains=~consul
+EOF
+
+# Create /etc/systemd/resolved.conf.d on server
+gcloud compute ssh nomad-server-1 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "mkdir -p /etc/systemd/resolved.conf.d"
+
+# SCP resolved-consul.conf
+gcloud compute scp /root/nomad/resolved-consul.conf nomad-server-1:/etc/systemd/resolved.conf.d/consul.conf --strict-host-key-checking no --zone "europe-west1-b"
+
+# Set iptables rules and restart resolved
+gcloud compute ssh nomad-server-1 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "iptables -t nat -A OUTPUT -d localhost -p udp -m udp --dport 53 -j REDIRECT --to-ports 8600 && iptables -t nat -A OUTPUT -d localhost -p tcp -m tcp --dport 53 -j REDIRECT --to-ports 8600 && systemctl restart systemd-resolved"
+
+# Write Nomad Server Config
+cat <<-EOF > /root/nomad/nomad-server1.hcl
+# Setup data dir
+data_dir = "/tmp/nomad/server1"
+
+# Give the agent a unique name.
+name = "server1"
+
+# Enable the server
+server {
+  enabled = true
+  bootstrap_expect = 1
+}
+
+# Consul configuration
+consul {
+  address = "nomad-server-1:8500"
+}
+EOF
+
+# SCP Nomad Config File to nomad-server-1
+gcloud compute scp /root/nomad/nomad-server1.hcl nomad-server-1:/etc/nomad.d/nomad-server1.hcl --strict-host-key-checking no --zone "europe-west1-b"
+
+# Start nomad on Server
+gcloud compute ssh nomad-server-1 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "systemctl start nomad"
+
+# Install MySQL Client 5.7
+gcloud compute ssh nomad-server-1 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "apt-get -y update && apt install -y --fix-missing mysql-client-core-5.7"
+
+
+### Consul Client 1 ###
+
+# Write Consul Client 1 Config
+cat <<-EOF > /root/nomad/consul-client1.json
+{
+  "log_level": "INFO",
+  "data_dir": "/tmp/consul/client1",
+  "node_name": "client1",
+  "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
+  "client_addr": "0.0.0.0",
+  "retry_join": [
+    "nomad-server-1"
+  ]
+}
+EOF
+
+# SCP Consul Config File to nomad-client-1
+gcloud compute scp /root/nomad/consul-client1.json nomad-client-1:/etc/consul.d/consul-client1.json --strict-host-key-checking no --zone "europe-west1-b"
+
+# Start consul on client
+gcloud compute ssh nomad-client-1 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "systemctl start consul"
+
+# Sleep
+sleep 15
+
+# Write resolved-consul.conf
+cat <<-EOF > /root/nomad/resolved-consul.conf
+[Resolve]
+DNS=127.0.0.1
+Domains=~consul
+EOF
+
+# Create /etc/systemd/resolved.conf.d on client
+gcloud compute ssh nomad-client-1 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "mkdir -p /etc/systemd/resolved.conf.d"
+
+# SCP resolved-consul.conf
+gcloud compute scp /root/nomad/resolved-consul.conf nomad-client-1:/etc/systemd/resolved.conf.d/consul.conf --strict-host-key-checking no --zone "europe-west1-b"
+
+# Set iptables rules and restart resolved
+gcloud compute ssh nomad-client-1 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "iptables -t nat -A OUTPUT -d localhost -p udp -m udp --dport 53 -j REDIRECT --to-ports 8600 && iptables -t nat -A OUTPUT -d localhost -p tcp -m tcp --dport 53 -j REDIRECT --to-ports 8600 && systemctl restart systemd-resolved"
+
+# Write Nomad client Config
+cat <<-EOF > /root/nomad/nomad-client1.hcl
+# Setup data dir
+data_dir = "/tmp/nomad/client1"
+
+# Give the agent a unique name.
+name = "client1"
+
+# Enable the client
+client {
+  enabled = true
+}
+
+# Consul configuration
+consul {
+  address = "nomad-client-1:8500"
+}
+
+plugin "docker" {
+  config {
+    allow_privileged = true
+  }
+}
+EOF
+
+# SCP Nomad Config File to nomad-client-1
+gcloud compute scp /root/nomad/nomad-client1.hcl nomad-client-1:/etc/nomad.d/nomad-client1.hcl --strict-host-key-checking no --zone "europe-west1-b"
+
+# Start nomad on client
+gcloud compute ssh nomad-client-1 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "systemctl start nomad"
+
+# Install MySQL Client 5.7
+gcloud compute ssh nomad-client-1 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "apt-get -y update && apt install -y --fix-missing mysql-client-core-5.7"
+
+### Consul Client 2 ###
+
+# Write Consul Client 2 Config
+cat <<-EOF > /root/nomad/consul-client2.json
+{
+  "log_level": "INFO",
+  "data_dir": "/tmp/consul/client2",
+  "node_name": "client2",
+  "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
+  "client_addr": "0.0.0.0",
+  "retry_join": [
+    "nomad-server-1"
+  ]
+}
+EOF
+
+# SCP Consul Config File to nomad-client-2
+gcloud compute scp /root/nomad/consul-client2.json nomad-client-2:/etc/consul.d/consul-client2.json --strict-host-key-checking no --zone "europe-west1-b"
+
+# Start consul on client
+gcloud compute ssh nomad-client-2 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "systemctl start consul"
+
+# Sleep
+sleep 15
+
+# Write resolved-consul.conf
+cat <<-EOF > /root/nomad/resolved-consul.conf
+[Resolve]
+DNS=127.0.0.1
+Domains=~consul
+EOF
+
+# Create /etc/systemd/resolved.conf.d on client
+gcloud compute ssh nomad-client-2 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "mkdir -p /etc/systemd/resolved.conf.d"
+
+# SCP resolved-consul.conf
+gcloud compute scp /root/nomad/resolved-consul.conf nomad-client-2:/etc/systemd/resolved.conf.d/consul.conf --strict-host-key-checking no --zone "europe-west1-b"
+
+# Set iptables rules and restart resolved
+gcloud compute ssh nomad-client-2 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "iptables -t nat -A OUTPUT -d localhost -p udp -m udp --dport 53 -j REDIRECT --to-ports 8600 && iptables -t nat -A OUTPUT -d localhost -p tcp -m tcp --dport 53 -j REDIRECT --to-ports 8600 && systemctl restart systemd-resolved"
+
+# Write Nomad client Config
+cat <<-EOF > /root/nomad/nomad-client2.hcl
+# Setup data dir
+data_dir = "/tmp/nomad/client2"
+
+# Give the agent a unique name.
+name = "client2"
+
+# Enable the client
+client {
+  enabled = true
+}
+
+# Consul configuration
+consul {
+  address = "nomad-client-2:8500"
+}
+
+plugin "docker" {
+  config {
+    allow_privileged = true
+  }
+}
+EOF
+
+# SCP Nomad Config File to nomad-client-2
+gcloud compute scp /root/nomad/nomad-client2.hcl nomad-client-2:/etc/nomad.d/nomad-client2.hcl --strict-host-key-checking no --zone "europe-west1-b"
+
+# Start nomad on client
+gcloud compute ssh nomad-client-2 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "systemctl start nomad"
+
+# Install MySQL Client 5.7
+gcloud compute ssh nomad-client-2 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "apt-get -y update && apt install -y --fix-missing mysql-client-core-5.7"
+
+### Consul Client 3 ###
+
+# Write Consul Client 3 Config
+cat <<-EOF > /root/nomad/consul-client3.json
+{
+  "log_level": "INFO",
+  "data_dir": "/tmp/consul/client3",
+  "node_name": "client3",
+  "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
+  "client_addr": "0.0.0.0",
+  "retry_join": [
+    "nomad-server-1"
+  ]
+}
+EOF
+
+# SCP Consul Config File to nomad-client-3
+gcloud compute scp /root/nomad/consul-client3.json nomad-client-3:/etc/consul.d/consul-client3.json --strict-host-key-checking no --zone "europe-west1-b"
+
+# Start consul on client
+gcloud compute ssh nomad-client-3 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "systemctl start consul"
+
+# Sleep
+sleep 15
+
+# Write resolved-consul.conf
+cat <<-EOF > /root/nomad/resolved-consul.conf
+[Resolve]
+DNS=127.0.0.1
+Domains=~consul
+EOF
+
+# Create /etc/systemd/resolved.conf.d on client
+gcloud compute ssh nomad-client-3 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "mkdir -p /etc/systemd/resolved.conf.d"
+
+# SCP resolved-consul.conf
+gcloud compute scp /root/nomad/resolved-consul.conf nomad-client-3:/etc/systemd/resolved.conf.d/consul.conf --strict-host-key-checking no --zone "europe-west1-b"
+
+# Set iptables rules and restart resolved
+gcloud compute ssh nomad-client-3 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "iptables -t nat -A OUTPUT -d localhost -p udp -m udp --dport 53 -j REDIRECT --to-ports 8600 && iptables -t nat -A OUTPUT -d localhost -p tcp -m tcp --dport 53 -j REDIRECT --to-ports 8600 && systemctl restart systemd-resolved"
+
+# Write Nomad client Config
+cat <<-EOF > /root/nomad/nomad-client3.hcl
+# Setup data dir
+data_dir = "/tmp/nomad/client3"
+
+# Give the agent a unique name.
+name = "client3"
+
+# Enable the client
+client {
+  enabled = true
+}
+
+# Consul configuration
+consul {
+  address = "nomad-client-3:8500"
+}
+
+plugin "docker" {
+  config {
+    allow_privileged = true
+  }
+}
+EOF
+
+# SCP Nomad Config File to nomad-client-3
+gcloud compute scp /root/nomad/nomad-client3.hcl nomad-client-3:/etc/nomad.d/nomad-client3.hcl --strict-host-key-checking no --zone "europe-west1-b"
+
+# Start nomad on client
+gcloud compute ssh nomad-client-3 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "systemctl start nomad"
+
+# Install MySQL Client 5.7
+gcloud compute ssh nomad-client-3 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "apt-get -y update && apt install -y --fix-missing mysql-client-core-5.7"
+
+# Export public IP of server
+echo "export nomad_server_ip=$(gcloud compute instances list | grep nomad-server-1 | cut -d' ' -f23)" >> /root/.bashrc
+
+# Export it on the Nomad server too
+gcloud compute ssh nomad-server-1 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "echo \"export $nomad_server_ip\" >> /root/.bashrc"
+
+exit 0
