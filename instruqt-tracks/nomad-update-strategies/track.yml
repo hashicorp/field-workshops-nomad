@@ -1,17 +1,23 @@
-slug: nomad-update-strategies-nginx
+slug: nomad-update-strategies
 id: orxif8plq08a
 type: track
 title: Nomad Job Update Strategies
 teaser: |
   Explore Nomad job update strategies including rolling, blue/green, and canary updates.
 description: |-
-  Most applications are long-lived and require updates over time. Whether you are deploying a new version of your web application or updating to a new version of a database, Nomad has built-in support for rolling, blue/green, and canary updates.
+  Most applications are long-lived and require updates over time. Whether you are deploying a new version of your web application or updating to a new version of a database, Nomad has built-in support for rolling, blue/green, and canary updates, which can be used with non-containerized and containerized applications or to containerize the former.
 
-  This track will guide you through implementing these update strategies based on the [Nomad Job Update Strategies](https://learn.hashicorp.com/nomad/update-strategies) guide.
+  This track will guide you through implementing these update strategies based on the [Nomad Job Update Strategies](https://learn.hashicorp.com/nomad/update-strategies/) guide.
 
-  You will run "mongodb", "chat-app", and "nginx" jobs and update the second using rolling, blue/green, and canary update strategies. NGINX will be used as a load balancer that will forward requests to instances of the "chat" application which will store its chat messages in a single MongoDB database.
+  You will run "mongodb", "chat-app", and "nginx" jobs and update the second using rolling, blue/green, and canary update strategies.
 
-  Before running this track, we suggest you run the [Nomad Basics](https://instruqt.com/hashicorp/tracks/nomad-basics), [Nomad Simple Cluster](https://instruqt.com/hashicorp/tracks/nomad-simple-cluster), and [Nomad Multi-Server Cluster](https://instruqt.com/hashicorp/tracks/nomad-multi-server-cluster) tracks.
+  NGINX will be used as a load balancer that will forward requests to instances of the "chat" application which will store its chat messages in a single MongoDB database.
+
+  This track will demonstrate Nomad's job update strategies using a single web app that will initially be deployed by Nomad's [exec](https://www.nomadproject.io/docs/drivers/exec/) task driver as a binary compiled from node.js. The first version of the app will have a light background. You will then use a rolling update to convert to a version of the binary that uses a dark background. You will then do a blue/green deployment to convert to a Docker version of the app that uses the light background. Finally, you will do a canary deployment that converts the Docker version of the app to the dark background.
+
+  You will also learn how Nomad allows you to promote or fail blue/green and canary deployments.
+
+  Before running this track, we suggest you run the [Nomad Basics](https://play.instruqt.com/hashicorp/tracks/nomad-basics), [Nomad Simple Cluster](https://play.instruqt.com/hashicorp/tracks/nomad-simple-cluster), and [Nomad Multi-Server Cluster](https://play.instruqt.com/hashicorp/tracks/nomad-multi-server-cluster) tracks.
 icon: https://storage.googleapis.com/instruqt-hashicorp-tracks/logo/nomad.png
 tags:
 - Nomad
@@ -19,6 +25,8 @@ tags:
 - rolling
 - blue/green
 - canary
+- dockerized apps
+- legacy apps
 owner: hashicorp
 developers:
 - roger@hashicorp.com
@@ -26,15 +34,17 @@ private: false
 published: true
 challenges:
 - slug: verify-nomad-cluster-health
-  id: d0jmzi59u4th
+  id: tklzqhaey58k
   type: challenge
   title: Verify the Health of Your Nomad Enterprise Cluster
   teaser: |
-    Verify the health of the Nomad Enterprise cluster that has been deployed for you by the track's setup scripts.
+    Verify the health of the Nomad Enterprise cluster that has been deployed for you.
   assignment: |-
     In this challenge, you will verify the health of the Nomad Enterprise cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
 
-    The cluster is running 1 Nomad/Consul server and 3 Nomad/Consul clients. The [Consul Connect integration](https://nomadproject.io/guides/integrations/consul-connect) has been enabled on the server and clients since the chatapp uses it to talk to the MongoDB database. Additionally, a Nomad [host volume](https://nomadproject.io/docs/configuration/client/#host_volume-stanza) called "mongodb_mount" has been configured on the clients under the /opt/mongodb/data directory so that MongoDB can persist its data.
+    The cluster is running 1 Nomad/Consul server and 3 Nomad/Consul clients running Nomad 0.11.1 and Consul 1.7.2.
+
+    The [Consul Connect integration](https://www.nomadproject.io/docs/integrations/consul-connect/) has been enabled on the server and clients since the chatapp uses it to talk to the MongoDB database. Additionally, a Nomad [host volume](https://nomadproject.io/docs/configuration/client/#host_volume-stanza) called "mongodb_mount" has been configured on the clients under the /opt/mongodb/data directory so that MongoDB can persist its data.
 
     First, verify that all 4 Consul agents are running and connected to the cluster by running this command on the "Server" tab:
     ```
@@ -63,6 +73,17 @@ challenges:
       In this challenge, you will verify the health of the Nomad Enterprise cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
 
       In later challenges, you will run "mongodb", "chat-app", and "nginx" jobs and update the second using rolling, blue/green, and canary update strategies. NGINX will be used as a load balancer that will forward requests to instances of the "chat" application which will store its messages in a single MongoDB database.
+  - type: text
+    contents: |-
+      You will start with a non-containerized version of the "chat-app" application that uses Nomad's [exec](https://www.nomadproject.io/docs/drivers/exec/) task driver to run a binary compiled from a node.js application that uses a light background.
+
+      You will then use a rolling update to convert to a version of the binary that uses a dark background.
+
+      You will then do a blue/green deployment to convert to a Docker version of the app that uses the light background.
+
+      Finally, you will do a canary deployment that converts the Docker version of the app to the dark background.
+
+      You will also learn how Nomad allows you to promote or fail blue/green and canary deployments.
   tabs:
   - title: Server
     type: terminal
@@ -78,7 +99,7 @@ challenges:
   difficulty: basic
   timelimit: 300
 - slug: deploy-the-jobs
-  id: tdts2n3bahc0
+  id: wfbxeo0th19f
   type: challenge
   title: Deploy the MongoDB, NGINX, and Chat-App Jobs
   teaser: |
@@ -118,8 +139,28 @@ challenges:
     ```
     on the "Server" tab to check the status of the "mongodb" job and validate that the "db" task group is healthy.
 
-    ## Run the chat-app.nomad Job
-    Next, inspect the "chat-app.nomad" job specification file on the "Jobs" tab. This job deploys 3 instances of a "chat-app" task group that runs a custom Docker image, "lhaig/anon-app:light-0.03" created by two HashiCorp solutions engineers, Guy Barrows and Lance Haig. Note that the job specifies the "light-0.03" tag for that image to use a version of the chat app with a light background. Later, when we update the app in various ways, we will also use the tag, "dark-0.03", to use a version of the app with a dark background.
+    ## Run the chat-app Job
+    Next, inspect the "chat-app-light-binary.nomad" job specification file on the "Jobs" tab. This job deploys 3 instances of a "chat-app" task group that runs the "chatapp-light-linux" binary compiled from a node.js application that was created by a HashiCorp solutions engineer, Guy Barrows.
+
+    It runs the app using Nomad's [exec](https://www.nomadproject.io/docs/drivers/exec/) task driver. In the next challenge, we will update the app to a different binary that runs a dark version of the app. Here is the relevant portion of the job specification:
+    ```
+    task "chat-app" {
+      driver = "exec"
+
+      config {
+        command = "chatapp-light-linux"
+      }
+
+      artifact {
+        source = "https://github.com/GuyBarros/anonymouse-realtime-chat-app/releases/download/0.03/chatapp-light-linux"
+        options {
+          checksum = "md5:55677699984200530a836cf8fdec5bb5"
+        }
+      }
+    }
+    ```
+
+    You can see that we are downloading the binary from a Google Cloud Platform storage bucket using Nomad's [artifact](https://www.nomadproject.io/docs/job-specification/artifact/) stanza.
 
     One instance of the chat-app task group will be deployed to each Nomad client because of the job's use of the "spread" stanza:<br>
     `
@@ -138,6 +179,7 @@ challenges:
       }
     }
     `<br>
+
     The NGINX load balancer that you will deploy after the "chat-app" job will automatically add a route for each instance of the chat app because of the "template" stanza within the "nginx.nomad" job specification file.
 
     Finally, the "chat-app" task group uses Consul Connect [sidecar proxies](https://www.consul.io/docs/connect/proxies.html) to talk to the MongoDB database using mutual Transport Layer Security (mTLS) certificates. This is implemented by this stanza:<br>
@@ -154,10 +196,11 @@ challenges:
       }
     }
     `<br>
+    The exact same stanza will be used in versions of the job that run the containerized versions of the application with the [Docker](https://www.nomadproject.io/docs/drivers/docker/) task driver. Nomad and Consul Connect work equally well with non-containerized and containerized applications.
 
-    Run the "chat-app.nomad" job on the "Server" tab with this command:
+    Run the "chat-app-light-binary.nomad" job on the "Server" tab with this command:
     ```
-    nomad job run chat-app.nomad
+    nomad job run chat-app-light-binary.nomad
     ```
     This should return something like this:<br>
     `
@@ -185,7 +228,7 @@ challenges:
     5d57baab  9afadcdd  chat-app    0        run      running  1m11s ago  16s ago
     `<br>
 
-    Note that the Node IDs of the 3 allocations are all different. In other words, Nomad scheduled one instance of the chat-app task to each Nomad client because of the `spread` stanza we included in the "chat-app.nomad" job specification.
+    Note that the Node IDs of the 3 allocations are all different. In other words, Nomad scheduled one instance of the chat-app task to each Nomad client because of the `spread` stanza we included in the "chat-app-light-binary.nomad" job specification.
 
     You can also check out the "chat-app" job in the Nomad UI. Within 60 seconds of running the job, all 3 allocations should be healthy.
 
@@ -194,7 +237,7 @@ challenges:
     ## Run the nginx.nomad Job
     Next, inspect the "nginx.nomad" job specification file on the "Jobs" tab. This job deploys [NGINX](https://nginx.org) as a system job on all the Nomad clients from a Docker image. Since it is a system job, no "count" is specified for the "nginx" task group.
 
-    NGINX will route requests to the "chat-app" Consul service registered by the "chat-app" job; this is done by the "template" stanza of the job which generates the NGINX configuration file, "load-balancer.conf", based on the current instances of the "chat-app" service. (This explains why we run the "nginx.nomad" job after the "chat-app.nomad" job.)
+    NGINX will route requests to the "chat-app" Consul service registered by the "chat-app-light-binary.nomad" job; this is done by the "template" stanza of the job which generates the NGINX configuration file, "load-balancer.conf", based on the current instances of the "chat-app" service. (This explains why we run the "nginx.nomad" job after the "chat-app-light-binary.nomad" job.)
 
     The "ip_hash" instruction in the "load-balancer.conf" configuration file is included to make the NGINX sessions of the chat app sticky. This is required to avoid HTTP 400 errors that would otherwise occur when multiple requests are sent during the lifetime of a socket used by the socket.io framework. (See this [doc](https://socket.io/docs/using-multiple-nodes) for details.)
 
@@ -225,7 +268,9 @@ challenges:
     contents: |-
       In this challenge, you will deploy the "mongodb", "chat-app", and "nginx" jobs.
 
-      In the next challenge, you will update the Chat app using the rolling update strategy.
+      The first version of the "chat-app" job uses Nomad's [exec](https://www.nomadproject.io/docs/drivers/exec/) task driver to run a binary compiled from a node.js application. This version of the app has a light background.
+
+      In the next challenge, you will update the Chat app to a different binary that uses a dark background using the rolling update strategy.
   tabs:
   - title: Jobs
     type: code
@@ -257,37 +302,53 @@ challenges:
   difficulty: basic
   timelimit: 600
 - slug: rolling-update
-  id: zcdcygf1s6sh
+  id: s71yve1la3vm
   type: challenge
   title: Do a Rolling Update of the Chat Job
   teaser: |
     Do a rolling update of the Chat job in which you replace one instance at a time.
   assignment: |-
-    In this challenge, you will do a rolling update of the "chat-app" job.
+    In this challenge, you will do a rolling update of the "chat-app" job.  You will be replacing the chatapp-light-linux binary with a chatapp-dark-linux binary that uses a dark background. This binary is also run with Nomad's exec task driver.
 
     Please navigate back to the /root/nomad/jobs directory on the "Server" tab again with this command:
     ```
     cd /root/nomad/jobs
     ```
 
-    Please inspect the "chat-app.nomad" job specification file on the "Jobs" tab again and note that the setup script for this challenge has added the following stanza to the "chat-app" task group:
+    Please inspect the "chat-app-dark-binary.nomad" job specification file on the "Jobs" tab and note that the setup script for this challenge has changed the task as follows:
+    ```
+    task "chat-app" {
+      driver = "exec"
+
+      config {
+        command = "chatapp-dark-linux"
+      }
+
+      artifact {
+        source = "https://github.com/GuyBarros/anonymouse-realtime-chat-app/releases/download/0.03/chatapp-dark-linux"
+        options {
+          checksum = "md5:912f8476a5f4fff479121b11bff5e098"
+        }
+      }
+    }
+    ```
+    The command that will be run by the exec driver and the source of the artifact have been changed. Note that the name of the job at the top of the file is still "chat-app"; so running this job will actually update the job with that name that we initially created with the "chat-app-light-binary.nomad" job specification file.
+
+    Additionally, the job's `update` stanza looks like this:
     ```
     update {
       max_parallel = 1
       health_check = "checks"
       min_healthy_time = "15s"
       healthy_deadline = "2m"
-      # canary = 3
     }
     ```
 
-    This tells Nomad that it should update one instance of the task group at a time, base the health of each instance on its health checks, require a new allocation to be healthy for 15 seconds before marking it as healthy, and require a new allocation to be healthy after no more than 2 minutes; if an allocation is not healthy within 2 minutes, it will be marked as unhealthy. The "canary" attribute is commented out for now; you will uncomment it when doing blue/green and canary deployments later in this track.
-
-    Additionally, the "chat-app.nomad" job specification is now using the "dark-0.03" tag on the "lhaig/anon-app" image instead of the original "light-0.03" tag. This will give the chat app a dark background.
+    This tells Nomad that it should update one instance of the task group at a time, base the health of each instance on its health checks, require a new allocation to be healthy for 15 seconds before marking it as healthy, and require a new allocation to be healthy after no more than 2 minutes; if an allocation is not healthy within 2 minutes, it will be marked as unhealthy.
 
     Now, check what would happen if you redeployed the "chat-app" job with this command:
     ```
-    nomad job plan chat-app.nomad
+    nomad job plan chat-app-dark-binary.nomad
     ```
 
     This should return the following text:<br>
@@ -296,15 +357,27 @@ challenges:
     +/- Task Group: "chat-app" (1 create/destroy update, 2 ignore)
       +/- Task: "chat-app" (forces create/destroy update)
         +/- Config {
-          +/- image: "lhaig/anon-app:light-0.03" => "lhaig/anon-app:dark-0.03"
+          +/- command: "chatapp-light-linux" => "chatapp-dark-linux"
             }
-          Task: "connect-proxy-chat-app"
+        +   Artifact {
+          + GetterMode:              "any"
+          + GetterOptions[checksum]: "md5:912f8476a5f4fff479121b11bff5e098"
+          + GetterSource:            "https://github.com/GuyBarros/anonymouse-realtime-chat-app/releases/download/0.03/chatapp-dark-linux"
+          + RelativeDest:            "local/"
+          }
+        -   Artifact {
+          - GetterMode:              "any"
+          - GetterOptions[checksum]: "md5:55677699984200530a836cf8fdec5bb5"
+          - GetterSource:            "https://github.com/GuyBarros/anonymouse-realtime-chat-app/releases/download/0.03/chatapp-light-linux"
+          - RelativeDest:            "local/"
+          }
+        Task: "connect-proxy-chat-app"
     `<br>
-    This indicates that Nomad would initially only update 1 of the 3 allocations, confirming that it would do a rolling update.
+    This indicates that Nomad would initially only update 1 of the 3 allocations, confirming that it would do a rolling update. Note that the URLs and checksums of the binaries are different.
 
     Go ahead and actually run a rolling update of the chat application:
     ```
-    nomad job run chat-app.nomad
+    nomad job run chat-app-dark-binary.nomad
     ```
 
     In the Nomad UI, if you select the "chat-app" job, you will see that there is a new deployment running. Over the next two minutes, you will see the numbers of placed and healthy allocations for this deployment increase to 3.
@@ -319,13 +392,15 @@ challenges:
     ```
     You will now see 6 allocations, 3 of which are marked "complete" while 3 are "running".
 
-    In the next challenge, you will update the Chat app using a "blue/green" deployment strategy.
+    In the next challenge, you will update the Chat app to a Docker-based version that uses the original light background using a "blue/green" deployment strategy.
   notes:
   - type: text
     contents: |-
       In this challenge, you will do a rolling update of the Chat job to make it use a dark background instead of the current light background.
 
-      In the next challenge, you will update the Chat app using a "blue/green" deployment strategy.
+      The new version of the app is a different node.js binary that is also run by Nomad's exec driver.
+
+      In the next challenge, you will update the Chat app to a Docker-based version that uses the original light background using a "blue/green" deployment strategy.
   tabs:
   - title: Jobs
     type: code
@@ -357,37 +432,39 @@ challenges:
   difficulty: basic
   timelimit: 600
 - slug: blue-green-deployment
-  id: 3r4wmr3zrh2r
+  id: vyyv312rchyo
   type: challenge
   title: Do a Blue/Green Deployment of the Chat Job
   teaser: |
-    Do a blue/green deployment of the Chat job in which you deploy 3 new instances alongside the current ones and then promote the deployment when satisfied.
+    Do a blue/green deployment of the Chat job.
   assignment: |-
-    In this challenge, you will do a blue/green deployment of the Chat job.
+    In this challenge, you will do a blue/green deployment of the Chat job in which you deploy 3 new instances alongside the current ones and then promote the deployment when satisfied.
 
-    This means that you will initally deploy 3 new instances of the chat app with the original light background but keep the 3 instances with the dark background running. When you are satisfied with the new instances, you will promote the deployment, causing Nomad to stop the old instances.
+    This means that you will initally deploy 3 new Docker-based instances of the chat app with the original light background but keep the 3 non-Docker instances with the dark background running. When you are satisfied with the new instances, you will promote the deployment, causing Nomad to stop the old instances.
 
     Please navigate back to the /root/nomad/jobs directory on the "Server" tab again with this command:
     ```
     cd /root/nomad/jobs
     ```
 
-    Edit the "chat-app.nomad" job specification file on the "Jobs" tab, making the following changes:
+    Inspect the new "chat-app-light-binary.nomad" job specification file on the "Jobs" tab and note that the update stanza now has `canary = 3`:
 
-      1. Uncomment the line with `canary = 3` in the "update" stanza by removing `# ` from before it.
-      2. Change the `dark-0.03` tag on the image back to `light-0.03`.
-
-    If you prefer, you can use these commands to edit the file for you:
+    Additionally, note that the task now uses the Docker driver that runs a custom Docker image, "lhaig/anon-app:light-0.03" which another HashiCorp solutions engineer, Lance Haig, uploaded to Docker Hub for us:
     ```
-    sed -i "s/# canary = 3/canary = 3/g" chat-app.nomad
-    sed -i "s/dark-0.03/light-0.03/g" chat-app.nomad
+    task "chat-app" {
+      driver = "docker"
+
+      config {
+        image = "lhaig/anon-app:light-0.03"
+      }
+    }
     ```
 
-    Setting the "canary" attribute to the "count" attribute of the "chat-app" task group tells Nomad to deploy 3 new instances of the task group as part of a "blue/green" deployment in which the 3 "blue" instances of the chat app with the dark background continue to run even after the new "green" instances of the chat app with the light background are deployed. (Note that the colors "blue" and "green" here have nothing to do with the background colors of the chat app; they are just standard terminology for referring to this particular update strategy.)
+    Setting the "canary" attribute to the "count" attribute of the "chat-app" task group tells Nomad to deploy 3 new instances of the task group as part of a "blue/green" deployment in which the 3 "blue" instances of the chat app with the dark background continue to run even after the new "green" instances of the chat app with the light background are deployed. (Note that the colors "blue" and "green" here have nothing to do with the background colors of the chat app; they are just standard terminology for referring to this particular update strategy.) In this scenario, we are migrating the Chat App from the non-Docker version to a Docker version.
 
     Now, check what would happen if you redeployed the "chat-app" job with this command on the "Server" tab:
     ```
-    nomad job plan chat-app.nomad
+    nomad job plan chat-app-light-docker.nomad
     ```
 
     This should return something like this:<br>
@@ -397,25 +474,33 @@ challenges:
       +/- Update {
           AutoPromote:      "false"
           AutoRevert:       "false"
-        +/- Canary:           "0" => "3"
-            HealthCheck:      "checks"
-            HealthyDeadline:  "120000000000"
-            MaxParallel:      "1"
-            MinHealthyTime:   "15000000000"
-            ProgressDeadline: "600000000000"
-          }
+      +/- Canary:           "0" => "3"
+          HealthCheck:      "checks"
+          HealthyDeadline:  "120000000000"
+          MaxParallel:      "1"
+          MinHealthyTime:   "15000000000"
+          ProgressDeadline: "600000000000"
+        }
       +/- Task: "chat-app" (forces create/destroy update)
+        +/- Driver: "exec" => "docker"
         +/- Config {
-          +/- image: "lhaig/anon-app:dark-0.03" => "lhaig/anon-app:light-0.03"
+          - command: "chatapp-dark-linux"
+          + image:   "lhaig/anon-app:light-0.03"
             }
-          Task: "connect-proxy-chat-app"
+            -   Artifact {
+              - GetterMode:              "any"
+              - GetterOptions[checksum]: "md5:912f8476a5f4fff479121b11bff5e098"
+              - GetterSource:            "https://github.com/GuyBarros/anonymouse-realtime-chat-app/releases/download/0.03/chatapp-dark-linux"
+              - RelativeDest:            "local/"
+              }
+            Task: "connect-proxy-chat-app"
     `<br>
 
-    The plan indicates that Nomad would create 3 canaries to run the "light-0.03" version of the chat app but ignore the 3 allocations that are currently running. That would result in 6 instances of the chat app running on the 3 Nomad clients. That is ok, however, since we are using ports dynamically selected by Nomad and are using NGINX to forward requests to the chat app instances.
+    The plan indicates that Nomad would create 3 canaries to run the "light-0.03" version of a Docker version of the chat app with image "lhaig/anon-app:light-0.03" but ignore the 3 allocations that are currently running. That would result in 6 instances of the chat app running on the 3 Nomad clients. That is ok, however, since we are using ports dynamically selected by Nomad and are using NGINX to forward requests to the chat app instances.
 
     Go ahead and re-run the "chat-app" job with this command:
     ```
-    nomad job run chat-app.nomad
+    nomad job run chat-app-light-docker.nomad
     ```
 
     This should return something like this:<br>
@@ -452,11 +537,11 @@ challenges:
 
     If you had been unhappy with the new version of the chat app, you could have rolled back to the old version by running `nomad deployment fail <deployment_id>`, replacing <deployment_id\> with the deployment ID returned by the job status command. Nomad would then have stopped the new allocations leaving the app in the state it had been in before you re-ran the job.
 
-    In the next challenge, you will update the Chat job using a "canary" deployment, but you will rollback the deployment instead of promoting it.
+    In the next challenge, you will update the Chat job using a "canary" deployment, but you will rollback the deployment instead of promoting it. You will be changing to a Docker-based version of the app that uses the dark background.
   notes:
   - type: text
     contents: |-
-      In this challenge, you will do a "blue/green" deployment of the Chat job for which Nomad will deploy 3 new instances of the chat app with the original light background but keep the 3 instances with the dark background running.
+      In this challenge, you will do a "blue/green" deployment of the Chat job for which Nomad will deploy 3 new Docker-based instances of the chat app with the original light background but keep the 3 binary-based instances with the dark background running.
 
       When you are satisfied with the new version of the app, you will promote the deployment, causing Nomad to stop the old instances.
   tabs:
@@ -490,7 +575,7 @@ challenges:
   difficulty: basic
   timelimit: 600
 - slug: canary-deployment
-  id: n3gbteuho9x3
+  id: xi4uaufnbg0y
   type: challenge
   title: Do a Canary Deployment of the Chat Job
   teaser: |
@@ -498,29 +583,20 @@ challenges:
   assignment: |-
     In this challenge, you will do a "canary" deployment of the chat-app job, but you will rollback the deployment instead of promoting it.
 
-    This means that you will deploy 1 new "canary" instance of the chat app with the dark background but keep the 3 instances with the light background that you deployed in the last challenge running. You will then roll back the deployment with the `nomad deployment fail` command.
+    This means that you will deploy 1 new "canary" instance of a Docker-based version of the chat app with the dark background but keep the 3 instances with the light background that you deployed in the last challenge running. You will then roll back the deployment with the `nomad deployment fail` command.
 
     Please navigate back to the /root/nomad/jobs directory on the "Server" tab again with this command:
     ```
     cd /root/nomad/jobs
     ```
 
-    Edit the "chat-app.nomad" job specification file on the "Jobs" tab, making the following changes:
-
-      1. Change the line with `canary = 3` in the "update" stanza to `canary = 1`.
-      2. Change the `light-0.03` tag on the image to `dark-0.03`.
-
-    If you prefer, you can use these commands to edit the file for you:
-    ```
-    sed -i "s/canary = 3/canary = 1/g" chat-app.nomad
-    sed -i "s/light-0.03/dark-0.03/g" chat-app.nomad
-    ```
+    Inspect the chat-app-dark-docker.nomad job specification file on the "Jobs" tab and note that we have changed "canary" from "3" to "1" and changed the image of the task to "lhaig/anon-app:dark-0.03".
 
     Setting the "canary" attribute to "1" tells Nomad to deploy a single "canary" instance of the chat app with the dark background while leaving the 3 instances with the light background running.
 
     Now, check what would happen if you redeployed the "chat-app" job with this command on the "Server" tab:
     ```
-    nomad job plan chat-app.nomad
+    nomad job plan chat-app-dark-docker.nomad
     ```
 
     This should return something like this:<br>
@@ -530,25 +606,25 @@ challenges:
       +/- Update {
           AutoPromote:      "false"
           AutoRevert:       "false"
-        +/- Canary:           "3" => "1"
-            HealthCheck:      "checks"
-            HealthyDeadline:  "120000000000"
-            MaxParallel:      "1"
-            MinHealthyTime:   "15000000000"
-            ProgressDeadline: "600000000000"
+      +/- Canary:           "3" => "1"
+          HealthCheck:      "checks"
+          HealthyDeadline:  "120000000000"
+          MaxParallel:      "1"
+          MinHealthyTime:   "15000000000"
+          ProgressDeadline: "600000000000"
+        }
+    +/- Task: "chat-app" (forces create/destroy update)
+      +/- Config {
+        +/- image: "lhaig/anon-app:light-0.03" => "lhaig/anon-app:dark-0.03"
           }
-      +/- Task: "chat-app" (forces create/destroy update)
-        +/- Config {
-          +/- image: "lhaig/anon-app:light-0.03" => "lhaig/anon-app:dark-0.03"
-            }
-          Task: "connect-proxy-chat-app"
+        Task: "connect-proxy-chat-app"
     `<br>
 
-    The plan indicates that Nomad would create 1 canary to run the "dark-0.03" version of the chat app but ignore the 3 allocations that are currently running. That would result in 4 instances of the chat app running on the 3 Nomad clients.
+    The plan indicates that Nomad would create 1 canary to run the Docker "lhaig/anon-app:dark-0.03" version of the chat app but ignore the 3 allocations that are currently running. That would result in 4 instances of the chat app running on the 3 Nomad clients.
 
     Go ahead and re-run the "chat-app" job with this command:
     ```
-    nomad job run chat-app.nomad
+    nomad job run chat-app-dark-docker.nomad
     ```
 
     This should return something like this:<br>
@@ -600,7 +676,7 @@ challenges:
   notes:
   - type: text
     contents: |-
-      In this challenge, you will do a "canary" deployment of the Chat job for which Nomad will deploy 1 new "canary" instance of the chat app with the dark background but keep the 3 instances with the light background that you deployed in the last challenge running.
+      In this challenge, you will do a "canary" deployment of the Chat job for which Nomad will deploy 1 new "canary" instance of a Docker-based version of the chat app with the dark background but keep the 3 instances with the light background that you deployed in the last challenge running.
 
       However, instead of promoting the deployment, you will roll it back.
   tabs:
@@ -633,4 +709,4 @@ challenges:
     port: 8080
   difficulty: basic
   timelimit: 600
-checksum: "5094913000355465032"
+checksum: "18171488544626439226"

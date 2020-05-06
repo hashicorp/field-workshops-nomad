@@ -5,8 +5,8 @@ set -e
 rm /root/.bash_history
 touch /root/.bash_history
 
-# Write the chatapp.nomad job
-cat <<-EOF > /root/nomad/jobs/chat-app.nomad
+# Write the chat-app-dark-binary.nomad job
+cat <<-EOF > /root/nomad/jobs/chat-app-dark-binary.nomad
 job "chat-app" {
   datacenters = ["dc1"]
   type = "service"
@@ -23,7 +23,6 @@ job "chat-app" {
       health_check = "checks"
       min_healthy_time = "15s"
       healthy_deadline = "2m"
-      # canary = 3
     }
 
     network {
@@ -34,10 +33,17 @@ job "chat-app" {
     }
 
     task "chat-app" {
-      driver = "docker"
+      driver = "exec"
 
       config {
-        image = "lhaig/anon-app:dark-0.03"
+        command = "chatapp-dark-linux"
+      }
+
+      artifact {
+        source = "https://github.com/GuyBarros/anonymouse-realtime-chat-app/releases/download/0.03/chatapp-dark-linux"
+        options {
+          checksum = "md5:912f8476a5f4fff479121b11bff5e098"
+        }
       }
 
       env {
