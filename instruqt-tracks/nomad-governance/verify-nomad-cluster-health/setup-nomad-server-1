@@ -1,6 +1,10 @@
 #!/bin/bash -l
 
-mkdir /root/nomad
+mkdir /home/nomad/nomad
+chown -R nomad:nomad /home/nomad/nomad
+
+echo 'shopt -s histappend' >> /home/nomad/.bashrc
+echo 'PROMPT_COMMAND="history -a;$PROMPT_COMMAND"' >> /home/nomad/.bashrc
 
 # Write Nomad Server 1 Config
 cat <<-EOF > /etc/nomad.d/nomad-server1.hcl
@@ -23,7 +27,7 @@ consul {
 EOF
 
 # Write Copy of Nomad Server 1 Config
-cat <<-EOF > /root/nomad/nomad-server1.hcl
+cat <<-EOF > /home/nomad/nomad/nomad-server1.hcl
 # Setup data dir
 data_dir = "/tmp/nomad/server1"
 
@@ -60,7 +64,7 @@ cat <<-EOF > /etc/consul.d/consul-server1.json
 EOF
 
 # Write Copy of Consul Server 1 Config
-cat <<-EOF > /root/nomad/consul-server1.json
+cat <<-EOF > /home/nomad/nomad/consul-server1.json
 {
   "server": true,
   "ui": true,
@@ -77,7 +81,7 @@ cat <<-EOF > /root/nomad/consul-server1.json
 EOF
 
 # Write Nomad Client 1 Config
-cat <<-EOF > /root/nomad/nomad-client1.hcl
+cat <<-EOF > /home/nomad/nomad/nomad-client1.hcl
 # Setup data dir
 data_dir = "/tmp/nomad/client1"
 
@@ -96,7 +100,7 @@ consul {
 EOF
 
 # Write Consul Client 1 Config
-cat <<-EOF > /root/nomad/consul-client1.json
+cat <<-EOF > /home/nomad/nomad/consul-client1.json
 {
   "ui": true,
   "log_level": "INFO",
@@ -114,7 +118,7 @@ cat <<-EOF > /root/nomad/consul-client1.json
 EOF
 
 # Write Nomad Client 2 Config
-cat <<-EOF > /root/nomad/nomad-client2.hcl
+cat <<-EOF > /home/nomad/nomad/nomad-client2.hcl
 # Setup data dir
 data_dir = "/tmp/nomad/client2"
 
@@ -133,7 +137,7 @@ consul {
 EOF
 
 # Write Consul Client 2 Config
-cat <<-EOF > /root/nomad/consul-client2.json
+cat <<-EOF > /home/nomad/nomad/consul-client2.json
 {
   "ui": true,
   "log_level": "INFO",
@@ -151,7 +155,7 @@ cat <<-EOF > /root/nomad/consul-client2.json
 EOF
 
 # Write Nomad Client 3 Config
-cat <<-EOF > /root/nomad/nomad-client3.hcl
+cat <<-EOF > /home/nomad/nomad/nomad-client3.hcl
 # Setup data dir
 data_dir = "/tmp/nomad/client3"
 
@@ -170,7 +174,7 @@ consul {
 EOF
 
 # Write Consul Client 3 Config
-cat <<-EOF > /root/nomad/consul-client3.json
+cat <<-EOF > /home/nomad/nomad/consul-client3.json
 {
   "ui": true,
   "log_level": "INFO",
@@ -187,12 +191,19 @@ cat <<-EOF > /root/nomad/consul-client3.json
 }
 EOF
 
+# Start Consul
 systemctl start consul
 
+# Sleep
 sleep 15
 
+# Start Nomad
 systemctl start nomad
 
-sleep 30
+# Sleep
+sleep 45
+
+# Set the working directory
+set-workdir /home/nomad/nomad
 
 exit 0

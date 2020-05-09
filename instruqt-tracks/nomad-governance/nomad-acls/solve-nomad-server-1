@@ -1,14 +1,14 @@
 #!/bin/bash -l
 
 #Enable bash history
-HISTFILE=/root/.bash_history
+HISTFILE=/home/nomad/.bash_history
 set -o history
 
-# Change directory
-cd /root/nomad/acls
+# Navigate to right directory
+cd /home/nomad/nomad/acls
 
 # Restart server
-systemctl restart nomad
+sudo systemctl restart nomad
 
 # Sleep
 sleep 30
@@ -18,26 +18,26 @@ nomad acl bootstrap | tee bootstrap.txt
 
 # Export bootstrap token
 export NOMAD_TOKEN=$(cat bootstrap.txt | grep Secret | cut -d' ' -f7)
-echo "export NOMAD_TOKEN=$NOMAD_TOKEN" >> /root/.bash_profile
+echo "export NOMAD_TOKEN=$NOMAD_TOKEN" >> /home/nomad/.bashrc
 
 # Sleep
 sleep 15
 
 # Restart the Nomad clients
 ssh -o StrictHostKeyChecking=no nomad-client-1 << ENDSSH
-HISTFILE=/root/.bash_history
+HISTFILE=/home/nomad/.bash_history
 set -o history
-systemctl restart nomad
+sudo systemctl restart nomad
 ENDSSH
 ssh -o StrictHostKeyChecking=no nomad-client-2 << ENDSSH
-HISTFILE=/root/.bash_history
+HISTFILE=/home/nomad/.bash_history
 set -o history
-systemctl restart nomad
+sudo systemctl restart nomad
 ENDSSH
 ssh -o StrictHostKeyChecking=no nomad-client-3 << ENDSSH
-HISTFILE=/root/.bash_history
+HISTFILE=/home/nomad/.bash_history
 set -o history
-systemctl restart nomad
+sudo systemctl restart nomad
 ENDSSH
 
 # Add the ACL Policies

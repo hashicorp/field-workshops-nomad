@@ -1,10 +1,11 @@
 #!/bin/bash -l
 
 # Make sentinel directory
-mkdir /root/nomad/sentinel
+mkdir /home/nomad/nomad/sentinel
+chown -R nomad:nomad /home/nomad/nomad/sentinel
 
 # Write allow-docker-and-java-drivers.sentinel
-cat <<-EOF > /root/nomad/sentinel/allow-docker-and-java-drivers.sentinel
+cat <<-EOF > /home/nomad/nomad/sentinel/allow-docker-and-java-drivers.sentinel
 # Only allow Docker and Java drivers
 
 # Allow Docker rule
@@ -23,7 +24,7 @@ main = rule {
 EOF
 
 # Write restrict-docker-images.sentinel
-cat <<-EOF > /root/nomad/sentinel/restrict-docker-images.sentinel
+cat <<-EOF > /home/nomad/nomad/sentinel/restrict-docker-images.sentinel
 # Allowed Docker images
 allowed_images = [
   "nginx",
@@ -50,7 +51,7 @@ main = rule {
 EOF
 
 # Write prevent-docker-host-network.sentinel
-cat <<-EOF > /root/nomad/sentinel/prevent-docker-host-network.sentinel
+cat <<-EOF > /home/nomad/nomad/sentinel/prevent-docker-host-network.sentinel
 # Prevent Docker containers from running with host network mode
 prevent_host_network = rule {
   all job.task_groups as tg {

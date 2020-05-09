@@ -2,18 +2,18 @@
 
 set -e
 
-grep -q "cd /root/nomad/quotas" /root/.bash_history || fail-message "You have not navigated to the /root/nomad/quotas directory on the Server yet."
+grep -q "cd /home/nomad/nomad/quotas" /home/nomad/.bash_history || fail-message "You have not navigated to the /home/nomad/nomad/quotas directory on the Server yet."
 
-grep -q "nomad quota apply quota-default.hcl" /root/.bash_history || fail-message "You have not created the default resource quota on the Server yet."
+grep -q "nomad quota apply quota-default.hcl" /home/nomad/.bash_history || fail-message "You have not created the default resource quota on the Server yet."
 
-grep -q "nomad quota apply quota-dev.hcl" /root/.bash_history || fail-message "You have not created the dev resource quota on the Server yet."
+grep -q "nomad quota apply quota-dev.hcl" /home/nomad/.bash_history || fail-message "You have not created the dev resource quota on the Server yet."
 
-grep -q "nomad quota apply quota-qa.hcl" /root/.bash_history || fail-message "You have not created the qa resource quota on the Server yet."
+grep -q "nomad quota apply quota-qa.hcl" /home/nomad/.bash_history || fail-message "You have not created the qa resource quota on the Server yet."
 
-grep -q 'nomad namespace apply -quota default -description "default namespace" default' /root/.bash_history || fail-message "You have not applied the default quota to the default namespace on the Server yet."
+grep -q 'nomad namespace apply -quota default -description "default namespace" default' /home/nomad/.bash_history || fail-message "You have not applied the default quota to the default namespace on the Server yet."
 
-grep -q 'nomad namespace apply -quota dev -description "dev namespace" dev' /root/.bash_history || fail-message "You have not created the dev namespace and applied the dev resource quota to it on the Server yet."
+grep -q 'nomad namespace apply -quota dev -description "dev namespace" dev' /home/nomad/.bash_history || fail-message "You have not created the dev namespace and applied the dev resource quota to it on the Server yet."
 
-grep -q 'nomad namespace apply -quota qa -description "qa namespace" qa' /root/.bash_history || fail-message "You have not created the qa namespace and applied the qa resource quota to it on the Server yet."
+grep -q 'nomad namespace apply -quota qa -description "qa namespace" qa' /home/nomad/.bash_history || fail-message "You have not created the qa namespace and applied the qa resource quota to it on the Server yet."
 
 exit 0

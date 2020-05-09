@@ -2,6 +2,6 @@
 
 set -e
 
-grep -q "systemctl restart nomad" /root/.bash_history || fail-message "You have not restarted Client 3 yet."
+grep -q "sudo systemctl restart nomad" /home/nomad/.bash_history || fail-message "You have not restarted Client 3 yet."
 
 exit 0

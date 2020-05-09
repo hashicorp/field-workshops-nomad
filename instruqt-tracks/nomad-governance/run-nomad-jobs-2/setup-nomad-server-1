@@ -1,6 +1,3 @@
 #!/bin/bash -l
 
-rm /root/.bash_history
-touch /root/.bash_history
-
 exit 0

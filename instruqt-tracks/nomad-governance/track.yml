@@ -21,7 +21,7 @@ tags:
 owner: hashicorp
 developers:
 - roger@hashicorp.com
-private: true
+private: false
 published: true
 challenges:
 - slug: verify-nomad-cluster-health
@@ -34,6 +34,8 @@ challenges:
     In this challenge, you will verify the health of the Nomad Enterprise cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
 
     The cluster is running 1 Nomad/Consul server and 3 Nomad/Consul clients. Each of these has 3.75GB of memory and 1 virtual CPU with 2,300MHz of CPU capacity. This means that the total capacity of the 3 Nomad clients is 11.25GB of memory and 6,900MHz of CPU capacity.
+
+    The cluster is using Nomad 0.11.1 and Consul 1.7.2.
 
     First, verify that all 4 Consul agents are running and connected to the cluster by running this command on the "Server" tab:
     ```
@@ -53,8 +55,6 @@ challenges:
     ```
     You should see 3 Nomad clients.
 
-    Please also run the last command on the "Client 1", "Client 2", and "Client 3" tabs. In each case, you should see the same 3 Nomad clients.
-
     In the next challenge, you will configure Nomad Enterprise namespaces and resource quotas.
   notes:
   - type: text
@@ -68,7 +68,7 @@ challenges:
   - title: Config Files
     type: code
     hostname: nomad-server-1
-    path: /root/nomad/
+    path: /home/nomad/nomad/
   - title: Server
     type: terminal
     hostname: nomad-server-1
@@ -98,9 +98,9 @@ challenges:
 
     Start by inspecting the "quota-default.hcl", "quota-dev.hcl", and "quota-qa.hcl" resource quota specifications in the quotas directory on the "Config Files" tab. These are written in the HashiCorp Configuration Language (HCL). The first sets global limits of 2,300 MHz of CPU capacity and 3,100 MB of memory while the others set global limits of 2,300 MHz of CPU capacity and 4,100 MB of memory.
 
-    The resource quota specification files are all in the /root/nomad/quotas directory, so please navigate to it with this command:
+    The resource quota specification files are all in the /home/nomad/nomad/quotas directory, so please navigate to it with this command:
     ```
-    cd /root/nomad/quotas
+    cd /home/nomad/nomad/quotas
     ```
 
     Next, create the "default" resource quota by running this command on the "Server" tab:
@@ -176,7 +176,7 @@ challenges:
   - title: Config Files
     type: code
     hostname: nomad-server-1
-    path: /root/nomad/
+    path: /home/nomad/nomad/
   - title: Server
     type: terminal
     hostname: nomad-server-1
@@ -207,14 +207,14 @@ challenges:
 
     This stanza is needed on Nomad servers and clients when enabling the Nomad ACL system. You are looking at copies of the actual files that have been placed in the /etc/nomad.d directory on the server and all 3 clients.
 
-    Navigate to the /root/nomad/acls directory on the "Server" tab with this command:
+    Navigate to the /home/nomad/nomad/acls directory on the "Server" tab with this command:
     ```
-    cd /root/nomad/acls
+    cd /home/nomad/nomad/acls
     ```
 
     Restart the Nomad server on the "Server" tab with this command:
     ```
-    systemctl restart nomad
+    sudo systemctl restart nomad
     ```
 
     After waiting about 15 seconds, bootstrap the Nomad ACLs system by running this command on the "Server" tab:
@@ -238,7 +238,7 @@ challenges:
     Export the bootstrap token with these commands on the "Server" tab:
     ```
     export NOMAD_TOKEN=$(cat bootstrap.txt | grep Secret | cut -d' ' -f7)
-    echo "export NOMAD_TOKEN=$NOMAD_TOKEN" >> /root/.bash_profile
+    echo "export NOMAD_TOKEN=$NOMAD_TOKEN" >> /home/nomad/.bashrc
     ```
     The second command ensures that the bootstrap token will be exported in later challenges.
 
@@ -246,7 +246,7 @@ challenges:
 
     Next, you should restart all 3 of the Nomad clients on the "Client 1", "Client 2", and "Client 3" tabs:
     ```
-    systemctl restart nomad
+    sudo systemctl restart nomad
     ```
 
     ## Create ACL Policies and Tokens
@@ -367,7 +367,7 @@ challenges:
   - title: Config Files
     type: code
     hostname: nomad-server-1
-    path: /root/nomad/
+    path: /home/nomad/nomad/
   - title: Server
     type: terminal
     hostname: nomad-server-1
@@ -405,9 +405,9 @@ challenges:
 
     You will create the first of these Sentinel policies with the "hard-mandatory" enforcement level and the others with the "soft-mandatory" enforcement level. This means that absolutely no Nomad task drivers except for the Docker and Java drivers will be allowed but that Nomad administrators will be able to override failures of the other two Sentinel policies.
 
-    Navigate to the /root/nomad/sentinel directory on the "Server" tab with this command:
+    Navigate to the /home/nomad/nomad/sentinel directory on the "Server" tab with this command:
     ```
-    cd /root/nomad/sentinel
+    cd /home/nomad/nomad/sentinel
     ```
 
     Add the "allow-docker-and-java-drivers" Sentinel policy on the "Server" tab with this command:
@@ -448,7 +448,7 @@ challenges:
   - title: Config Files
     type: code
     hostname: nomad-server-1
-    path: /root/nomad/
+    path: /home/nomad/nomad/
   - title: Server
     type: terminal
     hostname: nomad-server-1
@@ -467,15 +467,15 @@ challenges:
   assignment: |-
     In this challenge, you will run Nomad jobs and learn how Nomad ACL and Sentinel policies restrict them.
 
-    Navigate to the /root/nomad/jobs directory by running this command on the "Server" tab:
+    Navigate to the /home/nomad/nomad/jobs directory by running this command on the "Server" tab:
     ```
-    cd /root/nomad/jobs
+    cd /home/nomad/nomad/jobs
     ```
 
     ## Run the sleep.nomad Job
     Start by inspecting the "sleep.nomad" job in the jobs directory on the "Config Files" tab. This job uses Nomad's [exec](https://nomadproject.io/docs/drivers/exec) driver to run the Linux `sleep` command.
 
-    If you run `echo $NOMAD_TOKEN`, you should see the bootstrap token that you added to /root/.bash_profile earlier. This means that any jobs you run while it is set will be run with the bootstrap token.
+    If you run `echo $NOMAD_TOKEN`, you should see the bootstrap token that you added to /home/nomad/.bash_profile earlier. This means that any jobs you run while it is set will be run with the bootstrap token.
 
     Try running the sleep.nomad job (with the bootstrap token) with this command on the "Server" tab:
     ```
@@ -506,15 +506,21 @@ challenges:
 
     You might wonder why there is not an error about the Docker images not being allowed. This is because Nomad happened to have evaluated the "prevent-docker-host-network" policy before the "restrict-docker-images" policy and stops evaluating Sentinel policies as soon as one of them fails.
 
-    If you edit the "catalogue.nomad" job to change the value of `network_mode` from `host` to `bridge` and re-run the job, you will see an error message complaining about the "restrict-docker-images" policy being violated. You could make that change with the Instruqt text editor on the "Config Files" tab or run these commands:
+    If you edit the "catalogue.nomad" job to change the value of `network_mode` from `host` to `bridge` and re-run the job, you will see an error message complaining about the "restrict-docker-images" policy being violated. You could make that change with the Instruqt text editor on the "Config Files" tab or run this commands:
     ```
-    sed -i 's/"host"/"bridge"/g' /root/nomad/jobs/catalogue.nomad
+    sed -i 's/"host"/"bridge"/g' /home/nomad/nomad/jobs/catalogue.nomad
+    ```
+    and then run the job:
+    ```
     nomad job run catalogue.nomad
     ```
 
     Since the bootstrap ACL token can override soft-mandatory violations, let's try running the "catalogue.nomad" job again with the `-policy-override` argument after changing the job specification to set `network_mode` back to `host`:
     ```
-    sed -i 's/"bridge"/"host"/g' /root/nomad/jobs/catalogue.nomad
+    sed -i 's/"bridge"/"host"/g' /home/nomad/nomad/jobs/catalogue.nomad
+    ```
+    Then run the job:
+    ```
     nomad job run -policy-override catalogue.nomad
     ```
     This returns yellow messages complaining about both violated Sentinel policies, but allows the job to be deployed.
@@ -528,7 +534,7 @@ challenges:
 
     Set Alice's ACL token with this command on the "Server" tab:
     ```
-    export NOMAD_TOKEN=$(cat /root/nomad/acls/alice-token.txt | grep Secret | cut -d' ' -f7)
+    export NOMAD_TOKEN=$(cat /home/nomad/nomad/acls/alice-token.txt | grep Secret | cut -d' ' -f7)
     ```
 
     Now, run the "webserver-test.nomad" job as Alice with this command:
@@ -541,9 +547,13 @@ challenges:
 
     Recall that Bob's ACL token was assigned the "qa" ACL policy. So, let's try setting his ACL token and running the job again. Do that with these commands:
     ```
-    export NOMAD_TOKEN=$(cat /root/nomad/acls/bob-token.txt | grep Secret | cut -d' ' -f7)
+    export NOMAD_TOKEN=$(cat /home/nomad/nomad/acls/bob-token.txt | grep Secret | cut -d' ' -f7)
+    ```
+    and
+    ```
     nomad job run webserver-test.nomad
     ```
+
     This time, you should see a red message complaining about the "restrict-docker-images" Sentinel policy being violated. Since we did not see a 403 error, this means that Bob would be allowed to run the job if it did not violate any Sentinel policies.
 
     Bob might be tempted to run the job with the `-policy-override` argument. Go ahead and have Bob try this by running this command:
@@ -589,7 +599,7 @@ challenges:
 
     Then set the `NOMAD_TOKEN` environment variable to Charlie's token:
     ```
-    export NOMAD_TOKEN=$(cat /root/nomad/acls/charlie-token.txt | grep Secret | cut -d' ' -f7)
+    export NOMAD_TOKEN=$(cat /home/nomad/nomad/acls/charlie-token.txt | grep Secret | cut -d' ' -f7)
     ```
 
     Finally, have Charlie run the webserver-test job with the `-policy-override` argument:
@@ -597,6 +607,8 @@ challenges:
     nomad job run -policy-override webserver-test.nomad
     ```
     This should give a yellow warning about the violation of the "restrict-docker-images" Sentinel policy but successfully redeploy the job, switching the web server from nginx to httpd.
+
+    Wait until both of the new allocations of the webserver-test job are running before clicking the "Check" button.
 
     In this challenge, you saw how Nomad ACL and Sentinel policies restricted which jobs could be run and who could run them.
 
@@ -613,7 +625,7 @@ challenges:
   - title: Config Files
     type: code
     hostname: nomad-server-1
-    path: /root/nomad/
+    path: /home/nomad/nomad/
   - title: Server
     type: terminal
     hostname: nomad-server-1
@@ -632,14 +644,14 @@ challenges:
   assignment: |-
     In this challenge, you will run some more Nomad jobs and learn how Resource Quotas can prevent some of them from running all of their desired allocations.
 
-    Navigate to the /root/nomad/jobs directory by running this command on the "Server" tab:
+    Navigate to the /home/nomad/nomad/jobs directory by running this command on the "Server" tab:
     ```
-    cd /root/nomad/jobs
+    cd /home/nomad/nomad/jobs
     ```
 
     Next, export Alice's Nomad ACL token with this command:
     ```
-    export NOMAD_TOKEN=$(cat /root/nomad/acls/alice-token.txt | grep Secret | cut -d' ' -f7)
+    export NOMAD_TOKEN=$(cat /home/nomad/nomad/acls/alice-token.txt | grep Secret | cut -d' ' -f7)
     ```
 
     Have Alice inspect the current usage of the "dev" resource quota with this command:
@@ -653,13 +665,13 @@ challenges:
     Limits      = 1
     Quota Limits
     Region  CPU Usage  Memory Usage  Network Usage
-    global  0 / 4600   0 / 4100      - / inf
+    global  0 / 2300   0 / 4100      - / inf
     `<br>
     which indicates that none of the "dev" resource quota is being used. ("inf" under "Network Usage" stands for infinity and means that there is no limit on network usage in the "dev" resource quota.)
 
-    Inspect the "website-dev.nomad" job specification file in the jobs directory on the "Config Files" tab and note that it wants to run a job called "website" in the "dev" namespace. The job consists of "nginx" and "mongodb" task groups that each have one task that would consume 500MHz of CPU and 512MB of memory.
+    Inspect the "website-dev.nomad" job specification file in the jobs directory on the "Config Files" tab and note that it wants to run a job called "website" in the "dev" namespace. The job consists of "nginx" and "mongodb" task groups that each have one task that would consume 250MHz of CPU and 512MB of memory.
 
-    However, the count for each task group is 2, so the job would consume a total of 2,000MHz of CPU and 2,048MB of RAM if Nomad is able to schedule all four tasks. Since there are currently no jobs running in the "dev" namespace and these amounts are lower than the limits of the "dev" resource quota, Nomad should be able to run the entire job.
+    However, the count for each task group is 2, so the job would consume a total of 1,000MHz of CPU and 2,048MB of RAM if Nomad is able to schedule all four tasks. Since there are currently no jobs running in the "dev" namespace and these amounts are lower than the limits of the "dev" resource quota, Nomad should be able to run the entire job.
 
     See if that is true by running the job as Alice with this command:
     ```
@@ -672,7 +684,7 @@ challenges:
     ```
     Note that you need to specify the namespace since job names are not unique across multiple namespaces.
 
-    You should see 4 allocations running at the bottom. You can also check the status of the "website" job in the "dev" namespace in the Nomad UI after providing a suitable ACL token after selecting the "ACL Tokens" menu; we recommend using Charlie's token from the charlie-token.txt file in the /root/nomad/acls directory.
+    You should see 4 allocations running at the bottom. You can also check the status of the "website" job in the "dev" namespace in the Nomad UI after providing a suitable ACL token after selecting the "ACL Tokens" menu; we recommend using Charlie's token from the charlie-token.txt file in the /home/nomad/nomad/acls directory.
 
     You'll then need to select the "Jobs" menu and click the Instruqt refresh icon to make the Nomad UI show the namespace selector which will let you select the "dev" namespace. If you click on the "website" job in the "dev" namespace, you will see 4 Desired, Placed, and Healthy allocations.
 
@@ -683,7 +695,7 @@ challenges:
     Limits      = 1
     Quota Limits
     Region  CPU Usage    Memory Usage  Network Usage
-    global  2000 / 4600  2048 / 4100   40 / inf
+    global  1000 / 2300  2048 / 4100   40 / inf
     `<br>
     which exactly matches what we had expected.
 
@@ -691,7 +703,7 @@ challenges:
 
     Export Bob's Nomad ACL token with this command:
     ```
-    export NOMAD_TOKEN=$(cat /root/nomad/acls/bob-token.txt | grep Secret | cut -d' ' -f7)
+    export NOMAD_TOKEN=$(cat /home/nomad/nomad/acls/bob-token.txt | grep Secret | cut -d' ' -f7)
     ```
 
     Then, have Bob check the current usage in the "qa" namespace with this command:
@@ -705,10 +717,10 @@ challenges:
     Limits      = 1
     Quota Limits
     Region  CPU Usage    Memory Usage  Network Usage
-    global  1000 / 4600  1024 / 4100   20 / inf
+    global  500 / 2300  1024 / 4100   20 / inf
     `<br>
 
-    Since 1,024MB of memory is already being used and the "qa" resource quota limits the "qa" namespace to a total of 4,100MB and the "website-qa.nomad" needs 4,096MB, Nomad clearly cannot schedul all 4 allocations of the job.
+    Since 1,024MB of memory is already being used and the "qa" resource quota limits the "qa" namespace to a total of 4,100MB and the "website-qa.nomad" needs 4,096MB, Nomad clearly cannot schedule all 4 allocations of the job. (There is enough CPU capacity.)
 
     Even so, have Bob try to run it with this command:
     ```
@@ -724,12 +736,14 @@ challenges:
         Allocation "5f7186bd" created: node "a9e882e3", group "mongodb"
         Evaluation status changed: "pending" -> "complete"
     ==> Evaluation "17faede9" finished with status "complete" but failed to place all allocations:
-        Task Group "mongodb" (failed to place 1 allocation):
+        Task Group "mongodb" (failed to place 2 allocations):
+          * Resources exhausted on 1 nodes
+          * Dimension "memory" exhausted on 1 nodes
           * Quota limit hit "memory exhausted (5120 needed > 4100 limit)"
         Evaluation "f94e7499" waiting for additional capacity to place remainder
     ```
 
-    Note that the Nomad failed to place 1 allocation because the running job and the four allocations of the new job would need a total of 5,120MB which is greater than the 4,096MB limit of the "qa" resource quota.
+    Note that the Nomad failed to place 2 allocations because the running job and the four allocations of the new job would need a total of 5,120MB which is greater than the 4,096MB limit of the "qa" resource quota. (Sometimes, the message might say Nomad failed to place 1 allocation; and if you inspect the job in the Nomad UI, you might actually see 3 allocations running.)
 
     You can also select the "qa" namespace in the Nomad UI, select the "website" in it, and confirm that only 3 of the 4 allocations of the "website" job are running while 1 of them is queued. The fact that the allocation is currently queued rather than failed is important; this means that it could still be deployed if extra memory became available within the "qa" namespace or if the memory limit of the "qa" resource quota were increased.
 
@@ -758,7 +772,7 @@ challenges:
   - title: Config Files
     type: code
     hostname: nomad-server-1
-    path: /root/nomad/
+    path: /home/nomad/nomad/
   - title: Server
     type: terminal
     hostname: nomad-server-1
@@ -768,4 +782,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 900
-checksum: "6090509817335165843"
+checksum: "17895184411988258584"
