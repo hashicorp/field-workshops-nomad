@@ -2,11 +2,11 @@
 
 set -e
 
-grep -q "consul members" /root/.bash_history || fail-message "You have not run 'consul members' on the Server yet."
+grep -q "consul members" /home/nomad/.bash_history || fail-message "You have not run 'consul members' on the Server yet."
 
-grep -q "nomad server members" /root/.bash_history || fail-message "You have not run 'nomad server members' on the Server yet."
+grep -q "nomad server members" /home/nomad/.bash_history || fail-message "You have not run 'nomad server members' on the Server yet."
 
-grep -q "nomad node status" /root/.bash_history || fail-message "You have not run 'nomad node status' on the Server yet."
+grep -q "nomad node status" /home/nomad/.bash_history || fail-message "You have not run 'nomad node status' on the Server yet."
 
 consul_clients=$(consul members | grep alive | wc -l)
 if [ $consul_clients -ne 4 ]; then

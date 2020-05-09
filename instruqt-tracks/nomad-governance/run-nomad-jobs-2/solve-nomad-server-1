@@ -1,14 +1,14 @@
 #!/bin/bash -l
 
 #Enable bash history
-HISTFILE=/root/.bash_history
+HISTFILE=/home/nomad/.bash_history
 set -o history
 
-# Change directory
-cd /root/nomad/jobs
+# Navigate to right directory
+cd /home/nomad/nomad/jobs
 
 # Export Alice's ACL token
-export NOMAD_TOKEN=$(cat /root/nomad/acls/alice-token.txt | grep Secret | cut -d' ' -f7)
+export NOMAD_TOKEN=$(cat /home/nomad/nomad/acls/alice-token.txt | grep Secret | cut -d' ' -f7)
 
 # Check the dev resource quota
 nomad quota status dev
@@ -26,7 +26,7 @@ nomad job status -namespace=dev website
 nomad quota status dev
 
 # Export Bob's ACL token
-export NOMAD_TOKEN=$(cat /root/nomad/acls/bob-token.txt | grep Secret | cut -d' ' -f7)
+export NOMAD_TOKEN=$(cat /home/nomad/nomad/acls/bob-token.txt | grep Secret | cut -d' ' -f7)
 
 # Check the qa resource quota
 nomad quota status qa

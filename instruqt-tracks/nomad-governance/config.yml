@@ -1,26 +1,26 @@
 version: "2"
 virtualmachines:
 - name: nomad-server-1
-  image: instruqt-hashicorp/nomad-ent-0-10-4
-  shell: /bin/bash -l
+  image: instruqt-hashicorp/nomad-ent-0-11-1
+  shell: sudo -u nomad -i /bin/bash -l
   environment:
     CONSUL_HTTP_ADDR: nomad-server-1:8500
   machine_type: n1-standard-1
 - name: nomad-client-1
-  image: instruqt-hashicorp/nomad-ent-0-10-4
-  shell: /bin/bash -l
+  image: instruqt-hashicorp/nomad-ent-0-11-1
+  shell: sudo -u nomad -i /bin/bash -l
   environment:
     CONSUL_HTTP_ADDR: nomad-client-1:8500
   machine_type: n1-standard-1
 - name: nomad-client-2
-  image: instruqt-hashicorp/nomad-ent-0-10-4
-  shell: /bin/bash -l
+  image: instruqt-hashicorp/nomad-ent-0-11-1
+  shell: sudo -u nomad -i /bin/bash -l
   environment:
     CONSUL_HTTP_ADDR: nomad-client-2:8500
   machine_type: n1-standard-1
 - name: nomad-client-3
-  image: instruqt-hashicorp/nomad-ent-0-10-4
-  shell: /bin/bash -l
+  image: instruqt-hashicorp/nomad-ent-0-11-1
+  shell: sudo -u nomad -i /bin/bash -l
   environment:
     CONSUL_HTTP_ADDR: nomad-client-3:8500
   machine_type: n1-standard-1

@@ -2,6 +2,4 @@
 
 set -e
 
-grep -q "nomad node status" /root/.bash_history || fail-message "You have not run 'nomad node status' on Client 3 yet."
-
 exit 0

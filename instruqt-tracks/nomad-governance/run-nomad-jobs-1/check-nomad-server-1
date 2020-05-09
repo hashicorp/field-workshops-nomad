@@ -2,16 +2,18 @@
 
 set -e
 
-grep -q "cd /root/nomad/jobs" /root/.bash_history || fail-message "You have not navigated to the /root/nomad/jobs directory on the Server yet."
+grep -q "cd /home/nomad/nomad/jobs" /home/nomad/.bash_history || fail-message "You have not navigated to the /home/nomad/nomad/jobs directory on the Server yet."
 
-grep -q "nomad job run sleep.nomad" /root/.bash_history || fail-message "You have not tried to run the sleep.nomad job on the Server yet."
+grep -q "nomad job run sleep.nomad" /home/nomad/.bash_history || fail-message "You have not tried to run the sleep.nomad job on the Server yet."
 
-grep -q "nomad job run catalogue.nomad" /root/.bash_history || fail-message "You have not tried to run the catalogue.nomad job on the Server yet."
+# grep -q "nomad job stop sleep" /home/nomad/.bash_history || fail-message "You have not stopped the sleep job on the Server yet."
 
-grep -q "nomad job run -policy-override catalogue.nomad" /root/.bash_history || fail-message "You have not tried to run the catalogue.nomad job with the -policy-override argument on the Server yet."
+grep -q "nomad job run catalogue.nomad" /home/nomad/.bash_history || fail-message "You have not tried to run the catalogue.nomad job on the Server yet."
+
+grep -q "nomad job run -policy-override catalogue.nomad" /home/nomad/.bash_history || fail-message "You have not tried to run the catalogue.nomad job with the -policy-override argument on the Server yet."
 
 # Set the bootstrap ACL token
-export NOMAD_TOKEN=$(cat /root/nomad/acls/bootstrap.txt | grep Secret | cut -d' ' -f7)
+export NOMAD_TOKEN=$(cat /home/nomad/nomad/acls/bootstrap.txt | grep Secret | cut -d' ' -f7)
 
 # Check that catalogue job is running
 catalogue_status=$(nomad job status catalogue | grep running | wc -l)
@@ -19,29 +21,29 @@ if [ $catalogue_status -lt 1 ]; then
   fail-message "The catalogue job is not running"
 fi
 
-grep -q "export NOMAD_TOKEN=\$(cat /root/nomad/acls/alice-token.txt | grep Secret | cut -d' ' -f7)" /root/.bash_history || fail-message "You have not set NOMAD_TOKEN to Alice's ACL token on the Server yet."
+grep -q "export NOMAD_TOKEN=\$(cat /home/nomad/nomad/acls/alice-token.txt | grep Secret | cut -d' ' -f7)" /home/nomad/.bash_history || fail-message "You have not set NOMAD_TOKEN to Alice's ACL token on the Server yet."
 
-grep -q "nomad job run webserver-test.nomad" /root/.bash_history || fail-message "You have not tried to run the webserver-test.nomad job as Alice on the Server yet."
+grep -q "nomad job run webserver-test.nomad" /home/nomad/.bash_history || fail-message "You have not tried to run the webserver-test.nomad job as Alice on the Server yet."
 
-grep -q "export NOMAD_TOKEN=\$(cat /root/nomad/acls/bob-token.txt | grep Secret | cut -d' ' -f7)" /root/.bash_history || fail-message "You have not set NOMAD_TOKEN to Bob's ACL token on the Server yet."
+grep -q "export NOMAD_TOKEN=\$(cat /home/nomad/nomad/acls/bob-token.txt | grep Secret | cut -d' ' -f7)" /home/nomad/.bash_history || fail-message "You have not set NOMAD_TOKEN to Bob's ACL token on the Server yet."
 
-grep -q "nomad job run -policy-override webserver-test.nomad" /root/.bash_history || fail-message "You have not run the webserver-test.nomad job with the -policy-override argument on the Server yet."
+grep -q "nomad job run -policy-override webserver-test.nomad" /home/nomad/.bash_history || fail-message "You have not run the webserver-test.nomad job with the -policy-override argument on the Server yet."
 
-grep -q 'sed -i "s/httpd/nginx/g" webserver-test.nomad' /root/.bash_history || fail-message "You have not replaced httpd with nginx in webserver-test.nomad on the Server yet."
+grep -q 'sed -i "s/httpd/nginx/g" webserver-test.nomad' /home/nomad/.bash_history || fail-message "You have not replaced httpd with nginx in webserver-test.nomad on the Server yet."
 
-grep -q 'sed -i "s/nginx/nginx:1.15.6/g" webserver-test.nomad' /root/.bash_history || fail-message "You have not added the 1.15.6 tag for nginx in webserver-test.nomad on the Server yet."
+grep -q 'sed -i "s/nginx/nginx:1.15.6/g" webserver-test.nomad' /home/nomad/.bash_history || fail-message "You have not added the 1.15.6 tag for nginx in webserver-test.nomad on the Server yet."
 
-grep -q 'sed -i "s/nginx:1.15.6/httpd:2.4/g" webserver-test.nomad' /root/.bash_history || fail-message "You have not added reverted to httpd in webserver-test.nomad on the Server yet."
+grep -q 'sed -i "s/nginx:1.15.6/httpd:2.4/g" webserver-test.nomad' /home/nomad/.bash_history || fail-message "You have not added reverted to httpd in webserver-test.nomad on the Server yet."
 
-grep -q "export NOMAD_TOKEN=\$(cat /root/nomad/acls/charlie-token.txt | grep Secret | cut -d' ' -f7)" /root/.bash_history || fail-message "You have not set NOMAD_TOKEN to Charlie's ACL token on the Server yet."
+grep -q "export NOMAD_TOKEN=\$(cat /home/nomad/nomad/acls/charlie-token.txt | grep Secret | cut -d' ' -f7)" /home/nomad/.bash_history || fail-message "You have not set NOMAD_TOKEN to Charlie's ACL token on the Server yet."
 
-override_attempts=$(grep "nomad job run -policy-override webserver-test.nomad" /root/.bash_history | wc -l)
+override_attempts=$(grep "nomad job run -policy-override webserver-test.nomad" /home/nomad/.bash_history | wc -l)
 if [ $override_attempts -lt 2 ]; then
   fail-message "Did you forget to have Charlie override the Sentinel violation for the webserver-test.nomad job?"
 fi
 
 # Set Charlie's ACL token
-export NOMAD_TOKEN=$(cat /root/nomad/acls/charlie-token.txt | grep Secret | cut -d' ' -f7)
+export NOMAD_TOKEN=$(cat /home/nomad/nomad/acls/charlie-token.txt | grep Secret | cut -d' ' -f7)
 
 # Check status of the webserver-test job
 webserver_test_status=$(nomad job status -namespace qa webserver-test | grep running | wc -l)

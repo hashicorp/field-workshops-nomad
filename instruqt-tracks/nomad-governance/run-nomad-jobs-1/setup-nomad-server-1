@@ -1,10 +1,11 @@
 #!/bin/bash -l
 
 # Make jobs directory
-mkdir /root/nomad/jobs
+mkdir /home/nomad/nomad/jobs
+chown -R nomad:nomad /home/nomad/nomad/jobs
 
 # Write the sleep job
-cat <<-EOF > /root/nomad/jobs/sleep.nomad
+cat <<-EOF > /home/nomad/nomad/jobs/sleep.nomad
 job "sleep" {
   datacenters = ["dc1"]
   type        = "service"
@@ -23,7 +24,7 @@ job "sleep" {
 EOF
 
 # Write the catalogue job
-cat <<-EOF > /root/nomad/jobs/catalogue.nomad
+cat <<-EOF > /home/nomad/nomad/jobs/catalogue.nomad
 job "catalogue" {
   datacenters = ["dc1"]
   type        = "service"
@@ -129,7 +130,7 @@ job "catalogue" {
 EOF
 
 # Write the webserver-test job
-cat <<-EOF > /root/nomad/jobs/webserver-test.nomad
+cat <<-EOF > /home/nomad/nomad/jobs/webserver-test.nomad
 job "webserver-test" {
   datacenters = ["dc1"]
   type        = "service"
@@ -175,8 +176,8 @@ job "webserver-test" {
       }
 
       resources {
-        cpu = 500 # 500 Mhz
-        memory = 512 # 512MB
+        cpu = 250 # Mhz
+        memory = 512 # MB
         network {
           mbits = 10
           port "http" {}
@@ -188,7 +189,7 @@ job "webserver-test" {
 EOF
 
 # Write the website-dev job
-cat <<-EOF > /root/nomad/jobs/website-dev.nomad
+cat <<-EOF > /home/nomad/nomad/jobs/website-dev.nomad
 job "website" {
   datacenters = ["dc1"]
   type        = "service"
@@ -233,7 +234,7 @@ job "website" {
       }
 
       resources {
-        cpu = 500 # Mhz
+        cpu = 250 # Mhz
         memory = 512 # MB
         network {
           mbits = 10
@@ -271,7 +272,7 @@ job "website" {
       }
 
       resources {
-        cpu = 500 # Mhz
+        cpu = 250 # Mhz
         memory = 512 # MB
         network {
           mbits = 10
@@ -285,7 +286,7 @@ job "website" {
 EOF
 
 # Write the website-qa job
-cat <<-EOF > /root/nomad/jobs/website-qa.nomad
+cat <<-EOF > /home/nomad/nomad/jobs/website-qa.nomad
 job "website" {
   datacenters = ["dc1"]
   type        = "service"
@@ -330,7 +331,7 @@ job "website" {
       }
 
       resources {
-        cpu = 500 # Mhz
+        cpu = 250 # Mhz
         memory = 1024 # MB
         network {
           mbits = 10
@@ -368,7 +369,7 @@ job "website" {
       }
 
       resources {
-        cpu = 500 # Mhz
+        cpu = 250 # Mhz
         memory = 1024 # MB
         network {
           mbits = 10

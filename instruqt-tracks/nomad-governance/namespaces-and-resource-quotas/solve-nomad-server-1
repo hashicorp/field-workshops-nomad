@@ -1,11 +1,11 @@
 #!/bin/bash -l
 
 #Enable bash history
-HISTFILE=/root/.bash_history
+HISTFILE=/home/nomad/.bash_history
 set -o history
 
-# Change to /root/nomad
-cd /root/nomad/quotas
+# Navigate to right directory
+cd /home/nomad/nomad/quotas
 
 # Create Default Resource Quota
 nomad quota apply quota-default.hcl
@@ -15,6 +15,9 @@ nomad quota apply quota-dev.hcl
 
 # Create QA Resource Quota
 nomad quota apply quota-qa.hcl
+
+# Sleep
+sleep 15
 
 # Apply Default Quota to Default Namespace
 nomad namespace apply -quota default -description "default namespace" default
