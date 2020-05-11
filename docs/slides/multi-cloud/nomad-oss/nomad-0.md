@@ -68,10 +68,10 @@ name: instruqt-tracks
 * This workshop uses [Instruqt](https://instruqt.com) for hands-on labs.
 * Instruqt labs are run in "tracks" that are divided into "challenges".
 * This workshop uses the following tracks:
-    1. https://play.instruqt.com/hashicorp/tracks/nomad-basics
-    1. https://play.instruqt.com/hashicorp/tracks/nomad-simple-cluster
-    1. https://play.instruqt.com/hashicorp/tracks/nomad-multi-server-cluster
-    1. https://play.instruqt.com/hashicorp/tracks/nomad-monitoring
+    1. [Nomad Basics](https://play.instruqt.com/hashicorp/invite/vyjfryiw8pgx)
+    1. [Nomad Simple Cluster](https://play.instruqt.com/hashicorp/invite/vcqexnx8ency)
+    1. [Nomad Multi-Server Cluster](https://play.instruqt.com/hashicorp/invite/igeavsouomb2)
+    1. [Nomad Monitoring](https://play.instruqt.com/hashicorp/invite/f7v0fg7ewyzu)
 
 ???
 * Links to the Instruqt tracks used in this workshop

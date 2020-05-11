@@ -39,7 +39,7 @@ name: chapter-5-summary
 # Where are We and Where are We Going?
 
 * We already learned about Nomad servers, clients, clusters, and jobs in Chapter 2.
-* We even ran a Nomad Dev Agent and a simple job in the [Nomad Basics](https://instruqt.com/hashicorp/tracks/nomad-basics) lab.
+* We even ran a Nomad Dev Agent and a simple job in the "Nomad Basics" lab.
 * But we did not have to do any configuration of that agent.  
 * In this chapter, we will learn how to configure and run Nomad servers and clients and how to connect them in clusters.
 * We'll also learn how to modify and re-run Nomad jobs.
@@ -141,7 +141,7 @@ job "redis" {
 name: lab-nomad-simple-cluster-track
 # 👩‍💻 Lab 5: Nomad Simple Cluster
 * Now, you'll have a chance to configure and run your first Nomad cluster.
-* You'll run a simple Nomad cluster consisting of 1 server and 2 clients in the "Nomad Simple Cluster" Instruqt track using the URL: https://instruqt.com/hashicorp/tracks/nomad-simple-cluster.
+* You'll run a simple Nomad cluster consisting of 1 server and 2 clients in the [Nomad Simple Cluster](https://play.instruqt.com/hashicorp/invite/vcqexnx8ency) Instruqt track.
 * In the first challenge, you will configure and run the cluster.
 * In additional challenges, you will create, run, stop, modify, and then re-run a simple job in the cluster.
 * Start the "Nomad Simple Cluster" track by clicking on the "Run the Nomad Server and 2 Clients" challenge of the track.

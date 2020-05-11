@@ -170,8 +170,7 @@ name: lab-nomad-governance
 # 👩‍💻 Nomad Enterprise Governance Lab
 * In this lab, you'll learn how to use Nomad Enterprise's governance capabilities including namespaces, resource quotas, and Sentinel policies.
 * You'll also enable and use Nomad ACLs since these are required in order to use Sentinel in Nomad.
-* You'll do this using the Instruqt track "Nomad Enterprise Governance" at this URL:<br>
-https://play.instruqt.com/hashicorp/tracks/nomad-governance
+* You'll do this using the Instruqt track [Nomad Enterprise Governance](https://play.instruqt.com/hashicorp/invite/yvqyiphxoc0e).
 
 ???
 * Now, you can explore Nomad namespaces, resource quotas, and Sentinel policies hands-on
