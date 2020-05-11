@@ -22,12 +22,11 @@ layout: true
 ---
 name: more-nomad-labs
 # More Nomad Labs
-* There are more Nomad Instruqt tracks available here:
-https://play.instruqt.com/hashicorp/topics/nomad-workshops
 * If you finished the 4 labs in this workshop early, we recommend any of the following tracks:
-  * [Nomad Advanced Job Placement](https://play.instruqt.com/hashicorp/tracks/nomad-job-placement)
-  * [Nomad Job Update Strategies](https://play.instruqt.com/hashicorp/tracks/nomad-update-strategies)
-  * [Nomad Integration with Vault](https://play.instruqt.com/hashicorp/tracks/nomad-integration-with-vault)
+  * [Nomad Advanced Job Placement](https://play.instruqt.com/hashicorp/invite/rbexlxuhgqgd)
+  * [Nomad Job Update Strategies](https://play.instruqt.com/hashicorp/invite/1a910sszvvpe)
+  * [Nomad Integration with Vault](https://play.instruqt.com/hashicorp/invite/lf9lvmtfpson)
+  * [Nomad Integration with Consul Connect](https://play.instruqt.com/hashicorp/invite/v1xengoaw0i1)
 
 ???
 * Here are some additional Nomad Instruqt tracks you can try if you have extra time.

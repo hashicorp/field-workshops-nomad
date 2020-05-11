@@ -142,9 +142,8 @@ class: compact
 name: lab-host-volumes
 # 👩‍💻 Nomad Host Volumes Lab
 * In this lab, you'll learn how to use Nomad host volumes.
-* You'll do this using the Instruqt track "Nomad Host Volumes" at this URL:<br>
-https://play.instruqt.com/hashicorp/tracks/nomad-host-volumes
-* To explore using Nomad with Portworx, please see the [Stateful Workloads with Portworx](https://learn.hashicorp.com/nomad/stateful-workloads/portworx) learn track.
+* You'll do this using the Instruqt track [Nomad Host Volumes](https://play.instruqt.com/hashicorp/invite/1cxyk78sgqja).
+* To explore using Nomad with Portworx, you can run the Instruqt track [Nomad Integration with Portworx](https://play.instruqt.com/hashicorp/invite/nrfcdqrghxiq).
 * To explore using Nomad with CSI plugins, please see the [Stateful Workloads with Container Storage Interface](https://learn.hashicorp.com/nomad/stateful-workloads/csi-volumes) learn track.
 
 ???

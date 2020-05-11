@@ -67,12 +67,12 @@ class: compact
 * This workshop uses [Instruqt](https://instruqt.com) for hands-on labs.
 * Instruqt labs are run in "tracks" that are divided into "challenges".
 * Here are the tracks you will use:
-  * https://instruqt.com/hashicorp/tracks/nomad-acls
-  * https://instruqt.com/hashicorp/tracks/nomad-job-placement
-  * https://instruqt.com/hashicorp/tracks/nomad-update-strategies
-  * https://instruqt.com/hashicorp/tracks/nomad-integration-with-vault
-  * https://instruqt.com/hashicorp/tracks/nomad-host-volumes
-  * https://instruqt.com/hashicorp/tracks/nomad-governance
+  * [Nomad Access Control Lists (ACLs)](https://play.instruqt.com/hashicorp/invite/shnoqbxokwuj)
+  * [Nomad Advanced Job Placement](https://play.instruqt.com/hashicorp/invite/rbexlxuhgqgd)
+  * [Nomad Job Update Strategies](https://play.instruqt.com/hashicorp/invite/1a910sszvvpe)
+  * [Nomad Integration with Vault](https://play.instruqt.com/hashicorp/invite/lf9lvmtfpson)
+  * [Nomad Host Volumes](https://play.instruqt.com/hashicorp/invite/1cxyk78sgqja)
+  * [Nomad Enterprise Governance](https://play.instruqt.com/hashicorp/invite/yvqyiphxoc0e)
 
 ???
 * This workshop uses labs run in Instruqt
