@@ -29,12 +29,6 @@ grep -q "export NOMAD_TOKEN=\$(cat /home/nomad/nomad/acls/bob-token.txt | grep S
 
 grep -q "nomad job run -policy-override webserver-test.nomad" /home/nomad/.bash_history || fail-message "You have not run the webserver-test.nomad job with the -policy-override argument on the Server yet."
 
-grep -q 'sed -i "s/httpd/nginx/g" webserver-test.nomad' /home/nomad/.bash_history || fail-message "You have not replaced httpd with nginx in webserver-test.nomad on the Server yet."
-
-grep -q 'sed -i "s/nginx/nginx:1.15.6/g" webserver-test.nomad' /home/nomad/.bash_history || fail-message "You have not added the 1.15.6 tag for nginx in webserver-test.nomad on the Server yet."
-
-grep -q 'sed -i "s/nginx:1.15.6/httpd:2.4/g" webserver-test.nomad' /home/nomad/.bash_history || fail-message "You have not added reverted to httpd in webserver-test.nomad on the Server yet."
-
 grep -q "export NOMAD_TOKEN=\$(cat /home/nomad/nomad/acls/charlie-token.txt | grep Secret | cut -d' ' -f7)" /home/nomad/.bash_history || fail-message "You have not set NOMAD_TOKEN to Charlie's ACL token on the Server yet."
 
 override_attempts=$(grep "nomad job run -policy-override webserver-test.nomad" /home/nomad/.bash_history | wc -l)
