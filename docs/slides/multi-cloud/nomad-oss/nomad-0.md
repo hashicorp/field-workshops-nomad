@@ -3,7 +3,7 @@ class: title, shelf, no-footer, fullbleed
 background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/bkgs/HashiCorp-Title-bkg.jpeg)
 count: false
 
-# Nomad OSS Workshop
+# Introduction to Nomad Workshop
 ## Flexible Workload Orchestration
 
 ![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)

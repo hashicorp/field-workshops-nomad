@@ -320,7 +320,7 @@ challenges:
 
     This job specification file defines two task groups:
       1. The `api` task group runs a counting service API in a container running the `hashicorpnomad/counter-api` Docker image on port 9001 on the bridge network.
-      2. The `dashboard` task group runs a web dashboard  in a container running the `hashicorpnomad/counter-dashboard` Docker image on port 9001 on the bridge network.
+      2. The `dashboard` task group runs a web dashboard  in a container running the `hashicorpnomad/counter-dashboard` Docker image on port 9002 on the bridge network.
 
     The `api` task group registers itself with Consul as the `count-api` service listening on port 9001. It runs on the bridge network and therefore has an isolated network namespace with an interface bridged to the host it runs on. It does not define any ports in its network because it is only accessible via Consul Connect. The Envoy proxy will automatically route traffic sent to the service using port 9001 to the port inside the network namespace dynamically selected by Nomad.
 
@@ -401,4 +401,4 @@ challenges:
     port: 9002
   difficulty: basic
   timelimit: 1200
-checksum: "12916979421926795240"
+checksum: "13477204803359411370"
