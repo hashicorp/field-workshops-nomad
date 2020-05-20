@@ -4,6 +4,9 @@
 echo -e "cd nomad" >> /root/.bash_history
 cd nomad
 
+# Change count to 3 in example.nomad
+sed -i 's/task/count = 3\n\t\ttask/g' example.nomad
+
 # Plan the job
 echo -e "nomad job plan example.nomad" >> /root/.bash_history
 nomad job plan example.nomad > planjob.log

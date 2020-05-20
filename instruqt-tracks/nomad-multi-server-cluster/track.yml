@@ -103,7 +103,7 @@ challenges:
   notes:
   - type: text
     contents: |-
-      This track will show you how to bootstrap a Nomad cluster that has three servers and two clients in two different ways. You will also learn how easy it is to register Nomad tasks as Consul services and secure them with Nomad's native integration with [Consul Connect](https://learn.hashicorp.com/nomad/consul-integration/nomad-connect-acl).
+      This track will show you how to bootstrap a Nomad cluster that has three servers and two clients in two different ways. You will also learn how easy it is to register Nomad tasks as Consul services and secure them with Nomad's native integration with [Consul Connect](https://www.nomadproject.io/docs/integrations/consul-connect/).
 
       In this first challenge, you will bootstrap the Nomad cluster using manual clustering.
 
@@ -352,7 +352,7 @@ challenges:
 
     As you watch the app, you should see the counter climb.
 
-    You can also look at the tasks associated proxies in both the Nomad and the Consul UIs.
+    You can also look at the tasks associated with proxies in both the Nomad and the Consul UIs.
 
     Congratulations on completing the Nomad Multi-Server Cluster track!
   notes:
@@ -401,4 +401,4 @@ challenges:
     port: 9002
   difficulty: basic
   timelimit: 1200
-checksum: "13477204803359411370"
+checksum: "1464619900613205445"
