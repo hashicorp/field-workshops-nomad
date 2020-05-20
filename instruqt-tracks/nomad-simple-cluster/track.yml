@@ -191,7 +191,7 @@ challenges:
     ```
     This will show the ID of the job ("example"), the Status ("running"), the datacenters it is running in, and some other high-level information.  It will then show a summary of the job's task groups, indicating how many are queued, started, running, failed, completed, and lost.
 
-    This is followed by information about the latest deployment of the job and by information about the job's allocations. You should see that one allocation is running.
+    This is followed by information about the latest deployment of the job and by information about the job's allocations. You should see that one allocation is running and healthy.
 
     Next, get more information about the evaluation by running:<br>
     `nomad eval status <EvaluationID>`<br>
@@ -266,9 +266,9 @@ challenges:
     ```
     You will see that the scheduler detected the change in count and informs us that it will cause 2 new allocations to be created. The in-place update that will occur pushes the update of the job specification to the existing allocation but will not cause any service interruption.
 
-    After running the plan, check if the dry-run is successful to see if there's enough resources for the changes. If it completes, then we're ready to apply the updates!
+    The dry-run indicates that there are enough resources for the modified job to be run by returning "All tasks successfully allocated."
 
-    Do that by running the following:<br>
+    Run the modified job with the following command:<br>
     `nomad job run -check-index <job_modify_index> example.nomad`<br>
     where <job_modify_index\> is the job modify index returned by the `nomad job plan` command.
 
@@ -276,7 +276,7 @@ challenges:
 
     After running the job, we can see that 2 additional allocations were created as desired.
 
-    Look at the job in the Nomad UI tab to verify that the additional allocations were deployed. You should see 3 allocations in the "Running" status. Also look at both clients in the Nomad UI and verify that one of them has 2 allocations and that the other has 1 allocation.
+    Look at the job in the Nomad UI tab to verify that the additional allocations were deployed. You should see 3 healthy allocations. Also look at both clients in the Nomad UI and verify that one of them has 2 allocations and that the other has 1 allocation.
 
     To stop the job and de-allocate all the redis docker containers, run the following command on the "Server" tab:
     ```
@@ -287,7 +287,8 @@ challenges:
     ```
     nomad status example
     ```
-    Inspect the following properties:
+    <br>
+    Please do the following:
 
     1. Check that the Status attribute of the job is marked as "dead (stopped)".
     2. Under the Allocations section, verify that all three allocations have the "complete" status.
@@ -314,4 +315,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 900
-checksum: "11842144462749863460"
+checksum: "7085498699051331824"

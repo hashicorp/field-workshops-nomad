@@ -6,9 +6,9 @@ teaser: Monitor a Nomad cluster and jobs with Prometheus.
 description: |-
   The Nomad client and server agents collect runtime [telemetry](https://www.nomadproject.io/docs/telemetry/index.html). Operators can use this data to gain real-time visibility into their Nomad clusters and improve performance. Additionally, Nomad operators can set up monitoring and alerting against these metrics and export the metrics to tools like Prometheus, Grafana, Graphite, DataDog, and Circonus.
 
-  This track will guide you through implementing the [Using Prometheus to Monitor Nomad Metrics](https://www.nomadproject.io/guides/operations/monitoring-and-alerting/prometheus-metrics.html) guide.
+  This track will guide you through implementing the [Using Prometheus to Monitor Nomad Metrics](https://learn.hashicorp.com/nomad/operating-nomad/prometheus-metrics) guide.
 
-  Before running this track, we suggest you run the [Nomad Basics](https://instruqt.com/hashicorp/tracks/nomad-basics), [Nomad Simple Cluster](https://instruqt.com/hashicorp/tracks/nomad-simple-cluster), [Nomad Multi-Server Cluster](https://instruqt.com/hashicorp/tracks/nomad-multi-server-cluster), and [Nomad Access Control Lists (ACLs)](https://instruqt.com/hashicorp/tracks/nomad-acls) tracks.
+  Before running this track, we suggest you run the [Nomad Basics](https://instruqt.com/hashicorp/tracks/nomad-basics), [Nomad Simple Cluster](https://instruqt.com/hashicorp/tracks/nomad-simple-cluster), and the [Nomad Multi-Server Cluster](https://instruqt.com/hashicorp/tracks/nomad-multi-server-cluster) tracks.
 icon: https://storage.googleapis.com/instruqt-hashicorp-tracks/logo/nomad.png
 tags:
 - Nomad
@@ -67,7 +67,7 @@ challenges:
     ```
     nomad job status fabio | grep -A 5 Allocations
     ```
-    This should return something like this:
+    This should return something like this:<br>
     `
     Allocations
     ID        Node ID   Task Group  Version  Desired  Status   Created     Modified
@@ -96,7 +96,7 @@ challenges:
     ```
     nomad job run prometheus1.nomad
     ```
-    This should return something like this:
+    This should return something like this:<br>
     `
     ==> Monitoring evaluation "bdef8e9d"
     Evaluation triggered by job "prometheus"
@@ -110,7 +110,7 @@ challenges:
     ```
     nomad job status prometheus | grep -A 5 Allocations
     ```
-    This should return something like this:
+    This should return something like this:<br>
     `
     Allocations
     ID        Node ID   Task Group  Version  Desired  Status   Created     Modified
@@ -130,7 +130,7 @@ challenges:
     * Note that you can click the rectangular icon next to the refresh icon to hide and redisplay the assignment in order to see the results more easily.
     * The value of the `fabio` job is `3` since it is using the [system](https://www.nomadproject.io/docs/schedulers.html#system) scheduler type and we are running three Nomad clients in our demo cluster.
     * The value of our `prometheus` job is `1` since we only deployed one instance of it.
-    * To see what this looks like, visit this [page](https://www.nomadproject.io/assets/images/running-jobs-564b55df.png).
+    * To see what this looks like, visit this [page](https://learn.hashicorp.com/img/nomad/operating-nomad/running-jobs.png).
     * To see the description of other metrics, visit the [telemetry](https://www.nomadproject.io/docs/configuration/telemetry.html) section of the Nomad documentation.
 
     If you go back to the "Fabio" tab and click the Instruqt refresh icon, you will now see the "prometheus" service in the routing table.  (Note that you cannot visit it using the URL in the "Dest" column because Instruqt will not allow access to the Prometheus UI on the "Fabio" tab.)
@@ -143,7 +143,7 @@ challenges:
 
       Additionally, Nomad operators can set up monitoring and alerting against these metrics and export the metrics to tools like Prometheus, Grafana, Graphite, DataDog, and Circonus.
 
-      This track will guide you through implementing the [Using Prometheus to Monitor Nomad Metrics](https://www.nomadproject.io/guides/operations/monitoring-and-alerting/prometheus-metrics.html) guide.
+      This track will guide you through implementing the [Using Prometheus to Monitor Nomad Metrics](https://learn.hashicorp.com/nomad/operating-nomad/prometheus-metrics) guide.
   - type: text
     contents: |-
       The setup scripts for this track have configured 4 VMs running Nomad and Consul agents. One is functioning as a server while the other 3 are functioning as clients, both with regard to Nomad and to Consul.
@@ -315,21 +315,14 @@ challenges:
     `<br>
     If you would like to see the full job status, you can leave off the `grep` command.
 
-    ## Re-run the Prometheus Job
-    At this point, re-run your `prometheus` job on the "Server" tab:
-    ```
-    nomad job run prometheus2.nomad
-    ```
-    This will return results similar to what you've seen when running other jobs.
-
     ## Inspect Prometheus Targets and Alerts
     Please do the following steps on the "Prometheus" tab. (Note that we are now only showing one tab for it.)
     * Select Status -> Targets.
     * You will see `webserver` and `alertmanager` appear in your list of targets.
-    * To see what this looks like, visit this [page](https://www.nomadproject.io/assets/images/new-targets-7e2bcd93.png).
+    * To see what this looks like, visit this [page](https://learn.hashicorp.com/img/nomad/operating-nomad/new-targets.png).
     * Select the "Alerts" tab of the Prometheus UI.
     * Note the alert that we configured for the web server. No alerts are active because our web server is running.
-    * To see what this looks like, visit this [page](https://www.nomadproject.io/assets/images/alerts-ee875c5e.png).
+    * To see what this looks like, visit this [page](https://learn.hashicorp.com/img/nomad/operating-nomad/alerts.png).
 
     ## Stop the Web Server to See Alerts
     Next, please stop your webserver on the "Server" tab:
@@ -340,11 +333,11 @@ challenges:
     Now, let's see what Prometheus is showing on the "Prometheus" tab.
     * Select the "Alerts" tab of the Prometheus UI (even if it is already selected).
     * Note that we now have an active "Webserver down" alert.
-    * To see what this looks like, visit this [page](https://www.nomadproject.io/assets/images/active-alert-cfcc7e45.png).
+    * To see what this looks like, visit this [page](https://learn.hashicorp.com/img/nomad/operating-nomad/active-alert.png).
 
     Verify that Alertmanager has received this alert as well on the "Alertmanager" tab.
     * You should see that Alertmanager has received the alert and is showing it as `alertname="Webserver down"`. (You will probably want to click the rectangular Instruqt icon to temporarily hide this assignment to get the Alertmananger spread out horizontally more.)
-    * To see what this looks like, visit this [page](https://www.nomadproject.io/assets/images/alertmanager-webui-612ce20c.png).
+    * To see what this looks like, visit this [page](https://learn.hashicorp.com/img/nomad/operating-nomad/alertmanager-webui.png).
 
     ## Restart the Web Server
     Please restart the `webserver` job on the "Server" tab:
@@ -396,4 +389,4 @@ challenges:
     port: 9999
   difficulty: basic
   timelimit: 600
-checksum: "18340852418893460676"
+checksum: "16346210181371618422"

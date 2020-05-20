@@ -28,7 +28,7 @@ challenges:
     ```
     nomad version
     ```
-    You should see "Nomad v0.10.2".
+    You should see "Nomad v0.11.2".
 
     You can also see the list of all Nomad CLI commands:
     ```
@@ -207,7 +207,7 @@ challenges:
     ```
     curl --data @payload.json http://localhost:4646/v1/jobs | jq
     ```
-    The JSON data returned will include a job index, and evaluation ID, and other information.
+    The JSON data returned will include a job index, an evaluation ID, and other information.
 
     For more information regarding creating jobs using Nomad's HTTP API, refer to https://www.nomadproject.io/api/jobs.html#create-job
 
@@ -231,7 +231,7 @@ challenges:
     ```
     curl http://localhost:4646/v1/job/redis/summary | jq
     ```
-    The JSON response should show that no jobs are currently running and that the number of complete jobs has increased by 1.
+    The JSON response should show that no allocations are currently running and that the number of complete allocations has increased by 1.
   notes:
   - type: text
     contents: |-
@@ -248,4 +248,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 900
-checksum: "5012004696476575306"
+checksum: "1584290427368761215"

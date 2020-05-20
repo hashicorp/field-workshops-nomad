@@ -8,9 +8,6 @@ grep -q "nomad job run webserver.nomad" /root/.bash_history || fail-message "You
 # Check that the status of the webserver job was checked
 grep -q "nomad job status webserver" /root/.bash_history || fail-message "You haven't checked the status of the webserver job yet."
 
-# Check that the prometheus2.nomad job was re-run
-grep -q "nomad job run prometheus2.nomad" /root/.bash_history || fail-message "You haven't re-run the prometheus2.nomad job yet."
-
 # Check that the webserver job was stopped
 grep -q "nomad job stop webserver" /root/.bash_history || fail-message "You haven't stopped the webserver job yet."
 
