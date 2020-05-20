@@ -57,3 +57,19 @@ name: Feedback-Survey
 
 ???
 * Ask them to fill out the online survey
+
+---
+name: credits
+# Credits
+* This workshop was created by the following HashiCorp SEs:
+  * Roger Berlind
+  * Alex Harness
+  * Rob Jackson
+  * Marc Chua
+  * Chris Dunlop
+  * Peter Phan
+  * Lance Haig
+
+
+???
+* Credits for the workshop
