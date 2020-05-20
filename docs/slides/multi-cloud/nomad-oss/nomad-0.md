@@ -72,6 +72,8 @@ name: instruqt-tracks
     1. [Nomad Simple Cluster](https://play.instruqt.com/hashicorp/invite/vcqexnx8ency)
     1. [Nomad Multi-Server Cluster](https://play.instruqt.com/hashicorp/invite/igeavsouomb2)
     1. [Nomad Monitoring](https://play.instruqt.com/hashicorp/invite/f7v0fg7ewyzu)
+* You'll need to register with Instruqt:
+  https://play.instruqt.com/signup
 
 ???
 * Links to the Instruqt tracks used in this workshop
