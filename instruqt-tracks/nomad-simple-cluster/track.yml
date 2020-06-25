@@ -205,7 +205,9 @@ challenges:
     `nomad alloc logs <AllocationID> redis`<br>
     where <AllocationID\> is the same allocation ID you used for the last command.  You will see the complete logs from the Redis Docker container that was launched.
 
-    We encourage you to also look at the status of the job and its allocation and the task log in the Nomad UI.  To do this, click on the "example" job, scroll down, select the allocation, scroll down, click "redis", and select the "Logs" tab.
+    Note that while allocation logs can normally be viewed in the Nomad UI, this is blocked in the Instruqt environment.
+
+    We encourage you to also look at the status of the job and its allocation in the Nomad UI.
 
     You can also look at deployment details on the "Deployments" tab, inspect allocations on the "Allocations" tab, and see evaluation details on the "Evaluations" tab.
 
@@ -315,4 +317,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 900
-checksum: "7085498699051331824"
+checksum: "8653733042126027712"
