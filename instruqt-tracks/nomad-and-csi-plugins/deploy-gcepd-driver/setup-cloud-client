@@ -1,0 +1,7 @@
+#!/bin/bash -l
+
+gcloud iam service-accounts keys create --iam-account service-account@$INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID.iam.gserviceaccount.com creds.json
+
+gcloud compute scp /root/creds.json nomad-server-1:/root --zone europe-west1-b
+
+gcloud compute ssh nomad-server-1 --zone europe-west1-b --command 'git clone https://github.com/auto-store/nomad-csi'

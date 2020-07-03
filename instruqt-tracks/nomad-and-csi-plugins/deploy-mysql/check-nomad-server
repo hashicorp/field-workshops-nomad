@@ -1,0 +1,11 @@
+#!/bin/bash -l
+
+set -e
+
+gcloud compute scp nomad-server-1:/root/.bash_history /root/.nomad_server_history --strict-host-key-checking no --zone "europe-west1-b"
+
+#grep -q "nomad job run" /root/.nomad_server_history || fail-message "You have not run the mysql job"
+
+grep -q "mysql -h mysql-server.service.consul -u web -p -D itemcollection" /root/.nomad_server_history || fail-message "You have not connected to the mysql datatbase"
+
+exit 0

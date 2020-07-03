@@ -1,0 +1,3 @@
+#!/bin/bash -l
+
+gcloud compute ssh nomad-server-1 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking=no
