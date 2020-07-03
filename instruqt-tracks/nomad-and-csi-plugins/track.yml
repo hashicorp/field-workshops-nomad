@@ -39,34 +39,35 @@ challenges:
   title: Verify the Health of Your Nomad Cluster
   teaser: |
     Verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts.
-  assignment: "In this challenge, you will verify the health of the Nomad cluster
-    that has been deployed for you by the track's setup scripts. This will include
-    checking the health of a Consul cluster that has been set up on the same VMs.
-
-    The cluster is running 1 Nomad/Consul server and 3 Nomad/Consul clients with Nomad
-    0.11.1 and Consul 1.7.2.
-
-    You can visit the Google Cloud Console for the GCP project associated with this lab by selecting the 'Cloud Links' tab, right-clicking
-    the Project ID for the \"nomad\" Google cloud project, and then opening the console
-    in a new tab or window. If you already have your own GCP account, it will be easier
-    to use an incognito window.
-
-    First, determine the public IP of your Nomad server by running
-    this command on the \"Cloud CLI\" tab:\n```\necho $nomad_server_ip\n```\nYou can
-    visit the Nomad UI in any browser tab outside the Instruqt tab with the URL, `http://<NOMAD_IP>:4646`
-    where <NOMAD_IP\\> is the value of $nomad_server_ip.\nYou can visit the Consul
-    UI in any browser tab outside the Instruqt tab with the URL, `http://<NOMAD_IP>:8500`
-    where <NOMAD_IP\\> is the value of $nomad_server_ip.\nNext, SSH to the Nomad server
-    with this command:\n```\ngcloud compute ssh nomad-server-1 --zone europe-west1-b
-    \ --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking
-    no\n```\nNow, verify that all 4 Consul agents are running and connected to the
-    cluster by running this command on the \"Cloud CLI\" tab:\n```\nconsul members\n```\nYou
-    should see 4 Consul agents with the \"alive\" status including 1 server and 3
-    clients.\nCheck that the Nomad server is running by running this command on the
-    \"Cloud CLI\" tab:\n```\nnomad server members\n```\nYou should see 1 Nomad server
-    with the \"alive\" status.\nCheck the status of the Nomad client nodes by running
-    this command on the \"Cloud CLI\" tab:\n```\nnomad node status\n```\nYou should
-    see 3 Nomad clients with the \"ready\" status."
+  assignment: |-
+    In this challenge, you will verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
+    The cluster is running 1 Nomad/Consul server and 3 Nomad/Consul clients with Nomad 0.11.1 and Consul 1.7.2.
+    You can visit the Google Cloud Console for the GCP project associated with this lab by selecting the 'Cloud Links' tab, right-clicking the Project ID for the "nomad" Google cloud project, and then opening the console in a new tab or window. If you already have your own GCP account, it will be easier to use an incognito window.
+    First, determine the public IP of your Nomad server by running this command on the "Cloud CLI" tab:
+    ```
+    echo $nomad_server_ip
+    ```
+    You can visit the Nomad UI in any browser tab outside the Instruqt tab with the URL, `http://<NOMAD_IP>:4646` where <NOMAD_IP\> is the value of $nomad_server_ip.
+    You can visit the Consul UI in any browser tab outside the Instruqt tab with the URL, `http://<NOMAD_IP>:8500` where <NOMAD_IP\> is the value of $nomad_server_ip.
+    Next, SSH to the Nomad server with this command:
+    ```
+    gcloud compute ssh nomad-server-1 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no
+    ```
+    Now, verify that all 4 Consul agents are running and connected to the cluster by running this command on the "Cloud CLI" tab:
+    ```
+    consul members
+    ```
+    You should see 4 Consul agents with the "alive" status including 1 server and 3 clients.
+    Check that the Nomad server is running by running this command on the "Cloud CLI" tab:
+    ```
+    nomad server members
+    ```
+    You should see 1 Nomad server with the "alive" status.
+    Check the status of the Nomad client nodes by running this command on the "Cloud CLI" tab:
+    ```
+    nomad node status
+    ```
+    You should see 3 Nomad clients with the "ready" status.
   notes:
   - type: text
     contents: |-
@@ -172,9 +173,8 @@ challenges:
   id: wsoiwyeiglqn
   type: challenge
   title: Create a Google Persistent Disk
-  teaser: -|
-    Create a Google Persistent Disk for the CSI plugin to mount
-  assignment: |-
+  teaser: -| Create a Google Persistent Disk for the CSI plugin to mount
+  assignment: |2-
 
     You are now ready to create a persistent disk and regiser the disk as a Nomad CSI volume. In the 'Cloud CLI' tab, enter the following gcloud commands:
 
@@ -336,4 +336,4 @@ challenges:
     port: 80
   difficulty: basic
   timelimit: 7200
-checksum: "1108091270258918541"
+checksum: "6720201840300435187"
