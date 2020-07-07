@@ -19,6 +19,7 @@ description: |-
   There are other tracks related to different Nomad storage options:
 
   Host Volumes: https://play.instruqt.com/hashicorp/tracks/nomad-host-volumes
+
   Portworx: https://play.instruqt.com/hashicorp/tracks/nomad-and-portworx
 icon: https://storage.googleapis.com/instruqt-hashicorp-tracks/logo/nomad.png
 tags:
@@ -179,7 +180,7 @@ challenges:
     You are now ready to create a persistent disk and regiser the disk as a Nomad CSI volume. In the 'Cloud CLI' tab, enter the following gcloud commands:
 
     ```
-    gcloud mcompute disks create mysql --size 10 --zone europe-west1-b
+    gcloud compute disks create mysql --size 10 --zone europe-west1-b
     ```
     Describe the details of the disk, we will need the ```self_link``` value in the next step:
     ```
@@ -190,7 +191,7 @@ challenges:
     gcloud compute ssh nomad-server-1 --zone europe-west1-b
     ```
     Now open the volume.hcl file on the Nomad Server tab (which is in the nomad-csi folder) and edit the ```external_id``` field with the value of the self_link from the previous step.  \nplease only copy
-    from ```projects/``` onwards, the ```https://googleapis.com``` is not needed.
+    from ```projects/``` onwards, the ```https://googleapis.com``` is not needed and will cause the registration to fail.
 
     Close and save the file:
     ```
@@ -337,7 +338,8 @@ challenges:
     You have successfully completed the track. Feel free to play around in the environment!
   notes:
   - type: text
-    contents: Stop and purge the MySQL job and then redeploy. See your persistent data!
+    contents: Stop and purge the MySQL job and then redeploy. See your persistent
+      data!
   tabs:
   - title: Cloud CLI
     type: terminal
@@ -352,4 +354,4 @@ challenges:
     port: 80
   difficulty: basic
   timelimit: 7200
-checksum: "6720201840300435187"
+checksum: "10536835636882268811"
