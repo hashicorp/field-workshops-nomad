@@ -26,8 +26,8 @@ tags:
 - secrets
 owner: hashicorp
 developers:
-- roger@hashicorp.com
 - pgryzan@hashicorp.com
+- roger@hashicorp.com
 private: false
 published: true
 challenges:
@@ -579,4 +579,5 @@ challenges:
     port: 3000
   difficulty: basic
   timelimit: 600
-checksum: "11704517051229875481"
+checksum: "10136880272254806548"
+show_timer: true

@@ -782,4 +782,5 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 900
-checksum: "2394657316684888628"
+checksum: "1150716968822406457"
+show_timer: true

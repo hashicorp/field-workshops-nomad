@@ -436,4 +436,5 @@ challenges:
     port: 80
   difficulty: basic
   timelimit: 600
-checksum: "6947135051653320432"
+checksum: "14030453726869564426"
+show_timer: true
