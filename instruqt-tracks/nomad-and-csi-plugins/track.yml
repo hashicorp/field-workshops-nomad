@@ -206,7 +206,6 @@ challenges:
     nomad volume status
     ```
     Please exit the SSH session - this will enable the "Check" to work correctly.
-
     ```
     exit
     ```
@@ -241,6 +240,13 @@ challenges:
     ```
     gcloud compute ssh nomad-server-1 --zone europe-west1-b
     ```
+    Inspect the job mysql job file:
+    ```
+    vim nomad-csi/mysql.nomad
+    ```
+    Notice the ```volume_mount``` stanza. The volume_mount stanza allows the task to specify how a volume should be mounted into the task.
+    In this case the volume is being mounted at the ```/srv``` directory within the mysql container, which is where mysql stores tables.
+    The volume is the CSI volume that was previously registered with Nomad and is backed my a Google Persistent Disk.
     Run the mysql job:
     ```
     nomad job run nomad-csi/mysql.nomad
@@ -269,6 +275,9 @@ challenges:
     ```
     exit
     ```
+    Please exit the shell session to the Nomad server to enable to check scripts to work effectivley:
+    ```
+    exit
   notes:
   - type: text
     contents: Deploy MySQL as a Nomad Job and write data to a table
@@ -305,7 +314,7 @@ challenges:
     ```
     nomad job status mysql
     ```
-    Using the same mysql.nomad job file, re-deploy the database:
+    Using the same mysql.nomad job file, re-deploy the database. The job will use the existing volume that holds data that was previously written rather than starting with a clean slate:
     ```
     nomad run nomad-csi/mysql.nomad
     ```
@@ -317,11 +326,18 @@ challenges:
     ```
     select * from items;
     ```
+    Return to the shell session on the Nomad Server:
+    ```
+    exit
+    ```
+    Please exit the shell session to the Nomad server to enable to check scripts to work effectivley:
+    ```
+    exit
+    ```
     You have successfully completed the track. Feel free to play around in the environment!
   notes:
   - type: text
-    contents: Stop and purge the MySQL job and then redeploy. See your persistent
-      data!
+    contents: Stop and purge the MySQL job and then redeploy. See your persistent data!
   tabs:
   - title: Cloud CLI
     type: terminal
