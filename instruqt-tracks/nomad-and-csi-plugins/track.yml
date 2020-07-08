@@ -42,7 +42,8 @@ challenges:
     Verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts.
   assignment: |-
     In this challenge, you will verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
-    The cluster is running 1 Nomad/Consul server and 3 Nomad/Consul clients with Nomad 0.11.1 and Consul 1.7.2.
+    The cluster is running 1 server and 3 clients with Nomad 0.11.3 and Consul 1.7.4 installed.
+
     You can visit the Google Cloud Console for the GCP project associated with this lab by selecting the 'Cloud Links' tab, right-clicking the Project ID for the "nomad" Google cloud project, and then opening the console in a new tab or window. If you already have your own GCP account, it will be easier to use an incognito window.
     First, determine the public IP of your Nomad server by running this command on the "Cloud CLI" tab:
     ```
@@ -75,7 +76,7 @@ challenges:
       Nomad supports stateful workloads with 3 different options:
         * [Nomad Host Volumes](https://nomadproject.io/docs/configuration/client/#host_volume-stanza) that are managed by Nomad and can be used with any Nomad task driver
         * [Docker Volume Drivers](https://docs.docker.com/engine/extend/plugins_volume/#create-a-volumedriver) such as Portworx that are externally managed and can only be used with the Docker task driver
-        * [CSI Plugins](https://github.com/container-storage-interface/spec/blob/master/spec.md) that are also externally managed but can be used with any Nomad task driver.
+        * [CSI Plugins](https://github.com/container-storage-interface/spec/blob/master/spec.md) that are also externally managed and used with the Docker task driver.
       In this track, you will use the GCE Persistent Disk driver to persist data for MySQL database.
   - type: text
     contents: |-
@@ -91,19 +92,20 @@ challenges:
     path: /
     port: 80
   difficulty: basic
-  timelimit: 7200
+  timelimit: 600
 - slug: deploy-gcepd-driver
   id: dwnjvrvf1vhr
   type: challenge
   title: Deploy CSI Plugin as Nomad Job
   teaser: Deploy the CSI plugin
   assignment: |-
-    The GCE-PD CSI driver is deployed in Nomad, There are two jobs to run. One is the “controller” job and one is the “nodes” job.
-    Once these are running, the GCE-PD driver will register as a plugin within Nomad.
+    TYou will deploy the Google Compute Engine Persistent Disk (gcepd) CSI driver in Nomad, There are two jobs to run. One is the “controller” job and one is the “nodes” job.
+    Once these are running, the gcepd driver will register as a plugin within Nomad.
 
     The "controller" job runs on a Nomad client and has the function of being an endpoint for requests for new volume registrations, maintaining the state of the registered volumes etc.
     The "nodes" job is run on every nomad client and is responsible for mapping and unmapping storage devices.
-    The Google Compute Engine Persistent Disk (gcepd) driver is deployed as a nomad job using the docker driver.
+
+    The gcepd driver is deployed as a nomad job using the docker driver.
 
     The gcepd docker container needs credentials to interact with GCE resources.
     This is achieved by creating a service account, creating a key for the service account and then passing the service account key to the gcepd container.
@@ -115,7 +117,7 @@ challenges:
 
     The Nomad job will query Consul’s key-value store for the ```service_account``` key and export the value as an environment variable named ```GOOGLE_APPLICATION_CREDENTIALS``` within the container.
 
-    issue these comands in the "Nomad Server" tab.
+    Issue these comands in the "Nomad Server" tab.
 
     SSH into the Nomad Server:
     ```
@@ -125,7 +127,7 @@ challenges:
     ```
     consul kv put service_account @creds.json
     ```
-    now you need to run the controller job which is located in the nomad-csi folder. Before you do, examine the contents of the file. Note the "csi_plugin" stanza, which allows the task to specify it provides a Container Storage Interface plugin to the cluster. Nomad will automatically register the plugin so that it can be used by other jobs to claim volumes. Examine the file:
+    Run the controller job which is located in the nomad-csi folder. Before you do, examine the contents of the file. Note the "csi_plugin" stanza, which allows the task to specify it provides a Container Storage Interface plugin to the cluster. Nomad will automatically register the plugin so that it can be used by other jobs to claim volumes. Examine the file:
     ```
     cat nomad-csi/controller.nomad
     ```
@@ -144,7 +146,7 @@ challenges:
     ```
     nomad job status nodes
     ```
-    Check the status of the plugin to ensure it is registered. Please note, it usually takes around 30 seconds to register the CSI plugin with Nomad. run this command:
+    Check the status of the plugin to ensure it is registered. Please note, it usually takes around 30 seconds to register the CSI plugin with Nomad. Execute this command to check the status:
     ```
     nomad plugin status
     ```
@@ -169,7 +171,7 @@ challenges:
     path: /
     port: 80
   difficulty: basic
-  timelimit: 7200
+  timelimit: 600
 - slug: create-persistent-disk
   id: wsoiwyeiglqn
   type: challenge
@@ -226,7 +228,7 @@ challenges:
     path: /
     port: 80
   difficulty: basic
-  timelimit: 7200
+  timelimit: 600
 - slug: deploy-mysql
   id: pxhpjsbuxe5a
   type: challenge
@@ -295,7 +297,7 @@ challenges:
     path: /
     port: 80
   difficulty: basic
-  timelimit: 7200
+  timelimit: 600
 - slug: destroy-redeploy
   id: 8axvovofeilq
   type: challenge
@@ -353,5 +355,5 @@ challenges:
     path: /
     port: 80
   difficulty: basic
-  timelimit: 7200
-checksum: "10536835636882268811"
+  timelimit: 1200
+checksum: "11342096839055052236"

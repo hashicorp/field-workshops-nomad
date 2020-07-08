@@ -162,11 +162,6 @@ attachment_mode = "file-system"
 plugin_id = "gcepd"
 EOF'
 
-gcloud compute ssh nomad-server-1 --zone europe-west1-b --command 'consul kv put service_account @creds.json'
 
-gcloud compute ssh nomad-server-1 --zone europe-west1-b --command 'nomad run nomad-csi/controller.nomad'
 
-gcloud compute ssh nomad-server-1 --zone europe-west1-b --command 'nomad run nomad-csi/nodes.nomad'
-
-exit 0
-
+exit o
