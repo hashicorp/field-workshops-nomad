@@ -1,9 +1,0 @@
-#!/bin/bash -l
-
-#Enable bash history
-HISTFILE=/root/.bash_history
-set -o history
-
-nomad run /root/nomad/mysql.nomad
-
-exit 0

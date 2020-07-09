@@ -1,9 +1,0 @@
-#!/bin/bash -l
-
-#Enable bash history
-HISTFILE=~/.bash_history
-set -o history
-
-aws ec2 create-volume --volume-type gp2 --size 5 --region eu-west-1 --availability-zone eu-west-1b
-
-exit 0
