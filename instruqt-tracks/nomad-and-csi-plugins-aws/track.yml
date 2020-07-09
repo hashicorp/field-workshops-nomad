@@ -1,0 +1,363 @@
+slug: nomad-and-csi-plugins
+id: 8gcf7uizgmdf
+type: track
+title: Nomad CSI Plugins
+teaser: |
+  Learn how Nomad CSI plugins support stateful workloads.
+description: |-
+  Some Nomad workloads need to persist data that will still be available if the job that runs the workloads are stopped and restarted.
+
+  Nomad supports stateful workloads with 3 different options:
+    * [Nomad Host Volumes](https://nomadproject.io/docs/configuration/client/#host_volume-stanza) that are managed by Nomad and can be used with any Nomad task driver
+    * [Docker Volume Drivers](https://docs.docker.com/engine/extend/plugins_volume/#create-a-volumedriver) such as Portworx that are externally managed and can only be used with the Docker task driver
+    * [CSI Plugins](https://github.com/container-storage-interface/spec/blob/master/spec.md) that are also externally managed but can be used with any Nomad task driver.
+
+  This track will guide you through using Nomad CSI Plugins to persist data for a MySQL database in an AWS EBS volume. It is based on the [Stateful Workloads with Container Storage Interface](https://learn.hashicorp.com/nomad/stateful-workloads/csi-volumes) guide.
+
+  Before running this track, we suggest you run the [Nomad Basics](https://play.instruqt.com/hashicorp/tracks/nomad-basics) track.
+icon: https://storage.googleapis.com/instruqt-hashicorp-tracks/logo/nomad.png
+tags:
+- Nomad
+- stateful
+- CSI plugins
+- storage
+owner: hashicorp
+developers:
+- roger@hashicorp.com
+- tharris@hashicorp.com
+private: true
+published: false
+challenges:
+- slug: verify-nomad-cluster-health
+  id: 0e1x2hnlvsaf
+  type: challenge
+  title: Verify the Health of Your Nomad Cluster
+  teaser: |
+    Verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts.
+  assignment: |-
+    In this challenge, you will verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
+
+    The cluster is running 1 Nomad/Consul server and 3 Nomad/Consul clients with Nomad 0.11.0 and Consul 1.7.2.
+
+    First, verify that all 4 Consul agents are running and connected to the cluster by running this command on the "Server" tab:
+    ```
+    consul members
+    ```
+    You should see 4 Consul agents with the "alive" status.
+
+    Check that the Nomad server is running by running this command on the "Server" tab:
+    ```
+    nomad server members
+    ```
+    You should see 1 Nomad server with the "alive" status.
+
+    Check the status of the Nomad client nodes by running this command on the "Server" tab:
+    ```
+    nomad node status
+    ```
+    You should see 3 Nomad clients with the "ready" status.
+
+    You can also check the status of the Nomad server and clients in the Nomad and Consul UIs.
+
+    In the next challenge, you will provisioning an EBS volume that will be used by the CSI driver.
+  notes:
+  - type: text
+    contents: |-
+      Nomad supports stateful workloads with 3 different options:
+        * [Nomad Host Volumes](https://nomadproject.io/docs/configuration/client/#host_volume-stanza) that are managed by Nomad and can be used with any Nomad task driver
+        * [Docker Volume Drivers](https://docs.docker.com/engine/extend/plugins_volume/#create-a-volumedriver) such as Portworx that are externally managed and can only be used with the Docker task driver
+        * [CSI Plugins](https://github.com/container-storage-interface/spec/blob/master/spec.md) that are also externally managed but can be used with any Nomad task driver.
+
+      In this track, you will use a Nomad CSI Plugin to persist data for a MySQL database.
+  - type: text
+    contents: |-
+      In this challenge, you will verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
+
+      In later challenges, you will deploy a CSI storage plugin and deploy a database with a persistent volume.
+  tabs:
+  - title: Server
+    type: terminal
+    hostname: nomad-server-1
+  - title: Nomad UI
+    type: service
+    hostname: nomad-server-1
+    port: 4646
+  difficulty: basic
+  timelimit: 600
+- slug: deploy-ebs-volume
+  id: wx6zftmpdxai
+  type: challenge
+  title: Deploy an AWS EBS Volume
+  teaser: |
+    Deploy an AWS EBS volume that the CSI plugin will mount.
+  assignment: |2-
+
+    "In this challenge, you will deploy an AWS EBS volume that the CSI plugin, [aws-ebs-csi-driver](https://github.com/kubernetes-sigs/aws-ebs-csi-driver) will use to persist data from a MySQL database.
+
+    Create a 5GB EBS volume that the CSI plugin will use to persist data for a MYSQL database. Run this in the Cloud CLI tab.
+
+    ```
+    aws ec2 create-volume --volume-type gp2 --size 5 --region eu-west-1 --availability-zone
+    eu-west-1b
+    ```
+    Edit the volume.hcl file in the Files tab which we will use later to register the volume with Nomad. Change the external_id field to the volume id from the awscli output in the CloudCLI tab.
+
+    In the next challenge, you will deploy the EBS plugin and register your newly created volume. "
+  notes:
+  - type: text
+    contents: In this challenge, you will deploy an AWS EBS volume that the CSI plugin,
+      [aws-ebs-csi-driver](https://github.com/kubernetes-sigs/aws-ebs-csi-driver)
+      will use to persist data from a MySQL database.In the next challenge, you will
+      do deploy the EBS plugin as a omad job then register the newly created volume
+      with Nomad.
+  tabs:
+  - title: Files
+    type: code
+    hostname: nomad-server-1
+    path: /root/
+  - title: Server
+    type: terminal
+    hostname: nomad-server-1
+  - title: Client 1
+    type: terminal
+    hostname: nomad-client-1
+  - title: Client 2
+    type: terminal
+    hostname: nomad-client-2
+  - title: Client 3
+    type: terminal
+    hostname: nomad-client-3
+  - title: Nomad UI
+    type: service
+    hostname: nomad-server-1
+    port: 4646
+  - title: Cloud CLI
+    type: terminal
+    hostname: cloud-client
+  - title: Cloud Links
+    type: service
+    hostname: cloud-client
+    path: /
+    port: 80
+  difficulty: basic
+  timelimit: 3600
+- slug: deploy-ebs-plugin
+  id: rirwwvutdpkr
+  type: challenge
+  title: Deploy the EBS plugin and register the volume
+  teaser: 'Deploy the EBS CSI plugin as a Nomad job then register the EBS volume you
+    created. '
+  assignment: |2-
+
+    In this challenge, you will deploy the EBS plugin as a Nomad job. Plugins for CSI are run as Nomad jobs with a plugin stanza. The AWS EBS CSI driver is packaged as a docker container that you can run with the Docker task driver.
+
+     The EBS CSI driver requires a controller plugin to coordinate access to the EBS volume, and node plugins to mount the volume to the EC2 instance. You'll create a controller job as a nomad service job and the node job as a Nomad system job.
+
+    Inspect `plugin-ebs-controller.nomad` in the files tab under `/root/nomad` In the server tab, run the job.
+    ```
+    nomad job run nomad/plugin-ebs-controller.nomad
+    ```
+
+    Inspect `plugin-ebs-nodes.nomad`in the files tab under `/root/nomad`In the server tab, run the job
+    ```
+    nomad job run nomad/plugin-ebs-nodes.nomad
+    ```
+
+    The CSI plugins need to be told about each volume they manage, so for each volume you'll run nomad volume register.
+    ```
+    nomad volume register nomad/volume.hcl
+    ```
+
+    Check the status of the volume. The volume status output indicates that the volume is ready to be scheduled, but
+    has no allocations currently using it.
+    ```
+    nomad volume status mysql
+    ```
+
+    In the next challenge, you will deply a MySQL database than can use the EBS volume as storage.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will deploy an AWS EBS volume that the CSI plugin, [aws-ebs-csi-driver](https://github.com/kubernetes-sigs/aws-ebs-csi-driver) will use to persist data from a MySQL database.
+
+      In the next challenge, you will do <SOMETHING\>.
+  tabs:
+  - title: Files
+    type: code
+    hostname: nomad-server-1
+    path: /root/
+  - title: Server
+    type: terminal
+    hostname: nomad-server-1
+  - title: Client 1
+    type: terminal
+    hostname: nomad-client-1
+  - title: Client 2
+    type: terminal
+    hostname: nomad-client-2
+  - title: Client 3
+    type: terminal
+    hostname: nomad-client-3
+  - title: Nomad UI
+    type: service
+    hostname: nomad-server-1
+    port: 4646
+  - title: Cloud CLI
+    type: terminal
+    hostname: cloud-client
+  - title: Cloud Links
+    type: service
+    hostname: cloud-client
+    path: /
+    port: 80
+  difficulty: basic
+  timelimit: 3600
+- slug: deploy-mysql
+  id: qfh5vuxd772m
+  type: challenge
+  title: Deploy MySQL as a Nomad Job
+  teaser: Deploy MySQL as a Nomad job and write data to a table.
+  assignment: |2-
+
+    In this challenge you will deploy a MySQL database and write data to a database table that is backed by the EBS persistent volume.
+
+    Inspect `mysql.nomad` in the files tab under `/root/nomad` In the server tab, run the job.
+    ```
+    nomad job run nomad/mysql.nomad
+    ```
+
+    Check the status of the volume. The output should indicate that the allocation is claiming the volume
+    ```
+    nomad volume status mysql
+    ```
+
+    Using the mysql client, connect to the database and access the information
+    ```
+    mysql -h mysql-server.service.consul -u web -p -D itemcollection
+    ```
+
+    Once you are connected to the database, verify the table `items` exists
+    ```
+    show tables;
+    ```
+
+    Display the contents of the table
+    ```
+    select * from items;
+    ```
+
+    Now write some data to this table
+    ```
+    INSERT INTO items (name) VALUES ('glove');
+    ```
+
+    Run the `INSERT INTO` command some more times with different values of your own. Once you are done then type `exit` to go back to the Nomad client command line.
+
+
+
+    In the next challenge, you will destry the database job and then re-deploy to verify the data has persisted.
+  notes:
+  - type: text
+    contents: In this Challenge you will deploy a MySQL database with a persistent
+      volume then write some data to a MySQL table.
+  tabs:
+  - title: Files
+    type: code
+    hostname: nomad-server-1
+    path: /root/
+  - title: Server
+    type: terminal
+    hostname: nomad-server-1
+  - title: Client 1
+    type: terminal
+    hostname: nomad-client-1
+  - title: Client 2
+    type: terminal
+    hostname: nomad-client-2
+  - title: Client 3
+    type: terminal
+    hostname: nomad-client-3
+  - title: Nomad UI
+    type: service
+    hostname: nomad-server-1
+    port: 4646
+  - title: Cloud CLI
+    type: terminal
+    hostname: cloud-client
+  - title: Cloud Links
+    type: service
+    hostname: cloud-client
+    path: /
+    port: 80
+  difficulty: basic
+  timelimit: 3600
+- slug: destroy-mysql
+  id: bgwrqixycyhx
+  type: challenge
+  title: Verify data is persisted
+  teaser: Destroy the MySQL job then re-deploy to verify data has persisted
+  assignment: |-
+    In this challenge you will destory the MySQL job then re-deploy to verify the data has persisted.
+
+    Run the command to stop and purge the MySQL job for the cluster
+    ```
+    nomad stop -purge mysql-server
+    ```
+
+    Verify that MySQL is no longer running in the cluster. The following command should return `No job(s) with prefix or id mysql found`
+
+    ```
+    nomad job status mysql
+    ```
+
+    Now re-deploy the database using the same mysql job file you used previousy.
+
+    ```
+    nomad run nomad/mysql.nomad
+    ```
+
+    Connect to MySQL
+    ```
+    mysql -h mysql-server.service.consul -u web -p -D itemcollection
+    ```
+
+    Once you are connected, verify the information you added is still present.
+    ```
+    select * from items;
+    ```
+  notes:
+  - type: text
+    contents: In this challenge, you will destory the MySQL job then re-deploy to
+      verify the data has persisted
+  tabs:
+  - title: Files
+    type: code
+    hostname: nomad-server-1
+    path: /root/
+  - title: Server
+    type: terminal
+    hostname: nomad-server-1
+  - title: Client 1
+    type: terminal
+    hostname: nomad-client-1
+  - title: Client 2
+    type: terminal
+    hostname: nomad-client-2
+  - title: Client 3
+    type: terminal
+    hostname: nomad-client-3
+  - title: Nomad UI
+    type: service
+    hostname: nomad-server-1
+    port: 4646
+  - title: Cloud CLI
+    type: terminal
+    hostname: cloud-client
+  - title: Cloud Links
+    type: service
+    hostname: cloud-client
+    path: /
+    port: 80
+  difficulty: basic
+  timelimit: 3600
+checksum: "17953632584709886647"

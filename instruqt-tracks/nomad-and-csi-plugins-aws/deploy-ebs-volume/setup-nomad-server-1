@@ -1,0 +1,20 @@
+#!/bin/bash -l
+
+set -e
+
+## Create volume.hcl file
+
+cat <<-EOF > /root/nomad/volume.hcl
+type = "csi"
+id = "mysql"
+name = "mysql"
+external_id = "REPLACE_WITH_ID"
+access_mode = "single-node-writer"
+attachment_mode = "file-system"
+plugin_id = "aws-ebs0"
+
+EOF
+
+
+
+exit 0

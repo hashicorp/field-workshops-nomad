@@ -1,0 +1,8 @@
+#!/bin/bash -l
+
+set -e
+
+grep -q "aws ec2 create-volume --volume-type gp2 --size 5 --region eu-west-1 --availability-zone eu-west-1b" /root/.bash_history || fail-message "You have not created the EBS volume"
+
+
+exit 0

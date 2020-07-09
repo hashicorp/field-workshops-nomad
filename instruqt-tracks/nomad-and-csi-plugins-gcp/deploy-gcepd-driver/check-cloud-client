@@ -1,0 +1,22 @@
+#!/bin/bash -l
+
+set -e
+
+running_jobs=$(gcloud compute ssh nomad-server-1 --zone europe-west1-b  --command 'nomad job status | grep "running" | wc -l')
+if [ $running_jobs -ne 2 ]; then
+  fail-message "At least one of the CSI driver jobs is not running."
+fi
+
+gcloud compute ssh nomad-server-1 --zone europe-west1-b  --command "nomad plugin status gcepd" > plugin_status.txt
+
+plugin_controller_status=$(cat plugin_status.txt | grep "Controllers Healthy" | grep "1" | wc -l)
+if [ $plugin_controller_status -ne 1 ]; then
+  fail-message "'nomad plugin status gcepd' does not show that the gcppd CSI plugin has 1 healthy controller."
+fi
+
+plugin_node_status=$(cat plugin_status.txt | grep "Nodes Healthy" | grep "3" | wc -l)
+if [ $plugin_node_status -ne 1 ]; then
+  fail-message "'nomad plugin status gcepd' does not show that the gcppd CSI plugin has 3 healthy nodes."
+fi
+
+exit 0

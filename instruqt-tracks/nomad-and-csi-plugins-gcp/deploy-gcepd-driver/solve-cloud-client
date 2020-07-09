@@ -1,0 +1,17 @@
+#!/bin/bash -l
+
+#Enable bash history
+HISTFILE=/root/.bash_history
+set -o history
+
+gcloud compute ssh nomad-server-1 --zone europe-west1-b --command 'nomad job run nomad/controller.nomad'
+
+sleep 60
+
+gcloud compute ssh nomad-server-1 --zone europe-west1-b --command 'nomad job run nomad/nodes.nomad'
+
+sleep 60
+
+gcloud compute ssh nomad-server-1 --zone europe-west1-b --command 'nomad plugin status gcepd'
+
+exit 0

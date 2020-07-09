@@ -1,0 +1,490 @@
+slug: nomad-and-csi-plugins-gcp
+id: ganihbpgy38x
+type: track
+title: Nomad CSI Plugins (GCP)
+teaser: |
+  Learn how Nomad CSI plugins support stateful workloads in GCP.
+description: |-
+  Some Nomad workloads need to persist data that will still be available if the job that runs the workloads are stopped and restarted.
+
+  Nomad supports stateful workloads with 3 different options:
+    * [Nomad Host Volumes](https://nomadproject.io/docs/configuration/client/#host_volume-stanza) that are managed by Nomad and can be used with any Nomad task driver
+    * [Docker Volume Drivers](https://docs.docker.com/engine/extend/plugins_volume/#create-a-volumedriver) such as Portworx that are externally managed and can only be used with the Docker task driver
+    * [CSI Plugins](https://github.com/container-storage-interface/spec/blob/master/spec.md) that are also externally managed but can be used with any Nomad task driver.
+
+  This track will guide you through using Nomad CSI Plugins to persist data for a MySQL database using a Google Persitent Disk and the GCP Driver. It is based on the [Stateful Workloads with Container Storage Interface](https://learn.hashicorp.com/nomad/stateful-workloads/csi-volumes) guide, but uses GCP instead of AWS.
+
+  Before running this track, we suggest you run the [Nomad Basics](https://play.instruqt.com/hashicorp/tracks/nomad-basics) track.
+
+  You might also want to explore these tracks related to the other Nomad storage options:
+    * [Nomad Host Volumes](https://play.instruqt.com/hashicorp/tracks/nomad-host-volumes)
+    * [Nomad Integration with Portworx](https://play.instruqt.com/hashicorp/tracks/nomad-and-portworx)
+icon: https://storage.googleapis.com/instruqt-hashicorp-tracks/logo/nomad.png
+tags:
+- Nomad
+- stateful workloads
+- CSI plugins
+- storage
+- GCP
+owner: hashicorp
+developers:
+- roger@hashicorp.com
+- tharris@hashicorp.com
+private: false
+published: true
+challenges:
+- slug: verify-nomad-cluster-health
+  id: mhnnrzaezbee
+  type: challenge
+  title: Verify the Health of Your Nomad Cluster
+  teaser: |
+    Verify the health of the Nomad cluster that has been deployed for you.
+  assignment: |-
+    In this challenge, you will verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
+
+    The cluster is running 1 Nomad/Consul server and 3 Nomad/Consul clients with Nomad 0.11.3 and Consul 1.7.4. These VMs have been created in a GCP project within this Instruqt track.
+
+    If you want, you can inspect the Nomad and Consul configuration files on the "Config Files" tab.
+
+    You can visit the Google Cloud Console for the GCP project associated with the lab by selecting the 'Cloud Links' tab, right-clicking the Project ID for the "nomad" Google cloud project, and then opening the console in a new tab or window. If you already have your own GCP account, it will be easier to use an incognito window.
+
+    First, determine the public IP of your Nomad server by running this command on the "Cloud CLI" tab:
+    ```
+    echo $nomad_server_ip
+    ```
+
+    You can visit the Nomad UI in any browser tab outside the Instruqt tab with the URL, `http://<NOMAD_IP>:4646` where <NOMAD_IP\> is the value of $nomad_server_ip.
+
+    You can visit the Consul UI in any browser tab outside the Instruqt tab with the URL, `http://<NOMAD_IP>:8500` where <NOMAD_IP\> is the value of $nomad_server_ip.
+
+    Next, SSH to the Nomad server on the "Cloud CLI" tab with this command:
+    ```
+    gcloud compute ssh nomad-server-1 --zone europe-west1-b
+    ```
+
+    Now, verify that all 4 Consul agents are running and connected to the cluster by running this command on the "Cloud CLI" tab:
+    ```
+    consul members
+    ```
+    You should see 4 Consul agents with the "alive" status including 1 server and 3 clients.
+
+    Check that the Nomad server is running by running this command on the "Cloud CLI" tab:
+    ```
+    nomad server members
+    ```
+    You should see 1 Nomad server with the "alive" status.
+
+    Check the status of the Nomad client nodes by running this command on the "Cloud CLI" tab:
+    ```
+    nomad node status
+    ```
+    You should see 3 Nomad clients with the "ready" status.
+
+    Click the green "Check" button to verify you did everything correctly. If you did, you'll be taken to the next challenge.
+  notes:
+  - type: text
+    contents: |-
+      Nomad supports stateful workloads with 3 different options:
+        * [Nomad Host Volumes](https://nomadproject.io/docs/configuration/client/#host_volume-stanza) that are managed by Nomad and can be used with any Nomad task driver
+        * [Docker Volume Drivers](https://docs.docker.com/engine/extend/plugins_volume/#create-a-volumedriver) such as Portworx that are externally managed and can only be used with the Docker task driver
+        * [CSI Plugins](https://github.com/container-storage-interface/spec/blob/master/spec.md) that are also externally managed and used with the Docker task driver.
+      In this track, you will use the GCE Persistent Disk driver to persist data for MySQL database.
+  - type: text
+    contents: |-
+      In this challenge, you will verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
+
+      In later challenges you will run Nomad jobs that deploy the Google Persistent Disk CSI driver, deploy a MySQL database, and verify that data written to MySQL survives stopping and rerunning the MySQL job.
+  tabs:
+  - title: Config Files
+    type: code
+    hostname: cloud-client
+    path: /root/nomad/
+  - title: Cloud CLI
+    type: terminal
+    hostname: cloud-client
+  - title: Cloud Links
+    type: service
+    hostname: cloud-client
+    path: /
+    port: 80
+  difficulty: basic
+  timelimit: 600
+- slug: deploy-gcepd-driver
+  id: rc0l8cyobbkw
+  type: challenge
+  title: Deploy the CSI Driver with Nomad
+  teaser: |
+    Deploy the GCE Persistent Disk CSI Driver with a Nomad Job.
+  assignment: |-
+    In this challenge, you will deploy the Google Compute Engine Persistent Disk (gcepd) CSI driver using Nomad. There are two jobs to run: One is the “controller” job and the other is the “nodes” job.
+
+    Once these jobs are running, the gcepd driver will register as a plugin within Nomad.
+
+    The "controller" job runs on a single Nomad client and acts as an endpoint for requests for new volume registrations, maintaining the state of the registered volumes.
+
+    The "nodes" job is run on every Nomad client and is responsible for mapping and unmapping storage devices.
+
+    Both jobs  deploy Docker containers using the docker driver.
+
+    The gcepd docker container needs credentials to interact with GCE resources. This is achieved by creating a GCP service account, creating a key for the service account and then passing the service account key to the gcepd container.
+
+    Service account credentials have been created as part of the this lab's setup and are in the "creds.json" file in the Cloud CLI container as well as on the Nomad Server. The contents of the file have also been written to the `service_account` key of Consul's key-value store.
+
+    The containers access the key by reading an environment variable named `GOOGLE_APPLICATION_CREDENTIALS` within the container runtime.
+
+    There are multiple ways to set sensitive environment variables for a Nomad job; this example uses Consul templates which are built into Nomad.
+
+    The Nomad job will query Consul’s key-value store for the `service_account` key and export the value as an environment variable named `GOOGLE_APPLICATION_CREDENTIALS` within the container.
+
+    Please run all of the following commands on the "Nomad Server" tab.
+
+    First, SSH into the Nomad Server:
+    ```
+    gcloud compute ssh nomad-server-1 --zone europe-west1-b
+    ```
+
+    Please examine the "controller.nomad" file on the "Config Files" tab or by running this command on the "Nomad Server" tab:
+    ```
+    cat nomad/controller.nomad
+    ```
+    You could use `vim` instead if you prefer.
+
+    Note the `csi_plugin` stanza, which allows the task to specify that it provides a Container Storage Interface plugin called `gcepd` to the cluster. Nomad will automatically register the plugin so that it can be used by other jobs to claim volumes.
+
+    Go ahead and run the "controller" Nomad job:
+    ```
+    nomad job run nomad/controller.nomad
+    ```
+
+    Please check the status of the "controller" job to ensure it is in the running state and has 1 healthy instance of the "controller" task group:
+    ```
+    nomad job status controller
+    ```
+    You might have to repeat the command a few times before you do see 1 healthy allocation.  You can also check the status of the job in the Nomad UI.
+
+    Next, please examine the "nodes.nomad" job specification file on the "Config Files" tab or by running `cat` or `vim` on the "Nomad Server" tab.
+
+    Now run the "nodes" job:
+    ```
+    nomad job run nomad/nodes.nomad
+    ```
+
+    Please check the status of the "nodes" job to ensure it in in the running state and has 3 healthy allocations:
+    ```
+    nomad job status nodes
+    ```
+    You might have to repeat the command a few times before you do see 3 running instances of the "nodes" task group.  You can also check the status of the job in the Nomad UI:
+
+    Check the status of the CSI plugin with the following command to ensure it is registered:
+    ```
+    nomad plugin status gcepd
+    ```
+    Please note, it usually takes around 30 seconds to register the CSI plugin with Nomad.
+
+    Please exit the SSH session. (This will enable the script run by the "Check" button to work correctly.)
+    ```
+    exit
+    ```
+
+    In the next challenge, you will create a Google Persistent Disk and register it as a Nomad CSI plugin with the gcepd CSI driver.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will deploy the [Google Compute Engine Persistent Disk (gcepd) CSI driver](https://cloud.google.com/kubernetes-engine/docs/how-to/persistent-volumes/gce-pd-csi-driver) using Nomad.
+
+      In the next challenge, you will create a Google Persistent Disk and register it as a Nomad CSI plugin with the gcepd CSI driver.
+  tabs:
+  - title: Config Files
+    type: code
+    hostname: cloud-client
+    path: /root/nomad/
+  - title: Cloud CLI
+    type: terminal
+    hostname: cloud-client
+  - title: Nomad Server
+    type: terminal
+    hostname: cloud-client
+  - title: Cloud Links
+    type: service
+    hostname: cloud-client
+    path: /
+    port: 80
+  difficulty: basic
+  timelimit: 600
+- slug: create-persistent-disk
+  id: lyhsmqlrnhgw
+  type: challenge
+  title: Create and Register a Google Persistent Disk
+  teaser: |
+    Create a Google Persistent Disk and register it with the CSI Driver.
+  assignment: |-
+    In this challenge, you will create a persistent disk and register it with the gcepd CSI Driver as a Nomad CSI volume.
+
+    First, create a GCP persistent disk on the "Cloud CLI" tab:
+    ```
+    gcloud compute disks create mysql --size 10 --zone europe-west1-b
+    ```
+    You can ignore the warning about having selected a disk size under 200GB.
+
+    Then, describe the details of the disk on the "Cloud CLI" tab since we will need part of the `selfLink` value in the next step:
+    ```
+    gcloud compute disks describe mysql --zone europe-west1-b
+    ```
+
+    Please run the following commands on the "Cloud CLI" tab to update the "volume.hcl" file with desired portion of the `selfLink` returned by the last command:
+    ```
+    self_link=$(gcloud compute disks describe mysql --zone europe-west1-b | grep "selfLink"| cut -c49-)
+    gcloud compute ssh nomad-server-1 --zone europe-west1-b --command "sed -i 's:SELF_LINK:$self_link:g' nomad/volume.hcl"
+    ```
+
+    Please SSH to the Nomad Server on the "Nomad Server" tab:
+    ```
+    gcloud compute ssh nomad-server-1 --zone europe-west1-b
+    ```
+
+    Inspect the "volume.hcl" file in the "nomad" directory on the "Nomad Server" tab:
+    ```
+    vim nomad/volume.hcl
+    ```
+
+    Here is an example of what the file should look like:<br>
+    `
+    type = "csi"
+    id = "mysql"
+    name = "mysql"
+    external_id = "projects/p-win27zef7iuixs40ujimrnpitdbj/zones/europe-west"
+    access_mode = "single-node-writer"
+    attachment_mode = "file-system"
+    plugin_id = "gcepd"
+    `<br>
+
+    Quit `vim` by typing `:q`.
+
+    Next, register the volume on the "Nomad Server" tab:
+    ```
+    nomad volume register nomad/volume.hcl
+    ```
+    If the command is successful, it will not return anything.
+
+    Check that the volume is correctly registered on the "Nomad Server" tab:
+    ```
+    nomad volume status
+    ```
+    This should return this:<br>
+    `
+    Container Storage Interface
+    ID     Name   Plugin ID  Schedulable  Access Mode
+    mysql  mysql  gcepd      true         single-node-writer
+    `<br>
+
+    Please exit the SSH session so that the "Check" button will work correctly.
+    ```
+    exit
+    ```
+
+    In the next challenge, you will deploy a MySQL database that uses the CSI Volume to store its data.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will create a Google persistent disk and register it with as a CSI volume with the CSI driver.
+
+      In the next challenge, you will deploy a MySQL database that uses the CSI Volume to store its data.
+  tabs:
+  - title: Config Files
+    type: code
+    hostname: cloud-client
+    path: /root/nomad/
+  - title: Cloud CLI
+    type: terminal
+    hostname: cloud-client
+  - title: Nomad Server
+    type: terminal
+    hostname: cloud-client
+  - title: Cloud Links
+    type: service
+    hostname: cloud-client
+    path: /
+    port: 80
+  difficulty: basic
+  timelimit: 600
+- slug: deploy-mysql
+  id: u62alewqbkjf
+  type: challenge
+  title: Deploy a MySQL Database
+  teaser: |
+    Deploy a MySQL database that uses the Nomad CSI volume for its storage.
+  assignment: |-
+    In this challenge, you will deploy a MySQL database that uses the CSI Volume to store its data. You will also add some items to one of its tables.
+
+    You will deploy the database with a Nomad job file. The MySQL database will be able to persist its data since the Nomad job attaches the CSI volume you registered with Nomad in the last challenge.
+
+    First, SSH into the Nomad Server on the "Nomad Server" tab:
+    ```
+    gcloud compute ssh nomad-server-1 --zone europe-west1-b
+    ```
+
+    Next, please examine the "mysql.nomad" file on the "Config Files" tab or by running `cat` or `vim` on the "Nomad Server" tab:
+    ```
+    cat nomad/mysql.nomad
+    ```
+    Please note the following aspects of this job:
+      * The `volume` stanza in the `mysql-server` task group indicates that the task group will use the `mysql` CSI volume.
+      * The `volume_mount` stanza in the `mysql-server` task indicates that the `mysql` volume should be mounted in the task's allocation as the `/srv` directory which is where mysql stores its data.
+
+    The volume is the CSI volume that you registered with Nomad and is backed by the CSI Driver that uses the Google Persistent Disk you created.
+
+    Run the mysql job:
+    ```
+    nomad job run nomad/mysql.nomad
+    ```
+
+    Check that the job is in a running state and has 1 healthy allocation:
+    ```
+    nomad job status mysql
+    ```
+    You might have to repeat the command a few times before the allocation is healthy. You can also check the status of the job in the Nomad UI. It might take up to 90 seconds for the database to be fully running.
+
+    Using the `mysql` client on the "Nomad Server" tab, connect to the database to access the MySQL tables:
+    ```
+    mysql -h mysql-server.service.consul -u web -p -D itemcollection
+    ```
+    The password for this demo is `password`.
+
+    Display the contents of the items table:
+    ```
+    select * from items;
+    ```
+
+    Now add some items to the table:
+    ```
+    INSERT INTO items (name) VALUES ('glove');
+    INSERT INTO items (name) VALUES ('dog');
+    ```
+
+    Once you have added these items to the table, exit the `mysql` client:
+    ```
+    exit
+    ```
+
+    Please also exit the SSH session to the Nomad server to enable the check scripts to work correctly:
+    ```
+    exit
+    ```
+
+    In the next challenge, you will stop and purge the MySQL job and then redeploy it.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will deploy a MySQL database with a Nomad Job and add some items to one of its tables.
+
+      In the next challenge, you will stop and purge the MySQL job and then redeploy it. When you do this, you will find that the items you added in this challenge are still in the `items` table.
+  tabs:
+  - title: Config Files
+    type: code
+    hostname: cloud-client
+    path: /root/nomad/
+  - title: Cloud CLI
+    type: terminal
+    hostname: cloud-client
+  - title: Nomad Server
+    type: terminal
+    hostname: cloud-client
+  - title: Cloud Links
+    type: service
+    hostname: cloud-client
+    path: /
+    port: 80
+  difficulty: basic
+  timelimit: 600
+- slug: destroy-rerun-mysql
+  id: kx5bkx74hpb1
+  type: challenge
+  title: Destroy and Rerun the MySQL Job
+  teaser: |
+    Destroy and rerun the MySQL job. Confirm persistence of its data.
+  assignment: |-
+    In this challenge, you will stop and purge the MySQL job and then rerun it. When you do this, you will find that the items you added in the last challenge are still in the `items` table.
+
+    First, SSH into the Nomad Server on the "Nomad Server" tab"
+    ```
+    gcloud compute ssh nomad-server-1 --zone europe-west1-b
+    ```
+
+    You are now ready to destroy the database. Please run the following command on the "Nomad Server" tab to stop and purge the job from the Nomad cluster:
+    ```
+    nomad stop -purge mysql-server
+    ```
+
+    Verify the `mysql` job is no longer running in the cluster:
+    ```
+    nomad job status mysql
+    ```
+    You should not see the `mysql` job.
+
+    Using the same "mysql.nomad" job file that you used in the last challenge, redeploy the database:
+    ```
+    nomad job run nomad/mysql.nomad
+    ```
+    The job will use the existing volume that holds data that was previously written rather than starting with a clean slate.
+
+    Next, connect to the database:
+    ```
+    mysql -h mysql-server.service.consul -u web -p -D itemcollection
+    ```
+    Recall that he password for this demo is `password`.
+
+    Once you reconnect to MySQL, you should be able to verify that the items you added to the `items` table in the last challenge are still present:
+    ```
+    select * from items;
+    ```
+    This should show the following:
+    ````
+    +----+----------+
+    | id | name     |
+    +----+----------+
+    |  1 | bike     |
+    |  2 | baseball |
+    |  3 | chair    |
+    |  4 | glove    |
+    |  5 | dog      |
+    +----+----------+
+    ````
+    By using a CSI plugin, Nomad was able to preserve the data across the restart of the MySQL database.
+
+    Exit the `mysql` client:
+    ```
+    exit
+    ```
+
+    Finally, exit the SSH session on the "Nomad Server" tab so that the scripts run by the "Check" button will work correctly:
+    ```
+    exit
+    ```
+
+    Congratulations on completing the track! Feel free to play around in the environment until the track times out. When you're done, click the green "Check" button to run the final check.
+  notes:
+  - type: text
+    contents: |-
+      Stop and purge the MySQL Nomad job and then rerun it to redeploy the database.
+
+      Then check that the items you added to the `items` table are still there.
+  tabs:
+  - title: Config Files
+    type: code
+    hostname: cloud-client
+    path: /root/nomad/
+  - title: Cloud CLI
+    type: terminal
+    hostname: cloud-client
+  - title: Nomad Server
+    type: terminal
+    hostname: cloud-client
+  - title: Cloud Links
+    type: service
+    hostname: cloud-client
+    path: /
+    port: 80
+  difficulty: basic
+  timelimit: 1200
+checksum: "12767536093021618890"
+show_timer: true

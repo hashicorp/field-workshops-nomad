@@ -1,0 +1,33 @@
+#!/bin/bash -l
+
+set -e
+
+rm /root/.bash_history
+touch /root/.bash_history
+
+# Write solve script
+cat <<-EOF > /root/nomad/stop-and-restart-mysql.sh
+#!/bin/bash -l
+#Enable bash history
+HISTFILE=~/.bash_history
+set -o history
+# Stop and Purge the Job
+nomad job stop -purge mysql-server
+# Sleep
+sleep 60
+# Rerun the mysql.nomad Job
+nomad job run nomad/mysql.nomad
+# Sleep
+sleep 60
+EOF
+
+# SCP solve script to nomad-server-1
+gcloud compute scp /root/nomad/stop-and-restart-mysql.sh nomad-server-1:/root/nomad/stop-and-restart-mysql.sh --zone "europe-west1-b"
+
+# Make solve script executable
+gcloud compute ssh nomad-server-1 --zone europe-west1-b  --command "chmod +x /root/nomad/stop-and-restart-mysql.sh"
+
+# Purge history on server
+gcloud compute ssh nomad-server-1 --zone europe-west1-b --command "rm /root/.bash_history && touch /root/.bash_history"
+
+exit 0

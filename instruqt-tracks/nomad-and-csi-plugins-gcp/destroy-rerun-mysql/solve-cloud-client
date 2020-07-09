@@ -1,0 +1,9 @@
+#!/bin/bash -l
+
+#Enable bash history
+HISTFILE=/root/.bash_history
+set -o history
+
+gcloud compute ssh nomad-server-1 --zone europe-west1-b --command "/root/nomad/stop-and-restart-mysql.sh"
+
+exit 0

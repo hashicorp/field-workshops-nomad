@@ -1,0 +1,15 @@
+#!/bin/bash -l
+
+set -e
+
+running_jobs=$(gcloud compute ssh nomad-server-1 --zone europe-west1-b  --command 'nomad job status | grep "running" | wc -l')
+if [ $running_jobs -ne 3 ]; then
+  fail-message "You appear to have not run the mysql job."
+fi
+
+items_in_table=$(gcloud compute ssh nomad-server-1 --zone europe-west1-b --command 'mysql -h mysql-server.service.consul -u web -ppassword -D itemcollection -ss -e "select * from items;" | wc -l')
+if [ $items_in_table -lt 5 ]; then
+  fail-message "You did not add 2 or more items to the items table in the MySQL database."
+fi
+
+exit 0
