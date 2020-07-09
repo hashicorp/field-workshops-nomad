@@ -4,6 +4,12 @@
 HISTFILE=/root/.bash_history
 set -o history
 
+nomad stop -purge mysql-server
+
+sleep 30
+
 nomad run /root/nomad/mysql.nomad
+
+sleep 60
 
 exit 0

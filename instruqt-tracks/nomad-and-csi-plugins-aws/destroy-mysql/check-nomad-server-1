@@ -4,7 +4,7 @@ set -e
 
 grep -q "nomad stop -purge mysql-server" /root/.bash_history || fail-message "You have not destroyed the MySQL instance"
 
-grep -q "nomad run" /root/.bash_history || fail-message "You have not deployed the database"
+grep -q "nomad run .*mysql.nomad" /root/.bash_history || fail-message "You have not deployed the database"
 
 grep -q "mysql -h mysql-server.service.consul -u web -p -D itemcollection" /root/.bash_history || fail-message "You have not connected to the database"
 

@@ -6,5 +6,6 @@ grep -q "nomad run nomad/plugin-ebs-controller.nomad" /root/.bash_history || fai
 
 grep -q "nomad run nomad/plugin-ebs-nodes.nomad" /root/.bash_history || fail-message "You have not deployed the plugin. Run the nodes job"
 
+grep -q "nomad volume register /nomad/volume.hcl" /root/.bash_history || fail-message "You have not registered the volume yet."
 
 exit 0

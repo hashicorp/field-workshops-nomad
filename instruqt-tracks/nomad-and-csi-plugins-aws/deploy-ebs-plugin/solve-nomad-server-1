@@ -6,7 +6,10 @@ set -o history
 
 nomad job run nomad/plugin-ebs-controller.nomad
 
+sleep 60
 nomad job run nomad/plugin-ebs-nodes.nomad
+
+sleep 60
 
 nomad volume register /nomad/volume.hcl
 

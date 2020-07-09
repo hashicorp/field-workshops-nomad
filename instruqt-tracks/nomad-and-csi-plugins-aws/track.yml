@@ -1,7 +1,7 @@
-slug: nomad-and-csi-plugins
-id: 8gcf7uizgmdf
+slug: nomad-and-csi-plugins-aws
+id: m165ntb5pvth
 type: track
-title: Nomad CSI Plugins
+title: Nomad CSI Plugins (AWS)
 teaser: |
   Learn how Nomad CSI plugins support stateful workloads.
 description: |-
@@ -29,7 +29,7 @@ private: true
 published: false
 challenges:
 - slug: verify-nomad-cluster-health
-  id: 0e1x2hnlvsaf
+  id: wsyxuk2k3pt5
   type: challenge
   title: Verify the Health of Your Nomad Cluster
   teaser: |
@@ -85,14 +85,13 @@ challenges:
   difficulty: basic
   timelimit: 600
 - slug: deploy-ebs-volume
-  id: wx6zftmpdxai
+  id: uamsy14pnxpb
   type: challenge
   title: Deploy an AWS EBS Volume
   teaser: |
     Deploy an AWS EBS volume that the CSI plugin will mount.
-  assignment: |2-
-
-    "In this challenge, you will deploy an AWS EBS volume that the CSI plugin, [aws-ebs-csi-driver](https://github.com/kubernetes-sigs/aws-ebs-csi-driver) will use to persist data from a MySQL database.
+  assignment: |-
+    In this challenge, you will deploy an AWS EBS volume that the CSI plugin, [aws-ebs-csi-driver](https://github.com/kubernetes-sigs/aws-ebs-csi-driver) will use to persist data from a MySQL database.
 
     Create a 5GB EBS volume that the CSI plugin will use to persist data for a MYSQL database. Run this in the Cloud CLI tab.
 
@@ -105,10 +104,11 @@ challenges:
     In the next challenge, you will deploy the EBS plugin and register your newly created volume. "
   notes:
   - type: text
-    contents: In this challenge, you will deploy an AWS EBS volume that the CSI plugin,
-      [aws-ebs-csi-driver](https://github.com/kubernetes-sigs/aws-ebs-csi-driver)
-      will use to persist data from a MySQL database.In the next challenge, you will
-      do deploy the EBS plugin as a omad job then register the newly created volume
+    contents: |-
+      In this challenge, you will deploy an AWS EBS volume that the CSI plugin, [aws-ebs-csi-driver](https://github.com/kubernetes-sigs/aws-ebs-csi-driver)
+      will use to persist data from a MySQL database.
+
+      In the next challenge, you will deploy the EBS plugin as a Nomad job and then register the newly created volume
       with Nomad.
   tabs:
   - title: Files
@@ -118,15 +118,6 @@ challenges:
   - title: Server
     type: terminal
     hostname: nomad-server-1
-  - title: Client 1
-    type: terminal
-    hostname: nomad-client-1
-  - title: Client 2
-    type: terminal
-    hostname: nomad-client-2
-  - title: Client 3
-    type: terminal
-    hostname: nomad-client-3
   - title: Nomad UI
     type: service
     hostname: nomad-server-1
@@ -140,25 +131,24 @@ challenges:
     path: /
     port: 80
   difficulty: basic
-  timelimit: 3600
+  timelimit: 600
 - slug: deploy-ebs-plugin
-  id: rirwwvutdpkr
+  id: quv2h4kf8hma
   type: challenge
   title: Deploy the EBS plugin and register the volume
-  teaser: 'Deploy the EBS CSI plugin as a Nomad job then register the EBS volume you
-    created. '
-  assignment: |2-
-
+  teaser: |
+    Deploy the EBS CSI plugin as a Nomad job and register the EBS volume.
+  assignment: |-
     In this challenge, you will deploy the EBS plugin as a Nomad job. Plugins for CSI are run as Nomad jobs with a plugin stanza. The AWS EBS CSI driver is packaged as a docker container that you can run with the Docker task driver.
 
-     The EBS CSI driver requires a controller plugin to coordinate access to the EBS volume, and node plugins to mount the volume to the EC2 instance. You'll create a controller job as a nomad service job and the node job as a Nomad system job.
+    The EBS CSI driver requires a controller plugin to coordinate access to the EBS volume, and node plugins to mount the volume to the EC2 instance. You'll create a controller job as a nomad service job and the node job as a Nomad system job.
 
-    Inspect `plugin-ebs-controller.nomad` in the files tab under `/root/nomad` In the server tab, run the job.
+    Inspect `plugin-ebs-controller.nomad` in the files tab under `/root/nomad`. On the server tab, run the job:
     ```
     nomad job run nomad/plugin-ebs-controller.nomad
     ```
 
-    Inspect `plugin-ebs-nodes.nomad`in the files tab under `/root/nomad`In the server tab, run the job
+    Inspect `plugin-ebs-nodes.nomad`in the files tab under `/root/nomad` On the server tab, run the job:
     ```
     nomad job run nomad/plugin-ebs-nodes.nomad
     ```
@@ -174,13 +164,13 @@ challenges:
     nomad volume status mysql
     ```
 
-    In the next challenge, you will deply a MySQL database than can use the EBS volume as storage.
+    In the next challenge, you will deply a MySQL database and  than can use the EBS volume as storage.
   notes:
   - type: text
     contents: |-
-      In this challenge, you will deploy an AWS EBS volume that the CSI plugin, [aws-ebs-csi-driver](https://github.com/kubernetes-sigs/aws-ebs-csi-driver) will use to persist data from a MySQL database.
+      In this challenge, you will deploy an AWS EBS volume that the CSI plugin, [aws-ebs-csi-driver](https://github.com/kubernetes-sigs/aws-ebs-csi-driver), will use to persist data from a MySQL database.
 
-      In the next challenge, you will do <SOMETHING\>.
+      In the next challenge, you will deploy a MySQL database and write some data to it.
   tabs:
   - title: Files
     type: code
@@ -189,15 +179,6 @@ challenges:
   - title: Server
     type: terminal
     hostname: nomad-server-1
-  - title: Client 1
-    type: terminal
-    hostname: nomad-client-1
-  - title: Client 2
-    type: terminal
-    hostname: nomad-client-2
-  - title: Client 3
-    type: terminal
-    hostname: nomad-client-3
   - title: Nomad UI
     type: service
     hostname: nomad-server-1
@@ -211,14 +192,14 @@ challenges:
     path: /
     port: 80
   difficulty: basic
-  timelimit: 3600
+  timelimit: 600
 - slug: deploy-mysql
-  id: qfh5vuxd772m
+  id: xtm23vvxclht
   type: challenge
   title: Deploy MySQL as a Nomad Job
-  teaser: Deploy MySQL as a Nomad job and write data to a table.
-  assignment: |2-
-
+  teaser: |
+    Deploy MySQL as a Nomad job and write data to a table.
+  assignment: |-
     In this challenge you will deploy a MySQL database and write data to a database table that is backed by the EBS persistent volume.
 
     Inspect `mysql.nomad` in the files tab under `/root/nomad` In the server tab, run the job.
@@ -253,13 +234,13 @@ challenges:
 
     Run the `INSERT INTO` command some more times with different values of your own. Once you are done then type `exit` to go back to the Nomad client command line.
 
-
-
-    In the next challenge, you will destry the database job and then re-deploy to verify the data has persisted.
+    In the next challenge, you will destroy the database job and then re-deploy to verify the data has persisted.
   notes:
   - type: text
-    contents: In this Challenge you will deploy a MySQL database with a persistent
-      volume then write some data to a MySQL table.
+    contents: |-
+      In this Challenge you will deploy a MySQL database with a persistent volume and then write some data to a MySQL table.
+
+      In the next challenge, you will destroy the database job and then re-deploy to verify the data has persisted.
   tabs:
   - title: Files
     type: code
@@ -268,15 +249,6 @@ challenges:
   - title: Server
     type: terminal
     hostname: nomad-server-1
-  - title: Client 1
-    type: terminal
-    hostname: nomad-client-1
-  - title: Client 2
-    type: terminal
-    hostname: nomad-client-2
-  - title: Client 3
-    type: terminal
-    hostname: nomad-client-3
   - title: Nomad UI
     type: service
     hostname: nomad-server-1
@@ -290,12 +262,13 @@ challenges:
     path: /
     port: 80
   difficulty: basic
-  timelimit: 3600
+  timelimit: 600
 - slug: destroy-mysql
-  id: bgwrqixycyhx
+  id: 5lvvbsvaxicz
   type: challenge
   title: Verify data is persisted
-  teaser: Destroy the MySQL job then re-deploy to verify data has persisted
+  teaser: |
+    Destroy the MySQL job and then re-deploy it to verify data has been persisted.
   assignment: |-
     In this challenge you will destory the MySQL job then re-deploy to verify the data has persisted.
 
@@ -327,8 +300,10 @@ challenges:
     ```
   notes:
   - type: text
-    contents: In this challenge, you will destory the MySQL job then re-deploy to
-      verify the data has persisted
+    contents: |-
+      In this challenge, you will stop and purge the MySQL Nomad job.
+
+      You will then rerun it to verify that the data has been persisted.
   tabs:
   - title: Files
     type: code
@@ -337,15 +312,6 @@ challenges:
   - title: Server
     type: terminal
     hostname: nomad-server-1
-  - title: Client 1
-    type: terminal
-    hostname: nomad-client-1
-  - title: Client 2
-    type: terminal
-    hostname: nomad-client-2
-  - title: Client 3
-    type: terminal
-    hostname: nomad-client-3
   - title: Nomad UI
     type: service
     hostname: nomad-server-1
@@ -359,5 +325,6 @@ challenges:
     path: /
     port: 80
   difficulty: basic
-  timelimit: 3600
-checksum: "17953632584709886647"
+  timelimit: 1200
+checksum: "3840692511594612917"
+show_timer: true

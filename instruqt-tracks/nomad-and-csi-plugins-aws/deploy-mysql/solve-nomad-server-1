@@ -6,4 +6,9 @@ set -o history
 
 nomad run /root/nomad/mysql.nomad
 
+sleep 60
+
+nomad volume status mysql
+
+
 exit 0
