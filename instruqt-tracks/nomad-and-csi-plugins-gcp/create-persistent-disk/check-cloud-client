@@ -1,0 +1,19 @@
+#!/bin/bash -l
+
+set -e
+
+grep -q "gcloud compute disks create mysql --size 10 --zone europe-west1-b" /root/.bash_history || fail-message "You have not created a disk yet"
+
+# Get the edited copy of volume.hcl
+gcloud compute scp nomad-server-1:/root/nomad/volume.hcl /root/volume.hcl --strict-host-key-checking no --zone "europe-west1-b"
+
+# Check that volume.hcl has valid external_id
+grep -q "projects/.*/zones/europe-west1-b/disks/mysql" /root/volume.hcl || fail-message "You have not set 'external_id' in volume.hcl correctly yet."
+
+# Check status of volume
+volume_status=$(gcloud compute ssh nomad-server-1 --zone europe-west1-b --command 'nomad volume status | grep "true" | wc -l')
+if [ $volume_status -ne 1 ]; then
+  fail-message "The volume mysql is not schedulable."
+fi
+
+exit 0

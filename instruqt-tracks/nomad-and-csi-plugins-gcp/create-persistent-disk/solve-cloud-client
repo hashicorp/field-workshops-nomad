@@ -1,0 +1,22 @@
+#!/bin/bash -l
+
+#Enable bash history
+HISTFILE=/root/.bash_history
+set -o history
+
+gcloud compute disks create mysql --size 10 --zone europe-west1-b
+
+sleep 30
+
+self_link=$(gcloud compute disks describe mysql --zone europe-west1-b | grep "selfLink"| cut -c49-)
+
+gcloud compute ssh nomad-server-1 --zone europe-west1-b --command "sed -i 's:SELF_LINK:$self_link:g' nomad/volume.hcl"
+
+gcloud compute ssh nomad-server-1 --zone europe-west1-b --command 'nomad volume register nomad/volume.hcl'
+
+sleep 30
+
+# Check volume status
+gcloud compute ssh nomad-server-1 --zone europe-west1-b --command 'nomad volume status'
+
+exit 0

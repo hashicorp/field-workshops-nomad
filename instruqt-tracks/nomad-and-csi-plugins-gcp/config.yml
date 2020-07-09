@@ -5,11 +5,6 @@ containers:
   shell: /bin/bash -l
   ports:
   - 80
-- name: nomad-server
-  image: gcr.io/instruqt/cloud-client
-  shell: /bin/bash -l
-  ports:
-  - 80
 gcp_projects:
 - name: nomad
   services:

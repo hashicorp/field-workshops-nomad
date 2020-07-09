@@ -1,8 +1,0 @@
-#!/bin/bash -l
-
-set -e
-
-grep -q "gcloud compute disks create mysql --size 10 --zone europe-west1-b" /root/.bash_history || fail-message "You have not created a disk yet"
-
-
-exit 0

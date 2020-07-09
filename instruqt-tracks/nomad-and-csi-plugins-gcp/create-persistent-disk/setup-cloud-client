@@ -1,0 +1,17 @@
+#!/bin/bash -l
+
+set -e
+
+cat <<-EOF > /root/nomad/volume.hcl
+type = "csi"
+id = "mysql"
+name = "mysql"
+external_id = "SELF_LINK"
+access_mode = "single-node-writer"
+attachment_mode = "file-system"
+plugin_id = "gcepd"
+EOF
+
+gcloud compute scp /root/nomad/volume.hcl nomad-server-1:/root/nomad/volume.hcl --strict-host-key-checking no --zone "europe-west1-b"
+
+exit 0

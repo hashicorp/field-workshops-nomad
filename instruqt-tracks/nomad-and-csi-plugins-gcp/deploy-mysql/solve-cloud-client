@@ -1,0 +1,17 @@
+#!/bin/bash -l
+
+#Enable bash history
+HISTFILE=/root/.bash_history
+set -o history
+
+gcloud compute ssh nomad-server-1 --zone europe-west1-b --command 'nomad job run nomad/mysql.nomad'
+
+sleep 60
+
+gcloud compute ssh nomad-server-1 --zone europe-west1-b --command 'nomad job status mysql'
+
+gcloud compute ssh nomad-server-1 --zone europe-west1-b --command "mysql -h mysql-server.service.consul -u web -ppassword -D itemcollection -e \"INSERT INTO items (name) VALUES ('glove');\""
+
+gcloud compute ssh nomad-server-1 --zone europe-west1-b --command "mysql -h mysql-server.service.consul -u web -ppassword -D itemcollection -e \"INSERT INTO items (name) VALUES ('dog');\""
+
+exit 0

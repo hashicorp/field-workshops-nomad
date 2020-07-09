@@ -1,9 +1,0 @@
-#!/bin/bash -l
-
-#Enable bash history
-HISTFILE=/root/.bash_history
-set -o history
-
-gcloud compute disks create mysql --size 10 --zone europe-west1-b
-
-exit 0
