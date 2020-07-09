@@ -8,9 +8,9 @@ description: |-
   Some Nomad workloads need to persist data that will still be available if the job that runs the workloads are stopped and restarted.
 
   Nomad supports stateful workloads with 3 different options:
-    * [Nomad Host Volumes](https://nomadproject.io/docs/configuration/client/#host_volume-stanza) that are managed by Nomad and can be used with any Nomad task driver
+    * [Nomad Host Volumes](https://nomadproject.io/docs/configuration/client/#host_volume-stanza) that are managed by Nomad and can be used with many Nomad task drivers including Docker, Exec, and Java
     * [Docker Volume Drivers](https://docs.docker.com/engine/extend/plugins_volume/#create-a-volumedriver) such as Portworx that are externally managed and can only be used with the Docker task driver
-    * [CSI Plugins](https://github.com/container-storage-interface/spec/blob/master/spec.md) that are also externally managed but can be used with any Nomad task driver.
+    * [CSI Plugins](https://github.com/container-storage-interface/spec/blob/master/spec.md) that are also externally managed but can be used with many Nomad task drivers including Docker, Exec, and Java
 
   This track will guide you through using Nomad CSI Plugins to persist data for a MySQL database using a Google Persitent Disk and the GCP Driver. It is based on the [Stateful Workloads with Container Storage Interface](https://learn.hashicorp.com/nomad/stateful-workloads/csi-volumes) guide, but uses GCP instead of AWS.
 
@@ -48,7 +48,7 @@ challenges:
 
     You can visit the Google Cloud Console for the GCP project associated with the lab by selecting the 'Cloud Links' tab, right-clicking the Project ID for the "nomad" Google cloud project, and then opening the console in a new tab or window. If you already have your own GCP account, it will be easier to use an incognito window.
 
-    First, determine the public IP of your Nomad server by running this command on the "Cloud CLI" tab:
+    First, determine the public IP of your Nomad server by running this command on the "Nomad Server" tab:
     ```
     echo $nomad_server_ip
     ```
@@ -57,24 +57,24 @@ challenges:
 
     You can visit the Consul UI in any browser tab outside the Instruqt tab with the URL, `http://<NOMAD_IP>:8500` where <NOMAD_IP\> is the value of $nomad_server_ip.
 
-    Next, SSH to the Nomad server on the "Cloud CLI" tab with this command:
+    Next, SSH to the Nomad server on the "Nomad Server" tab with this command:
     ```
     gcloud compute ssh nomad-server-1 --zone europe-west1-b
     ```
 
-    Now, verify that all 4 Consul agents are running and connected to the cluster by running this command on the "Cloud CLI" tab:
+    Now, verify that all 4 Consul agents are running and connected to the cluster by running this command on the "Nomad Server" tab:
     ```
     consul members
     ```
     You should see 4 Consul agents with the "alive" status including 1 server and 3 clients.
 
-    Check that the Nomad server is running by running this command on the "Cloud CLI" tab:
+    Check that the Nomad server is running by running this command on the "Nomad Server" tab:
     ```
     nomad server members
     ```
     You should see 1 Nomad server with the "alive" status.
 
-    Check the status of the Nomad client nodes by running this command on the "Cloud CLI" tab:
+    Check the status of the Nomad client nodes by running this command on the "Nomad Server" tab:
     ```
     nomad node status
     ```
@@ -99,7 +99,7 @@ challenges:
     type: code
     hostname: cloud-client
     path: /root/nomad/
-  - title: Cloud CLI
+  - title: Nomad Server
     type: terminal
     hostname: cloud-client
   - title: Cloud Links
@@ -128,7 +128,7 @@ challenges:
 
     The gcepd docker container needs credentials to interact with GCE resources. This is achieved by creating a GCP service account, creating a key for the service account and then passing the service account key to the gcepd container.
 
-    Service account credentials have been created as part of the this lab's setup and are in the "creds.json" file in the Cloud CLI container as well as on the Nomad Server. The contents of the file have also been written to the `service_account` key of Consul's key-value store.
+    Service account credentials have been created as part of the this lab's setup and are in the "creds.json" file in the Cloud CLI container  as well as on the Nomad Server. The contents of the file have also been written to the `service_account` key of Consul's key-value store.
 
     The containers access the key by reading an environment variable named `GOOGLE_APPLICATION_CREDENTIALS` within the container runtime.
 
@@ -198,9 +198,6 @@ challenges:
     type: code
     hostname: cloud-client
     path: /root/nomad/
-  - title: Cloud CLI
-    type: terminal
-    hostname: cloud-client
   - title: Nomad Server
     type: terminal
     hostname: cloud-client
@@ -220,21 +217,26 @@ challenges:
   assignment: |-
     In this challenge, you will create a persistent disk and register it with the gcepd CSI Driver as a Nomad CSI volume.
 
-    First, create a GCP persistent disk on the "Cloud CLI" tab:
+    First, create a GCP persistent disk on the "Nomad Server" tab:
     ```
     gcloud compute disks create mysql --size 10 --zone europe-west1-b
     ```
     You can ignore the warning about having selected a disk size under 200GB.
 
-    Then, describe the details of the disk on the "Cloud CLI" tab since we will need part of the `selfLink` value in the next step:
+    Then, describe the details of the disk on the "Nomad Server" tab since we will need part of the `selfLink` value in the next step:
     ```
     gcloud compute disks describe mysql --zone europe-west1-b
     ```
 
-    Please run the following commands on the "Cloud CLI" tab to update the "volume.hcl" file with desired portion of the `selfLink` returned by the last command:
+    Please run the following commands on the "Nomad Server" tab to update the "volume.hcl" file on the Nomad server with part of the `selfLink` of the disk:
     ```
     self_link=$(gcloud compute disks describe mysql --zone europe-west1-b | grep "selfLink"| cut -c49-)
     gcloud compute ssh nomad-server-1 --zone europe-west1-b --command "sed -i 's:SELF_LINK:$self_link:g' nomad/volume.hcl"
+    ```
+
+    If you want to see the disk details yourself, you can run the following command on the "Nomad Server" tab:
+    ```
+    gcloud compute disks describe mysql --zone europe-west1-b
     ```
 
     Please SSH to the Nomad Server on the "Nomad Server" tab:
@@ -277,6 +279,11 @@ challenges:
     mysql  mysql  gcepd      true         single-node-writer
     `<br>
 
+    If you would like to see more details, you can run this command too:
+    ```
+    nomad volume status mysql
+    ```
+
     Please exit the SSH session so that the "Check" button will work correctly.
     ```
     exit
@@ -294,9 +301,6 @@ challenges:
     type: code
     hostname: cloud-client
     path: /root/nomad/
-  - title: Cloud CLI
-    type: terminal
-    hostname: cloud-client
   - title: Nomad Server
     type: terminal
     hostname: cloud-client
@@ -383,9 +387,6 @@ challenges:
     type: code
     hostname: cloud-client
     path: /root/nomad/
-  - title: Cloud CLI
-    type: terminal
-    hostname: cloud-client
   - title: Nomad Server
     type: terminal
     hostname: cloud-client
@@ -473,9 +474,6 @@ challenges:
     type: code
     hostname: cloud-client
     path: /root/nomad/
-  - title: Cloud CLI
-    type: terminal
-    hostname: cloud-client
   - title: Nomad Server
     type: terminal
     hostname: cloud-client
@@ -486,5 +484,5 @@ challenges:
     port: 80
   difficulty: basic
   timelimit: 1200
-checksum: "12767536093021618890"
+checksum: "17263855367438720889"
 show_timer: true

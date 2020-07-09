@@ -55,7 +55,7 @@ name: nomad-storage-volume-options
   * [Nomad Host Volumes](https://nomadproject.io/docs/configuration/client/#host_volume-stanza) deployed to Nomad clients and managed by Nomad.
   * [Docker Volume Drivers](https://nomadproject.io/docs/drivers/docker/#inlinecode-volumes-16) such as Portworx that are deployed to Nomad clients but are externally managed.
   * [Container Storage Interface (CSI)](https://github.com/container-storage-interface/spec/blob/master/spec.md) plugins that expose externally managed storage.
-* The first and third can be used with all Nomad task drivers, but the second can only be used with the Docker task driver.
+* The first and third can be used with several Nomad task drivers, but the second can only be used with the Docker task driver.
 
 ???
 * Nomad 0.11 offers three choices for mounting persistent data volumes: Host Volumes, Docker Volume Drivers, and CSI plugins.
@@ -69,10 +69,10 @@ name: nomad-host-volumes
   * Simple Local Directory (/opt/coolapp/data/)
   * NFS Mountpoint (mount -t nfs 10.10.0.10:/backups /var/backups)
   * GlusterFS (gfs1.gluster-host.intern:/datastore /mnt/datastore)
-* These mounts can be used by [tasks](https://nomadproject.io/docs/job-specification/task/) within a [task group](https://nomadproject.io/docs/job-specification/group/) for any [task driver](https://nomadproject.io/docs/drivers).
+* These mounts can be used by [tasks](https://nomadproject.io/docs/job-specification/task/) within a [task group](https://nomadproject.io/docs/job-specification/group/) for several [task driver](https://nomadproject.io/docs/drivers).
 
 ???
-* Nomad host volumes work with multiple task drivers.
+* Nomad host volumes work with multiple task drivers, including docker, exec, and java.
 * They use storage volumes mounted on the Nomad clients.
 
 ---
