@@ -283,7 +283,7 @@ challenges:
     ```
     nomad volume status mysql
     ```
-    
+
     Please exit the SSH session so that the "Check" button will work correctly.
     ```
     exit
@@ -483,6 +483,6 @@ challenges:
     path: /
     port: 80
   difficulty: basic
-  timelimit: 7200
-checksum: "10755338108880415691"
+  timelimit: 1200
+checksum: "17263855367438720889"
 show_timer: true
