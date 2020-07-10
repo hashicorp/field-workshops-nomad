@@ -27,7 +27,7 @@ name: chapter-5-topics
 * Using Nomad Host Volumes
 * Using [Portworx](https://docs.portworx.com/install-with-other/nomad) with a Docker Volume Driver
 * Using Container Storage Interface (CSI) plugins
-* Stateful Workloads Hands-on Lab
+* Stateful Workloads Hands-on Labs
 
 ???
 * Here are the topics we will cover in this chapter.
@@ -53,8 +53,8 @@ name: nomad-storage-volume-options
 
 * Nomad 0.11 allows mounting persistant storage in 3 ways:
   * [Nomad Host Volumes](https://nomadproject.io/docs/configuration/client/#host_volume-stanza) deployed to Nomad clients and managed by Nomad.
-  * [Docker Volume Drivers](https://nomadproject.io/docs/drivers/docker/#inlinecode-volumes-16) such as Portworx that are deployed to Nomad clients but are externally managed.
-  * [Container Storage Interface (CSI)](https://github.com/container-storage-interface/spec/blob/master/spec.md) plugins that expose externally managed storage.
+  * [Docker Volume Drivers](https://www.nomadproject.io/docs/drivers/docker#volume_driver) such as Portworx that are deployed to Nomad clients but are externally managed.
+  * [Container Storage Interface (CSI)](https://www.nomadproject.io/docs/internals/plugins/csi) plugins that expose externally managed storage.
 * The first and third can be used with several Nomad task drivers, but the second can only be used with the Docker task driver.
 
 ???
@@ -69,7 +69,7 @@ name: nomad-host-volumes
   * Simple Local Directory (/opt/coolapp/data/)
   * NFS Mountpoint (mount -t nfs 10.10.0.10:/backups /var/backups)
   * GlusterFS (gfs1.gluster-host.intern:/datastore /mnt/datastore)
-* These mounts can be used by [tasks](https://nomadproject.io/docs/job-specification/task/) within a [task group](https://nomadproject.io/docs/job-specification/group/) for several [task driver](https://nomadproject.io/docs/drivers).
+* These mounts can be used by [tasks](https://nomadproject.io/docs/job-specification/task/) within a [task group](https://nomadproject.io/docs/job-specification/group/) for several [task drivers](https://nomadproject.io/docs/drivers).
 
 ???
 * Nomad host volumes work with multiple task drivers, including docker, exec, and java.
@@ -98,6 +98,7 @@ name: nomad-volumes-configurationon-in-jobs
 class: smaller
 # Using Host Volumes in Nomad Jobs
 * The [volume](https://nomadproject.io/docs/job-specification/volume) stanza is added to task groups to use a host volume mounted on the client.
+
 ```hcl
 volume "mongodb_vol" {
   type = "host"
@@ -105,6 +106,7 @@ volume "mongodb_vol" {
 }
 ```
 * The [volume_mount](https://nomadproject.io/docs/job-specification/volume_mount) stanza is added to tasks to allow a task to use the task group's volume.
+
 ```hcl
 volume_mount {
   volume = "mongodb_vol"
@@ -132,23 +134,56 @@ name: using-docker-volume-drivers
 name: csi-plugins
 class: compact
 # Using CSI Plugins
-* Nomad 0.11.0 added support for [Container Storage Interface (CSI)](https://github.com/container-storage-interface/spec/blob/master/spec.md) plugins.
+* Nomad 0.11.0 added support for [Container Storage Interface (CSI)](https://www.nomadproject.io/docs/internals/plugins/csi) plugins.
 * You can run CSI plugins as Nomad jobs that mount volumes created by your storage providers.
 * Examples include AWS EBS volumes, Azure disks, and GCP persistent disks.
 * Since the CSI plugins are written by the storage vendors, any CSI plugin that supports Kubernetes can also be used with Nomad.
-* Since the CSI plugins are run as Nomad jobs and told about volumes they should manage with the `nomad volume register` command, no configuration changes are needed on Nomad clients.
+* The CSI plugins are run as Nomad jobs.
+* Since volumes are registered with CSI plugins using the `nomad volume register` command, no configuration changes are needed on Nomad clients.
+
+???
+* Nomad 0.11 added support for CSI Plugins.
+
+---
+name: csi-plugins-details
+class: compact, smaller
+# CSI Plugin Details
+* CSI Plugins are run by Nomad jobs that use the Docker driver to run Docker containers.
+* There are 3 types of CSI plugins: Controllers, Nodes, and Monolith.
+* The node plugins are usually run as system jobs.
+* A job that registers a CSI plugin uses the [csi_plugin](https://www.nomadproject.io/docs/job-specification/csi_plugin) stanza.
+
+```hcl
+csi_plugin {
+  id        = "gcepd"
+  type      = "controller"
+  mount_dir = "/csi"
+}
+```
+* Task groups can claim volumes by using the [volume](https://www.nomadproject.io/docs/job-specification/volume) stanza.
+* Tasks in those task groups mount the volumes with the [volume_mount](https://www.nomadproject.io/docs/job-specification/volume_mount) stanza.
+
+???
+* CSI Plugins are run by Nomad jobs that use the Docker driver to run Docker containers.
+* There are 3 types of plugins.
+* Note that monolith plugins simultaneously serve as controllers and nodes.
+* The `csi_plugin` stanza is used when registering CSI plugins.
 
 ---
 name: lab-host-volumes
-# 👩‍💻 Nomad Host Volumes Lab
-* In this lab, you'll learn how to use Nomad host volumes.
-* You'll do this using the Instruqt track [Nomad Host Volumes](https://play.instruqt.com/hashicorp/invite/1cxyk78sgqja).
-* To explore using Nomad with Portworx, you can run the Instruqt track [Nomad Integration with Portworx](https://play.instruqt.com/hashicorp/invite/nrfcdqrghxiq).
-* To explore using Nomad with CSI plugins, please see the [Stateful Workloads with Container Storage Interface](https://learn.hashicorp.com/nomad/stateful-workloads/csi-volumes) learn track.
+# 👩‍💻 Nomad Stateful Workloads Lab
+* In this lab, you'll learn how to run stateful workloads in Nomad.
+* You can chose any of the following 3 Instruqt tracks:
+  * [Nomad Host Volumes](https://play.instruqt.com/hashicorp/invite/1cxyk78sgqja)
+  * [Nomad Integration with Portworx](https://play.instruqt.com/hashicorp/invite/nrfcdqrghxiq)
+  * [Nomad CSI Plugins (GCP)](https://play.instruqt.com/hashicorp/invite/x2ongtdbbbwe)
+* To explore using Nomad with the [AWS EBS CSI Driver](https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html), please see the [Stateful Workloads with Container Storage Interface](https://learn.hashicorp.com/nomad/stateful-workloads/csi-volumes) learn track.
+* We hope to have an Instruqt track that implements the AWS learn track in the near future.
 
 ???
-* Now, you can explore Nomad host volumes hands-on
-* You'll be running the Instruqt track "Nomad Host Volumes"
+* Now, you can explore running stateful workloads in Nomad hands-on.
+* You can chose from 3 different Instruqt tracks.
+* Maybe you'll even have time to run more than 1.
 
 ---
 name: chapter-Summary
@@ -159,7 +194,7 @@ In this chapter you did the following:
   * Using Nomad host volumes with any task driver
   * Using Docker volume drivers with the Docker driver
   * Using CSI plugins with external storage volumes
-* Actually worked with Nomad host volumes in an Instruqt lab.
+* Actually ran an Instruqt lab that used one of these stateful storage options.
 
 ???
 * You now know a lot more about Nomad's persistent storage options than you did yesterday.

@@ -12,7 +12,9 @@ description: |-
     * [Docker Volume Drivers](https://docs.docker.com/engine/extend/plugins_volume/#create-a-volumedriver) such as Portworx that are externally managed and can only be used with the Docker task driver
     * [CSI Plugins](https://github.com/container-storage-interface/spec/blob/master/spec.md) that are also externally managed but can be used with many Nomad task drivers including Docker, Exec, and Java
 
-  This track will guide you through using Nomad CSI Plugins to persist data for a MySQL database using a Google Persitent Disk and the GCP Driver. It is based on the [Stateful Workloads with Container Storage Interface](https://learn.hashicorp.com/nomad/stateful-workloads/csi-volumes) guide, but uses GCP instead of AWS.
+  This track will guide you through using a Nomad CSI Plugin to persist data for a MySQL database using a Google Persistent Disk and the [GCP Persistent Disk CSI Driver](https://cloud.google.com/kubernetes-engine/docs/how-to/persistent-volumes/gce-pd-csi-driver).
+
+  It is based on the [Stateful Workloads with Container Storage Interface](https://learn.hashicorp.com/nomad/stateful-workloads/csi-volumes) guide, but runs in GCP instead of AWS.
 
   Before running this track, we suggest you run the [Nomad Basics](https://play.instruqt.com/hashicorp/tracks/nomad-basics) track.
 
@@ -484,5 +486,5 @@ challenges:
     port: 80
   difficulty: basic
   timelimit: 1200
-checksum: "17263855367438720889"
+checksum: "17906758483636403794"
 show_timer: true
