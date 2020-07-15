@@ -245,9 +245,9 @@ name:  Nomad Evaluation
 # Nomad Evaluation
 ![EvaluationQueue](images/Evaluation_Queue.png)
 
-Once the Evaluation Broker recieves the Evaluations, the Broker queues the changes in order based on priority.
+Once the Evaluation Broker receives the Evaluations, the Broker queues the changes in order based on priority.
 
-Scheduler on Follower Nodes pick the Evaluations off the queue and start planning!
+The scheduler on Follower Nodes picks the Evaluations off the queue and starts planning!
 
 ???
 -  Here the evaluation Broker, residing on the leader node, manages the queue of pending evaluations.
