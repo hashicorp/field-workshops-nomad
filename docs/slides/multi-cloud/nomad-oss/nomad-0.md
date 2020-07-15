@@ -39,7 +39,7 @@ name: Introductions
 
 * Your Name
 * Job Title
-* Secrets Management Experience
+* Orchestration Experience
 * Favorite Text Editor
 
 ???
