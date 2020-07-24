@@ -4,6 +4,9 @@
 echo -e "nomad agent -dev -bind=0.0.0.0 &" >> /root/.bash_history
 nomad agent -dev -bind=0.0.0.0 > nomad.log 2>&1 &
 
+# Sleep
+sleep 30
+
 # Get the Nomad node status
 echo -e "nomad node status" >> /root/.bash_history
 nomad node status
