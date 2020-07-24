@@ -43,4 +43,10 @@ nomad job stop -namespace=qa webserver-test
 # Sleep
 sleep 30
 
+# Export the bootstrap token
+export NOMAD_TOKEN=$(cat /home/nomad/nomad/acls/bootstrap.txt | grep Secret | cut -d' ' -f7)
+
+# Use a Cross-Namespace Query
+nomad job status -namespace=* website
+
 exit 0

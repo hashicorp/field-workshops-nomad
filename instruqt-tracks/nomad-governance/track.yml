@@ -5,7 +5,7 @@ title: Nomad Enterprise Governance
 teaser: |
   Learn how to use Nomad Enterprise's governance capabilities including namespaces, resource quotas, and Sentinel policies.
 description: |-
-  This track will show you how to use Nomad Enterprise's governance capabilities including [Audit Logging](https://www.nomadproject.io/docs/enterprise#audit-logging), [Namespaces](https://learn.hashicorp.com/nomad/governance-and-policy/namespaces), [Resource Quotas](https://learn.hashicorp.com/nomad/governance-and-policy/quotas), and [Sentinel Policies](https://learn.hashicorp.com/nomad/governance-and-policy/sentinel).
+  This track will show you how to use Nomad Enterprise's governance capabilities including [Audit Logging](https://www.nomadproject.io/docs/enterprise#audit-logging), [Namespaces](https://learn.hashicorp.com/nomad/governance-and-policy/namespaces), [Resource Quotas](https://learn.hashicorp.com/nomad/governance-and-policy/quotas), [Sentinel Policies](https://learn.hashicorp.com/nomad/governance-and-policy/sentinel), and [Cross-Namespace Queries](https://www.nomadproject.io/docs/enterprise#cross-namespace-queries).
 
   You will also configure and use [Nomad ACLs](https://learn.hashicorp.com/nomad/acls/fundamentals) which are applicable to namespaces and resource quotas and required by Nomad Sentinel policies.
 
@@ -63,7 +63,7 @@ challenges:
 
       In later challenges, you will enable Nomad Enterprise's [Audit Logging](https://www.nomadproject.io/docs/enterprise#audit-logging) and define Nomad [Namespaces](https://learn.hashicorp.com/nomad/governance-and-policy/namespaces), [Resource Quotas](https://learn.hashicorp.com/nomad/governance-and-policy/quotas), [Nomad ACLs](https://learn.hashicorp.com/nomad/acls/fundamentals), and [Sentinel Policies](https://learn.hashicorp.com/nomad/governance-and-policy/sentinel).
 
-      You will then run jobs and learn how Sentinel policies and resource quotas restrict them.
+      You will then run jobs and learn how Sentinel policies and resource quotas restrict them. You'll also run a [Cross-Namespace Query](https://www.nomadproject.io/docs/enterprise#cross-namespace-queries)
   tabs:
   - title: Config Files
     type: code
@@ -930,6 +930,25 @@ challenges:
 
     However, it is important to keep in mind that some memory and CPU capacity is needed by the OS and the Nomad client itself on each of the 3 Nomad clients. So, if Nomad had allowed the QA team to run both the "website" and "webserver-test" jobs in the "qa" namespace, the Dev team might have been adversely affected if they had later tried to run some other jobs.
 
+    Finally, to see the status of the website jobs in both the Dev and the QA namespaces, run these command:
+    ```
+    export NOMAD_TOKEN=$(cat /home/nomad/nomad/acls/bootstrap.txt | grep Secret | cut -d' ' -f7)
+    nomad job status -namespace=* website
+    ```
+    This uses Nomad Enterprise's [Cross-Namespace Queries](https://www.nomadproject.io/docs/enterprise#cross-namespace-queries) feature.
+
+    It should return data like this:
+    ```
+    Prefix matched multiple jobs
+
+    ID       Namespace  Type     Priority  Status   Submit Date
+    website  dev        service  40        running  2020-07-24T03:10:34Z
+    website  qa         service  50        running  2020-07-24T03:11:55Z
+    ```
+    Cross-namespace queries like this allow Nomad operators to quickly do queries across multiple namespaces and then run other namespace-specific queries to get more details.
+
+    Note that using `*` in a cross-namespace query will only return data from namespaces that the current ACL token has access to. That is why we first exported the bootstrap token.
+
     In this challenge, you saw how resource quotas can prevent jobs that violate them from running all of their desired allocations. You also saw that stopping a job in a namespace can allow a queued allocation to be deployed.
 
     Congratulatons on completing the Nomad Enterprise Governance track!
@@ -955,5 +974,5 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 900
-checksum: "6980795737802330523"
+checksum: "3173894446873683353"
 show_timer: true
