@@ -34,4 +34,7 @@ if [ $qa_website_healthy -ne 2 ]; then
   fail-message "The website job in the qa namespace does not have 4 healthy allocations yet."
 fi
 
+# Verify that use ran a Cross-Namespace Query
+grep -q "nomad job status -namespace=\* website" /home/nomad/.bash_history || fail-message "You have not run a cross-namespace query on the Server yet."
+
 exit 0
