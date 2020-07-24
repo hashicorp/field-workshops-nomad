@@ -1,0 +1,52 @@
+#!/bin/bash -l
+
+# Add ACL stanza to nomad.hcl config
+cat <<-EOF >> /etc/nomad.d/nomad-server1.hcl
+
+# Enable Auditing
+audit {
+  enabled = true
+}
+EOF
+
+# Add ACL stanza to copy of nomad.hcl config
+cat <<-EOF >> /home/nomad/nomad/nomad-server1.hcl
+
+# Enable Auditing
+audit {
+  enabled = true
+}
+EOF
+
+# Add ACL stanza to copy of nomad-client1.hcl config
+cat <<-EOF >> /home/nomad/nomad/nomad-client1.hcl
+
+# Enable Auditing
+audit {
+  enabled = true
+}
+EOF
+
+# Add ACL stanza to copy of nomad-client2.hcl config
+cat <<-EOF >> /home/nomad/nomad/nomad-client2.hcl
+
+# Enable Auditing
+audit {
+  enabled = true
+}
+EOF
+
+# Add ACL stanza to copy of nomad-client3.hcl config
+cat <<-EOF >> /home/nomad/nomad/nomad-client3.hcl
+
+# Enable Auditing
+audit {
+  enabled = true
+}
+EOF
+
+mkdir -p /tmp/nomad/server1/audit
+touch /tmp/nomad/server1/audit/audit.log
+chmod -R 777 /tmp/nomad
+
+exit 0
