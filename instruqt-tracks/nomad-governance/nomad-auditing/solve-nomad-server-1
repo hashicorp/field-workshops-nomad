@@ -1,0 +1,39 @@
+#!/bin/bash -l
+
+#Enable bash history
+HISTFILE=/home/nomad/.bash_history
+set -o history
+
+# Navigate to right directory
+cd /home/nomad/nomad/
+
+# Restart server
+sudo systemctl restart nomad
+
+# Sleep
+sleep 30
+
+# Restart the Nomad clients
+ssh -o StrictHostKeyChecking=no nomad-client-1 << ENDSSH
+HISTFILE=/home/nomad/.bash_history
+set -o history
+sudo systemctl restart nomad
+ENDSSH
+ssh -o StrictHostKeyChecking=no nomad-client-2 << ENDSSH
+HISTFILE=/home/nomad/.bash_history
+set -o history
+sudo systemctl restart nomad
+ENDSSH
+ssh -o StrictHostKeyChecking=no nomad-client-3 << ENDSSH
+HISTFILE=/home/nomad/.bash_history
+set -o history
+sudo systemctl restart nomad
+ENDSSH
+
+# Check job status
+nomad job status
+
+# Inspect audit log
+cat /tmp/nomad/server1/audit/audit.log | jq .
+
+exit 0

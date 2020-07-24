@@ -1,0 +1,11 @@
+#!/bin/bash -l
+
+set -e
+
+grep -q "sudo systemctl restart nomad" /home/nomad/.bash_history || fail-message "You have not restarted the Server yet."
+
+grep -q "nomad job status" /home/nomad/.bash_history || fail-message "You have not run 'nomad job status' yet."
+
+grep -q "cat /tmp/nomad/server1/audit/audit.log | jq ." /home/nomad/.bash_history || fail-message "You have not examined the audit log yet."
+
+exit 0

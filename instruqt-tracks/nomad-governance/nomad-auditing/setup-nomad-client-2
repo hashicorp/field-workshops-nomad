@@ -1,0 +1,16 @@
+#!/bin/bash -l
+
+# Add ACL stanza to nomad-client2.hcl config
+cat <<-EOF >> /etc/nomad.d/nomad-client2.hcl
+
+# Enable Auditing
+audit {
+  enabled = true
+}
+EOF
+
+mkdir -p /tmp/nomad/client2/audit
+touch /tmp/nomad/client2/audit/audit.log
+chmod -R 777 /tmp/nomad
+
+exit 0

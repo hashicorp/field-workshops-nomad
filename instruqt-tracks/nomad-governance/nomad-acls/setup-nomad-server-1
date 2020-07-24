@@ -1,8 +1,5 @@
 #!/bin/bash -l
 
-#rm /home/nomad/.bash_history
-#touch /home/nomad/.bash_history
-
 # Add ACL stanza to nomad.hcl config
 cat <<-EOF >> /etc/nomad.d/nomad-server1.hcl
 
