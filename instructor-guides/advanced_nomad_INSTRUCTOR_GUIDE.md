@@ -57,7 +57,7 @@ https://github.com/hashicorp/field-workshops-nomad/issues
 ### Hands-on Labs
 At certain points in the slide deck there are links to the lab exercises. [Instruqt](https://instruqt.com/hashicorp) is our lab platform. While all of the Nomad workshop tracks are actually public, the slides use links to permanent Instruqt invitations that require users to register with Instruqt. We do this so that HashiCorp Field Marketing can collect the emails of users who start tracks during public or private workshops or on their own after following the links from the slides.
 
-Participants can register with Instruqt [here](https://play.instruqt.com/signup?from=/public). Instruqt supports registering with an email and via Google, GitHub, and Twitter.
+Participants can register with Instruqt [here](https://play.instruqt.com/signup). Users only need to provide an email and a password. They can then login via email, Google, GitHub, and Twitter.
 
 Students may have questions during the labs. When presenting a workshop be sure to give enough time for all your participants to go through the labs. Remember that this is probably their first time using a tool like Nomad.
 
@@ -88,6 +88,9 @@ Go through this track start to finish and make sure you understand all the chall
 https://play.instruqt.com/hashicorp/tracks/nomad-governance
 
 Go through this track start to finish and make sure you understand all the challenges. In this track, students learn about Nomad Enterprise's Governance features including namespaces, resource quotas, and Sentinel policies. Together with ACLs, these features allow multiple teams to share a Nomad cluster without interfering with each other.
+
+### Configuring the Instruqt Pools
+We recommend that you configure Instruqt pools for each Instruqt track used in this workshop 1-2 hours before your workshop begins. Please see this Confluence [doc](https://hashicorp.atlassian.net/wiki/spaces/SE/pages/511574174/Instruqt+and+Remark+Contributor+Guide#InstruqtandRemarkContributorGuide-ConfiguringInstruqtPools) for instructions.
 
 ### Timing
 You should budget about five hours for this workshop including two short breaks. This is meant as a guideline, you can adjust as needed.
