@@ -6,8 +6,6 @@ grep -q "cd /home/nomad/nomad/jobs" /home/nomad/.bash_history || fail-message "Y
 
 grep -q "nomad job run sleep.nomad" /home/nomad/.bash_history || fail-message "You have not tried to run the sleep.nomad job on the Server yet."
 
-# grep -q "nomad job stop sleep" /home/nomad/.bash_history || fail-message "You have not stopped the sleep job on the Server yet."
-
 grep -q "nomad job run catalogue.nomad" /home/nomad/.bash_history || fail-message "You have not tried to run the catalogue.nomad job on the Server yet."
 
 grep -q "nomad job run -policy-override catalogue.nomad" /home/nomad/.bash_history || fail-message "You have not tried to run the catalogue.nomad job with the -policy-override argument on the Server yet."

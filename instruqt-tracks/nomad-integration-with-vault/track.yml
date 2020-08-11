@@ -539,7 +539,7 @@ challenges:
       This assigns the job the "access-tables" policy so that it can request database credentials from Vault.
   - type: text
     contents: |-
-      We are using the "template" stanza's vault integration to populate an configuration file that our application needs.
+      We are using the "template" stanza's vault integration to populate a configuration file that our application needs.
 
       The underlying tool being used is [Consul Template](https://learn.hashicorp.com/consul/developer-configuration/consul-template), which is built into Nomad and can populate files with data from Consul's key/value store and from Vault secrets.
   - type: text
@@ -579,5 +579,5 @@ challenges:
     port: 3000
   difficulty: basic
   timelimit: 600
-checksum: "10136880272254806548"
+checksum: "18426580880948227176"
 show_timer: true
