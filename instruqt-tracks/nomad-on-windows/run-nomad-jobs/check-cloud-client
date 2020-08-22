@@ -1,0 +1,24 @@
+#!/bin/bash -l
+
+set -e
+
+# Get Nomad job status
+sshpass -e ssh hashistack@$nomad_server_ip 'nomad job status' > nomad_jobs.txt
+
+# Find running jobs
+running_jobs=$(cat nomad_jobs.txt | grep running | wc -l)
+
+# Check running jobs
+if [ $running_jobs -ne 3 ]; then
+  fail-message "'nomad job status' does not show 3 running Nomad jobs."
+fi
+
+# Find dead jobs (the batch one)
+dead_jobs=$(cat nomad_jobs.txt | grep dead | wc -l)
+
+# Check dead jobs
+if [ $dead_jobs -ne 1 ]; then
+  fail-message "'nomad job status' does not show 1 dead Nomad job (from running 'nomad job dispatch'against the batch job) as expected."
+fi
+
+exit 0

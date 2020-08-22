@@ -7,16 +7,16 @@ export SSHPASS=Passw0rd!
 echo "export SSHPASS=Passw0rd!" >> /root/.bashrc
 
 # Create Nomad Server
-gcloud compute instances create nomad-server-1 --image-project=instruqt-hashicorp --image=hashistack-windows-0-6-1 --zone=europe-west1-b --tags=nomad --machine-type=n1-standard-1
+gcloud compute instances create nomad-server-1 --image-project=instruqt-hashicorp --image=windows-hashistack-0-8-1 --zone=europe-west1-b --tags=nomad --machine-type=n1-standard-1
 
 # Create Nomad Client 1
-gcloud compute instances create nomad-client-1 --image-project=instruqt-hashicorp --image=hashistack-windows-0-6-1 --zone=europe-west1-b --tags=nomad --machine-type=n1-standard-1
+gcloud compute instances create nomad-client-1 --image-project=instruqt-hashicorp --image=windows-hashistack-0-8-1 --zone=europe-west1-b --tags=nomad --machine-type=n1-standard-2
 
 # Create Nomad Client 2
-gcloud compute instances create nomad-client-2 --image-project=instruqt-hashicorp --image=hashistack-windows-0-6-1 --zone=europe-west1-b --tags=nomad --machine-type=n1-standard-1
+gcloud compute instances create nomad-client-2 --image-project=instruqt-hashicorp --image=windows-hashistack-0-8-1 --zone=europe-west1-b --tags=nomad --machine-type=n1-standard-2
 
 # Create Nomad Client 3
-gcloud compute instances create nomad-client-3 --image-project=instruqt-hashicorp --image=hashistack-windows-0-6-1 --zone=europe-west1-b --tags=nomad --machine-type=n1-standard-1
+gcloud compute instances create nomad-client-3 --image-project=instruqt-hashicorp --image=windows-hashistack-0-8-1 --zone=europe-west1-b --tags=nomad --machine-type=n1-standard-2
 
 # Sleep
 sleep 60
@@ -35,6 +35,9 @@ gcloud compute firewall-rules create consul-allow-inbound-wan-serf --allow tcp:8
 gcloud compute firewall-rules create nomad-allow-inbound-http --allow tcp:4646
 gcloud compute firewall-rules create nomad-allow-inbound-rpc --allow tcp:4647 --source-tags=nomad --target-tags=nomad
 gcloud compute firewall-rules create nomad-allow-inbound-serf --allow tcp:4648 --allow udp:4648 --source-tags=nomad --target-tags=nomad
+
+# Create Firewall Rule for IIS
+gcloud compute firewall-rules create iis-allow-inbound-http --allow tcp:8000
 
 # Export public IP of nomad-server-1
 export nomad_server_ip=$(gcloud compute instances list | grep nomad-server-1 | cut -d' ' -f23)
@@ -78,10 +81,10 @@ ssh-keyscan -H $nomad_client_3_ip >> ~/.ssh/known_hosts
 mkdir /root/nomad
 
 # Disable Windows firewall on all 4 VMs
-sshpass -e ssh nomad@$nomad_server_ip 'netsh advfirewall set allprofiles state off'
-sshpass -e ssh nomad@$nomad_client_1_ip 'netsh advfirewall set allprofiles state off'
-sshpass -e ssh nomad@$nomad_client_2_ip 'netsh advfirewall set allprofiles state off'
-sshpass -e ssh nomad@$nomad_client_3_ip 'netsh advfirewall set allprofiles state off'
+sshpass -e ssh hashistack@$nomad_server_ip 'netsh advfirewall set allprofiles state off'
+sshpass -e ssh hashistack@$nomad_client_1_ip 'netsh advfirewall set allprofiles state off'
+sshpass -e ssh hashistack@$nomad_client_2_ip 'netsh advfirewall set allprofiles state off'
+sshpass -e ssh hashistack@$nomad_client_3_ip 'netsh advfirewall set allprofiles state off'
 
 
 ### Server
@@ -90,9 +93,9 @@ cat <<-EOF > /root/nomad/consul-server1.json
 {
   "server": true,
   "ui": true,
-  "log_file": "c:\\\\Users\\\\nomad\\\\consul\\\\consul.log",
+  "log_file": "c:\\\\Users\\\\hashistack\\\\consul\\\\consul.log",
   "log_level": "INFO",
-  "data_dir": "c:\\\\Users\\\\nomad\\\\consul\\\\data\\\\",
+  "data_dir": "c:\\\\Users\\\\hashistack\\\\consul\\\\data\\\\",
   "node_name": "server1",
   "bind_addr": "$nomad_server_private_ip",
   "client_addr": "0.0.0.0",
@@ -101,13 +104,13 @@ cat <<-EOF > /root/nomad/consul-server1.json
 EOF
 
 # SCP Consul Config File to nomad-server-1
-sshpass -e scp /root/nomad/consul-server1.json nomad@$nomad_server_ip:c:\\Users\\nomad\\consul\\consul-server1.json
+sshpass -e scp /root/nomad/consul-server1.json hashistack@$nomad_server_ip:c:\\Users\\hashistack\\consul\\consul-server1.json
 
 # Make Consul data directory
-sshpass -e ssh nomad@$nomad_server_ip 'mkdir c:\Users\nomad\consul\data'
+sshpass -e ssh hashistack@$nomad_server_ip 'mkdir c:\Users\hashistack\consul\data'
 
 # Start Consul on Server
-sshpass -e ssh nomad@$nomad_server_ip 'sc start Consul'
+sshpass -e ssh hashistack@$nomad_server_ip 'sc start Consul'
 
 # Sleep
 sleep 15
@@ -115,7 +118,7 @@ sleep 15
 # Write Nomad Server Config
 cat <<-EOF > /root/nomad/nomad-server1.hcl
 # Setup data dir
-data_dir = "c:\\\\Users\\\\nomad\\\\nomad\\\\data\\\\"
+data_dir = "c:\\\\Users\\\\hashistack\\\\nomad\\\\data\\\\"
 
 # Give the agent a unique name.
 name = "server1"
@@ -131,25 +134,28 @@ consul {
   address = "nomad-server-1:8500"
 }
 
-log_file = "c:\\\\Users\\\\nomad\\\\nomad\\\\nomad.log"
+log_file = "c:\\\\Users\\\\hashistack\\\\nomad\\\\nomad.log"
 EOF
 
 # SCP Nomad Config File to nomad-server-1
-sshpass -e scp /root/nomad/nomad-server1.hcl nomad@$nomad_server_ip:c:\\Users\\nomad\\nomad\\nomad-server1.hcl
+sshpass -e scp /root/nomad/nomad-server1.hcl hashistack@$nomad_server_ip:c:\\Users\\hashistack\\nomad\\nomad-server1.hcl
 
 # Make Nomad data directory
-sshpass -e ssh nomad@$nomad_server_ip 'mkdir c:\Users\nomad\nomad\data'
+sshpass -e ssh hashistack@$nomad_server_ip 'mkdir c:\Users\hashistack\nomad\data'
 
 # Start Nomad on Server
-sshpass -e ssh nomad@$nomad_server_ip 'sc start Nomad'
+sshpass -e ssh hashistack@$nomad_server_ip 'sc start Nomad'
+
+# Start Docker in case it was not started
+# sshpass -e ssh hashistack@$nomad_server_ip 'sc start Docker'
 
 ### Client 1
 # Write Consul Client Config
 cat <<-EOF > /root/nomad/consul-client1.json
 {
-  "log_file": "c:\\\\Users\\\\nomad\\\\consul\\\\consul.log",
+  "log_file": "c:\\\\Users\\\\hashistack\\\\consul\\\\consul.log",
   "log_level": "INFO",
-  "data_dir": "c:\\\\Users\\\\nomad\\\\consul\\\\data\\\\",
+  "data_dir": "c:\\\\Users\\\\hashistack\\\\consul\\\\data\\\\",
   "node_name": "client1",
   "bind_addr": "$nomad_client_1_private_ip",
   "client_addr": "0.0.0.0",
@@ -160,13 +166,13 @@ cat <<-EOF > /root/nomad/consul-client1.json
 EOF
 
 # SCP Consul Config File to Nomad client
-sshpass -e scp /root/nomad/consul-client1.json nomad@$nomad_client_1_ip:c:\\Users\\nomad\\consul\\consul-client1.json
+sshpass -e scp /root/nomad/consul-client1.json hashistack@$nomad_client_1_ip:c:\\Users\\hashistack\\consul\\consul-client1.json
 
 # Make Consul data directory
-sshpass -e ssh nomad@$nomad_client_1_ip 'mkdir c:\Users\nomad\consul\data'
+sshpass -e ssh hashistack@$nomad_client_1_ip 'mkdir c:\Users\hashistack\consul\data'
 
 # Start Consul on Client
-sshpass -e ssh nomad@$nomad_client_1_ip 'sc start Consul'
+sshpass -e ssh hashistack@$nomad_client_1_ip 'sc start Consul'
 
 # Sleep
 sleep 15
@@ -174,7 +180,7 @@ sleep 15
 # Write Nomad Client Config
 cat <<-EOF > /root/nomad/nomad-client1.hcl
 # Setup data dir
-data_dir = "c:\\\\Users\\\\nomad\\\\nomad\\\\data\\\\"
+data_dir = "c:\\\\Users\\\\hashistack\\\\nomad\\\\data\\\\"
 
 # Give the agent a unique name.
 name = "client1"
@@ -189,25 +195,40 @@ consul {
   address = "nomad-client-1:8500"
 }
 
-log_file = "c:\\\\Users\\\\nomad\\\\nomad\\\\nomad.log"
+plugin "raw_exec" {
+  config {
+    enabled = true
+  }
+}
+
+plugin "docker" {
+  config {
+    pull_activity_timeout = "15m"
+  }
+}
+
+log_file = "c:\\\\Users\\\\hashistack\\\\nomad\\\\nomad.log"
 EOF
 
 # SCP Nomad Config File to Client
-sshpass -e scp /root/nomad/nomad-client1.hcl nomad@$nomad_client_1_ip:c:\\Users\\nomad\\nomad\\nomad-client1.hcl
+sshpass -e scp /root/nomad/nomad-client1.hcl hashistack@$nomad_client_1_ip:c:\\Users\\hashistack\\nomad\\nomad-client1.hcl
 
 # Make Nomad data directory
-sshpass -e ssh nomad@$nomad_client_1_ip 'mkdir c:\Users\nomad\nomad\data'
+sshpass -e ssh hashistack@$nomad_client_1_ip 'mkdir c:\Users\hashistack\nomad\data'
 
 # Start Nomad on Client
-sshpass -e ssh nomad@$nomad_client_1_ip 'sc start Nomad'
+sshpass -e ssh hashistack@$nomad_client_1_ip 'sc start Nomad'
+
+# Start Docker in case it was not started
+# sshpass -e ssh hashistack@$nomad_client_1_ip 'sc start Docker'
 
 ### Client 2
 # Write Consul Client Config
 cat <<-EOF > /root/nomad/consul-client2.json
 {
-  "log_file": "c:\\\\Users\\\\nomad\\\\consul\\\\consul.log",
+  "log_file": "c:\\\\Users\\\\hashistack\\\\consul\\\\consul.log",
   "log_level": "INFO",
-  "data_dir": "c:\\\\Users\\\\nomad\\\\consul\\\\data\\\\",
+  "data_dir": "c:\\\\Users\\\\hashistack\\\\consul\\\\data\\\\",
   "node_name": "client2",
   "bind_addr": "$nomad_client_2_private_ip",
   "client_addr": "0.0.0.0",
@@ -218,13 +239,13 @@ cat <<-EOF > /root/nomad/consul-client2.json
 EOF
 
 # SCP Consul Config File to Nomad client
-sshpass -e scp /root/nomad/consul-client2.json nomad@$nomad_client_2_ip:c:\\Users\\nomad\\consul\\consul-client2.json
+sshpass -e scp /root/nomad/consul-client2.json hashistack@$nomad_client_2_ip:c:\\Users\\hashistack\\consul\\consul-client2.json
 
 # Make Consul data directory
-sshpass -e ssh nomad@$nomad_client_2_ip 'mkdir c:\Users\nomad\consul\data'
+sshpass -e ssh hashistack@$nomad_client_2_ip 'mkdir c:\Users\hashistack\consul\data'
 
 # Start Consul on Client
-sshpass -e ssh nomad@$nomad_client_2_ip 'sc start Consul'
+sshpass -e ssh hashistack@$nomad_client_2_ip 'sc start Consul'
 
 # Sleep
 sleep 15
@@ -232,7 +253,7 @@ sleep 15
 # Write Nomad Client Config
 cat <<-EOF > /root/nomad/nomad-client2.hcl
 # Setup data dir
-data_dir = "c:\\\\Users\\\\nomad\\\\nomad\\\\data\\\\"
+data_dir = "c:\\\\Users\\\\hashistack\\\\nomad\\\\data\\\\"
 
 # Give the agent a unique name.
 name = "client2"
@@ -247,25 +268,40 @@ consul {
   address = "nomad-client-2:8500"
 }
 
-log_file = "c:\\\\Users\\\\nomad\\\\nomad\\\\nomad.log"
+plugin "raw_exec" {
+  config {
+    enabled = true
+  }
+}
+
+plugin "docker" {
+  config {
+    pull_activity_timeout = "15m"
+  }
+}
+
+log_file = "c:\\\\Users\\\\hashistack\\\\nomad\\\\nomad.log"
 EOF
 
 # SCP Nomad Config File to Client
-sshpass -e scp /root/nomad/nomad-client2.hcl nomad@$nomad_client_2_ip:c:\\Users\\nomad\\nomad\\nomad-client2.hcl
+sshpass -e scp /root/nomad/nomad-client2.hcl hashistack@$nomad_client_2_ip:c:\\Users\\hashistack\\nomad\\nomad-client2.hcl
 
 # Make Nomad data directory
-sshpass -e ssh nomad@$nomad_client_2_ip 'mkdir c:\Users\nomad\nomad\data'
+sshpass -e ssh hashistack@$nomad_client_2_ip 'mkdir c:\Users\hashistack\nomad\data'
 
 # Start Nomad on Client
-sshpass -e ssh nomad@$nomad_client_2_ip 'sc start Nomad'
+sshpass -e ssh hashistack@$nomad_client_2_ip 'sc start Nomad'
+
+# Start Docker in case it was not started
+# sshpass -e ssh hashistack@$nomad_client_2_ip 'sc start Docker'
 
 ### Client 3
 # Write Consul Client Config
 cat <<-EOF > /root/nomad/consul-client3.json
 {
-  "log_file": "c:\\\\Users\\\\nomad\\\\consul\\\\consul.log",
+  "log_file": "c:\\\\Users\\\\hashistack\\\\consul\\\\consul.log",
   "log_level": "INFO",
-  "data_dir": "c:\\\\Users\\\\nomad\\\\consul\\\\data\\\\",
+  "data_dir": "c:\\\\Users\\\\hashistack\\\\consul\\\\data\\\\",
   "node_name": "client3",
   "bind_addr": "$nomad_client_3_private_ip",
   "client_addr": "0.0.0.0",
@@ -276,13 +312,13 @@ cat <<-EOF > /root/nomad/consul-client3.json
 EOF
 
 # SCP Consul Config File to Nomad client
-sshpass -e scp /root/nomad/consul-client3.json nomad@$nomad_client_3_ip:c:\\Users\\nomad\\consul\\consul-client3.json
+sshpass -e scp /root/nomad/consul-client3.json hashistack@$nomad_client_3_ip:c:\\Users\\hashistack\\consul\\consul-client3.json
 
 # Make Consul data directory
-sshpass -e ssh nomad@$nomad_client_3_ip 'mkdir c:\Users\nomad\consul\data'
+sshpass -e ssh hashistack@$nomad_client_3_ip 'mkdir c:\Users\hashistack\consul\data'
 
 # Start Consul on Client
-sshpass -e ssh nomad@$nomad_client_3_ip 'sc start Consul'
+sshpass -e ssh hashistack@$nomad_client_3_ip 'sc start Consul'
 
 # Sleep
 sleep 15
@@ -290,7 +326,7 @@ sleep 15
 # Write Nomad Client Config
 cat <<-EOF > /root/nomad/nomad-client3.hcl
 # Setup data dir
-data_dir = "c:\\\\Users\\\\nomad\\\\nomad\\\\data\\\\"
+data_dir = "c:\\\\Users\\\\hashistack\\\\nomad\\\\data\\\\"
 
 # Give the agent a unique name.
 name = "client3"
@@ -305,17 +341,32 @@ consul {
   address = "nomad-client-3:8500"
 }
 
-log_file = "c:\\\\Users\\\\nomad\\\\nomad\\\\nomad.log"
+plugin "raw_exec" {
+  config {
+    enabled = true
+  }
+}
+
+plugin "docker" {
+  config {
+    pull_activity_timeout = "15m"
+  }
+}
+
+log_file = "c:\\\\Users\\\\hashistack\\\\nomad\\\\nomad.log"
 EOF
 
 # SCP Nomad Config File to Client
-sshpass -e scp /root/nomad/nomad-client3.hcl nomad@$nomad_client_3_ip:c:\\Users\\nomad\\nomad\\nomad-client3.hcl
+sshpass -e scp /root/nomad/nomad-client3.hcl hashistack@$nomad_client_3_ip:c:\\Users\\hashistack\\nomad\\nomad-client3.hcl
 
 # Make Nomad data directory
-sshpass -e ssh nomad@$nomad_client_3_ip 'mkdir c:\Users\nomad\nomad\data'
+sshpass -e ssh hashistack@$nomad_client_3_ip 'mkdir c:\Users\hashistack\nomad\data'
 
 # Start Nomad on Client
-sshpass -e ssh nomad@$nomad_client_3_ip 'sc start Nomad'
+sshpass -e ssh hashistack@$nomad_client_3_ip 'sc start Nomad'
+
+# Start Docker in case it was not started
+# sshpass -e ssh hashistack@$nomad_client_3_ip 'sc start Docker'
 
 # Sleep
 sleep 45
