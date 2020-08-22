@@ -4,9 +4,6 @@
 HISTFILE=/root/.bash_history
 set -o history
 
-# Sleep
-sleep 30
-
 # Run Windows IIS Job
 sshpass -e ssh hashistack@$nomad_server_ip 'nomad job run c:\Users\hashistack\nomad\iis.nomad'
 
@@ -14,7 +11,7 @@ sshpass -e ssh hashistack@$nomad_server_ip 'nomad job run c:\Users\hashistack\no
 sshpass -e ssh hashistack@$nomad_server_ip 'nomad job run c:\Users\hashistack\nomad\jenkins.nomad'
 
 # Run DotNet Batch Job
-sshpass -e ssh hashistack@$nomad_server_ip 'nomad job run batchjob.nomad'
+sshpass -e ssh hashistack@$nomad_server_ip 'nomad job run c:\Users\hashistack\nomad\batchjob.nomad'
 
 # Sleep
 sleep 30
@@ -23,6 +20,6 @@ sleep 30
 sshpass -e ssh hashistack@$nomad_server_ip 'nomad job dispatch -meta TTL=120 batchjob'
 
 # Sleep
-sleep 150
+sleep 30
 
 exit 0

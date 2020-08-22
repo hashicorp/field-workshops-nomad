@@ -1,14 +1,21 @@
 slug: nomad-on-windows
 id: m4sfchjwb8om
 type: track
-title: Nomad on Windows
-teaser: Run Nomad and Consul Cluster on Windows.
-description: |
-  Run a Nomad/Consul cluster on Windows Server 2019.
+title: Run Nomad Jobs on Windows
+teaser: |
+  Run Nomad jobs on Windows using the Docker, Java, and Raw Exec Drivers.
+description: |-
+  This track sets up a Nomad/Consul cluster for you on Windows Server 2019. It then guides you through the process of running 3 Nomad jobs on that cluster that use 3 different Nomad task drivers:
+    * The first uses the [Docker Driver](https://www.nomadproject.io/docs/drivers/docker) to run Windows IIS inside a Docker container.
+    * The second uses the [Java Driver](https://www.nomadproject.io/docs/drivers/java) to run the CI/CD solution, Jenkins.
+    * The third runs a parameterized Nomad batch job that uses Nomad's [Raw Fork/Exec Driver](https://www.nomadproject.io/docs/drivers/raw_exec) to launch a compiled DotNet application.
 icon: https://storage.googleapis.com/instruqt-hashicorp-tracks/logo/nomad.png
 tags:
 - nomad
 - windows
+- docker
+- java
+- dotnet
 owner: hashicorp
 developers:
 - roger@hashicorp.com
@@ -109,7 +116,7 @@ challenges:
     Run Java, Docker, and DotNet jobs on your Windows Nomad clients.
   assignment: |-
     ## Introduction
-    In this challenge, you will run three Nomad jobs that all deploy workload to the Nomad clients running on Windows.
+    In this challenge, you will run three Nomad jobs that all deploy workloads to the Nomad clients running on Windows.
       * The first uses the [Docker Driver](https://www.nomadproject.io/docs/drivers/docker) to run Windows IIS inside a Docker container.
       * The second uses the [Java Driver](https://www.nomadproject.io/docs/drivers/java) to run the CI/CD solution, Jenkins.
       * The third runs a parameterized Nomad batch job that uses Nomad's [Raw Fork/Exec Driver](https://www.nomadproject.io/docs/drivers/raw_exec) to launch a compiled DotNet application.
@@ -196,4 +203,4 @@ challenges:
     port: 80
   difficulty: basic
   timelimit: 1800
-checksum: "17518454912274917958"
+checksum: "17796628789663807579"

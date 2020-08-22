@@ -127,7 +127,7 @@ job "batchjob" {
     value     = "windows"
   }
 
-  # to dispatch this job use `nomad job dispatch -meta TTL=60 batchjob`
+  # to dispatch this job use nomad job dispatch -meta TTL=60 batchjob
   parameterized {
     #TTL is the amount of time this batch job will run for before it gets terminated
     meta_required = ["TTL"]

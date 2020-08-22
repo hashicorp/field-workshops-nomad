@@ -21,9 +21,6 @@ gcloud compute instances create nomad-client-3 --image-project=instruqt-hashicor
 # Sleep
 sleep 60
 
-# Create Inbound HTTP Rule
-gcloud compute firewall-rules create nomad-allow-inbound-http --allow tcp:4646
-
 # Create Firewall Rules for Consul
 gcloud compute firewall-rules create consul-allow-inbound-http --allow tcp:8500
 gcloud compute firewall-rules create consul-allow-inbound-dns --allow tcp:8600 --allow udp:8600
