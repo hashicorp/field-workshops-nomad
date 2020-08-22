@@ -8,12 +8,12 @@ set -o history
 sleep 30
 
 # Check Consul members
-sshpass -e ssh nomad@$nomad_server_ip 'consul members'
+sshpass -e ssh hashistack@$nomad_server_ip 'consul members'
 
 # Check Nomad server
-sshpass -e ssh nomad@$nomad_server_ip 'nomad server members'
+sshpass -e ssh hashistack@$nomad_server_ip 'nomad server members'
 
 # Check Nomad clients
-sshpass -e ssh nomad@$nomad_server_ip 'nomad node status'
+sshpass -e ssh hashistack@$nomad_server_ip 'nomad node status'
 
 exit 0

@@ -18,6 +18,7 @@ developers:
 - roger@hashicorp.com
 private: false
 published: true
+show_timer: true
 challenges:
 - slug: verify-nomad-cluster-health
   id: y96veofixdxn
@@ -28,7 +29,7 @@ challenges:
   assignment: |-
     In this challenge, you will verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
 
-    The cluster is running 1 Nomad/Consul server and 2 Nomad/Consul clients. They are using Nomad 0.11.3 and Consul 1.7.4.
+    The cluster is running 1 Nomad/Consul server and 2 Nomad/Consul clients. They are using Nomad 0.12.3 and Consul 1.8.3.
 
     First, verify that all 3 Consul agents are running and connected to the cluster by running this command on the "Server" tab:
     ```
@@ -70,7 +71,7 @@ challenges:
     hostname: nomad-server-1
     port: 4646
   difficulty: basic
-  timelimit: 300
+  timelimit: 900
 - slug: nomad-and-consul-connect
   id: qtu9dyfttayl
   type: challenge
@@ -154,6 +155,5 @@ challenges:
     hostname: nomad-client-2
     port: 9002
   difficulty: basic
-  timelimit: 1200
-checksum: "11396627031001395493"
-show_timer: true
+  timelimit: 2700
+checksum: "10462144364891199349"
