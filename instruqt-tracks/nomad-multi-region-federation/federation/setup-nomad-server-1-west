@@ -1,0 +1,66 @@
+#!/bin/bash -l
+
+mkdir /root/nomad
+
+# Write Nomad Server 1 Config
+
+
+cat <<-EOF > /etc/nomad.d/nomad-server1.hcl
+region = "west"
+datacenter = "west-1"
+# Setup data dir
+data_dir = "/tmp/nomad/server1"
+
+# Give the agent a unique name.
+name = "server1-west"
+
+# Enable the server
+server {
+  enabled = true
+  bootstrap_expect = 1
+}
+
+# Consul configuration
+consul {
+  address = "nomad-server-1-west:8500"
+}
+EOF
+
+# Write Consul Server 1 Config
+cat <<-EOF > /etc/consul.d/consul-server1.json
+{
+  "server": true,
+  "ui": true,
+  "log_level": "INFO",
+  "data_dir": "/tmp/consul/server1",
+  "node_name": "server1-west",
+  "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
+  "client_addr": "0.0.0.0",
+  "bootstrap_expect": 1,
+  "recursors": [
+    "10.64.0.254"
+  ]
+}
+EOF
+
+# Start Consul
+systemctl start consul
+
+# Sleep
+sleep 10
+
+# Configure Resolved and iptables
+cat <<-EOF > /etc/systemd/resolved.conf.d/consul.conf
+[Resolve]
+DNS=127.0.0.1
+Domains=~consul
+EOF
+iptables -t nat -A OUTPUT -d localhost -p udp -m udp --dport 53 -j REDIRECT --to-ports 8600
+iptables -t nat -A OUTPUT -d localhost -p tcp -m tcp --dport 53 -j REDIRECT --to-ports 8600
+systemctl restart systemd-resolved
+
+# Start Nomad
+systemctl start nomad
+
+
+exit 0
