@@ -51,7 +51,7 @@ challenges:
 
     You can also check the status of the Nomad server and clients in the Nomad and Consul UIs.
 
-    In the next challenge, you will run jobs that deploy a web application and the Traefik load balancer.
+    In the next challenge, you will run a job that uses Nomad's native integrations with Consul and Consul Connect.
   notes:
   - type: text
     contents: |-
@@ -156,4 +156,4 @@ challenges:
     port: 9002
   difficulty: basic
   timelimit: 2700
-checksum: "10462144364891199349"
+checksum: "9256521405146445216"
