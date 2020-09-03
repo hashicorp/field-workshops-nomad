@@ -1,0 +1,10 @@
+#!/bin/bash -l
+
+HISTFILE=/root/.bash_history
+set -o history
+
+nomad run /root/nomad/multi-redis.nomad
+
+nomad job status -region east example
+
+exit 0

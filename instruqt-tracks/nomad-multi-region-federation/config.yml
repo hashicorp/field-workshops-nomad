@@ -1,11 +1,5 @@
 version: "2"
 virtualmachines:
-- name: nomad-client-2-west
-  image: instruqt-hashicorp/hashistack-enterprise-0-8-0
-  shell: /bin/bash -l
-  environment:
-    CONSUL_HTTP_ADDR: nomad-client-2-west:8500
-  machine_type: g1-small
 - name: nomad-server-1-east
   image: instruqt-hashicorp/hashistack-enterprise-0-8-0
   shell: /bin/bash -l
@@ -35,4 +29,10 @@ virtualmachines:
   shell: /bin/bash -l
   environment:
     CONSUL_HTTP_ADDR: nomad-client-1-west:8500
+  machine_type: g1-small
+- name: nomad-client-2-west
+  image: instruqt-hashicorp/hashistack-enterprise-0-8-0
+  shell: /bin/bash -l
+  environment:
+    CONSUL_HTTP_ADDR: nomad-client-2-west:8500
   machine_type: g1-small

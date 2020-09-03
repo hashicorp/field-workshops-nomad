@@ -24,7 +24,7 @@ challenges:
     Nomad 0.12 introduces our breakthrough Multi-Cluster Deployment feature, which makes Nomad the first and only orchestrator on the market with complete and fully-supported federation capabilities for production.
   assignment: |2-
 
-    In the 'Nomad_West' server tab, verify the health of the nomad cients, then repeat the command in the 'Nomad_East' tab. The node status command should return two nodes in each region
+    In the "Nomad_Server_West" tab, verify the health of the nomad cients, then repeat the command in the "Nomad_Server_East" tab. The node status command should return two nodes in each region.
     ```
     nomad node status
     ```
@@ -32,11 +32,11 @@ challenges:
     ```
     nomad server members
     ```
-    In the Nomad_East tab, federate the two regions by using the server join command:
+    In the "Nomad_Server_East" tab, federate the two regions by using the server join command:
     ```
     nomad server join <nomad-server-west-ip>:4648
     ```
-    Verify the clusters have been federated. The output of the command should show the servers from both regions:
+    Verify the clusters have been federated. Run the below command in both server tabs. The output of the command should show the servers from both regions:
     ```
     nomad server members
     ```
@@ -88,12 +88,20 @@ challenges:
 
     Inspect the ```/root/nomad/multi-redis.nomad``` job file in the editor.
 
-    The job will deploy to both regions. The max_parallel field of the strategy block restricts Nomad to deploy to the regions one at a time. If either of the region deployments fail, both regions will be marked as failed. The count field for each region is interpolated for each region, replacing the count = 0 in the task group count. The job's update block uses the default "task states" value to determine if the job is healthy; if you configured a Consul service with health checks you could use that instead.
+    The job will deploy to both regions. The `max_parallel` field of the strategy block restricts Nomad to deploy to the regions one at a time.
+    If either of the region deployments fail, both regions will be marked as `failed`. The job will deploy to the region the the order that they
+    have been defined. Since in this case,`max_parallel` is set to `1`, the `west` region will be deployed before the `east` region regardless of
+    whether the job is started from the west server or the east server.
+
+    The `count` field for each region is interpolated for each region, replacing the `count = 0` in the task group count.
+    The job's update block uses the default `task states` value to determine if the job is healthy; if you configured a Consul
+    service with health checks you could use that instead.
 
     ```
     nomad run /root/nomad/multi-redis.nomad
     ```
-    Check the job status from the east region. Note that there are no running allocations in the east region, and that the status is "pending" because the east region is waiting for the west region to complete:
+    Check the job status in the east region. Note that there are no running allocations in the east region, and that the status is `pending` because the east region is waiting for the west region to complete.
+    The command can be run from a server in either region, but for the sake of the challenges check scripts, please run this in the `Nomad_Server_East` tab.
     ```
     nomad job status -region east example
     ```
@@ -101,7 +109,7 @@ challenges:
     ```
     watch nomad job status -region west example
     ```
-    The west region should be healthy 10s after the task state for all tasks switches to "running". the status for the west region will transition to "blocked" and the east region's deployment will become "running". Once the east region's deployment has completed, both regions will transition to ```successful```
+    The west region should be healthy 10 seconds after the task state for all tasks switches to `running`. the status for the west region will transition to `blocked` and the east region`s deployment will become `running`. Once the east region`s deployment has completed, both regions will transition to `successful`
 
     ```
     Multiregion Deployment
@@ -112,11 +120,16 @@ challenges:
   notes:
   - type: text
     contents: |-
-      Federated Nomad clusters are members of the same gossip cluster but not the same raft/consensus cluster; they don't share their data stores. Each region in a multi-region deployment gets an independent copy of the job, parameterized with the values of the region stanza. Nomad regions coordinate to rollout each region's deployment using rules determined by the strategy stanza.
+      Federated Nomad clusters are members of the same gossip cluster but not the same raft/consensus cluster; they don`t share their data stores. Each `region` in a multi-region deployment gets an independent copy of the job, parameterized with the values of the region stanza. Nomad regions coordinate to rollout each region`s deployment using rules determined by the strategy stanza.
 
-      A single region deployment using one of the various upgrade strategies begins in the running state and ends in either the successful state if it succeeds, the canceled state if another deployment supersedes it before it it's complete, or the failed state if it fails for any other reason. A failed single region deployment may automatically revert to the previous version of the job if its update stanza has the auto_revert setting.
-
-      In a multi-region deployment, regions begin in the pending state. This allows Nomad to determine that all regions have accepted the job before continuing. At this point, up to max_parallel regions will enter running at a time. When each region completes its local deployment, it enters a blocked state where it waits until the last region has completed the deployment. The final region will unblock the regions to mark them as successful.
+      A single region deployment using one of the various upgrade strategies begins in the `running state` and ends in either the `successful` state if it succeeds, the canceled state if another deployment supersedes it before it is `complete`, or the `failed` state if it fails for any other reason. A `failed` single region deployment may automatically revert to the previous version of the job if its update stanza has the `auto_revert` setting.
+  - type: text
+    contents: In a multi-region deployment, regions begin in the `pending state`.
+      This allows Nomad to determine that all regions have accepted the job before
+      continuing. At this point, up to `max_parallel` regions will enter into the
+      `running` state. When each region completes its local deployment,
+      it enters a `blocked` state where it waits until the last region has completed
+      the deployment. The final region will unblock the regions to mark them as successful.
   tabs:
   - title: Config Files
     type: code
@@ -152,7 +165,7 @@ challenges:
     Deploy a multi-region job which will simulate a failed deployment in the east region.
   assignment: |-
     In this challenge you will deploy a multi-region-job.
-    The ```multi-redis.nomad``` job file has been updated with the addition a new task group. The taskgroup is called "sidecar". You can view the job in the fileviewer. (file is located at on the ```west``` server)
+    The `multi-redis.nomad` job file has been updated with the addition a new task group. The taskgroup is called "sidecar". You can view the job in the config tab. (file is located at on the ```west``` server)
 
     With the ```/root/nomad/multi-redis.nomad``` file open, change the multiregion stratedy to ```fail_local```. e.g:
 
@@ -162,20 +175,23 @@ challenges:
         on_failure   = "fail_local"
     }
     ```
+    Please note the template stanza in the `sidecar` group. The simple script that is passed to the docker container ensures the allocation will always fail in the `east` region.
+
     Save and close the file.
 
-    Now run the job in the West server tab:
+    Now run the job. This can be run from a server located in either region, but for the sake of the challenges check scripts, please run this in the `Nomad_Server_West` tab:
     ```
     nomad job run /root/nomad/multi-redis.nomad
     ```
 
-    Check the status. As with the previous version of the job, you should see the deployment in the west in the "running" status and the deployment in the east in "pending". Eventually, the east region deployment will run and then fail. Because on_failure was set to "fail_local", the west region remains in a "blocked" state:
+    Check the status. As with the previous version of the job, you should see the deployment in the west in the `running` status and the deployment in the east in `pending`.
+    Eventually, the east region deployment will run and then fail. Because on_failure was set to `fail_local`, the west region remains in a `blocked` state:
     ```
     watch nomad job status -region west example
     ```
     You can either fix the job and redeploy, or accept the west deployment in its current state by using the nomad deployment unblock command.
     ```
-    nomad deployment unblock -region west <allocation-id>
+    nomad deployment unblock -region west <deployment-id>
     ```
     Check the status again and the west region should now be marked as successful:
     ```
@@ -212,4 +228,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 7200
-checksum: "12426534409965283233"
+checksum: "18056185520649502297"

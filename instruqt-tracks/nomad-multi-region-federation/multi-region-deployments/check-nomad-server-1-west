@@ -2,4 +2,8 @@
 
 set -e
 
+grep -q "nomad run /root/nomad/multi-redis.nomad" /root/.bash_history || fail-message "you have not run the redis job"
+
+grep -q "nomad job status" /root/.bash_history || fail-message "you have not observed the allocations"
+
 exit 0

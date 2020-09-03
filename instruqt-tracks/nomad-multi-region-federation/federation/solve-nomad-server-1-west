@@ -1,0 +1,15 @@
+#!/bin/bash -l
+
+HISTFILE=/root/.bash_history
+set -o history
+
+server_ip=$(ip addr show ens4 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
+
+##### currently there are insufficient privilidges to run the below command
+gcloud compute ssh p-$INSTRUQT_PARTICIPANT_ID-nomad-server-1-east --zone europe-west1-b --strict-host-key-checking no --command "nomad server join $server_ip:4648"
+
+nomad server members
+
+nomad status -region="east"
+
+exit 0

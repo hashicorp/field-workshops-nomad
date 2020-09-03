@@ -2,4 +2,18 @@
 
 set -e
 
+grep -q "nomad server members" /root/.bash_history || fail-message "You haven't checked the status of the Nomad server yet."
+
+nomad_servers=$(nomad server members | grep alive | wc -l)
+if [ "$nomad_servers" -lt "1" ]; then
+  fail-message "The command 'nomad server members' did not show an alive server. Something went wrong"
+fi
+
+grep -q "nomad node status" /root/.bash_history || fail-message "You haven't checked the status of the Nomad client nodes yet."
+
+nomad_clients=$(nomad node status | grep ready | wc -l)
+if [ "$nomad_clients" -lt "2" ]; then
+  fail-message "The command 'nomad node status' did not show 2 ready clients. Something went wrong"
+fi
+
 exit 0

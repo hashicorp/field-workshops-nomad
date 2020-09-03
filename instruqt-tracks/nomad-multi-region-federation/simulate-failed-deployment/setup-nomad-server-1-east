@@ -2,9 +2,6 @@
 
 # Write multi-region job spec
 
-rm /root/nomad/multi-redis.nomad
-touch /root/nomad/multi-redis.nomad
-
 cat <<-EOF > /root/nomad/multi-redis.nomad
 job "example" {
 
@@ -12,7 +9,7 @@ job "example" {
 
     strategy {
       max_parallel = 1
-      on_failure   = "fail_local"
+      on_failure   = "fail_all"
     }
 
     region "west" {

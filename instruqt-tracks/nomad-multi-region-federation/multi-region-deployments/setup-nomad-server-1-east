@@ -1,7 +1,7 @@
 #!/bin/bash -l
 
 # Write multi-region job spec
-touch /root/nomad/multi-redis.nomad
+
 
 cat <<-EOF > /root/nomad/multi-redis.nomad
 job "example" {

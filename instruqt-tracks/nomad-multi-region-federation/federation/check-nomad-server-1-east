@@ -2,4 +2,15 @@
 
 set -e
 
+nomad_servers=$(nomad server members | grep alive | wc -l)
+if [ "$nomad_servers" -lt "1" ]; then
+  fail-message "The command 'nomad server members' did not show an alive server. Something went wrong"
+fi
+
+
+
+nomad_clients=$(nomad node status | grep ready | wc -l)
+if [ "$nomad_clients" -lt "2" ]; then
+  fail-message "The command 'nomad node status' did not show 2 ready clients. Something went wrong"
+fi
 exit 0
