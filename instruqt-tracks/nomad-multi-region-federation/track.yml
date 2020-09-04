@@ -44,6 +44,7 @@ challenges:
     ```
     nomad status -region="east"
     ```
+    You are also able to run   `nomad status -region="west"` from the east server. As you can see, regions are addressable from different regions, a key tenet of the value of federation. Allowing control over many clusters from a single point of access, ensuring a more holistic view and management the environment.
   notes:
   - type: text
     contents: |-
@@ -95,13 +96,14 @@ challenges:
 
     The `count` field for each region is interpolated for each region, replacing the `count = 0` in the task group count.
     The job's update block uses the default `task states` value to determine if the job is healthy; if you configured a Consul
-    service with health checks you could use that instead.
+    service with health checks you could use that instead. Run this command in the "Nomad_Server_West" tab, for the sake of the check scripts.
 
     ```
     nomad run /root/nomad/multi-redis.nomad
     ```
     Check the job status in the east region. Note that there are no running allocations in the east region, and that the status is `pending` because the east region is waiting for the west region to complete.
-    The command can be run from a server in either region, but for the sake of the challenges check scripts, please run this in the `Nomad_Server_East` tab.
+    The command can be run from a server in either region, but for the sake of the challenges check scripts, please run this in the
+            "Nomad_Server_East" tab.
     ```
     nomad job status -region east example
     ```
@@ -120,16 +122,16 @@ challenges:
   notes:
   - type: text
     contents: |-
-      Federated Nomad clusters are members of the same gossip cluster but not the same raft/consensus cluster; they don`t share their data stores. Each `region` in a multi-region deployment gets an independent copy of the job, parameterized with the values of the region stanza. Nomad regions coordinate to rollout each region`s deployment using rules determined by the strategy stanza.
+      Federated Nomad clusters are members of the same gossip cluster but not the same raft/consensus cluster; they don't share their data stores. Each `region` in a multi-region deployment gets an independent copy of the job, parameterized with the values of the region stanza. Nomad regions coordinate to rollout each region's deployment using rules determined by the strategy stanza.
 
       A single region deployment using one of the various upgrade strategies begins in the `running state` and ends in either the `successful` state if it succeeds, the canceled state if another deployment supersedes it before it is `complete`, or the `failed` state if it fails for any other reason. A `failed` single region deployment may automatically revert to the previous version of the job if its update stanza has the `auto_revert` setting.
   - type: text
     contents: In a multi-region deployment, regions begin in the `pending state`.
       This allows Nomad to determine that all regions have accepted the job before
       continuing. At this point, up to `max_parallel` regions will enter into the
-      `running` state. When each region completes its local deployment,
-      it enters a `blocked` state where it waits until the last region has completed
-      the deployment. The final region will unblock the regions to mark them as successful.
+      `running` state. When each region completes its local deployment, it enters
+      a `blocked` state where it waits until the last region has completed the deployment.
+      The final region will unblock the regions to mark them as successful.
   tabs:
   - title: Config Files
     type: code
@@ -179,7 +181,7 @@ challenges:
 
     Save and close the file.
 
-    Now run the job. This can be run from a server located in either region, but for the sake of the challenges check scripts, please run this in the `Nomad_Server_West` tab:
+    Now run the job. This can be run from a server located in either region, but for the sake of the challenges check scripts, please run this in the "Nomad_Server_West" tab:
     ```
     nomad job run /root/nomad/multi-redis.nomad
     ```
@@ -200,7 +202,8 @@ challenges:
   notes:
   - type: text
     contents: In this challenge you will simulate a failed deployment when deploying
-      a multi-region job.
+      a multi-region job. For further information, please check out the HashiCorp
+      Learn guide on which this lab was based on - https://learn.hashicorp.com/tutorials/nomad/multiregion-deployments
   tabs:
   - title: Config Files
     type: code
@@ -228,4 +231,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 7200
-checksum: "18056185520649502297"
+checksum: "17239778204637236958"
