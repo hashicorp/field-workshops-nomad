@@ -4,4 +4,7 @@ set -e
 
 grep -q "nomad run /root/nomad/multi-redis.nomad" /root/.bash_history || fail-message "you have not run the redis job"
 
+grep -q "watch nomad job status -region west example" /root/.bash_history || fail-message "you have not checked the status of the job"
+
+
 exit 0

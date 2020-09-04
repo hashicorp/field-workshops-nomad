@@ -113,6 +113,6 @@ EOF
 
 nomad job run /root/nomad/multi-redis.nomad
 
-
+nomad job status -region west example
 
 exit 0
