@@ -3,8 +3,10 @@
 HISTFILE=/root/.bash_history
 set -o history
 
-nomad run /root/nomad/multi-redis.nomad
+# Run the job
+nomad job run /root/nomad/jobs/multi-redis.nomad
 
-nomad job status -region east example
+# Sleep
+sleep 60
 
 exit 0

@@ -1,10 +1,9 @@
 #!/bin/bash -l
 
 mkdir /root/nomad
+mkdir /root/nomad/config
 
-# Write Nomad Server 1 Config
-
-
+# Write Nomad Server 1 West Config
 cat <<-EOF > /etc/nomad.d/nomad-server1.hcl
 region = "west"
 datacenter = "west-1"
@@ -26,6 +25,29 @@ consul {
 }
 EOF
 
+# Copy of nomad-server1.hcl for West region
+cat <<-EOF > root/nomad/config/nomad-server1-west.hcl
+region = "west"
+datacenter = "west-1"
+# Setup data dir
+data_dir = "/tmp/nomad/server1"
+
+# Give the agent a unique name.
+name = "server1-west"
+
+# Enable the server
+server {
+  enabled = true
+  bootstrap_expect = 1
+}
+
+# Consul configuration
+consul {
+  address = "nomad-server-1-west:8500"
+}
+EOF
+
+
 # Write Consul Server 1 Config
 cat <<-EOF > /etc/consul.d/consul-server1.json
 {
@@ -37,6 +59,220 @@ cat <<-EOF > /etc/consul.d/consul-server1.json
   "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
   "client_addr": "0.0.0.0",
   "bootstrap_expect": 1,
+  "recursors": [
+    "10.64.0.254"
+  ]
+}
+EOF
+
+# Copy of Consul Server 1 Config for west region
+cat <<-EOF > root/nomad/config/consul-server1-west.json
+{
+  "server": true,
+  "ui": true,
+  "log_level": "INFO",
+  "data_dir": "/tmp/consul/server1",
+  "node_name": "server1-west",
+  "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
+  "client_addr": "0.0.0.0",
+  "bootstrap_expect": 1,
+  "recursors": [
+    "10.64.0.254"
+  ]
+}
+EOF
+
+# Copy of Nomad Server 1 Config for east region
+cat <<-EOF > root/nomad/config/nomad-server1-east.hcl
+region = "east"
+datacenter = "east-1"
+# Setup data dir
+data_dir = "/tmp/nomad/server1"
+
+# Give the agent a unique name.
+name = "server1-east"
+
+# Enable the server
+server {
+  enabled = true
+  bootstrap_expect = 1
+}
+
+# Consul configuration
+consul {
+  address = "nomad-server-1-east:8500"
+}
+EOF
+
+# Copy of Consul Server 1 Config for east region
+cat <<-EOF > root/nomad/config/consul-server1-east.json
+{
+  "server": true,
+  "ui": true,
+  "log_level": "INFO",
+  "data_dir": "/tmp/consul/server1",
+  "node_name": "server1-east",
+  "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
+  "client_addr": "0.0.0.0",
+  "bootstrap_expect": 1,
+  "recursors": [
+    "10.64.0.254"
+  ]
+}
+EOF
+
+# Copy Nomad Client 1 Config for west region
+cat <<-EOF > root/nomad/config/nomad-client1-west.hcl
+region = "west"
+datacenter = "west-1"
+# Setup data dir
+data_dir = "/tmp/nomad/client1"
+
+# Give the agent a unique name.
+name = "client1-west"
+
+# Enable the client
+client {
+  enabled = true
+}
+
+# Consul configuration
+consul {
+  address = "nomad-client-1-west:8500"
+}
+
+EOF
+
+# Copy of Consul Client 1 Config for west region
+cat <<-EOF > root/nomad/config/consul-client1-west.json
+{
+  "ui": true,
+  "log_level": "INFO",
+  "data_dir": "/tmp/consul/client1",
+  "node_name": "client1-west",
+  "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
+  "client_addr": "0.0.0.0",
+  "retry_join": [
+    "nomad-server-1-west"
+  ],
+  "recursors": [
+    "10.64.0.254"
+  ]
+}
+EOF
+
+# Copy of Nomad Client 1 Config for east region
+cat <<-EOF > root/nomad/config/nomad-client1-east.hcl
+region = "east"
+datacenter = "east-1"
+# Setup data dir
+data_dir = "/tmp/nomad/client1"
+
+# Give the agent a unique name.
+name = "client1-east"
+
+# Enable the client
+client {
+  enabled = true
+}
+
+# Consul configuration
+consul {
+  address = "nomad-client-1-east:8500"
+}
+
+EOF
+
+# Copy of Consul Client 1 Config for east region
+cat <<-EOF > root/nomad/config/consul-client1.json
+{
+  "ui": true,
+  "log_level": "INFO",
+  "data_dir": "/tmp/consul/client1",
+  "node_name": "client1-east",
+  "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
+  "client_addr": "0.0.0.0",
+  "retry_join": [
+    "nomad-server-1-east"
+  ],
+  "recursors": [
+    "10.64.0.254"
+  ]
+}
+EOF
+
+# Copy of Nomad Client 2 Config for west region
+cat <<-EOF > root/nomad/config/nomad-client2.hcl
+region = "west"
+datacenter = "west-1"
+# Setup data dir
+data_dir = "/tmp/nomad/client2"
+
+# Give the agent a unique name
+name = "client2-west"
+
+# Enable the client
+client {
+  enabled = true
+}
+
+# Consul configuration
+consul {
+  address = "nomad-client-2-west:8500"
+}
+EOF
+
+# Copy of Consul Client 2 Config for west region
+cat <<-EOF > root/nomad/config/consul-client2.json
+{
+  "ui": true,
+  "log_level": "INFO",
+  "data_dir": "/tmp/consul/client2",
+  "node_name": "client2-west",
+  "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
+  "client_addr": "0.0.0.0",
+  "retry_join": [
+    "nomad-server-1-west"
+  ],
+  "recursors": [
+    "10.64.0.254"
+  ]
+}
+EOF
+
+# Copy of Nomad Client 2 Config for east region
+cat <<-EOF > root/nomad/config/nomad-client2.hcl
+region = "east"
+datacenter = "east-1"
+# Setup data dir
+data_dir = "/tmp/nomad/client2"
+
+# Give the agent a unique name
+name = "client2-east"
+
+# Enable the client
+client {
+  enabled = true
+}
+
+# Consul configuration
+consul {
+  address = "nomad-client-2-east:8500"
+}
+EOF
+
+# Copy of Consul Client 2 Config for east region
+cat <<-EOF > root/nomad/config/consul-client2.json
+{
+  "ui": true,
+  "log_level": "INFO",
+  "data_dir": "/tmp/consul/client2",
+  "node_name": "client2-east",
+  "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
+  "client_addr": "0.0.0.0",
+  "retry_join": [
+    "nomad-server-1-east"
+  ],
   "recursors": [
     "10.64.0.254"
   ]
@@ -55,12 +291,19 @@ cat <<-EOF > /etc/systemd/resolved.conf.d/consul.conf
 DNS=127.0.0.1
 Domains=~consul
 EOF
+
+# Configure Resolved and iptables
+cat <<-EOF > root/nomad/config/resolved-consul.conf
+[Resolve]
+DNS=127.0.0.1
+Domains=~consul
+EOF
+
 iptables -t nat -A OUTPUT -d localhost -p udp -m udp --dport 53 -j REDIRECT --to-ports 8600
 iptables -t nat -A OUTPUT -d localhost -p tcp -m tcp --dport 53 -j REDIRECT --to-ports 8600
 systemctl restart systemd-resolved
 
 # Start Nomad
 systemctl start nomad
-
 
 exit 0

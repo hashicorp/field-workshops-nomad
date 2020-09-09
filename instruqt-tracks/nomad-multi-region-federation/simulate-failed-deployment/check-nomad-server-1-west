@@ -2,9 +2,16 @@
 
 set -e
 
-grep -q "nomad run /root/nomad/multi-redis.nomad" /root/.bash_history || fail-message "you have not run the redis job"
+# Check that the multi-redis.nomad job was edited to contain fail_local
+grep -q "fail_local" /root/nomad/jobs/multi-redis.nomad || fail-message "You have not edited the multi-redis.nomad file to set on_failure to fail_local yet."
 
-grep -q "watch nomad job status -region west example" /root/.bash_history || fail-message "you have not checked the status of the job"
+# Check that the job was run again
+grep -q "nomad.*job.*run.*/root/nomad/jobs/multi-redis.nomad" /root/.bash_history || fail-message "you have not redeployed the  multi-redis job on the Nomad_Server_West tab yet."
 
+# Check that the deployment in the west region was unblocked
+grep -q "nomad.*deployment.*unblock.*-region.*west" /root/.bash_history || fail-message "you have not unblocked the deployment of the job in the west region on the Nomad_Server_West tab yet."
+
+# Check that the job was stopped
+# grep -q "nomad.*job.*stop.*-global.*example" /root/.bash_history || fail-message "you have not stopped the job on the Nomad_Server_West tab yet."
 
 exit 0

@@ -3,6 +3,13 @@
 HISTFILE=/root/.bash_history
 set -o history
 
+# Check node status
+nomad node status
+
+# Check server status
 nomad server members
+
+# Check status of the west region
+nomad status -region=west
 
 exit 0

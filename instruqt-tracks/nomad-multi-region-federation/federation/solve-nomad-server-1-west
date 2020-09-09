@@ -3,14 +3,32 @@
 HISTFILE=/root/.bash_history
 set -o history
 
-server_ip=$(ip addr show ens4 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
+# Sleep
+sleep 30
 
-ssh nomad-server-1-east "nomad server join $server_ip:4648"
+# Check node status
+nomad node status
 
-sleep 5
-
+# Check server status
 nomad server members
 
-nomad status -region="east"
+# Get IP of server in west region
+server_ip=$(ip addr show ens4 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
+
+# SSH to the east server and join the clusters
+ssh -o StrictHostKeyChecking=no nomad-server-1-east << ENDSSH
+HISTFILE=/root/.bash_history
+set -o history
+nomad server join $server_ip:4648
+ENDSSH
+
+# Sleep
+sleep 15
+
+# Check servers again
+nomad server members
+
+# Check status for east region
+nomad status -region=east
 
 exit 0

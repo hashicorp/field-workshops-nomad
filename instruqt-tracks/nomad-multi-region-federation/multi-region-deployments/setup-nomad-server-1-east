@@ -1,9 +1,9 @@
 #!/bin/bash -l
 
+mkdir /root/nomad/jobs
+
 # Write multi-region job spec
-
-
-cat <<-EOF > /root/nomad/multi-redis.nomad
+cat <<-EOF > /root/nomad/jobs/multi-redis.nomad
 job "example" {
 
   multiregion {

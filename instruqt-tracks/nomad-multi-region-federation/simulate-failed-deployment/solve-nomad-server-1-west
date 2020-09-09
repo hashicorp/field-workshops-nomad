@@ -3,116 +3,25 @@
 HISTFILE=/root/.bash_history
 set -o history
 
-cat <<-EOF > /root/nomad/multi-redis.nomad
-job "example" {
+# Edit the job file
+sed -i "s/fail_all/fail_local/g" /root/nomad/jobs/multi-redis.nomad
 
-  multiregion {
+# Run the job again
+nomad job run /root/nomad/jobs/multi-redis.nomad
 
-    strategy {
-      max_parallel = 1
-      on_failure   = "fail_local"
-    }
+# Sleep
+sleep 60
 
-    region "west" {
-      count       = 1
-      datacenters = ["west-1"]
-    }
+# Get the deployment ID for the west region
+west_deployment_id=$(nomad job status example | grep Multiregion -A4 | grep blocked | cut -d' ' -f5)
 
-    region "east" {
-      count       = 1
-      datacenters = ["east-1"]
-    }
+# Unblock the deployment in the west region
+nomad deployment unblock -region west $west_deployment_id
 
-  }
+# Sleep
+sleep 15
 
-  update {
-    max_parallel      = 1
-    min_healthy_time  = "10s"
-    healthy_deadline  = "2m"
-    progress_deadline = "3m"
-    auto_revert       = true
-    auto_promote      = true
-    canary            = 1
-    stagger           = "30s"
-  }
-
-
-  group "cache" {
-
-    count = 0
-
-    task "redis" {
-      driver = "docker"
-
-      config {
-        image = "redis:6.0"
-
-        port_map {
-          db = 6379
-        }
-      }
-
-      resources {
-        cpu    = 256
-        memory = 128
-
-        network {
-          mbits = 10
-          port "db" {}
-        }
-      }
-    }
-  }
-
-  group "sidecar" {
-
-  # set the reschedule stanza so that we don't have to wait too long
-  # for the deployment to be marked failed
-  reschedule {
-    attempts       = 1
-    interval       = "24h"
-    unlimited      = false
-    delay          = "5s"
-    delay_function = "constant"
-  }
-
-  task "sidecar" {
-    driver = "docker"
-
-    config {
-      image   = "busybox:1"
-      command = "/bin/sh"
-      args    = ["local/script.sh"]
-    }
-
-    # this script will always fail in the east region
-    template {
-      destination = "local/script.sh"
-      data        = <<EOH
-if [[  \${NOMAD_REGION} == "east" ]]
-then
-echo FAIL
-exit 1
-fi
-echo OK
-sleep 600
-
-EOH
-
-    }
-
-    resources {
-      cpu    = 128
-      memory = 64
-    }
-   }
-  }
-}
-
-EOF
-
-nomad job run /root/nomad/multi-redis.nomad
-
-nomad job status -region west example
+# Stop and purge the job
+# nomad job stop -global example
 
 exit 0

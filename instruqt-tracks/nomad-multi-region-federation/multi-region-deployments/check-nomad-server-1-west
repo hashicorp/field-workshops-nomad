@@ -2,8 +2,11 @@
 
 set -e
 
-grep -q "nomad run /root/nomad/multi-redis.nomad" /root/.bash_history || fail-message "you have not run the redis job"
+grep -q "nomad.*job.*run.*/root/nomad/jobs/multi-redis.nomad" /root/.bash_history || fail-message "you have not run the multi-redis job on the Nomad_Server_West tab yet."
 
-grep -q "nomad job status" /root/.bash_history || fail-message "you have not observed the allocations"
+job_status=$(nomad job status example | grep Multiregion -A4 | grep successful | wc -l)
+if [ "$job_status" -lt "2" ]; then
+  fail-message "The example job's deployments are not successful in both regions yet."
+fi
 
 exit 0

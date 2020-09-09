@@ -2,15 +2,18 @@
 
 set -e
 
+grep -q "nomad.*server.*join.*4648" /root/.bash_history || fail-message "you have not joined your Nomad clusters on the Nomad_Server_East tab yet."
+
+# Check status of Nomad servers (after joining)
 nomad_servers=$(nomad server members | grep alive | wc -l)
-if [ "$nomad_servers" -lt "1" ]; then
-  fail-message "The command 'nomad server members' did not show an alive server. Something went wrong"
+if [ "$nomad_servers" -lt "2" ]; then
+  fail-message "The command 'nomad server members' on the Nomad_Server_East tab did not show two Nomad servers, one in each region. Something went wrong with the cluster setup or you did not yet join the clusters together."
 fi
 
-
-
+# Check status of Nomad clients
 nomad_clients=$(nomad node status | grep ready | wc -l)
 if [ "$nomad_clients" -lt "2" ]; then
-  fail-message "The command 'nomad node status' did not show 2 ready clients. Something went wrong"
+  fail-message "The command 'nomad node status' did not show 2 ready Nomad clients in the east cluster. Something went wrong"
 fi
+
 exit 0

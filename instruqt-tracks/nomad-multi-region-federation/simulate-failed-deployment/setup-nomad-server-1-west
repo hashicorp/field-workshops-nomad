@@ -1,8 +1,7 @@
 #!/bin/bash -l
 
 # Write multi-region job spec
-
-cat <<-EOF > /root/nomad/multi-redis.nomad
+cat <<-EOF > /root/nomad/jobs/multi-redis.nomad
 job "example" {
 
   multiregion {
@@ -65,29 +64,31 @@ job "example" {
 
   group "sidecar" {
 
-  # set the reschedule stanza so that we don't have to wait too long
-  # for the deployment to be marked failed
-  reschedule {
-    attempts       = 1
-    interval       = "24h"
-    unlimited      = false
-    delay          = "5s"
-    delay_function = "constant"
-  }
+    count = 0
 
-  task "sidecar" {
-    driver = "docker"
-
-    config {
-      image   = "busybox:1"
-      command = "/bin/sh"
-      args    = ["local/script.sh"]
+    # set the reschedule stanza so that we don't have to wait too long
+    # for the deployment to be marked failed
+    reschedule {
+      attempts       = 1
+      interval       = "24h"
+      unlimited      = false
+      delay          = "5s"
+      delay_function = "constant"
     }
 
-    # this script will always fail in the east region
-    template {
-      destination = "local/script.sh"
-      data        = <<EOH
+    task "sidecar" {
+      driver = "docker"
+
+      config {
+        image   = "busybox:1"
+        command = "/bin/sh"
+        args    = ["local/script.sh"]
+      }
+
+      # this script will always fail in the east region
+      template {
+        destination = "local/script.sh"
+        data        = <<EOH
 if [[  \${NOMAD_REGION} == "east" ]]
 then
 echo FAIL
@@ -97,18 +98,18 @@ echo OK
 sleep 600
 
 EOH
+      }
 
+      resources {
+        cpu    = 128
+        memory = 64
+      }
     }
-
-    resources {
-      cpu    = 128
-      memory = 64
-    }
-   }
   }
 }
-
 EOF
 
+rm /root/.bash_history
+touch /root/.bash_history
 
 exit 0

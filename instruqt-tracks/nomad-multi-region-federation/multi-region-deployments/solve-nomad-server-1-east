@@ -1,7 +1,0 @@
-#!/bin/bash -l
-
-HISTFILE=/root/.bash_history
-set -o history
-
-
-exit 0
