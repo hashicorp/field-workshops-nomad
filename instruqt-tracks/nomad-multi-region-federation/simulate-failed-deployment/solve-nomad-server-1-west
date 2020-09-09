@@ -1,0 +1,27 @@
+#!/bin/bash -l
+
+HISTFILE=/root/.bash_history
+set -o history
+
+# Edit the job file
+sed -i "s/fail_all/fail_local/g" /root/nomad/jobs/multi-redis.nomad
+
+# Run the job again
+nomad job run /root/nomad/jobs/multi-redis.nomad
+
+# Sleep
+sleep 60
+
+# Get the deployment ID for the west region
+west_deployment_id=$(nomad job status example | grep Multiregion -A4 | grep blocked | cut -d' ' -f5)
+
+# Unblock the deployment in the west region
+nomad deployment unblock -region west $west_deployment_id
+
+# Sleep
+sleep 15
+
+# Stop and purge the job
+# nomad job stop -global example
+
+exit 0

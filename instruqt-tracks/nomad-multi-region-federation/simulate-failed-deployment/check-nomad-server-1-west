@@ -1,0 +1,17 @@
+#!/bin/bash -l
+
+set -e
+
+# Check that the multi-redis.nomad job was edited to contain fail_local
+grep -q "fail_local" /root/nomad/jobs/multi-redis.nomad || fail-message "You have not edited the multi-redis.nomad file to set on_failure to fail_local yet."
+
+# Check that the job was run again
+grep -q "nomad.*job.*run.*/root/nomad/jobs/multi-redis.nomad" /root/.bash_history || fail-message "you have not redeployed the  multi-redis job on the Nomad_Server_West tab yet."
+
+# Check that the deployment in the west region was unblocked
+grep -q "nomad.*deployment.*unblock.*-region.*west" /root/.bash_history || fail-message "you have not unblocked the deployment of the job in the west region on the Nomad_Server_West tab yet."
+
+# Check that the job was stopped
+# grep -q "nomad.*job.*stop.*-global.*example" /root/.bash_history || fail-message "you have not stopped the job on the Nomad_Server_West tab yet."
+
+exit 0

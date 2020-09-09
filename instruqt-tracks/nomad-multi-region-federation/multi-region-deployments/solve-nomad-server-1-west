@@ -1,0 +1,12 @@
+#!/bin/bash -l
+
+HISTFILE=/root/.bash_history
+set -o history
+
+# Run the job
+nomad job run /root/nomad/jobs/multi-redis.nomad
+
+# Sleep
+sleep 60
+
+exit 0
