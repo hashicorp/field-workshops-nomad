@@ -3,11 +3,17 @@ id: xc0sasoj8opb
 type: track
 title: Nomad Multi-Region Federation
 teaser: |
-  In this track you will federate two Nomad clusters and then deploy a multi-region job.
+  In this track you will learn how to federate two Nomad clusters and deploy a multi-region job.
 description: |-
   Nomad is the first and only orchestrator on the market with complete and fully-supported federation capabilities for production.
 
   Nomad operates at a regional level and provides first-class support for federation, which enables users to submit jobs or interact with the Nomad HTTP API targeting any region, from any server, even if that server resides in a different region.
+
+  This track will show you how to use Nomad's federation capabilities including multi-region federation and multi-region job deployments. It is based on these two HashiCorp Learn guides:
+    * [Multi-Region Federation](https://learn.hashicorp.com/tutorials/nomad/federation)
+    * [Multi-Region Deployments](https://learn.hashicorp.com/tutorials/nomad/multiregion-deployments)
+
+  Note that running multi-region jobs across federated clusters requires Nomad Enterprise.
 icon: https://storage.googleapis.com/instruqt-hashicorp-tracks/logo/nomad.png
 tags:
 - Nomad
@@ -313,4 +319,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 900
-checksum: "17570018963680965838"
+checksum: "18335785685377508269"
