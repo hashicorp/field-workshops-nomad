@@ -3,15 +3,15 @@
 set -e
 
 # Check that payload.json was generated
-grep -q "nomad job run -output redis.nomad > payload.json" /root/.bash_history || fail-message "You haven't generated your payload json file."
+grep -q "nomad\s\+job\s\+run\s\+-output\s\+redis.nomad\s\+>\s\+payload.json" /root/.bash_history || fail-message "You haven't generated your payload json file."
 
 # Check that job was started with HTTP API
-grep -q "curl --data @payload.json http://localhost:4646/v1/jobs" /root/.bash_history || fail-message "You haven't started the redis job using the API."
+grep -q "curl\s\+--data\s\+@payload.json\s\+http://localhost:4646/v1/jobs" /root/.bash_history || fail-message "You haven't started the redis job using the API."
 
 # Check that job status was checked with HTTP API
-grep -q "curl http://localhost:4646/v1/job/redis/summary" /root/.bash_history || fail-message "You haven't queried the redis job status using the API"
+grep -q "curl\s\+http://localhost:4646/v1/job/redis/summary" /root/.bash_history || fail-message "You haven't queried the redis job status using the API"
 
 # Check that job was stopped with HTTP API
-grep -q "curl --request DELETE http://localhost:4646/v1/job/redis" /root/.bash_history || fail-message "You must stop the redis job before moving forward."
+grep -q "curl\s\+--request\s\+DELETE\s\+http://localhost:4646/v1/job/redis" /root/.bash_history || fail-message "You must stop the redis job before moving forward."
 
 exit 0

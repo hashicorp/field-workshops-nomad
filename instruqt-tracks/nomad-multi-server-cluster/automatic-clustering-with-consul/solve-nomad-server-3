@@ -1,27 +1,30 @@
 #!/bin/bash -l
 
+#Enable bash history
+HISTFILE=~/.bash_history
+set -o history
+
 cd nomad
 
 # Run the Consul agent
-echo -e "consul agent -config-file consul-server3.json > consul.log 2>&1 &" >> /root/.bash_history
 consul agent -config-file consul-server3.json > consul.log 2>&1 &
 
-# Check the members of the Consul cluster
+# Sleep
 sleep 15
-echo -e "consul members" >> /root/.bash_history
+
+# Check the members of the Consul cluster
 consul members
 
 # Run the Nomad server
-echo -e "nomad agent -config nomad-server3.hcl > nomad.log 2>&1 &" >> /root/.bash_history
 nomad agent -config nomad-server3.hcl > nomad.log 2>&1 &
 
-# Check the Nomad cluster members
+# Sleep
 sleep 15
-echo -e "nomad server members" >> /root/.bash_history
+
+# Check the Nomad cluster members
 nomad server members
 
 # Check the Nomad nodes
-echo -e "nomad node status" >> /root/.bash_history
 nomad node status
 
 exit 0

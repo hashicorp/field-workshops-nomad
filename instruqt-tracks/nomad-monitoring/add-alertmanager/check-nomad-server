@@ -3,15 +3,15 @@
 set -e
 
 # Check that the alertmanager.nomad job was run
-grep -q "nomad job run alertmanager.nomad" /root/.bash_history || fail-message "You haven't run the alertmanager.nomad job yet."
+grep -q "nomad\s\+job\s\+run\s\+alertmanager.nomad" /root/.bash_history || fail-message "You haven't run the alertmanager.nomad job yet."
 
 # Check that the status of the alertmanager job was checked
-grep -q "nomad job status alertmanager" /root/.bash_history || fail-message "You haven't checked the status of the alertmanager job yet."
+grep -q "nomad\s\+job\s\+status\s\+alertmanager" /root/.bash_history || fail-message "You haven't checked the status of the alertmanager job yet."
 
 # Check that the prometheus2.nomad job was run
-grep -q "nomad job run prometheus2.nomad" /root/.bash_history || fail-message "You haven't run the prometheus2.nomad job yet."
+grep -q "nomad\s\+job\s\+run\s\+prometheus2.nomad" /root/.bash_history || fail-message "You haven't run the prometheus2.nomad job yet."
 
 # Check that the status of the prometheus job was checked
-grep -q "nomad job status prometheus" /root/.bash_history || fail-message "You haven't re-checked the status of the prometheus job yet."
+grep -q "nomad\s\+job\s\+status\s\+prometheus" /root/.bash_history || fail-message "You haven't re-checked the status of the prometheus job yet."
 
 exit 0

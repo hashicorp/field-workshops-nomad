@@ -2,6 +2,6 @@
 
 set -e
 
-grep -q "nomad job run connect.nomad" /root/.bash_history || fail-message "You haven't run the connect.nomad job yet."
+grep -q "nomad\s\+job\s\+run\s\+connect.nomad" /root/.bash_history || fail-message "You haven't run the connect.nomad job yet."
 
 exit 0

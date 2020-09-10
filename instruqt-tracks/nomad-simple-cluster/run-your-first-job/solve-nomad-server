@@ -1,11 +1,13 @@
 #!/bin/bash -l
 
+#Enable bash history
+HISTFILE=~/.bash_history
+set -o history
+
 # CD to the Nomad directory
-echo -e "cd nomad" >> /root/.bash_history
 cd nomad
 
 # Run the job
-echo -e "nomad job run example.nomad" >> /root/.bash_history
 nomad job run example.nomad > runjob.log
 
 # Extract evaluation and allocation IDs
@@ -13,19 +15,15 @@ eval_id=$(sed -n 1p runjob.log | cut -d'"' -f2)
 alloc_id=$(sed -n 3p runjob.log | cut -d'"' -f2)
 
 # Check the job status
-echo -e "nomad job status example" >> /root/.bash_history
 nomad job status example
 
 # Check the evaluation status
-echo -e "nomad eval status $eval_id" >> /root/.bash_history
 nomad eval status $eval_id
 
 # Check the allocation status
-echo -e "nomad alloc status $alloc_id" >> /root/.bash_history
 nomad alloc status $alloc_id
 
 # Inspect the redis task logs from the job
-echo -e "nomad alloc logs $alloc_id redis" >> /root/.bash_history
 nomad alloc logs $alloc_id redis
 
 exit 0

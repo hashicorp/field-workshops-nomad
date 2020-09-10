@@ -1,25 +1,25 @@
 #!/bin/bash -l
 
+#Enable bash history
+HISTFILE=~/.bash_history
+set -o history
+
 # CD to the Nomad directory
-echo -e "cd nomad" >> /root/.bash_history
 cd nomad
 
 # Change count to 3 in example.nomad
 sed -i 's/task/count = 3\n\t\ttask/g' example.nomad
 
 # Plan the job
-echo -e "nomad job plan example.nomad" >> /root/.bash_history
 nomad job plan example.nomad > planjob.log
 
 # Extract the job modify index
 job_modify_index=$(sed -n 1p planjob.log | cut -d'"' -f2)
 
 # Run the job
-echo -e "nomad job run -check-index $job_modify_index example.nomad" >> /root/.bash_history
 nomad job run -check-index $job_modify_index example.nomad
 
 # Stop the job
-echo -e "nomad job stop example" >> /root/.bash_history
 nomad job stop example
 
 exit 0
