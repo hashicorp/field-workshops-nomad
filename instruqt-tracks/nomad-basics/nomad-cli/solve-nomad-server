@@ -1,11 +1,13 @@
 #!/bin/bash -l
 
+#Enable bash history
+HISTFILE=~/.bash_history
+set -o history
+
 # Get the Nomad version
-echo -e "nomad version" >> /root/.bash_history
 nomad version
 
 # Get help for the `nomad job run` command
-echo -e "nomad job run -h" >> /root/.bash_history
 nomad job run -h
 
 exit 0

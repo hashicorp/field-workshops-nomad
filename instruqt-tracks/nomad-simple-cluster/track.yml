@@ -2,7 +2,8 @@ slug: nomad-simple-cluster
 id: phqbclfchv0u
 type: track
 title: Nomad Simple Cluster
-teaser: Learn how to run a simple Nomad cluster with one server and two clients.
+teaser: |
+  Learn how to run a simple Nomad cluster with one server and two clients.
 description: |-
   Nomad is a flexible workload orchestrator that enables an organization to easily deploy and manage any containerized or legacy application using a single, unified workflow.
 
@@ -19,12 +20,14 @@ developers:
 - roger@hashicorp.com
 private: false
 published: true
+show_timer: true
 challenges:
 - slug: run-the-server-and-clients
   id: ykhcz4xjgdfi
   type: challenge
   title: Run the Nomad Server and 2 Clients
-  teaser: Configure and run the Nomad server and 2 Nomad clients.
+  teaser: |
+    Configure and run the Nomad server and 2 Nomad clients.
   assignment: |-
     Let's start by looking at the `server.hcl` configuration file on the "Config Files" tab on the left. You'll see that we are calling the server node `server`, configuring the agent as a server, and indicating that we expect one server in the cluster.
 
@@ -112,7 +115,8 @@ challenges:
   id: tfmp6ig1fzb1
   type: challenge
   title: Create Your First Nomad Job
-  teaser: Create a new sample Nomad job specification file.
+  teaser: |
+    Create a new sample Nomad job specification file.
   assignment: |-
     In this challenge, you will initialize a new Nomad job and then run it.
 
@@ -164,7 +168,8 @@ challenges:
   id: zstyej0kzykz
   type: challenge
   title: Run and Monitor Your First Nomad Job
-  teaser: Run and monitor the status of your first Nomad job
+  teaser: |
+    Run and monitor the status of your first Nomad job
   assignment: |-
     ## Run the Job
     To get started, you will use the `example.nomad` job specification file that you created in the previous challenge. You can review it again on the "Job Spec" tab.
@@ -245,7 +250,8 @@ challenges:
   id: qfn6u9nh1mrj
   type: challenge
   title: Modify a Job to Run More Instances
-  teaser: Modify an existing job to run more instances of its task group.
+  teaser: |
+    Modify an existing job to run more instances of its task group.
   assignment: |-
     Since your Redis database has been getting a lot of traffic, you've decided to run more instances of it to handle the load.
 
@@ -317,5 +323,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 900
-checksum: "15621097187040601449"
-show_timer: true
+checksum: "8336557276183308683"

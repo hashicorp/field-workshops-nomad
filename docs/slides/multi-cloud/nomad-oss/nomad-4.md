@@ -229,18 +229,19 @@ class: compact, col-2
   - [Isolated Fork/Exec Driver](https://www.nomadproject.io/docs/drivers/exec.html)
   - [Java Driver](https://www.nomadproject.io/docs/drivers/java.html)
   - [QEMU Driver](https://www.nomadproject.io/docs/drivers/qemu.html)
+  - [Podman Driver](https://www.nomadproject.io/docs/drivers/podman)
 <br>
 <br>
 
 ###  Community Task Drivers
 - There are currently 7 open source community supported task drivers:
   - [LXC Driver](https://www.nomadproject.io/docs/drivers/external/lxc/)
-  - [Podman Driver](https://www.nomadproject.io/docs/drivers/external/podman/)
   - [Singularity Driver](https://www.nomadproject.io/docs/drivers/external/singularity/)
   - [Jail Driver](https://www.nomadproject.io/docs/drivers/external/jail-task-driver/)
   - [Pot Driver](https://www.nomadproject.io/docs/drivers/external/pot/)
   - [Firecracker Driver](https://www.nomadproject.io/docs/drivers/external/firecracker-task-driver/)
   - [Nspawn Driver](https://www.nomadproject.io/docs/drivers/external/nspawn/)
+  - [Windows IIS Driver](https://www.nomadproject.io/docs/drivers/external/iis)
 ]
 
 ???
@@ -400,7 +401,7 @@ name: Specifying Required Resources
 class: compact, col-2
 # Specifying Required Resources
 - The [resources stanza](https://www.nomadproject.io/docs/job-specification/resources.html) describes the requirements a task requires.
-  - Resource requirements include memory, network, CPU, and device.
+  - Resource requirements include memory, CPU, and device.
   - Tasks will only be scheduled to client nodes that satisfy its resource requirements.
 
 <br>
@@ -413,10 +414,6 @@ job "example" {
 *     resources {
 *       cpu    = 500
 *       memory = 256
-*       network {
-*         mbits = 100
-*         port  "db"  {}
-*       }
 *     }
     }
   }
@@ -430,11 +427,10 @@ job "example" {
 name: Specifying Networking
 class: compact, col-2
 # Specifying Networking
-- The [network stanza](https://www.nomadproject.io/docs/job-specification/network.html) specifies the networking requirements for the task.
+- The [network stanza](https://www.nomadproject.io/docs/job-specification/network.html) specifies the networking requirements for all tasks in the task group.
   - Bandwidth
   - Port Allocations
 
-<br>
 <br>
 <br>
 
@@ -443,21 +439,14 @@ class: compact, col-2
 job "example" {
   datacenters = ["dc1"]
   group "cache" {
-    task "redis" {
-      driver = "docker"
-      resources {
-        cpu    = 500
-        memory = 256
-*       network {
-*         mbits = 100
-*         port  "db"  {}
-*       }
-      }
-    }
+*   network {
+*     mbits = 100
+*     port  "db"  {}
+* }
 ```
 
 ???
-* expanding the redis example with networking
+* networking settings
 
 ---
 class: compact, col-2
@@ -479,6 +468,9 @@ name: Specifying Port Mapping
 job "example" {
   datacenters = ["dc1"]
   group "cache" {
+*   network {
+*     port "db" {}
+*   }
     task "redis" {
       driver = "docker"
       config {
@@ -486,11 +478,7 @@ job "example" {
 *         db = 6379
 *       }
       }
-      resources {
-        network {
-*         port "db" {}
-        }
-      }
+    }
 ```
 
 ???
@@ -501,10 +489,12 @@ name: Specifying Bridged Networks
 class: compact, col-2
 # Specifying Bridged Networks
 .smaller[
--  When the network stanza is defined at the group level with [bridge](https://www.nomadproject.io/docs/job-specification/network.html#bridge-mode) as the networking mode, all tasks in the task group share the same network namespace.
--  Tasks running within a network namespace are not visible to applications outside the namespace on the same host.
+-  This example shows the [bridge](https://www.nomadproject.io/docs/job-specification/network.html#bridge-mode) network mode.
+-  Tasks running within a `bridge` network namespace are not visible to applications outside the namespace on the same host.
 ]
 
+<br>
+<br>
 <br>
 <br>
 <br>
@@ -514,16 +504,15 @@ class: compact, col-2
 job "example" {
   datacenters = ["dc1"]
   group "cache" {
+*   network {
+*     mode = "bridge"
+*     port "http" {
+*       static = 9002
+*       to     = 9002
+*     }
+*   }
     task "redis" {
       driver = "docker"
-    }
-    network {
-*     mode = "bridge"
-*       port "http" {
-*         static = 9002
-*         to     = 9002
-*       }
-*     }
     }
   }
 ```

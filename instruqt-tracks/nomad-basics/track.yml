@@ -2,7 +2,8 @@ slug: nomad-basics
 id: zzdva5ydzqbv
 type: track
 title: Nomad Basics
-teaser: Learn how to run the Nomad agent, run basic commands, and run Nomad jobs.
+teaser: |
+  Learn how to run the Nomad agent, run basic commands, and run Nomad jobs.
 description: |-
   Nomad is a flexible workload orchestrator that enables an organization to easily deploy and manage any containerized or legacy application using a single, unified workflow.
 
@@ -13,22 +14,24 @@ tags:
 - basics
 owner: hashicorp
 developers:
-- roger@hashicorp.com
 - rjackson@hashicorp.com
+- roger@hashicorp.com
 private: false
 published: true
+show_timer: true
 challenges:
 - slug: nomad-cli
   id: atio81hiysfy
   type: challenge
   title: The Nomad CLI
-  teaser: Explore the Nomad Command Line Interface (CLI).
+  teaser: |
+    Explore the Nomad Command Line Interface (CLI).
   assignment: |-
     Let's start with some basic Nomad commands, running them in the "Nomad CLI" tab on the left.
     ```
     nomad version
     ```
-    You should see "Nomad v0.11.2".
+    You should see "Nomad v0.12.4".
 
     You can also see the list of all Nomad CLI commands:
     ```
@@ -64,7 +67,8 @@ challenges:
   id: 2gvixlkq52un
   type: challenge
   title: Run a Dev Mode Nomad Agent
-  teaser: Run a Nomad server in development mode.
+  teaser: |
+    Run a Nomad server in development mode.
   assignment: |-
     Nomad relies on a long running agent on every machine in the cluster. The agent can run either in server or client mode.
 
@@ -115,7 +119,8 @@ challenges:
   id: xjjunqd5gsjz
   type: challenge
   title: Run Your First Nomad Job
-  teaser: Run your first Nomad job with the Nomad CLI and UI.
+  teaser: |
+    Run your first Nomad job with the Nomad CLI and UI.
   assignment: |-
     In this challenge, you'll run your first Nomad job using a Nomad job specification file that has been provided.
 
@@ -194,7 +199,8 @@ challenges:
   id: 4vobrui0upoe
   type: challenge
   title: Use Nomad's HTTP API
-  teaser: Run and stop a job with Nomad's HTTP API.
+  teaser: |
+    Run and stop a job with Nomad's HTTP API.
   assignment: |-
     In this challenge, you'll run the same Nomad job using Nomad's HTTP API.
 
@@ -248,5 +254,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 900
-checksum: "1758870900090342950"
-show_timer: true
+checksum: "3689164610119900332"

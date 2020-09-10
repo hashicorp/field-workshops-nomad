@@ -2,6 +2,6 @@
 
 set -e
 
-grep -q "nomad agent -config nomad-server1.hcl > nomad.log 2>&1 &" /root/.bash_history || fail-message "You haven't run your first Nomad server yet."
+grep -q "nomad\s\+agent\s\+-config\s\+nomad-server1.hcl\s\+>\s\+nomad.log\s\+2>&1\s\+&" /root/.bash_history || fail-message "You haven't run your first Nomad server yet."
 
 exit 0

@@ -23,10 +23,13 @@ layout: true
 name: more-nomad-labs
 # More Nomad Labs
 * If you finished the 4 labs in this workshop early, we recommend any of the following tracks:
+  * [Nomad ACLs](https://play.instruqt.com/hashicorp/invite/shnoqbxokwuj)
   * [Nomad Advanced Job Placement](https://play.instruqt.com/hashicorp/invite/rbexlxuhgqgd)
   * [Nomad Job Update Strategies](https://play.instruqt.com/hashicorp/invite/1a910sszvvpe)
   * [Nomad Integration with Vault](https://play.instruqt.com/hashicorp/invite/lf9lvmtfpson)
-  * [Nomad Integration with Consul Connect](https://play.instruqt.com/hashicorp/invite/v1xengoaw0i1)
+  * [Nomad Integration with Consul Connect](https://play.instruqt.com/hashicorp/invite/v1xengoaw0i1)  
+  * [Nomad Federation](https://play.instruqt.com/hashicorp/invite/dgpya4wz0c2z)
+  * [Run Nomad Jobs on Windows](https://play.instruqt.com/hashicorp/invite/qu5rqvzck4uo)
 
 ???
 * Here are some additional Nomad Instruqt tracks you can try if you have extra time.

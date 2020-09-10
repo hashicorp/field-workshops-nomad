@@ -1,17 +1,19 @@
 #!/bin/bash -l
 
+#Enable bash history
+HISTFILE=~/.bash_history
+set -o history
+
+# cd to nomad directory
 cd nomad
 
 # Run the Nomad server
-echo -e "nomad agent -config server.hcl > nomad.log 2>&1 &" >> /root/.bash_history
 nomad agent -config server.hcl > nomad.log 2>&1 &
 
 # Check the Nomad cluster members
-echo -e "nomad server members" >> /root/.bash_history
 nomad server members
 
 # Check the Nomad nodes
-echo -e "nomad node status" >> /root/.bash_history
 nomad node status
 
 exit 0

@@ -1,11 +1,13 @@
 #!/bin/bash -l
 
+#Enable bash history
+HISTFILE=~/.bash_history
+set -o history
+
 # CD to the Nomad directory
-echo -e "cd nomad" >> /root/.bash_history
 cd nomad
 
 # Create a new job specification file
-echo -e "nomad job init -short" >> /root/.bash_history
 nomad job init -short
 
 exit 0

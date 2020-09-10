@@ -2,8 +2,8 @@
 
 set -e
 
-grep -q "consul agent -config-file consul-client2.json > consul.log 2>&1 &" /root/.bash_history || fail-message "You haven't run your second Consul client yet."
+grep -q "consul\s\+agent\s\+-config-file\s\+consul-client2.json\s\+>\s\+consul.log\s\+2>&1\s\+&" /root/.bash_history || fail-message "You haven't run your second Consul client yet."
 
-grep -q "nomad agent -config nomad-client2.hcl > nomad.log 2>&1 &" /root/.bash_history || fail-message "You haven't run your second Nomad client yet."
+grep -q "nomad\s\+agent\s\+-config\s\+nomad-client2.hcl\s\+>\s\+nomad.log\s\+2>&1\s\+&" /root/.bash_history || fail-message "You haven't run your second Nomad client yet."
 
 exit 0
