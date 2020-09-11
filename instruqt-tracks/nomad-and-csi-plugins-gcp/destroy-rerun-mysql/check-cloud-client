@@ -4,9 +4,9 @@ set -e
 
 gcloud compute scp nomad-server-1:/root/.bash_history /root/.nomad_server_history --zone "europe-west1-b"
 
-grep -q "nomad job stop -purge mysql-server" /root/.nomad_server_history || fail-message "You have not stopped the mysql-server job on the Server yet."
+grep -q "nomad\s\+job\s\+stop\s\+-purge\s\+mysql-server" /root/.nomad_server_history || fail-message "You have not stopped the mysql-server job on the Server yet."
 
-grep -q "nomad job run nomad/mysql.nomad" /root/.nomad_server_history || fail-message "You have not re-run the mysql.nomad job on the Server yet."
+grep -q "nomad\s\+job\s\+run\s\+nomad/mysql.nomad" /root/.nomad_server_history || fail-message "You have not re-run the mysql.nomad job on the Server yet."
 
 items_in_table=$(gcloud compute ssh nomad-server-1 --zone europe-west1-b --command 'mysql -h mysql-server.service.consul -u web -ppassword -D itemcollection -ss -e "select * from items;" | wc -l')
 if [ $items_in_table -lt 5 ]; then

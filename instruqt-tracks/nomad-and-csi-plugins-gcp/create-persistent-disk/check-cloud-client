@@ -2,7 +2,7 @@
 
 set -e
 
-grep -q "gcloud compute disks create mysql --size 10 --zone europe-west1-b" /root/.bash_history || fail-message "You have not created a disk yet"
+grep -q "gcloud\s\+compute\s\+disks\s\+create\s\+mysql\s\+--size\s\+10\s\+--zone\s\+europe-west1-b" /root/.bash_history || fail-message "You have not created a disk yet"
 
 # Get the edited copy of volume.hcl
 gcloud compute scp nomad-server-1:/root/nomad/volume.hcl /root/volume.hcl --strict-host-key-checking no --zone "europe-west1-b"

@@ -1,16 +1,16 @@
 #!/bin/bash -l
 
 # Create Nomad Server
-gcloud compute instances create nomad-server-1 --image-project=instruqt-hashicorp --image=hashistack-0-6-3 --zone=europe-west1-b --boot-disk-size=10GB --tags=nomad-portworx --machine-type=n1-standard-1
+gcloud compute instances create nomad-server-1 --image-project=instruqt-hashicorp --image=hashistack-0-8-2 --zone=europe-west1-b --boot-disk-size=20GB --tags=nomad-portworx --machine-type=n1-standard-1
 
 # Create Nomad Client 1
-gcloud compute instances create nomad-client-1 --image-project=instruqt-hashicorp --image=hashistack-0-6-3 --zone=europe-west1-b --boot-disk-size=10GB  --tags=nomad-portworx --machine-type=n1-standard-1
+gcloud compute instances create nomad-client-1 --image-project=instruqt-hashicorp --image=hashistack-0-8-2 --zone=europe-west1-b --boot-disk-size=20GB  --tags=nomad-portworx --machine-type=n1-standard-1
 
 # Create Nomad Client 2
-gcloud compute instances create nomad-client-2 --image-project=instruqt-hashicorp --image=hashistack-0-6-3 --zone=europe-west1-b --boot-disk-size=10GB --tags=nomad-portworx --machine-type=n1-standard-1
+gcloud compute instances create nomad-client-2 --image-project=instruqt-hashicorp --image=hashistack-0-8-2 --zone=europe-west1-b --boot-disk-size=20GB --tags=nomad-portworx --machine-type=n1-standard-1
 
 # Create Nomad Client 3
-gcloud compute instances create nomad-client-3 --image-project=instruqt-hashicorp --image=hashistack-0-6-3 --zone=europe-west1-b --boot-disk-size=10GB --tags=nomad-portworx --machine-type=n1-standard-1
+gcloud compute instances create nomad-client-3 --image-project=instruqt-hashicorp --image=hashistack-0-8-2 --zone=europe-west1-b --boot-disk-size=20GB --tags=nomad-portworx --machine-type=n1-standard-1
 
 
 # Create Inbound HTTP Rule
