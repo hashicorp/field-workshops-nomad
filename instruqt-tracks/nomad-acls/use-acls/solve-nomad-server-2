@@ -4,7 +4,6 @@
 HISTFILE=~/.bash_history
 set -o history
 
-mkdir /root/nomad
 scp -oStrictHostKeyChecking=no nomad-server-1:/root/nomad/devro_token.txt /root/nomad/devro_token.txt
 
 export NOMAD_TOKEN=`cat /root/nomad/devro_token.txt | grep Secret | awk '{print $4}'`

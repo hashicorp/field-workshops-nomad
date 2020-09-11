@@ -1,9 +1,5 @@
 #!/bin/bash -l
 
-# Create config directory
-mkdir -p /etc/nomad.d
-chmod a+w /etc/nomad.d
-
 # Write Server main config file
 cat <<-EOF > /etc/nomad.d/client1.hcl
 # Setup data dir

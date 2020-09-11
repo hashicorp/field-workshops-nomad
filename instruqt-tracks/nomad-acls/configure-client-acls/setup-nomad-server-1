@@ -1,6 +1,5 @@
 #!/bin/bash -l
 
-#rm -rf /root/.bash_history
 echo "Configure Client ACLs" > /root/.bash_history
 
 exit 0
