@@ -2,25 +2,25 @@
 
 set -e
 
-grep -q "vault secrets enable database" /root/.bash_history || fail-message "You haven't enabled Vault's database secrets engine yet."
+grep -q "vault\s\+secrets\s\+enable\s\+database" /root/.bash_history || fail-message "You haven't enabled Vault's database secrets engine yet."
 
 database_enabled=$(vault secrets list | grep database | wc -l)
 if [ "$database_enabled" -ne "1" ]; then
   fail-message "You have not yet enabled Vault's database secrets engine yet."
 fi
 
-grep -q "vault write database/config/postgresql @connection.json" /root/.bash_history || fail-message "You haven't created the database connection yet."
+grep -q "vault\s\+write\s\+database/config/postgresql\s\+@connection.json" /root/.bash_history || fail-message "You haven't created the database connection yet."
 
-grep -q "vault write database/roles/accessdb db_name=postgresql creation_statements=@accessdb.sql default_ttl=1h max_ttl=24h" /root/.bash_history || fail-message "You haven't created the role yet."
+grep -q "vault\s\+write\s\+database/roles/accessdb\s\+db_name=postgresql\s\+creation_statements=@accessdb.sql\s\+default_ttl=1h\s\+max_ttl=24h" /root/.bash_history || fail-message "You haven't created the role yet."
 
-grep -q "vault read database/creds/accessdb" /root/.bash_history || fail-message "You haven't created the database credentials yet."
+grep -q "vault\s\+read\s\+database/creds/accessdb" /root/.bash_history || fail-message "You haven't created the database credentials yet."
 
 can_read_db_creds=$(vault read database/creds/accessdb | grep username | wc -l)
 if [ "$can_read_db_creds" -ne "1" ]; then
   fail-message "The accessdb database credentials cannot be read yet."
 fi
 
-grep -q "vault policy write access-tables access-tables-policy.hcl" /root/.bash_history || fail-message "You haven't created the access-table policy yet."
+grep -q "vault\s\+policy\s\+write\s\+access-tables\s\+access-tables-policy.hcl" /root/.bash_history || fail-message "You haven't created the access-table policy yet."
 
 vault policy read access-tables
 if [ "$?" -ne "0" ]; then

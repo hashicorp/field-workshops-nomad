@@ -2,10 +2,10 @@
 
 set -e
 
-grep -q "nomad server members" /root/.bash_history || fail-message "You haven't checked the status of your Nomad servers yet."
+grep -q "nomad\s\+server\s\+members" /root/.bash_history || fail-message "You haven't checked the status of your Nomad servers yet."
 
-grep -q "nomad node status" /root/.bash_history || fail-message "You haven't checked the status of your Nomad client nodes yet."
+grep -q "nomad\s\+node\s\+status" /root/.bash_history || fail-message "You haven't checked the status of your Nomad client nodes yet."
 
-grep -q "nomad status" /root/.bash_history || fail-message "You haven't checked the status of your Nomad jobs yet."
+grep -q "nomad\s\+status" /root/.bash_history || fail-message "You haven't checked the status of your Nomad jobs yet."
 
 exit 0

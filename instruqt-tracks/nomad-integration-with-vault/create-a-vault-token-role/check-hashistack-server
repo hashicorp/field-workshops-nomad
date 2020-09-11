@@ -2,6 +2,6 @@
 
 set -e
 
-grep -q "vault write auth/token/roles/nomad-cluster @nomad-cluster-role.json" /root/.bash_history || fail-message "You haven't created your token role yet."
+grep -q "vault\s\+write\s\+auth/token/roles/nomad-cluster\s\+@nomad-cluster-role.json" /root/.bash_history || fail-message "You haven't created your token role yet."
 
 exit 0

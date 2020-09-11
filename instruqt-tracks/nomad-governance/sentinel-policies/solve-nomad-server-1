@@ -1,14 +1,14 @@
 #!/bin/bash -l
 
 #Enable bash history
-HISTFILE=/home/nomad/.bash_history
+HISTFILE=/root/.bash_history
 set -o history
 
 # Navigate to right directory
-cd /home/nomad/nomad/sentinel
+cd /root/nomad/sentinel
 
 # Export bootstrap token
-export NOMAD_TOKEN=$(cat /home/nomad/nomad/acls/bootstrap.txt | grep Secret | cut -d' ' -f7)
+export NOMAD_TOKEN=$(cat /root/nomad/acls/bootstrap.txt | grep Secret | cut -d' ' -f7)
 
 # Create allow-docker-and-java-drivers.sentinel
 nomad sentinel apply -description "Only allow the Docker and Java drivers" -level hard-mandatory allow-docker-and-java-drivers allow-docker-and-java-drivers.sentinel

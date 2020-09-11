@@ -6,8 +6,8 @@ grep -q "acl" /etc/nomad.d/server3.hcl || fail-message "You have not added the '
 
 grep -q "authoritative_region" /etc/nomad.d/server3.hcl || fail-message "You have not set 'authoritative_region' in the server3.hcl file on Server 3 yet."
 
-grep -q "systemctl restart nomad" /root/.bash_history || fail-message "You haven't restarted Server 3 yet."
+grep -q "systemctl\s\+restart\s\+nomad" /root/.bash_history || fail-message "You haven't restarted Server 3 yet."
 
-grep -q "ps -ef | grep nomad" /root/.bash_history || fail-message "You haven't performed the process check of Server 3 yet."
+grep -q "ps\s\+-ef\s\+|\s\+grep\s\+nomad" /root/.bash_history || fail-message "You haven't performed the process check of Server 3 yet."
 
 exit 0

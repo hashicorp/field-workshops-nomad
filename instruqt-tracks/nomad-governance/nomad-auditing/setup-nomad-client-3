@@ -11,6 +11,5 @@ EOF
 
 mkdir -p /tmp/nomad/client3/audit
 touch /tmp/nomad/client3/audit/audit.log
-chmod -R 777 /tmp/nomad
 
 exit 0

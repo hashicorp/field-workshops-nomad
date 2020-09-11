@@ -1,8 +1,6 @@
 #!/bin/bash -l
 
-# Create config directory
-mkdir -p /etc/nomad.d
-chmod a+w /etc/nomad.d
+mkdir /root/nomad
 
 # Write Server main config file
 cat <<-EOF > /etc/nomad.d/server3.hcl
@@ -76,7 +74,6 @@ nomad -autocomplete-install
 complete -C /usr/local/bin/nomad nomad
 
 # Setup Nomad Track Environment Files
-mkdir nomad
 cd nomad
 
 #Create demo Job

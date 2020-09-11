@@ -32,6 +32,7 @@ developers:
 - roger@hashicorp.com
 private: false
 published: true
+show_timer: true
 challenges:
 - slug: verify-nomad-cluster-health
   id: tklzqhaey58k
@@ -42,7 +43,7 @@ challenges:
   assignment: |-
     In this challenge, you will verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
 
-    The cluster is running 1 Nomad/Consul server and 3 Nomad/Consul clients running Nomad 0.11.1 and Consul 1.7.2.
+    The cluster is running 1 Nomad/Consul server and 3 Nomad/Consul clients running Nomad 0.12.4 and Consul 1.8.3.
 
     The [Consul Connect integration](https://www.nomadproject.io/docs/integrations/consul-connect/) has been enabled on the server and clients since the chatapp uses it to talk to the MongoDB database. Additionally, a Nomad [host volume](https://nomadproject.io/docs/configuration/client/#host_volume-stanza) called "mongodb_mount" has been configured on the clients under the /opt/mongodb/data directory so that MongoDB can persist its data.
 
@@ -709,5 +710,4 @@ challenges:
     port: 8080
   difficulty: basic
   timelimit: 600
-checksum: "4120221687258631541"
-show_timer: true
+checksum: "10795939054865805692"

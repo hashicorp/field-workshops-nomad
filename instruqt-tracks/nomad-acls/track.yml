@@ -20,6 +20,7 @@ developers:
 - roger@hashicorp.com
 private: false
 published: true
+show_timer: true
 challenges:
 - slug: run-the-servers-and-clients
   id: 5efmxtpkfxlm
@@ -546,5 +547,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 1800
-checksum: "15027582479777174377"
-show_timer: true
+checksum: "10246681775223192326"

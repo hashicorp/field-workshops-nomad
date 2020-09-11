@@ -2,7 +2,7 @@
 
 set -e
 
-grep -q "nomad job run connect.nomad" /root/.bash_history || fail-message "You haven't run the connect.nomad job yet."
+grep -q "nomad\s\+job\s\+run\s\+connect.nomad" /root/.bash_history || fail-message "You haven't run the connect.nomad job yet."
 
 nomad_allocations=$(nomad job status countdash | grep Healthy -A3 | grep "1        1       1" | wc -l)
 if [ $nomad_allocations -ne 2 ]; then

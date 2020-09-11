@@ -1,10 +1,9 @@
 #!/bin/bash -l
 
-mkdir -p /home/nomad/nomad/quotas
-chown -R nomad:nomad /home/nomad/nomad/quotas
+mkdir -p /root/nomad/quotas
 
 # Write Default Resource Quota
-cat <<-EOF > /home/nomad/nomad/quotas/quota-default.hcl
+cat <<-EOF > /root/nomad/quotas/quota-default.hcl
 name = "default"
 description = "default quota"
 
@@ -18,7 +17,7 @@ limit {
 EOF
 
 # Write Dev Resource Quota
-cat <<-EOF > /home/nomad/nomad/quotas/quota-dev.hcl
+cat <<-EOF > /root/nomad/quotas/quota-dev.hcl
 name = "dev"
 description = "dev quota"
 
@@ -32,7 +31,7 @@ limit {
 EOF
 
 # Write QA Resource Quota
-cat <<-EOF > /home/nomad/nomad/quotas/quota-qa.hcl
+cat <<-EOF > /root/nomad/quotas/quota-qa.hcl
 name = "qa"
 description = "qa quota"
 

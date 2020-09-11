@@ -2,7 +2,7 @@
 
 set -e
 
-grep -q "echo \$nomad_server_ip" /root/.bash_history || fail-message "You have not checked the IP of your Nomad server yet."
+grep -q "echo\s\+\$nomad_server_ip" /root/.bash_history || fail-message "You have not checked the IP of your Nomad server yet."
 
 consul_members=$(gcloud compute ssh nomad-server-1 --zone europe-west1-b  --project $INSTRUQT_GCP_PROJECT_NOMAD_PROJECT_ID --strict-host-key-checking no --command "consul members | grep alive | wc -l")
 
