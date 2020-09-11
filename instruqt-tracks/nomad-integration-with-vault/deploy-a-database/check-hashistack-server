@@ -2,9 +2,9 @@
 
 set -e
 
-grep -q "nomad run /root/hashistack/nomad/db.nomad" /root/.bash_history || fail-message "You haven't run the database deployment job yet."
+grep -q "nomad\s\+run\s\+/root/hashistack/nomad/db.nomad" /root/.bash_history || fail-message "You haven't run the database deployment job yet."
 
-grep -q "nomad status database" /root/.bash_history || fail-message "You haven't checked the status of the deployed job yet."
+grep -q "nomad\s\+status\s\+database" /root/.bash_history || fail-message "You haven't checked the status of the deployed job yet."
 
 database_status=$(nomad status database | grep "Status .* running" | wc -l)
 if [ "$database_status" -ne "1" ]; then

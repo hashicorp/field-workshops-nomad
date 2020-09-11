@@ -2,16 +2,16 @@
 
 set -e
 
-grep -q "cd /root/hashistack/vault" /root/.bash_history || fail-message "You haven't changed directories to /root/hashistack/vault yet."
+grep -q "cd\s\+/root/hashistack/vault" /root/.bash_history || fail-message "You haven't changed directories to /root/hashistack/vault yet."
 
-grep -q "vault policy write nomad-server nomad-server-policy.hcl" /root/.bash_history || fail-message "You haven't written your Nomad policy to Vault yet."
+grep -q "vault\s\+policy\s\+write\s\+nomad-server\s\+nomad-server-policy.hcl" /root/.bash_history || fail-message "You haven't written your Nomad policy to Vault yet."
 
 vault policy read nomad-server
 if [ "$?" -ne "0" ]; then
   fail-message "The Vault policy nomad-server does not exist yet."
 fi
 
-grep -q "vault token create -policy nomad-server -period 72h -orphan > /root/hashistack/nomad/nomad-token.txt" /root/.bash_history || fail-message "You haven't created your Nomad token yet."
+grep -q "vault\s\+token\s\+create\s\+-policy\s\+nomad-server\s\+-period\s\+72h\s\+-orphan\s\+>\s\+/root/hashistack/nomad/nomad-token.txt" /root/.bash_history || fail-message "You haven't created your Nomad token yet."
 
 nomad_token=$(cat /root/hashistack/nomad/nomad-token.txt | grep nomad-server | wc -l)
 if [ "$nomad_token" -lt "2" ]; then
