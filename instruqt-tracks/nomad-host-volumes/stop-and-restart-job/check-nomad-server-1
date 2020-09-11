@@ -2,22 +2,22 @@
 
 set -e
 
-grep -q "nomad job stop -purge mysql-server" /root/.bash_history || fail-message "You have not stopped the mysql-server job on the Server yet."
+grep -q "nomad\s\+job\s\+stop\s\+-purge\s\+mysql-server" /root/.bash_history || fail-message "You have not stopped the mysql-server job on the Server yet."
 
-grep -q "nomad status" /root/.bash_history || fail-message "You have not checked Nomad's status after stopping the job on the Server yet."
+grep -q "nomad\s\+status" /root/.bash_history || fail-message "You have not checked Nomad's status after stopping the job on the Server yet."
 
-grep -q "cd /root/nomad" /root/.bash_history || fail-message "You have not navigated to the /root/nomad directory on the Server yet."
+grep -q "cd\s\+/root/nomad" /root/.bash_history || fail-message "You have not navigated to the /root/nomad directory on the Server yet."
 
-grep -q "nomad job run mysql.nomad" /root/.bash_history || fail-message "You have not re-run the mysql.nomad job on the Server yet."
+grep -q "nomad\s\+job\s\+run\s\+mysql.nomad" /root/.bash_history || fail-message "You have not re-run the mysql.nomad job on the Server yet."
 
-grep -q "nomad job status mysql-server" /root/.bash_history || fail-message "You have not checked the status of the mysql-server job after re-running it on the Server yet."
+grep -q "nomad\s\+job\s\+status\s\+mysql-server" /root/.bash_history || fail-message "You have not checked the status of the mysql-server job after re-running it on the Server yet."
 
 mysql_job_status=$(nomad job status -short mysql-server | grep Status | grep running | wc -l)
 if [ $mysql_job_status -ne 1 ]; then
   fail-message "The mysql-server job is not running."
 fi
 
-grep -q "mysql -h mysql-server.service.consul -u web -ppassword -D itemcollection" /root/.bash_history || fail-message "You have not connected to the MySQL database on the Server yet."
+grep -q "mysql\s\+-h\s\+mysql-server.service.consul\s\+-u\s\+web\s\+-ppassword\s\+-D\s\+itemcollection" /root/.bash_history || fail-message "You have not connected to the MySQL database on the Server yet."
 
 glove_result=$(mysql -h mysql-server.service.consul -u web -ppassword -D itemcollection -s -N -e "select count(*) from items where name='glove';")
 
