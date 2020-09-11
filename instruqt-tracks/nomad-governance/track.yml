@@ -23,6 +23,7 @@ developers:
 - roger@hashicorp.com
 private: false
 published: true
+show_timer: true
 challenges:
 - slug: verify-nomad-cluster-health
   id: ktmjptuistsh
@@ -35,7 +36,7 @@ challenges:
 
     The cluster is running 1 Nomad/Consul server and 3 Nomad/Consul clients. Each of these has 3.75GB of memory and 1 virtual CPU with 2,300MHz of CPU capacity. This means that the total capacity of the 3 Nomad clients is 11.25GB of memory and 6,900MHz of CPU capacity.
 
-    The cluster is using Nomad 0.11.1 and Consul 1.7.2.
+    The cluster is using Nomad 0.12.4 and Consul 1.8.3.
 
     First, verify that all 4 Consul agents are running and connected to the cluster by running this command on the "Server" tab:
     ```
@@ -68,7 +69,7 @@ challenges:
   - title: Config Files
     type: code
     hostname: nomad-server-1
-    path: /home/nomad/nomad/
+    path: /root/nomad/
   - title: Server
     type: terminal
     hostname: nomad-server-1
@@ -131,12 +132,12 @@ challenges:
 
     Restart the Nomad server on the "Server" tab with this command:
     ```
-    sudo systemctl restart nomad
+    systemctl restart nomad
     ```
 
     After waiting 15 seconds, you should restart all 3 of the Nomad clients on the "Client 1", "Client 2", and "Client 3" tabs:
     ```
-    sudo systemctl restart nomad
+    systemctl restart nomad
     ```
 
     ## Inspect Audit Logs
@@ -241,7 +242,7 @@ challenges:
   - title: Config Files
     type: code
     hostname: nomad-server-1
-    path: /home/nomad/nomad/
+    path: /root/nomad/
   - title: Server
     type: terminal
     hostname: nomad-server-1
@@ -271,9 +272,9 @@ challenges:
 
     Start by inspecting the "quota-default.hcl", "quota-dev.hcl", and "quota-qa.hcl" resource quota specifications in the quotas directory on the "Config Files" tab. These are written in the HashiCorp Configuration Language (HCL). The first sets global limits of 2,300 MHz of CPU capacity and 3,100 MB of memory while the others set global limits of 2,300 MHz of CPU capacity and 4,100 MB of memory.
 
-    The resource quota specification files are all in the /home/nomad/nomad/quotas directory, so please navigate to it with this command:
+    The resource quota specification files are all in the /root/nomad/quotas directory, so please navigate to it with this command:
     ```
-    cd /home/nomad/nomad/quotas
+    cd /root/nomad/quotas
     ```
 
     Next, create the "default" resource quota by running this command on the "Server" tab:
@@ -349,7 +350,7 @@ challenges:
   - title: Config Files
     type: code
     hostname: nomad-server-1
-    path: /home/nomad/nomad/
+    path: /root/nomad/
   - title: Server
     type: terminal
     hostname: nomad-server-1
@@ -380,14 +381,14 @@ challenges:
 
     This stanza is needed on Nomad servers and clients when enabling the Nomad ACL system. You are looking at copies of the actual files that have been placed in the /etc/nomad.d directory on the server and all 3 clients.
 
-    Navigate to the /home/nomad/nomad/acls directory on the "Server" tab with this command:
+    Navigate to the /root/nomad/acls directory on the "Server" tab with this command:
     ```
-    cd /home/nomad/nomad/acls
+    cd /root/nomad/acls
     ```
 
     Restart the Nomad server on the "Server" tab with this command:
     ```
-    sudo systemctl restart nomad
+    systemctl restart nomad
     ```
 
     After waiting about 15 seconds, bootstrap the Nomad ACLs system by running this command on the "Server" tab:
@@ -411,7 +412,7 @@ challenges:
     Export the bootstrap token with these commands on the "Server" tab:
     ```
     export NOMAD_TOKEN=$(cat bootstrap.txt | grep Secret | cut -d' ' -f7)
-    echo "export NOMAD_TOKEN=$NOMAD_TOKEN" >> /home/nomad/.bashrc
+    echo "export NOMAD_TOKEN=$NOMAD_TOKEN" >> /root/.bash_profile
     ```
     The second command ensures that the bootstrap token will be exported in later challenges.
 
@@ -419,7 +420,7 @@ challenges:
 
     Next, you should restart all 3 of the Nomad clients on the "Client 1", "Client 2", and "Client 3" tabs:
     ```
-    sudo systemctl restart nomad
+    systemctl restart nomad
     ```
 
     ## Create ACL Policies and Tokens
@@ -540,7 +541,7 @@ challenges:
   - title: Config Files
     type: code
     hostname: nomad-server-1
-    path: /home/nomad/nomad/
+    path: /root/nomad/
   - title: Server
     type: terminal
     hostname: nomad-server-1
@@ -578,9 +579,9 @@ challenges:
 
     You will create the first of these Sentinel policies with the "hard-mandatory" enforcement level and the others with the "soft-mandatory" enforcement level. This means that absolutely no Nomad task drivers except for the Docker and Java drivers will be allowed but that Nomad administrators will be able to override failures of the other two Sentinel policies.
 
-    Navigate to the /home/nomad/nomad/sentinel directory on the "Server" tab with this command:
+    Navigate to the /root/nomad/sentinel directory on the "Server" tab with this command:
     ```
-    cd /home/nomad/nomad/sentinel
+    cd /root/nomad/sentinel
     ```
 
     Add the "allow-docker-and-java-drivers" Sentinel policy on the "Server" tab with this command:
@@ -621,7 +622,7 @@ challenges:
   - title: Config Files
     type: code
     hostname: nomad-server-1
-    path: /home/nomad/nomad/
+    path: /root/nomad/
   - title: Server
     type: terminal
     hostname: nomad-server-1
@@ -640,15 +641,15 @@ challenges:
   assignment: |-
     In this challenge, you will run Nomad jobs and learn how Nomad ACL and Sentinel policies restrict them.
 
-    Navigate to the /home/nomad/nomad/jobs directory by running this command on the "Server" tab:
+    Navigate to the /root/nomad/jobs directory by running this command on the "Server" tab:
     ```
-    cd /home/nomad/nomad/jobs
+    cd /root/nomad/jobs
     ```
 
     ## Run the sleep.nomad Job
     Start by inspecting the "sleep.nomad" job in the jobs directory on the "Config Files" tab. This job uses Nomad's [exec](https://nomadproject.io/docs/drivers/exec) driver to run the Linux `sleep` command.
 
-    If you run `echo $NOMAD_TOKEN`, you should see the bootstrap token that you added to /home/nomad/.bash_profile earlier. This means that any jobs you run while it is set will be run with the bootstrap token.
+    If you run `echo $NOMAD_TOKEN`, you should see the bootstrap token that you added to /root/.bash_profile earlier. This means that any jobs you run while it is set will be run with the bootstrap token.
 
     Try running the sleep.nomad job (with the bootstrap token) with this command on the "Server" tab:
     ```
@@ -681,7 +682,7 @@ challenges:
 
     If you edit the "catalogue.nomad" job to change the value of `network_mode` from `host` to `bridge` and re-run the job, you will see an error message complaining about the "restrict-docker-images" policy being violated. You could make that change with the Instruqt text editor on the "Config Files" tab or run this commands:
     ```
-    sed -i 's/"host"/"bridge"/g' /home/nomad/nomad/jobs/catalogue.nomad
+    sed -i 's/"host"/"bridge"/g' /root/nomad/jobs/catalogue.nomad
     ```
     and then run the job:
     ```
@@ -690,7 +691,7 @@ challenges:
 
     Since the bootstrap ACL token can override soft-mandatory violations, let's try running the "catalogue.nomad" job again with the `-policy-override` argument after changing the job specification to set `network_mode` back to `host`:
     ```
-    sed -i 's/"bridge"/"host"/g' /home/nomad/nomad/jobs/catalogue.nomad
+    sed -i 's/"bridge"/"host"/g' /root/nomad/jobs/catalogue.nomad
     ```
     Then run the job:
     ```
@@ -707,7 +708,7 @@ challenges:
 
     Set Alice's ACL token with this command on the "Server" tab:
     ```
-    export NOMAD_TOKEN=$(cat /home/nomad/nomad/acls/alice-token.txt | grep Secret | cut -d' ' -f7)
+    export NOMAD_TOKEN=$(cat /root/nomad/acls/alice-token.txt | grep Secret | cut -d' ' -f7)
     ```
 
     Now, run the "webserver-test.nomad" job as Alice with this command:
@@ -720,7 +721,7 @@ challenges:
 
     Recall that Bob's ACL token was assigned the "qa" ACL policy. So, let's try setting his ACL token and running the job again. Do that with these commands:
     ```
-    export NOMAD_TOKEN=$(cat /home/nomad/nomad/acls/bob-token.txt | grep Secret | cut -d' ' -f7)
+    export NOMAD_TOKEN=$(cat /root/nomad/acls/bob-token.txt | grep Secret | cut -d' ' -f7)
     ```
     and
     ```
@@ -772,7 +773,7 @@ challenges:
 
     Then set the `NOMAD_TOKEN` environment variable to Charlie's token:
     ```
-    export NOMAD_TOKEN=$(cat /home/nomad/nomad/acls/charlie-token.txt | grep Secret | cut -d' ' -f7)
+    export NOMAD_TOKEN=$(cat /root/nomad/acls/charlie-token.txt | grep Secret | cut -d' ' -f7)
     ```
 
     Finally, have Charlie run the webserver-test job with the `-policy-override` argument:
@@ -798,7 +799,7 @@ challenges:
   - title: Config Files
     type: code
     hostname: nomad-server-1
-    path: /home/nomad/nomad/
+    path: /root/nomad/
   - title: Server
     type: terminal
     hostname: nomad-server-1
@@ -817,14 +818,14 @@ challenges:
   assignment: |-
     In this challenge, you will run some more Nomad jobs and learn how Resource Quotas can prevent some of them from running all of their desired allocations.
 
-    Navigate to the /home/nomad/nomad/jobs directory by running this command on the "Server" tab:
+    Navigate to the /root/nomad/jobs directory by running this command on the "Server" tab:
     ```
-    cd /home/nomad/nomad/jobs
+    cd /root/nomad/jobs
     ```
 
     Next, export Alice's Nomad ACL token with this command:
     ```
-    export NOMAD_TOKEN=$(cat /home/nomad/nomad/acls/alice-token.txt | grep Secret | cut -d' ' -f7)
+    export NOMAD_TOKEN=$(cat /root/nomad/acls/alice-token.txt | grep Secret | cut -d' ' -f7)
     ```
 
     Have Alice inspect the current usage of the "dev" resource quota with this command:
@@ -857,7 +858,7 @@ challenges:
     ```
     Note that you need to specify the namespace since job names are not unique across multiple namespaces.
 
-    You should see 4 allocations running at the bottom. You can also check the status of the "website" job in the "dev" namespace in the Nomad UI after providing a suitable ACL token after selecting the "ACL Tokens" menu; we recommend using Charlie's token from the charlie-token.txt file in the /home/nomad/nomad/acls directory.
+    You should see 4 allocations running at the bottom. You can also check the status of the "website" job in the "dev" namespace in the Nomad UI after providing a suitable ACL token after selecting the "ACL Tokens" menu; we recommend using Charlie's token from the charlie-token.txt file in the /root/nomad/acls directory.
 
     You'll then need to select the "Jobs" menu and click the Instruqt refresh icon to make the Nomad UI show the namespace selector which will let you select the "dev" namespace. If you click on the "website" job in the "dev" namespace, you will see 4 Desired, Placed, and Healthy allocations.
 
@@ -876,7 +877,7 @@ challenges:
 
     Export Bob's Nomad ACL token with this command:
     ```
-    export NOMAD_TOKEN=$(cat /home/nomad/nomad/acls/bob-token.txt | grep Secret | cut -d' ' -f7)
+    export NOMAD_TOKEN=$(cat /root/nomad/acls/bob-token.txt | grep Secret | cut -d' ' -f7)
     ```
 
     Then, have Bob check the current usage in the "qa" namespace with this command:
@@ -932,7 +933,7 @@ challenges:
 
     Finally, to see the status of the website jobs in both the Dev and the QA namespaces, run these command:
     ```
-    export NOMAD_TOKEN=$(cat /home/nomad/nomad/acls/bootstrap.txt | grep Secret | cut -d' ' -f7)
+    export NOMAD_TOKEN=$(cat /root/nomad/acls/bootstrap.txt | grep Secret | cut -d' ' -f7)
     nomad job status -namespace=* website
     ```
     This uses Nomad Enterprise's [Cross-Namespace Queries](https://www.nomadproject.io/docs/enterprise#cross-namespace-queries) feature.
@@ -964,7 +965,7 @@ challenges:
   - title: Config Files
     type: code
     hostname: nomad-server-1
-    path: /home/nomad/nomad/
+    path: /root/nomad/
   - title: Server
     type: terminal
     hostname: nomad-server-1
@@ -974,5 +975,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 900
-checksum: "8174848881880475148"
-show_timer: true
+checksum: "12824447933311762252"

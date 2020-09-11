@@ -1,11 +1,11 @@
 #!/bin/bash -l
 
 #Enable bash history
-HISTFILE=/home/nomad/.bash_history
+HISTFILE=/root/.bash_history
 set -o history
 
 # Navigate to right directory
-cd /home/nomad/nomad/quotas
+cd /root/nomad/quotas
 
 # Create Default Resource Quota
 nomad quota apply quota-default.hcl

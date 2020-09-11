@@ -1,7 +1,6 @@
 #!/bin/bash -l
 
-echo 'shopt -s histappend' >> /home/nomad/.bashrc
-echo 'PROMPT_COMMAND="history -a;$PROMPT_COMMAND"' >> /home/nomad/.bashrc
+mkdir /root/nomad
 
 # Write Nomad Client 3 Config
 cat <<-EOF > /etc/nomad.d/nomad-client3.hcl
@@ -50,6 +49,6 @@ sleep 15
 systemctl start nomad
 
 # Set the working directory
-set-workdir /home/nomad
+set-workdir /root/nomad
 
 exit 0

@@ -1,14 +1,14 @@
 #!/bin/bash -l
 
 #Enable bash history
-HISTFILE=/home/nomad/.bash_history
+HISTFILE=/root/.bash_history
 set -o history
 
 # Navigate to right directory
-cd /home/nomad/nomad/jobs
+cd /root/nomad/jobs
 
 # Export Alice's ACL token
-export NOMAD_TOKEN=$(cat /home/nomad/nomad/acls/alice-token.txt | grep Secret | cut -d' ' -f7)
+export NOMAD_TOKEN=$(cat /root/nomad/acls/alice-token.txt | grep Secret | cut -d' ' -f7)
 
 # Check the dev resource quota
 nomad quota status dev
@@ -26,7 +26,7 @@ nomad job status -namespace=dev website
 nomad quota status dev
 
 # Export Bob's ACL token
-export NOMAD_TOKEN=$(cat /home/nomad/nomad/acls/bob-token.txt | grep Secret | cut -d' ' -f7)
+export NOMAD_TOKEN=$(cat /root/nomad/acls/bob-token.txt | grep Secret | cut -d' ' -f7)
 
 # Check the qa resource quota
 nomad quota status qa
@@ -44,7 +44,7 @@ nomad job stop -namespace=qa webserver-test
 sleep 30
 
 # Export the bootstrap token
-export NOMAD_TOKEN=$(cat /home/nomad/nomad/acls/bootstrap.txt | grep Secret | cut -d' ' -f7)
+export NOMAD_TOKEN=$(cat /root/nomad/acls/bootstrap.txt | grep Secret | cut -d' ' -f7)
 
 # Use a Cross-Namespace Query
 nomad job status -namespace=* website

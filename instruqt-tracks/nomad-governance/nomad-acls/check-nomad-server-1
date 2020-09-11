@@ -2,28 +2,28 @@
 
 set -e
 
-grep -q "cd /home/nomad/nomad/acls" /home/nomad/.bash_history || fail-message "You have not navigated to the /home/nomad/nomad/acls directory on the Server yet."
+grep -q "cd /root/nomad/acls" /root/.bash_history || fail-message "You have not navigated to the /root/nomad/acls directory on the Server yet."
 
-grep -q "sudo systemctl restart nomad" /home/nomad/.bash_history || fail-message "You have not restarted the Server yet."
+grep -q "systemctl restart nomad" /root/.bash_history || fail-message "You have not restarted the Server yet."
 
-grep -q "nomad acl bootstrap | tee bootstrap.txt" /home/nomad/.bash_history || fail-message "You have not bootstrapped the ACL system on the Server yet."
+grep -q "nomad acl bootstrap | tee bootstrap.txt" /root/.bash_history || fail-message "You have not bootstrapped the ACL system on the Server yet."
 
-grep -q "export NOMAD_TOKEN=\$(cat bootstrap.txt | grep Secret | cut -d' ' -f7)" /home/nomad/.bash_history || fail-message "You have not exported the bootstrap token on the Server yet."
+grep -q "export NOMAD_TOKEN=\$(cat bootstrap.txt | grep Secret | cut -d' ' -f7)" /root/.bash_history || fail-message "You have not exported the bootstrap token on the Server yet."
 
-grep -q "export NOMAD_TOKEN" /home/nomad/.bashrc || fail-message "You have not added the bootstrap token to your .bashrc on the Server yet."
+grep -q "export NOMAD_TOKEN" /root/.bash_profile || fail-message "You have not added the bootstrap token to your .bash_profile on the Server yet."
 
-grep -q "nomad acl policy apply.*anonymous acl-anonymous.hcl" /home/nomad/.bash_history || fail-message "You have not created the anonymous ACL policy on the Server yet."
+grep -q "nomad acl policy apply.*anonymous acl-anonymous.hcl" /root/.bash_history || fail-message "You have not created the anonymous ACL policy on the Server yet."
 
-grep -q "nomad acl policy apply.*dev acl-dev.hcl" /home/nomad/.bash_history || fail-message "You have not created the dev ACL policy on the Server yet."
+grep -q "nomad acl policy apply.*dev acl-dev.hcl" /root/.bash_history || fail-message "You have not created the dev ACL policy on the Server yet."
 
-grep -q "nomad acl policy apply.*qa acl-qa.hcl" /home/nomad/.bash_history || fail-message "You have not created the qa ACL policy on the Server yet."
+grep -q "nomad acl policy apply.*qa acl-qa.hcl" /root/.bash_history || fail-message "You have not created the qa ACL policy on the Server yet."
 
-grep -q "nomad acl policy apply.*override acl-override.hcl" /home/nomad/.bash_history || fail-message "You have not created the override ACL policy on the Server yet."
+grep -q "nomad acl policy apply.*override acl-override.hcl" /root/.bash_history || fail-message "You have not created the override ACL policy on the Server yet."
 
-grep -q 'nomad acl token create -name="alice" -policy=dev | tee alice-token.txt' /home/nomad/.bash_history || fail-message "You have not created Alice's ACL token on the Server yet."
+grep -q 'nomad acl token create -name="alice" -policy=dev | tee alice-token.txt' /root/.bash_history || fail-message "You have not created Alice's ACL token on the Server yet."
 
-grep -q 'nomad acl token create -name="bob" -policy=qa | tee bob-token.txt' /home/nomad/.bash_history || fail-message "You have not created Bob's ACL token on the Server yet."
+grep -q 'nomad acl token create -name="bob" -policy=qa | tee bob-token.txt' /root/.bash_history || fail-message "You have not created Bob's ACL token on the Server yet."
 
-grep -q 'nomad acl token create -name="charlie" -policy=override | tee charlie-token.txt' /home/nomad/.bash_history || fail-message "You have not created Charlie's ACL token on the Server yet."
+grep -q 'nomad acl token create -name="charlie" -policy=override | tee charlie-token.txt' /root/.bash_history || fail-message "You have not created Charlie's ACL token on the Server yet."
 
 exit 0

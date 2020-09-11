@@ -1,11 +1,10 @@
 #!/bin/bash -l
 
 # Make jobs directory
-mkdir /home/nomad/nomad/jobs
-chown -R nomad:nomad /home/nomad/nomad/jobs
+mkdir /root/nomad/jobs
 
 # Write the sleep job
-cat <<-EOF > /home/nomad/nomad/jobs/sleep.nomad
+cat <<-EOF > /root/nomad/jobs/sleep.nomad
 job "sleep" {
   datacenters = ["dc1"]
   type        = "service"
@@ -24,7 +23,7 @@ job "sleep" {
 EOF
 
 # Write the catalogue job
-cat <<-EOF > /home/nomad/nomad/jobs/catalogue.nomad
+cat <<-EOF > /root/nomad/jobs/catalogue.nomad
 job "catalogue" {
   datacenters = ["dc1"]
   type        = "service"
@@ -130,7 +129,7 @@ job "catalogue" {
 EOF
 
 # Write the webserver-test job
-cat <<-EOF > /home/nomad/nomad/jobs/webserver-test.nomad
+cat <<-EOF > /root/nomad/jobs/webserver-test.nomad
 job "webserver-test" {
   datacenters = ["dc1"]
   type        = "service"
@@ -189,7 +188,7 @@ job "webserver-test" {
 EOF
 
 # Write the website-dev job
-cat <<-EOF > /home/nomad/nomad/jobs/website-dev.nomad
+cat <<-EOF > /root/nomad/jobs/website-dev.nomad
 job "website" {
   datacenters = ["dc1"]
   type        = "service"
@@ -286,7 +285,7 @@ job "website" {
 EOF
 
 # Write the website-qa job
-cat <<-EOF > /home/nomad/nomad/jobs/website-qa.nomad
+cat <<-EOF > /root/nomad/jobs/website-qa.nomad
 job "website" {
   datacenters = ["dc1"]
   type        = "service"
