@@ -33,8 +33,4 @@ if [ $mysql_volume_status -ne 1 ]; then
   fail-message "The Portworx mysql volume does not appear to have been created yet."
 fi
 
-
-
-
-
 exit 0
