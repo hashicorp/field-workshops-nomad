@@ -101,7 +101,7 @@ challenges:
     contents: |-
       In this challenge, you will run your first Nomad agent in development mode and explore a few more Nomad CLI commands.
 
-      See https://learn.hashicorp.com/nomad/getting-started/running#starting-the-agent for more on Nomad's development mode.
+      See https://learn.hashicorp.com/tutorials/nomad/get-started-run#starting-the-agent for more on Nomad's development mode.
   tabs:
   - title: Nomad Dev Server
     type: terminal
@@ -184,7 +184,7 @@ challenges:
     contents: |-
       In this challenge, you'll run your first Nomad job using a Nomad job specification file that has been provided.
 
-      See https://learn.hashicorp.com/nomad/getting-started/jobs for more on running Nomad jobs.
+      See https://learn.hashicorp.com/tutorials/nomad/get-started-jobs for more on running Nomad jobs.
   tabs:
   - title: Nomad CLI
     type: terminal
@@ -254,4 +254,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 900
-checksum: "3199321748375481850"
+checksum: "14512621176357453077"

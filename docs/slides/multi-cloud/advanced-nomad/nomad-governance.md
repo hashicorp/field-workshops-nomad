@@ -35,8 +35,8 @@ name: chapter-governance-topics
 name: nomad-enterprise-audit-logging
 # Nomad Enterprise Audit Logging
 * Nomad Enterprise's [Audit Logging](https://nomadproject.io/docs/enterprise/#audit-logging) provides Nomad administrators a complete set of records for all user-issued actions in Nomad.
-* Nomad Enteprise customers can proactively identify access anomalies, ensure enforcement of their security policies, and diagnose cluster behavior by viewing preceding user operations.
-* Each audit event is captured with relevant request and response information in a JSON format that is easily digestibile and familiar to operators
+* Nomad Enterprise customers can proactively identify access anomalies, ensure enforcement of their security policies, and diagnose cluster behavior by viewing preceding user operations.
+* Each audit event is captured with relevant request and response information in a JSON format that is easily digestibile and familiar to operators.
 
 ???
 * Let's start with Nomad Enterprise's audit logging that was added in Nomad 0.11.0.
@@ -44,7 +44,7 @@ name: nomad-enterprise-audit-logging
 ---
 name: nomad-namespaces
 # Nomad Enterprise Namespaces
-* [Namespaces](https://learn.hashicorp.com/nomad/governance-and-policy/namespaces) allow multiple teams to safely share a Nomad cluster.
+* [Namespaces](https://learn.hashicorp.com/tutorials/nomad/namespaces) allow multiple teams to safely share a Nomad cluster.
 * The jobs and tasks of one namespace are isolated from those of others.
 * The namespace of a job is specified by the job's `namespace` stanza.
   * Jobs are run in the `default` namespace if none is specified.
@@ -83,7 +83,7 @@ class: compact
 ---
 name: nomad-resource-quotas
 # Nomad Enterprise Resource Quotas
-* [Resource Quotas](https://learn.hashicorp.com/nomad/governance-and-policy/quotas) allow Nomad operators to restrict the aggregate resource consumption of namespaces.
+* [Resource Quotas](https://learn.hashicorp.com/tutorials/nomad/quotas) allow Nomad operators to restrict the aggregate resource consumption of namespaces.
 * The most common resources restricted are CPU and Memory.
 * But it is also possible to restrict network usage
 
@@ -131,8 +131,8 @@ limit {
 ---
 name: nomad-sentinel-policies
 # Nomad Enterprise Sentinel Policies
-* [Sentinel Policies](https://learn.hashicorp.com/nomad/governance-and-policy/sentinel) in Nomad restrict the characteristics of jobs submitted to Nomad.
-* Sentinel policies extend and require the Nomad [ACL system](https://learn.hashicorp.com/nomad/acls/fundamentals).
+* [Sentinel Policies](https://learn.hashicorp.com/tutorials/nomad/sentinel) in Nomad restrict the characteristics of jobs submitted to Nomad.
+* Sentinel policies extend and require the Nomad [ACL system](https://learn.hashicorp.com/tutorials/nomad/access-control).
 * Nomad Sentinel policies can do things like:
   * Restrict which drivers are allowed.
   * Restrict which Docker images can be used.

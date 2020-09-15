@@ -14,7 +14,7 @@ description: |-
 
   This track will guide you through using a Nomad CSI Plugin to persist data for a MySQL database using a Google Persistent Disk and the [GCP Persistent Disk CSI Driver](https://cloud.google.com/kubernetes-engine/docs/how-to/persistent-volumes/gce-pd-csi-driver).
 
-  It is based on the [Stateful Workloads with Container Storage Interface](https://learn.hashicorp.com/nomad/stateful-workloads/csi-volumes) guide, but runs in GCP instead of AWS.
+  It is based on the [Stateful Workloads with Container Storage Interface](https://learn.hashicorp.com/tutorials/nomad/stateful-workloads-csi-volumes) guide, but runs in GCP instead of AWS.
 
   Before running this track, we suggest you run the [Nomad Basics](https://play.instruqt.com/hashicorp/tracks/nomad-basics) track.
 
@@ -487,4 +487,4 @@ challenges:
     port: 80
   difficulty: basic
   timelimit: 1200
-checksum: "18235609306602126285"
+checksum: "16202575105132404972"

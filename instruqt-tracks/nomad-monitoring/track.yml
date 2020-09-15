@@ -7,7 +7,7 @@ teaser: |
 description: |-
   The Nomad client and server agents collect runtime [telemetry](https://www.nomadproject.io/docs/telemetry/index.html). Operators can use this data to gain real-time visibility into their Nomad clusters and improve performance. Additionally, Nomad operators can set up monitoring and alerting against these metrics and export the metrics to tools like Prometheus, Grafana, Graphite, DataDog, and Circonus.
 
-  This track will guide you through implementing the [Using Prometheus to Monitor Nomad Metrics](https://learn.hashicorp.com/nomad/operating-nomad/prometheus-metrics) guide.
+  This track will guide you through implementing the [Using Prometheus to Monitor Nomad Metrics](https://learn.hashicorp.com/tutorials/nomad/prometheus-metrics) guide.
 
   Before running this track, we suggest you run the [Nomad Basics](https://instruqt.com/hashicorp/tracks/nomad-basics), [Nomad Simple Cluster](https://instruqt.com/hashicorp/tracks/nomad-simple-cluster), and the [Nomad Multi-Server Cluster](https://instruqt.com/hashicorp/tracks/nomad-multi-server-cluster) tracks.
 icon: https://storage.googleapis.com/instruqt-hashicorp-tracks/logo/nomad.png
@@ -146,7 +146,7 @@ challenges:
 
       Additionally, Nomad operators can set up monitoring and alerting against these metrics and export the metrics to tools like Prometheus, Grafana, Graphite, DataDog, and Circonus.
 
-      This track will guide you through implementing the [Using Prometheus to Monitor Nomad Metrics](https://learn.hashicorp.com/nomad/operating-nomad/prometheus-metrics) guide.
+      This track will guide you through implementing the [Using Prometheus to Monitor Nomad Metrics](https://learn.hashicorp.com/tutorials/nomad/prometheus-metrics) guide.
   - type: text
     contents: |-
       The setup scripts for this track have configured 4 VMs running Nomad and Consul agents. One is functioning as a server while the other 3 are functioning as clients, both with regard to Nomad and to Consul.
@@ -393,4 +393,4 @@ challenges:
     port: 9999
   difficulty: basic
   timelimit: 1200
-checksum: "17249993678455077771"
+checksum: "4598853773109752482"

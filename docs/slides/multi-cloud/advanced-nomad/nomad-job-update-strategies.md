@@ -46,7 +46,7 @@ name: update-strategy-applicability
 ---
 name: rolling-updates
 # Rolling Updates
-* [Rolling Updates](https://learn.hashicorp.com/nomad/update-strategies/rolling-upgrades) are the default update strategy within Nomad.
+* [Rolling Updates](https://learn.hashicorp.com/tutorials/nomad/job-rolling-update) are the default update strategy within Nomad.
 * In a rolling update, new allocations of a task group gradually replace existing allocations in batches.
 * The `max_parallel` attribute of the `update` stanza specifies how many allocations should be replaced in parallel.
 * However, Nomad only advances from one batch of parallel allocations to the next batch if all tasks deployed in the previous batch are healthy.
@@ -88,7 +88,7 @@ group "api" {
 name: blue-green-deployments
 class: compact
 # Blue/Green Deployments
-* In a [Blue/Green Deployment](https://learn.hashicorp.com/nomad/update-strategies/blue-green-and-canary-deployments#bluegreen-deployments), two different versions of an application are run side-by-side so that they can be compared.
+* In a [Blue/Green Deployment](https://learn.hashicorp.com/tutorials/nomad/job-blue-green-and-canary-deployments#bluegreen-deployments), two different versions of an application are run side-by-side so that they can be compared.
 * In the Nomad context, a number of new allocations equal to the `count` of the task group are deployed while the same number of allocations that were previously deployed continue to run.
 * Blue/Green deployments in Nomad are configured by setting the `canary` attribute of the `update` stanza equal to the `count` of the task group.
 * The deployment has to be manually [promoted](https://nomadproject.io/docs/commands/deployment/promote/) before the old allocations are terminated.
@@ -126,7 +126,7 @@ group "api" {
 ---
 name: canary-deployments
 # Canary Deployments
-* In a [Canary Deployment](https://learn.hashicorp.com/nomad/update-strategies/blue-green-and-canary-deployments#deploy-with-canaries), a small number of new instances of an application are deployed alongside the existing one.
+* In a [Canary Deployment](https://learn.hashicorp.com/tutorials/nomad/job-blue-green-and-canary-deployments#deploy-with-canaries), a small number of new instances of an application are deployed alongside the existing one.
 * Coal miners used to take canaries into mines since the birds got sick from dangerous gas leaks before the miners did.
 * In the Nomad context, a number of new allocations equal to the `canary` attribute of the `update` stanza are deployed.
 * Note that a Blue/Green deployment in Nomad is a special case of a Canary deployment.
