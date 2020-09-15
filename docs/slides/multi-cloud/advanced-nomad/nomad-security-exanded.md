@@ -8,7 +8,7 @@ count: false
 ![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
 
 ???
-* In this chapter, we'll provide an overview of Nomad Security, focusing on Nomad's ACL system
+* In this chapter, we'll provide an overview of Nomad Security
 
 ---
 layout: true
@@ -20,10 +20,13 @@ layout: true
 
 ---
 name: chapter-security-topics
-# Chapter Topics
+# Chapter 1 Topics
 
-1. Nomad Encryption
-1. Nomad Access Control Lists (ACLs)
+1. Encryption Overview
+2. Nomad Access Control Lists (ACLs)
+3. Securing Nomad Clusters with TLS
+4. Using Vault's PKI Secrets Engine with Nomad
+5. Hands on Lab: Nomad ACLs
 
 ???
 * This is our topics slide.
@@ -34,7 +37,7 @@ class: title, shelf, no-footer, fullbleed
 background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/bkgs/HashiCorp-Title-bkg.jpeg)
 count: false
 
-# Nomad Encryption
+# Nomad Encryption Overview
 
 ![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
 
@@ -71,7 +74,7 @@ cg8StVXbQJ0gPvMd9o7yrg==
 name: nomad-chapter-security-encryption-http-rpc-1
 # HTTP and RPC Encryption with TLS
 
-.smaller[* Nomad uses mTLS (mutual TLS) to verify the authenticity of servers and clients.
+.smaller[* TLS is used to verify the authenticity of servers and clients.
 * All servers and clients should have signed key pairs configured.
 * Server authenticity can be enforced using:
  * `verify_server_hostname = true` in the **tls** configuration stanza.
@@ -81,58 +84,37 @@ name: nomad-chapter-security-encryption-http-rpc-1
  * TLS is used to secure the RPC calls between agents.
  ]
 
-???
-
 ---
-name: nomad-chapter-security-TLS-overview
-# Benefits of Nomad mTLS
+name: nomad-chapter-security-encryption-configuring-the-cli
+# Configuring The Command Line Tool
 
-.small[
-Nomad's use of mTLS provides the following benefits:
-* Prevents unauthorized Nomad access
-* Prevents observing or tampering with Nomad communication
-* Prevents client/server role or region misconfigurations
-* Prevents other services from masquerading as Nomad agents
-* Prevents misconfiguration of Nomad regions
+.smaller[* By default HTTPS does not validate client certificates
+  * No need for clients to have access to private keys
+* Additional **NOMAD_CACERT** environment variable is needed.
+  * This should point to the CA file used to sign the TLS certificates.
+
+For Example:
+```bash
+export NOMAD_ADDR=https://127.0.0.1:4646
+export NOMAD_CACERT=/path/to/ca.pem
+```
 ]
 
 ???
 
-Preventing region misconfigurations is a property of Nomad's mTLS not commonly found in the TLS implementations on the public Internet. While most uses of TLS verify the identity of the server you are connecting to based on a domain name such as example.com, Nomad verifies the node you are connecting to is in the expected region and configured for the expected role (e.g. client.us-west.nomad). This also prevents other services who may have access to certificates signed by the same private CA from masquerading as Nomad agents. If certificates were identified based on hostname/IP then any other service on a host could masquerade as a Nomad agent.
-
 ---
-name: nomad-chapter-security-TLS-certificates-1
-# Certificate Requirements
+name: nomad-chapter-security-encryption-network-isolation-tls-1
+# Network Isolation with TLS
 
-* Certificates must be signed by a **Private** CA.
-* All certificates must be signed by the same CA.
+.smaller[To isolate Nomad agents on a network with TLS enable:
+* `verify_https_client`.
+* `verify_server_hostname`.
 
-???
+Agents will:
+* Require client certificates for all incoming HTTPS connections.
+* Verify proper names on all other certificates.
 
----
-name: nomad-chapter-security-TLS-certificates-4
-class: col-2
-# TLS Configuration
-
-Adding TLS configuration to the server and client configurations:
-* Copy the CA, Certificate and keyfile to the server.
-* Edit the config hcl file and add the `tls` block.
-
-<br>
-```json
-
-tls {
-  http = true
-  rpc  = true
-
-  ca_file   = "nomad-ca.pem"
-  cert_file = "server.pem"
-  key_file  = "server-key.pem"
-
-  verify_server_hostname = true
-  verify_https_client    = true
-}
-```
+Consul will not attempt to health check agents with **`verify_https_client`** set.]
 
 ???
 
@@ -231,7 +213,7 @@ class: col-2
 # ACL Policies
 
 .small[
-* Default = Deny-All.
+* Default = Deny/Whitelist.
 * No permissions by default.
 * Policies allow a set of capabilities or actions.
 ]
@@ -355,7 +337,6 @@ node | Node-level catalog operations
 operator | Cluster-level operations in the Operator API
 quota | Quota specification related operations
 host_volume | Host Volume related operations
-plugin | CSI Plugin related operations
 ]
 ???
 The following table summarizes the ACL Rules that are available for constructing policy rules
@@ -399,13 +380,259 @@ When ACLs are enabled, Nomad depends on an "authoritative region" to act as a si
 
 Global ACL tokens are used to allow cross region requests. Standard ACL tokens are created in a single target region and not replicated. This means if a request takes place between regions, global tokens must be used so that both regions will have the token registered.
 
+
+---
+name: nomad-chapter-security-tls
+class: title, shelf, no-footer, fullbleed
+background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/bkgs/HashiCorp-Title-bkg.jpeg)
+count: false
+
+# Securing Nomad Clusters with TLS
+
+![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
+
+???
+
+---
+name: nomad-chapter-security-TLS-overview-1
+# Nomad TLS Overview
+
+* Securing Nomad's cluster communication is not only important for security but can even ease operations by preventing mistakes and misconfigurations.
+* Nomad optionally uses mutual TLS (mTLS) for all HTTP and RPC communication.
+
+
+---
+name: nomad-chapter-security-TLS-overview-2
+# Nomad TLS Overview
+
+.small[
+Nomad's use of mTLS provides the following benefits:
+* Prevents unauthorized Nomad access
+* Prevents observing or tampering with Nomad communication
+* Prevents client/server role or region misconfigurations
+* Prevents other services from masquerading as Nomad agents
+]
+
+???
+
+---
+name: nomad-chapter-security-TLS-overview-3
+# Nomad TLS Overview
+.small[
+Nomad's use of mTLS has the benefit that it prevents region misconfiguration.
+
+**It Verifies that:**
+* The node is in the expected Region.
+* The node is configured for the role.
+
+It prevents other services with access to certificates from the same CA from impersonating Nomad agents.
+]
+
+???
+Preventing region misconfigurations is a property of Nomad's mTLS not commonly found in the TLS implementations on the public Internet. While most uses of TLS verify the identity of the server you are connecting to based on a domain name such as example.com, Nomad verifies the node you are connecting to is in the expected region and configured for the expected role (e.g. client.us-west.nomad). This also prevents other services who may have access to certificates signed by the same private CA from masquerading as Nomad agents. If certificates were identified based on hostname/IP then any other service on a host could masquerade as a Nomad agent.
+
+---
+name: nomad-chapter-security-TLS-certificates-1
+# Certificates
+
+* Certificate Requirements:
+  * Certificates must be signed by a **Private** CA.
+  * All certificates must be signed by the same CA.
+
+???
+
+---
+name: nomad-chapter-security-TLS-certificates-2
+# Node Certificates
+
+* Nomad hosts are ephemeral, so creating a certificate for each hostname has no security benefit.
+* To provide the security needed, certificates must be signed with their region and role:
+  * `client.global.nomad` client node for global region
+  * `server.us-west.nomad` server node for us-west region
+
+???
+
+---
+name: nomad-chapter-security-TLS-certificates-3
+# Node Certificates
+
+* Adding `localhost` and `127.0.0.1` as subject alternate names (SANs) will allow tools like curl to communicte with the Nomad HTTP API endpoints from the same host.
+* Adding the DNS resolvable hostname as a SAN will allow remote HTTP requests from third party tools.
+
+???
+
+---
+name: nomad-chapter-security-TLS-certificates-4
+class: col-2
+# TLS Configuration
+
+Adding TLS configuration to the server and client configurations:
+* Copy the CA, Certificate and keyfile to the server.
+* Edit the config hcl file and add the `tls` block.
+
+<br>
+```json
+
+tls {
+  http = true
+  rpc  = true
+
+  ca_file   = "nomad-ca.pem"
+  cert_file = "server.pem"
+  key_file  = "server-key.pem"
+
+  verify_server_hostname = true
+  verify_https_client    = true
+}
+```
+
+???
+
+---
+name: nomad-chapter-security-vault-pki
+class: title, shelf, no-footer, fullbleed
+background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/bkgs/HashiCorp-Title-bkg.jpeg)
+count: false
+
+# Using Vault's PKI Secrets Engine with Nomad
+
+![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
+
+???
+
+---
+name: nomad-chapter-security-vault-pki-1
+# Vault PKI Secrets Engine Integration
+
+* Securing your Nomad nodes with TLS certificates is an important part of managing your cluster.
+
+* To increase the level of security that TLS provides you need to:
+  * Have a short TTL for each certificate.
+  * Regularly rotate these certificates.
+
+* In previous slides, we discussed what is needed to accomplish this. This can take a long time with many manual steps.
+
+???
+
+---
+name: nomad-chapter-security-vault-pki-2
+# Vault PKI Secrets Engine Integration
+* When your clusters and regions start growing in number, this process becomes cumbersome and will lead to mistakes.
+* Nomad can make use of [Consul Template](https://github.com/hashicorp/consul-template) to integrate with Vault's [PKI secrets engine](https://www.vaultproject.io/docs/secrets/pki).
+* This allows:
+  * Automatic Generation of dynamic certificates for each node
+  * Automatic renewal of these certificates for each node
+  * A unique relativly short TTL certificate per node
+  * Automatic certificate rotation by Consul Template
+
+???
+
+---
+name: nomad-chapter-security-lab
+class: title, shelf, no-footer, fullbleed
+background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/bkgs/HashiCorp-Title-bkg.jpeg)
+count: false
+
+# Nomad ACLs Lab
+
+![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
+
+???
+
+---
+name: lab-nomad-acls
+# 👩‍💻 Nomad ACLs Lab
+* In this lab, you'll configure a Nomad cluster to use ACLs.
+* You'll also see how ACLs allow some users to do things like running jobs while only allowing other users to monitor them.
+* You'll do this in the first challenge, "Run the Nomad Servers and Clients", of the [Nomad Access Control Lists (ACLs)](https://play.instruqt.com/hashicorp/invite/shnoqbxokwuj) Instruqt track.
+
+???
+* Now, you can configure ACLs for a Nomad cluster in another Instruqt track.
+* We'll be running the Instruqt track "Nomad Access Control Lists (ACLs)"
+
+---
+name: lab-challenge-1.1
+# 👩‍💻 Lab Challenge 1.1: Run Servers and Clients
+
+* Start the "Nomad Access Control Lists (ACLs)" track by clicking the "Run the Nomad Servers and Clients" challenge of the track.
+* While the challenge is loading, read the notes in both screens.
+* Click the green "Start" button to start the first challenge.
+* Follow the instructions on the right side of the challenge.
+* After completing all the steps, click the green "Check" button to see if you did everything right.
+* You can also click the "Check" button for reminders.
+
+???
+* Give the students some instructions for starting their first challenge.
+* This also includes instructions for checking that they did everything right.
+* Students can also click the green "Check" button to get reminded of what they should do next.
+
+---
+name: lab-challenge-1.2
+# 👩‍💻 Lab Challenge 1.2: Configure Server ACLs
+
+* In this challenge, you'll configure ACLs for the Nomad servers.
+* Instructions:
+  * Click the "Configure Nomad Server ACLs" challenge of the "Nomad Access Control Lists (ACLs)" track.
+  * Then click the green "Start" button.
+  * Follow the challenge's instructions.
+  * Click the green "Check" button when finished.
+
+???
+* In this challenge, you will configure ACLs for the Nomad servers.
+
+---
+name: lab-challenge-1.3
+# 👩‍💻 Lab Challenge 1.3: Configure Client ACLs
+
+* In this challenge, you'll configure ACLs for the Nomad clients.
+* Instructions:
+    * Click the "Configure Nomad Client ACLs" challenge of the "Nomad Access Control Lists (ACLs)" track.
+    * Then click the green "Start" button.
+    * Follow the challenge's instructions.
+    * Click the green "Check" button when finished.
+
+???
+* In this challenge, you will configure ACLs for the Nomad clients.
+
+---
+name: lab-challenge-1.4
+# 👩‍💻 Lab Challenge 1.4: Bootstrap Nomad ACLs
+
+* In this challenge, you'll bootstrap the ACL system for your Nomad cluster.
+* Instructions:
+    * Click the "Bootstrap Nomad ACLs" challenge of the "Nomad Access Control Lists (ACLs)" track.
+    * Then click the green "Start" button.
+    * Follow the challenge's instructions.
+    * Click the green "Check" button when finished.
+
+???
+* In this challenge, you will bootstrap the ACL system for your Nomad cluster.
+
+---
+name: lab-challenge-1.5
+# 👩‍💻 Lab Challenge 1.5: Use Nomad ACLs
+
+* In this challenge, you'll see how Nomad ACLs allow one user to run jobs while only allowing another user to monitor them.
+* Instructions:
+    * Click the "Use Nomad ACLs" challenge of the "Nomad Access Control Lists (ACLs)" track.
+    * Then click the green "Start" button.
+    * Follow the challenge's instructions.
+    * Click the green "Check" button when finished.
+
+???
+* In this challenge, you will see how Nomad ACLs allow one user to run jobs while only allowing another user to monitor them
+
 ---
 name: chapter-security-Summary
-# 📝 Chapter Summary
+# 📝 Chapter 1 Summary
 
-In this chapter, you learned a lot about Nomad security:
-1. Nomad Encryption including its use  of mTLS
-1. Nomad Access Control Lists (ACLs)
+In this chapter, you learned a lot about Nomad security, including:
+1. Nomad Encryption
+2. Nomad Access Control Lists (ACLs)
+3. Securing Nomad Clusters with TLS
+4. Using Vault's PKI Secrets Engine with Nomad
+
+You also did a hands-on lab in which you configured a cluster to use Nomad ACLs.
 
 ???
 * Summarize what we covered in the security chapter

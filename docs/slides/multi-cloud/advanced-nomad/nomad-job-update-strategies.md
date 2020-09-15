@@ -3,8 +3,7 @@ class: title, shelf, no-footer, fullbleed
 background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/bkgs/HashiCorp-Title-bkg.jpeg)
 count: false
 
-# Chapter 3
-## Nomad Job Update Strategies
+# Nomad Job Update Strategies
 
 ![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
 
@@ -35,7 +34,7 @@ name: chapter-topics
 
 ---
 name: update-strategy-applicability
-# Updata Strategy Applicability
+# Update Strategy Applicability
 * Nomad's update strategies can be used for **all** applications orchestrated by Nomad, whether containerized or not.
 * They are configured with the `update` stanza in Nomad job specifications at the job level or at the task group level.
 * If done at the job level, the specified update strategy is applied to all of the job's task groups.
@@ -167,7 +166,7 @@ group "api" {
 ---
 name: lab-job-update-strategies
 class: compact
-# 👩‍💻 Job Update Strategies Lab
+# 👩‍💻 Nomad Job Update Strategies Lab
 * In this lab, you'll deploy Nomad jobs that run a MongoDB data base, a chat web app, and nginx (as a load balancer for the web app).
 * You'll then update the chat app job 3 times, first with a rolling update, then with a blue/green deployment, and finally with a canary deployment.
 * As you do this, the background color of the chat app will change from light to dark and back again.
@@ -179,7 +178,7 @@ class: compact
 
 ---
 name: chapter-Summary
-# 📝 Chapter 3 Summary
+# 📝 Chapter Summary
 
 In this chapter you did the following:
 * Learned about Nomad's job update strategies:

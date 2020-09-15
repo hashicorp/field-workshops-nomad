@@ -3,8 +3,7 @@ class: title, shelf, no-footer, fullbleed
 background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/bkgs/HashiCorp-Title-bkg.jpeg)
 count: false
 
-# Chapter 4
-## Nomad Vault Integration
+# Nomad Vault Integration
 
 ![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
 
@@ -172,7 +171,7 @@ class: compact
 
 ---
 name: chapter-Summary
-# 📝 Chapter 4 Summary
+# 📝 Chapter Summary
 
 In this chapter you did the following:
 * Learned about Nomad's integration with Vault

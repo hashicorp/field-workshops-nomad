@@ -78,7 +78,7 @@ name:  More Nomad Concepts
 * **Allocations** map the tasks and task groups within jobs to client nodes
 * Nomad performs **Evaluations** whenever jobs or client states change to determine if allocations must be adjusted
 * Nomad maximizes resource utilization with a highly efficient **Bin Packing** algorithm
-* **Datacenters** are physical or logical groups of compute resources typically defined by cloud service providers
+* **Datacenters** are physical or logical groups of compute resources typically defined by cloud service providers as availability zones
 * **Regions** are Nomad logical constructs that may consist of multiple datacenters, and contain one Nomad cluster
 * Multiple Nomad Regions can be **Federated** together
 ]
@@ -87,7 +87,7 @@ name:  More Nomad Concepts
 -  Allocations map tasks, task groups, and jobs to various client resources.
 -  Allocations are adjusted based on Nomad Evaluations that are performed whenever balance within the system is disrupted, either through adjustments to the job, and/or changes to the client availability.
 -  Nomad uses a highly efficient bin packing algorithm to ensure that resource utilization is maximized across the client cluster.
--  A cluster can reside within a traditional datacenter, or across multipledata centers defined as a Nomad region.
+-  A cluster can reside within a traditional datacenter, or across multiple data centers defined as a Nomad region.
 - Regions can be federated together enabling wider communication without replicating data across all regions.
 
 ---
@@ -156,7 +156,7 @@ name:  Multi-region Federation
 .smaller[
 * If all servers in a region fail, clients can access servers in a federated region
 * Servers must be discoverable
-* Requires RPC and Raft across Regions
+* Requires RPC and Serf across Regions
 ]
 
 .center[![:scale 80%](images/Failed-Region.png)]
@@ -181,7 +181,7 @@ name:  Nomad Layout and Comms
 
 ???
 -  Within the Server Cluster, we have a Leader, and we have Followers.
--  Leaders are elected via quorum (which is why it is important to have 3-5 nodes) using Consensus, based on RAFT.
+-  Leaders are elected via quorum (which is why it is important to have 3-5 nodes) using Nomad's Consensus prootcol, based on RAFT.
 -  Leader of the servers makes all allocation decisions, and distributes to Followers.
 -  Server push allocation and task assignments via RPC to each Server.
 
