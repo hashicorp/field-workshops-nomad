@@ -84,7 +84,7 @@ challenges:
     hostname: nomad-server-1
     port: 4646
   difficulty: basic
-  timelimit: 1800
+  timelimit: 900
 - slug: configure-server-acls
   id: rfb3dvxmxuyp
   type: challenge
@@ -174,7 +174,7 @@ challenges:
     hostname: nomad-server-1
     port: 4646
   difficulty: basic
-  timelimit: 1800
+  timelimit: 900
 - slug: configure-client-acls
   id: ncufcvo3ycxz
   type: challenge
@@ -248,7 +248,7 @@ challenges:
     hostname: nomad-server-1
     port: 4646
   difficulty: basic
-  timelimit: 1800
+  timelimit: 900
 - slug: bootstrap-acls
   id: agli9we12h2m
   type: challenge
@@ -390,7 +390,7 @@ challenges:
     hostname: nomad-server-1
     port: 4646
   difficulty: basic
-  timelimit: 1800
+  timelimit: 900
 - slug: use-acls
   id: 2dzqorlvompb
   type: challenge
@@ -547,4 +547,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 1800
-checksum: "10246681775223192326"
+checksum: "9318739303332376960"

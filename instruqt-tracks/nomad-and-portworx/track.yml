@@ -106,7 +106,7 @@ challenges:
     path: /
     port: 80
   difficulty: basic
-  timelimit: 300
+  timelimit: 600
 - slug: install-portworx
   id: jndu9wxvuyj6
   type: challenge
@@ -279,7 +279,7 @@ challenges:
     path: /
     port: 80
   difficulty: basic
-  timelimit: 600
+  timelimit: 900
 - slug: write-data
   id: 8bnlvcgnijnb
   type: challenge
@@ -441,4 +441,4 @@ challenges:
     port: 80
   difficulty: basic
   timelimit: 600
-checksum: "10102855472221926914"
+checksum: "12854960168407950057"

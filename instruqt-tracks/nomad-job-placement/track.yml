@@ -76,7 +76,7 @@ challenges:
     hostname: nomad-server-1
     port: 4646
   difficulty: basic
-  timelimit: 300
+  timelimit: 600
 - slug: deploy-the-jobs
   id: ak0ehohkwlsk
   type: challenge
@@ -204,7 +204,7 @@ challenges:
     hostname: nomad-server-1
     port: 4646
   difficulty: basic
-  timelimit: 600
+  timelimit: 900
 - slug: use-constraint
   id: uowivhtikmoz
   type: challenge
@@ -309,7 +309,7 @@ challenges:
     path: /myapp
     port: 8080
   difficulty: basic
-  timelimit: 600
+  timelimit: 900
 - slug: use-spread
   id: sovmjupmykql
   type: challenge
@@ -499,4 +499,4 @@ challenges:
     port: 8080
   difficulty: basic
   timelimit: 600
-checksum: "9990265789170305539"
+checksum: "18142120775381220820"

@@ -62,7 +62,7 @@ challenges:
     type: terminal
     hostname: nomad-server
   difficulty: basic
-  timelimit: 300
+  timelimit: 900
 - slug: run-nomad-agent
   id: 2gvixlkq52un
   type: challenge
@@ -254,4 +254,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 900
-checksum: "3689164610119900332"
+checksum: "3199321748375481850"
