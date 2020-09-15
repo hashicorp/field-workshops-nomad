@@ -36,7 +36,6 @@ job "catalogue" {
   }
 
   update {
-    stagger = "10s"
     max_parallel = 1
   }
 
@@ -142,7 +141,6 @@ job "webserver-test" {
   }
 
   update {
-    stagger = "10s"
     max_parallel = 1
   }
 
@@ -201,7 +199,6 @@ job "website" {
   }
 
   update {
-    stagger = "10s"
     max_parallel = 1
   }
 
@@ -298,7 +295,6 @@ job "website" {
   }
 
   update {
-    stagger = "10s"
     max_parallel = 1
   }
 

@@ -7,7 +7,7 @@ teaser: |
 description: |-
   Most applications are long-lived and require updates over time. Whether you are deploying a new version of your web application or updating to a new version of a database, Nomad has built-in support for rolling, blue/green, and canary updates, which can be used with non-containerized and containerized applications or to containerize the former.
 
-  This track will guide you through implementing these update strategies based on the [Nomad Job Update Strategies](https://learn.hashicorp.com/nomad/update-strategies/) guide.
+  This track will guide you through implementing these update strategies based on the [Nomad Job Update Strategies](https://learn.hashicorp.com/tutorials/nomad/job-update-strategies) guide.
 
   You will run "mongodb", "chat-app", and "nginx" jobs and update the second using rolling, blue/green, and canary update strategies.
 
@@ -710,4 +710,4 @@ challenges:
     port: 8080
   difficulty: basic
   timelimit: 600
-checksum: "2258153190038980039"
+checksum: "13201654053878926155"

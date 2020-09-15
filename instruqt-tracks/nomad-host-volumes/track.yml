@@ -12,7 +12,7 @@ description: |-
     * [Docker Volume Drivers](https://docs.docker.com/engine/extend/plugins_volume/#create-a-volumedriver) such as Portworx that are externally managed and can only be used with the Docker task driver
     * [CSI Plugins](https://github.com/container-storage-interface/spec/blob/master/spec.md) that are also externally managed but can be used with many Nomad task drivers including Docker, Exec, and Java
 
-  This track will guide you through using Nomad Host Volumes to persist data for a MySQL database. It is based on the [Stateful Workloads with Nomad Host Volumes](https://learn.hashicorp.com/nomad/stateful-workloads/host-volumes) guide.
+  This track will guide you through using Nomad Host Volumes to persist data for a MySQL database. It is based on the [Stateful Workloads with Nomad Host Volumes](https://learn.hashicorp.com/tutorials/nomad/stateful-workloads-host-volumes) guide.
 
   Before running this track, we suggest you run the [Nomad Basics](https://play.instruqt.com/hashicorp/tracks/nomad-basics) track.
 
@@ -411,4 +411,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 600
-checksum: "11615840011778944406"
+checksum: "8499451688467099140"

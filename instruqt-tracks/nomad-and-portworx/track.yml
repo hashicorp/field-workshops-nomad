@@ -12,7 +12,7 @@ description: |-
     * [Docker Volume Drivers](https://docs.docker.com/engine/extend/plugins_volume/#create-a-volumedriver) such as Portworx that are externally managed and can only be used with the Docker task driver
     * [CSI Plugins](https://github.com/container-storage-interface/spec/blob/master/spec.md) that are also externally managed but can be used with many Nomad task drivers including Docker, Exec, and Java
 
-  This track will guide you through using a [Docker Volume Driver](https://nomadproject.io/docs/drivers/docker/#inlinecode-volumes-16) and [Portworx](https://docs.portworx.com/install-with-other/nomad) to persist data for an HA MySQL database deployed by Nomad. It is based on the [Stateful Workloads with Portworx](https://learn.hashicorp.com/nomad/stateful-workloads/portworx) guide.
+  This track will guide you through using a [Docker Volume Driver](https://nomadproject.io/docs/drivers/docker/#inlinecode-volumes-16) and [Portworx](https://docs.portworx.com/install-with-other/nomad) to persist data for an HA MySQL database deployed by Nomad. It is based on the [Stateful Workloads with Portworx](https://learn.hashicorp.com/tutorials/nomad/stateful-workloads-portworx) guide.
 
   Before running this track, we suggest you run the [Nomad Basics](https://play.instruqt.com/hashicorp/tracks/nomad-basics) track.
 
@@ -441,4 +441,4 @@ challenges:
     port: 80
   difficulty: basic
   timelimit: 600
-checksum: "12854960168407950057"
+checksum: "15609899725862352054"

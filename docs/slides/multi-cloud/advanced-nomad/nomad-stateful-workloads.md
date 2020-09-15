@@ -176,7 +176,7 @@ name: lab-host-volumes
   * [Nomad Host Volumes](https://play.instruqt.com/hashicorp/invite/1cxyk78sgqja)
   * [Nomad Integration with Portworx](https://play.instruqt.com/hashicorp/invite/nrfcdqrghxiq)
   * [Nomad CSI Plugins (GCP)](https://play.instruqt.com/hashicorp/invite/x2ongtdbbbwe)
-* To explore using Nomad with the [AWS EBS CSI Driver](https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html), please see the [Stateful Workloads with Container Storage Interface](https://learn.hashicorp.com/nomad/stateful-workloads/csi-volumes) learn track.
+* To explore using Nomad with the [AWS EBS CSI Driver](https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html), please see the [Stateful Workloads with Container Storage Interface](https://learn.hashicorp.com/tutorials/nomad/stateful-workloads-csi-volumes) learn track.
 * We hope to have an Instruqt track that implements that AWS learn track in the near future.
 
 ???

@@ -32,7 +32,6 @@ job "portworx" {
       healthy_deadline = "5m"
       auto_revert      = true
       canary           = 0
-      stagger          = "30s"
     }
 
     task "px-node" {

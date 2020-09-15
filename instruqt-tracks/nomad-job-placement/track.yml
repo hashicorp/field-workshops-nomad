@@ -144,7 +144,7 @@ challenges:
     constraints = ["tag==service"]
     `<br>
 
-    If you look back at the "webapp.nomad" job specification, on line 30 you will see that the same service tag was specified in the tags section of the registration of the web app with Consul.
+    If you look back at the "webapp.nomad" job specification, on line 33 you will see that the same service tag was specified in the tags section of the registration of the web app with Consul.
     <br>
     `
     tags = [
@@ -183,8 +183,6 @@ challenges:
   - type: text
     contents: |-
       In this challenge, you will run Nomad jobs that deploy a web application and [Traefik](https://containo.us/traefik/), which will serve as a load balancer in front of multiple instances of the web app.
-
-      ![alt text](https://containo.us/assets/img/traefik-logo.svg)
 
       In later challenges, you will learn about Nomad Spread, Constraints, and Affinities.
   tabs:
@@ -499,4 +497,4 @@ challenges:
     port: 8080
   difficulty: basic
   timelimit: 600
-checksum: "18142120775381220820"
+checksum: "6077355159864770265"

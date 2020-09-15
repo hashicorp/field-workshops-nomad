@@ -96,7 +96,7 @@ class: compact, smaller
   * The `cooldown` specifies a period during which no scaling actions should be taken immediately after a scaling action is taken. This avoids flapping.
   * The `target` specifies the autoscaling target. In a policy specified by the `scaling` stanza of a task group, this would generally not be specified since it defaults to the Nomad Task Group Target.
   * The `check` specifies a check to be executed to determine if a scaling action is required.
-      * The `check` specifies the APM plugin (`source`) and the Strategy plugin (`source`) to use and the `query` to run against the first.  
+      * The `check` specifies the APM plugin (`source`) and the Strategy plugin (`strategy`) to use and the `query` to run against the first.  
 
 ???
 * Autoscaling policy details

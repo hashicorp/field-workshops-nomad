@@ -93,7 +93,6 @@ Nomad's use of mTLS provides the following benefits:
 * Prevents observing or tampering with Nomad communication
 * Prevents client/server role or region misconfigurations
 * Prevents other services from masquerading as Nomad agents
-* Prevents misconfiguration of Nomad regions
 ]
 
 ???

@@ -5,9 +5,9 @@ title: Nomad Enterprise Governance
 teaser: |
   Learn how to use Nomad Enterprise's governance capabilities including namespaces, resource quotas, and Sentinel policies.
 description: |-
-  This track will show you how to use Nomad Enterprise's governance capabilities including [Audit Logging](https://www.nomadproject.io/docs/enterprise#audit-logging), [Namespaces](https://learn.hashicorp.com/nomad/governance-and-policy/namespaces), [Resource Quotas](https://learn.hashicorp.com/nomad/governance-and-policy/quotas), [Sentinel Policies](https://learn.hashicorp.com/nomad/governance-and-policy/sentinel), and [Cross-Namespace Queries](https://www.nomadproject.io/docs/enterprise#cross-namespace-queries).
+  This track will show you how to use Nomad Enterprise's governance capabilities including [Audit Logging](https://www.nomadproject.io/docs/enterprise#audit-logging), [Namespaces](https://learn.hashicorp.com/tutorials/nomad/namespaces), [Resource Quotas](https://learn.hashicorp.com/tutorials/nomad/quotas), [Sentinel Policies](https://learn.hashicorp.com/tutorials/nomad/sentinel), and [Cross-Namespace Queries](https://www.nomadproject.io/docs/enterprise#cross-namespace-queries).
 
-  You will also configure and use [Nomad ACLs](https://learn.hashicorp.com/nomad/acls/fundamentals) which are applicable to namespaces and resource quotas and required by Nomad Sentinel policies.
+  You will also configure and use [Nomad ACLs](https://learn.hashicorp.com/tutorials/nomad/access-control) which are applicable to namespaces and resource quotas and required by Nomad Sentinel policies.
 
   Before running this track, we suggest you run the [Nomad Basics](https://instruqt.com/hashicorp/tracks/nomad-basics) and [Nomad Simple Cluster](https://instruqt.com/hashicorp/tracks/nomad-simple-cluster) tracks.
 icon: https://storage.googleapis.com/instruqt-hashicorp-tracks/logo/nomad.png
@@ -62,7 +62,7 @@ challenges:
     contents: |-
       In this challenge, you will verify the health of the Nomad Enterprise cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
 
-      In later challenges, you will enable Nomad Enterprise's [Audit Logging](https://www.nomadproject.io/docs/enterprise#audit-logging) and define Nomad [Namespaces](https://learn.hashicorp.com/nomad/governance-and-policy/namespaces), [Resource Quotas](https://learn.hashicorp.com/nomad/governance-and-policy/quotas), [Nomad ACLs](https://learn.hashicorp.com/nomad/acls/fundamentals), and [Sentinel Policies](https://learn.hashicorp.com/nomad/governance-and-policy/sentinel).
+      In later challenges, you will enable Nomad Enterprise's [Audit Logging](https://www.nomadproject.io/docs/enterprise#audit-logging) and define Nomad [Namespaces](https://learn.hashicorp.com/tutorials/nomad/namespaces), [Resource Quotas](https://learn.hashicorp.com/tutorials/nomad/quotas), [Nomad ACLs](https://learn.hashicorp.com/tutorials/nomad/access-control), and [Sentinel Policies](https://learn.hashicorp.com/tutorials/nomad/sentinel).
 
       You will then run jobs and learn how Sentinel policies and resource quotas restrict them. You'll also run a [Cross-Namespace Query](https://www.nomadproject.io/docs/enterprise#cross-namespace-queries)
   tabs:
@@ -372,7 +372,7 @@ challenges:
     Nomad ACLs are also required to use Nomad Sentinel policies since only users with the suitable ACL policies can apply Sentinel policies.
 
     ## Enable the ACL System
-    Start by reviewing the "nomad-server1.hcl", "nomad-client1.hcl", "nomad-client1.hcl", and "nomad-client1.hcl" files on the "Config Files" tab. Notice that the following stanza has been added to the bottom of each file:<br>
+    Start by reviewing the "nomad-server1.hcl", "nomad-client1.hcl", "nomad-client2.hcl", and "nomad-client3.hcl" files on the "Config Files" tab. Notice that the following stanza has been added to the bottom of each file:<br>
     `
     acl {
       enabled = true
@@ -862,7 +862,11 @@ challenges:
 
     You'll then need to select the "Jobs" menu and click the Instruqt refresh icon to make the Nomad UI show the namespace selector which will let you select the "dev" namespace. If you click on the "website" job in the "dev" namespace, you will see 4 Desired, Placed, and Healthy allocations.
 
-    Run `nomad quota status dev` on the "Server" tab again to see how much of the "dev" resource quota is being used. You should now see this:<br>
+    Check the status of the dev resource quota on the "Server" tab again to see how much of the "dev" resource quota is being used:
+    ```
+    nomad quota status dev
+    ```
+    You should now see this:<br>
     `
     Name        = dev
     Description = dev quota
@@ -975,4 +979,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 900
-checksum: "12824447933311762252"
+checksum: "9490140127686699643"

@@ -129,7 +129,7 @@ challenges:
 
       This challenge is based on the  Consul Connect](https://www.nomadproject.io/docs/integrations/consul-connect/) in the Nomad documentation.
 
-      There is also a [version](https://learn.hashicorp.com/nomad/consul-integration/nomad-connect-acl) of this guide that can be used with a Consul cluster that has Consul ACLs enabled.
+      There is also a [version](https://learn.hashicorp.com/tutorials/nomad/consul-service-mesh) of this guide that can be used with a Consul cluster that has Consul ACLs enabled.
   tabs:
   - title: Config Files
     type: code
@@ -156,4 +156,4 @@ challenges:
     port: 9002
   difficulty: basic
   timelimit: 2700
-checksum: "13920906307534493849"
+checksum: "13132293051674240295"
