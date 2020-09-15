@@ -98,7 +98,7 @@ challenges:
     hostname: nomad-server-1
     port: 4646
   difficulty: basic
-  timelimit: 300
+  timelimit: 600
 - slug: deploy-the-jobs
   id: wfbxeo0th19f
   type: challenge
@@ -301,7 +301,7 @@ challenges:
     hostname: nomad-client-3
     port: 8080
   difficulty: basic
-  timelimit: 600
+  timelimit: 900
 - slug: rolling-update
   id: s71yve1la3vm
   type: challenge
@@ -431,7 +431,7 @@ challenges:
     hostname: nomad-client-3
     port: 8080
   difficulty: basic
-  timelimit: 600
+  timelimit: 900
 - slug: blue-green-deployment
   id: vyyv312rchyo
   type: challenge
@@ -448,7 +448,7 @@ challenges:
     cd /root/nomad/jobs
     ```
 
-    Inspect the new "chat-app-light-binary.nomad" job specification file on the "Jobs" tab and note that the update stanza now has `canary = 3`:
+    Inspect the new "chat-app-light-docker.nomad" job specification file on the "Jobs" tab and note that the update stanza now has `canary = 3`:
 
     Additionally, note that the task now uses the Docker driver that runs a custom Docker image, "lhaig/anon-app:light-0.03" which another HashiCorp solutions engineer, Lance Haig, uploaded to Docker Hub for us:
     ```
@@ -710,4 +710,4 @@ challenges:
     port: 8080
   difficulty: basic
   timelimit: 600
-checksum: "10795939054865805692"
+checksum: "2258153190038980039"

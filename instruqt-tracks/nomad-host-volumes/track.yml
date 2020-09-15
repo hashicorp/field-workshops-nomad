@@ -87,7 +87,7 @@ challenges:
     hostname: nomad-server-1
     port: 4646
   difficulty: basic
-  timelimit: 300
+  timelimit: 600
 - slug: configure-host-volume
   id: wllpfxtrtvqt
   type: challenge
@@ -172,7 +172,7 @@ challenges:
     hostname: nomad-server-1
     port: 4646
   difficulty: basic
-  timelimit: 600
+  timelimit: 900
 - slug: deploy-mysql
   id: 1y2xzn7fqj6i
   type: challenge
@@ -263,7 +263,7 @@ challenges:
     hostname: nomad-server-1
     port: 4646
   difficulty: basic
-  timelimit: 600
+  timelimit: 900
 - slug: write-data
   id: ila85jhq08rm
   type: challenge
@@ -411,4 +411,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 600
-checksum: "8019779110896269612"
+checksum: "11615840011778944406"
