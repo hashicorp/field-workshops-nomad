@@ -62,9 +62,10 @@ name: credits
 * This workshop was created by the following HashiCorp SEs:
   * Roger Berlind
   * Chris Dunlop
-  * Rob Jackson
   * Patrick Gryzan
   * Lance Haig
+  * Tom Harris
+  * Rob Jackson
 
 ???
 * Credits for the workshop
