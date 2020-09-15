@@ -108,20 +108,22 @@ name: chapter-1-nomad-workload-types
 
 ---
 name: chapter-1-nomad-autoscaling
+class: compact
 # Nomad Autoscaling
 * Nomad supports two types of autoscaling:
   * **Horizontal Application Autoscaling** allows the counts of task groups to dynamically scale up and back down.
   * **Horizontal Cluster Autoscaling** allows the size of a Nomad cluster to dynamically scale out and back in.
 * The latter is currently only supported in AWS using Auto Scaling Groups (ASGs).
 * Both types of autoscaling are driven by APM metrics.
-* Both are included in Nomad OSS.
+* The Nomad Autoscaler agent can be deployed as a Nomad job.
 
 ???
 * Nomad supports two types of autoscaling:
   * Horizontal application autoscaling
   * Horizontal cluster autoscaling
 * The latter is currently only supported in AWS.
-* Both reply upon APM metrics such as those from Prometheus.
+* Both types of autoscaling are driven by APM metrics.
+* The Nomad Autoscaler agent can be deployed as a Nomad job.
 
 ---
 name: chapter-1-nomad-federation
@@ -189,7 +191,7 @@ class: compact
   * Cross-Namespace Queries
   * Audit Logging
 * Nomad Multi-Cluster & Efficiency Module
-  * Multi-Region Deployments
+  * Multi-Region Job Deployments
 
 ???
 * A shared cluster can be partitioned into multiple namespaces which allow jobs and their associated objects to be isolated from each other and other users of the cluster

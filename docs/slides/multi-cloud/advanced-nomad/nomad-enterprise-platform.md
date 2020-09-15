@@ -3,8 +3,7 @@ class: title, shelf, no-footer, fullbleed
 background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/bkgs/HashiCorp-Title-bkg.jpeg)
 count: false
 
-# Chapter 6
-## Nomad Enterprise Platform
+# Nomad Enterprise Platform
 
 ![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
 
@@ -133,7 +132,7 @@ name: Nomad Redundancy Zones
 
 ---
 name: chapter-Summary
-# 📝 Chapter 6 Summary
+# 📝 Chapter Summary
 
 In this chapter you did the following:
 * Learned about the features of the Nomad Enterprise Platform:

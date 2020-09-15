@@ -3,8 +3,7 @@ class: title, shelf, no-footer, fullbleed
 background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/bkgs/HashiCorp-Title-bkg.jpeg)
 count: false
 
-# Chapter 2
-## Nomad Job Placement and Variable Interpolation
+# Nomad Advanced Job Placement and Variable Interpolation
 
 ![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
 
@@ -284,16 +283,16 @@ task "docs" {
 
 ---
 name: lab-job-update-strategies
-# 👩‍💻 Nomad Job Placement Lab
+# 👩‍💻 Nomad Advanced Job Placement Lab
 * In this lab, you'll deploy Nomad jobs with different job placement configurations.
-* You'll do this using the Instruqt track [Nomad Job Placement](https://play.instruqt.com/hashicorp/invite/rbexlxuhgqgd).
+* You'll do this using the Instruqt track [Nomad Advanced Job Placement](https://play.instruqt.com/hashicorp/invite/rbexlxuhgqgd).
 
 ???
 * Now, you can explore Nomad job update strategies hands-on
 * You'll be running the Instruqt track "Nomad Job Placement"
 ---
 name: chapter-Summary
-# 📝 Chapter 2 Summary
+# 📝 Chapter Summary
 
 In this chapter you did the following:
 * Learned about Nomad's job placement options (constraint, affinity, and spread) and variable interpolation.
