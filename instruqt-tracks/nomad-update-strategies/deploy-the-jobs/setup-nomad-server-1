@@ -82,7 +82,7 @@ job "nginx" {
         data = <<EOT
 upstream chat {
   # enable sticky session based on IP
-  ip_hash;
+  #ip_hash;
 {{ range service "chat-app" }}
   server {{ .Address }}:{{ .Port }};
 {{ else }}server 127.0.0.1:65535; # force a 502
