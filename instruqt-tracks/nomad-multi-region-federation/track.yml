@@ -279,7 +279,7 @@ challenges:
     ```
     The west region should now have the `successful` status.
 
-    Finally, you can stop the multi-region job by using the `-global` and `-purge` options with the `nomad job stop` command. Do that now on the "Nomad_Server_West" tab:
+    Finally, you can stop the multi-region job by using the `-global`option with the `nomad job stop` command. Do that now on the "Nomad_Server_West" tab:
     ```
     nomad job stop -global example
     ```
@@ -319,4 +319,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 1200
-checksum: "7406339294124852606"
+checksum: "6189967619573833377"
