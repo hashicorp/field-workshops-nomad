@@ -2,7 +2,7 @@ version: 2
 jobs:
   instruqt-validate:
     docker:
-      - image: ubuntu:latest
+      - image: docker.mirror.hashicorp.services/ubuntu:latest
     steps:
       - checkout
       - run:
@@ -30,7 +30,7 @@ jobs:
             done
   instruqt-test-nomad-basics:
     docker:
-      - image: ubuntu:latest
+      - image: docker.mirror.hashicorp.services/ubuntu:latest
     steps:
       - checkout
       - run:
@@ -70,7 +70,7 @@ jobs:
             fi
   instruqt-test-nomad-simple-cluster:
     docker:
-      - image: ubuntu:latest
+      - image: docker.mirror.hashicorp.services/ubuntu:latest
     steps:
       - checkout
       - run:
@@ -110,7 +110,7 @@ jobs:
             fi
   instruqt-test-nomad-multi-server-cluster:
     docker:
-      - image: ubuntu:latest
+      - image: docker.mirror.hashicorp.services/ubuntu:latest
     steps:
       - checkout
       - run:
@@ -150,7 +150,7 @@ jobs:
             fi
   instruqt-test-nomad-consul-connect:
     docker:
-      - image: ubuntu:latest
+      - image: docker.mirror.hashicorp.services/ubuntu:latest
     steps:
       - checkout
       - run:
@@ -190,7 +190,7 @@ jobs:
             fi
   instruqt-test-nomad-acls:
     docker:
-      - image: ubuntu:latest
+      - image: docker.mirror.hashicorp.services/ubuntu:latest
     steps:
       - checkout
       - run:
@@ -230,7 +230,7 @@ jobs:
             fi
   instruqt-test-nomad-monitoring:
     docker:
-      - image: ubuntu:latest
+      - image: docker.mirror.hashicorp.services/ubuntu:latest
     steps:
       - checkout
       - run:
@@ -270,7 +270,7 @@ jobs:
             fi
   instruqt-test-nomad-update-strategies:
     docker:
-      - image: ubuntu:latest
+      - image: docker.mirror.hashicorp.services/ubuntu:latest
     steps:
       - checkout
       - run:
@@ -310,7 +310,7 @@ jobs:
             fi
   instruqt-test-nomad-job-placement:
     docker:
-      - image: ubuntu:latest
+      - image: docker.mirror.hashicorp.services/ubuntu:latest
     steps:
       - checkout
       - run:
@@ -350,7 +350,7 @@ jobs:
             fi
   instruqt-test-nomad-integration-with-vault:
     docker:
-      - image: ubuntu:latest
+      - image: docker.mirror.hashicorp.services/ubuntu:latest
     steps:
       - checkout
       - run:
@@ -390,7 +390,7 @@ jobs:
             fi
   instruqt-test-nomad-host-volumes:
     docker:
-      - image: ubuntu:latest
+      - image: docker.mirror.hashicorp.services/ubuntu:latest
     steps:
       - checkout
       - run:
@@ -430,7 +430,7 @@ jobs:
             fi
   instruqt-test-nomad-and-portworx:
     docker:
-      - image: ubuntu:latest
+      - image: docker.mirror.hashicorp.services/ubuntu:latest
     steps:
       - checkout
       - run:
@@ -470,7 +470,7 @@ jobs:
             fi
   instruqt-test-nomad-csi-plugins-gcp:
     docker:
-      - image: ubuntu:latest
+      - image: docker.mirror.hashicorp.services/ubuntu:latest
     steps:
       - checkout
       - run:
@@ -510,7 +510,7 @@ jobs:
             fi
   instruqt-test-nomad-governance:
     docker:
-      - image: ubuntu:latest
+      - image: docker.mirror.hashicorp.services/ubuntu:latest
     steps:
       - checkout
       - run:
@@ -550,7 +550,7 @@ jobs:
             fi
   instruqt-test-nomad-on-windows:
     docker:
-      - image: ubuntu:latest
+      - image: docker.mirror.hashicorp.services/ubuntu:latest
     steps:
       - checkout
       - run:
@@ -590,7 +590,7 @@ jobs:
             fi
   instruqt-test-nomad-federation:
     docker:
-      - image: ubuntu:latest
+      - image: docker.mirror.hashicorp.services/ubuntu:latest
     steps:
       - checkout
       - run:
