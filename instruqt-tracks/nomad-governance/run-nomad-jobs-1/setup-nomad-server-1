@@ -61,7 +61,7 @@ job "catalogue" {
         args = ["-port", "8080", "-DSN", "catalogue_user:default_password@tcp(127.0.0.1:3306)/socksdb"]
         hostname = "catalogue.service.consul"
         network_mode = "host"
-        port_map = {
+        port_map {
           http = 8080
         }
       }
@@ -94,7 +94,7 @@ job "catalogue" {
         command = "docker-entrypoint.sh"
         args = ["mysqld", "--bind-address", "127.0.0.1"]
         network_mode = "host"
-        port_map = {
+        port_map {
           http = 3306
         }
       }
@@ -161,7 +161,7 @@ job "webserver-test" {
       config {
         # "httpd" is not an allowed image
         image = "httpd"
-        port_map = {
+        port_map {
           http = 80
         }
       }
@@ -218,7 +218,7 @@ job "website" {
 
       config {
         image = "nginx:1.15.6"
-        port_map = {
+        port_map {
           http = 80
         }
       }
@@ -256,7 +256,7 @@ job "website" {
 
       config {
         image = "mongo:3.4.3"
-        port_map = {
+        port_map {
           http = 27017
         }
       }
@@ -314,7 +314,7 @@ job "website" {
 
       config {
         image = "nginx:1.15.6"
-        port_map = {
+        port_map {
           http = 80
         }
       }
@@ -352,7 +352,7 @@ job "website" {
 
       config {
         image = "mongo:3.4.3"
-        port_map = {
+        port_map {
           http = 27017
         }
       }
