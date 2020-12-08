@@ -1,16 +1,16 @@
 #!/bin/bash -l
 
 # Create Nomad Server
-gcloud compute instances create nomad-server-1 --image-project=instruqt-hashicorp --image=hashistack-0-6-0 --zone=europe-west1-b --boot-disk-size=20GB --tags=nomad-portworx --machine-type=n1-standard-2
+gcloud compute instances create nomad-server-1 --image-project=instruqt-hashicorp --image=hashistack-0-9-1 --zone=europe-west1-b --boot-disk-size=20GB --tags=nomad-portworx --machine-type=n1-standard-2
 
 # Create Nomad Client 1
-gcloud compute instances create nomad-client-1 --image-project=instruqt-hashicorp --image=hashistack-0-6-0 --zone=europe-west1-b --boot-disk-size=20GB --create-disk=name=portworx-1,size=20GB --tags=nomad-portworx --machine-type=n1-standard-2
+gcloud compute instances create nomad-client-1 --image-project=instruqt-hashicorp --image=hashistack-0-9-1 --zone=europe-west1-b --boot-disk-size=20GB --create-disk=name=portworx-1,size=20GB --tags=nomad-portworx --machine-type=n1-standard-2
 
 # Create Nomad Client 2
-gcloud compute instances create nomad-client-2 --image-project=instruqt-hashicorp --image=hashistack-0-6-0 --zone=europe-west1-b --boot-disk-size=20GB --create-disk=name=portworx-2,size=20GB --tags=nomad-portworx --machine-type=n1-standard-2
+gcloud compute instances create nomad-client-2 --image-project=instruqt-hashicorp --image=hashistack-0-9-1 --zone=europe-west1-b --boot-disk-size=20GB --create-disk=name=portworx-2,size=20GB --tags=nomad-portworx --machine-type=n1-standard-2
 
 # Create Nomad Client 3
-gcloud compute instances create nomad-client-3 --image-project=instruqt-hashicorp --image=hashistack-0-6-0 --zone=europe-west1-b --boot-disk-size=20GB --create-disk=name=portworx-3,size=20GB --tags=nomad-portworx --machine-type=n1-standard-2
+gcloud compute instances create nomad-client-3 --image-project=instruqt-hashicorp --image=hashistack-0-9-1 --zone=europe-west1-b --boot-disk-size=20GB --create-disk=name=portworx-3,size=20GB --tags=nomad-portworx --machine-type=n1-standard-2
 
 # Create Inbound HTTP Rule
 gcloud compute firewall-rules create nomad-allow-inbound-http --allow tcp:4646
