@@ -7,16 +7,16 @@ export SSHPASS=Passw0rd!
 echo "export SSHPASS=Passw0rd!" >> /root/.bashrc
 
 # Create Nomad Server
-gcloud compute instances create nomad-server-1 --image-project=instruqt-hashicorp --image=windows-hashistack-0-8-2 --zone=europe-west1-b --tags=nomad --machine-type=n1-standard-1
+gcloud compute instances create nomad-server-1 --image-project=instruqt-hashicorp --image=windows-hashistack-0-9-1 --zone=europe-west1-b --tags=nomad --machine-type=n1-standard-1
 
 # Create Nomad Client 1
-gcloud compute instances create nomad-client-1 --image-project=instruqt-hashicorp --image=windows-hashistack-0-8-2 --zone=europe-west1-b --tags=nomad --machine-type=n1-standard-2
+gcloud compute instances create nomad-client-1 --image-project=instruqt-hashicorp --image=windows-hashistack-0-9-1 --zone=europe-west1-b --tags=nomad --machine-type=n1-standard-2
 
 # Create Nomad Client 2
-gcloud compute instances create nomad-client-2 --image-project=instruqt-hashicorp --image=windows-hashistack-0-8-2 --zone=europe-west1-b --tags=nomad --machine-type=n1-standard-2
+gcloud compute instances create nomad-client-2 --image-project=instruqt-hashicorp --image=windows-hashistack-0-9-1 --zone=europe-west1-b --tags=nomad --machine-type=n1-standard-2
 
 # Create Nomad Client 3
-gcloud compute instances create nomad-client-3 --image-project=instruqt-hashicorp --image=windows-hashistack-0-8-2 --zone=europe-west1-b --tags=nomad --machine-type=n1-standard-2
+gcloud compute instances create nomad-client-3 --image-project=instruqt-hashicorp --image=windows-hashistack-0-9-1 --zone=europe-west1-b --tags=nomad --machine-type=n1-standard-2
 
 # Sleep
 sleep 60
