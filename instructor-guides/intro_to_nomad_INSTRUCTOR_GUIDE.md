@@ -94,7 +94,7 @@ https://play.instruqt.com/hashicorp/tracks/nomad-monitoring
 Go through this track start to finish and make sure you understand all the challenges. In this track, students learn how to monitor a Nomad cluster and jobs using Prometheus. Fabio is used as a reverse proxy server. Both Prometheus and Fabio are themselves run as Nomad jobs. This lab builds on the knowledge about running jobs that students have learned in earlier tracks.
 
 ### Configuring the Instruqt Pools
-We recommend that you configure Instruqt pools for each Instruqt track used in this workshop 1-2 hours before your workshop begins. Please see this Confluence [doc](https://hashicorp.atlassian.net/wiki/spaces/SE/pages/511574174/Instruqt+and+Remark+Contributor+Guide#InstruqtandRemarkContributorGuide-ConfiguringInstruqtPools) for instructions.
+We recommend that you configure Instruqt pools for each Instruqt track used in this workshop 1 hour before you plan to use the track. Please see this Confluence [doc](https://hashicorp.atlassian.net/wiki/spaces/SE/pages/511574174/Instruqt+and+Remark+Contributor+Guide#InstruqtandRemarkContributorGuide-ConfiguringInstruqtPools) for instructions.
 
 ### Timing
 The following schedule assumes you have a group of participants who are brand new to Nomad. You should budget about four hours for this workshop including two short breaks. This is meant as a guideline, you can adjust as needed.
