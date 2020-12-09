@@ -22,11 +22,11 @@ layout: true
 name: chapter-autoscaler-topics
 class: compact
 # Nomad Autoscaler
-* The [Nomad Autoscaler](https://www.nomadproject.io/docs/autoscaling) currently supports two types of autoscaling:
+* The [Nomad Autoscaler](https://www.nomadproject.io/docs/autoscaling) currently supports three types of autoscaling:
   * **Horizontal Application Autoscaling** allows the counts of task groups to dynamically scale up and back down.
-  * **Horizontal Cluster Autoscaling** allows the size of a Nomad cluster to dynamically scale out and back in.
-* The latter is currently only supported in AWS using Auto Scaling Groups (ASGs). Support for other clouds will be added.
-* Both types of autoscaling are driven by APM metrics.
+  * **Horizontal Cluster Autoscaling** allows the size of a Nomad cluster to dynamically scale out and back in. (Supported in AWS and Azure)
+  * **Dynamic Application Sizing** allows optimization of resource consumption with sizing recommendations from Nomad. (Nomad Enterprise only)
+* All autoscaling types are driven by APM metrics.
 * The Nomad Autoscaler agent can be deployed as a Nomad job.
 
 ???
@@ -62,7 +62,8 @@ name: autoscaling-apm-plugins
 name: autoscaling-strategy-plugins
 # Nomad Autoscaler Strategy Plugins
 * The Nomad Autoscaler provides the [Target Value  Strategy](https://www.nomadproject.io/docs/autoscaling/plugins/strategy#target-value-strategy-plugin) plugin out of the box.
-* It performs count calculations in order to keep specified APM metrics near a specified value.
+  * It performs count calculations in order to keep specified APM metrics near a specified value.
+* The Nomad Autoscaler also provides the [Dynamic Application Sizing Average](https://www.nomadproject.io/docs/autoscaling/plugins/strategy#dynamic-application-sizing-average-strategy-plugin), the [Dynamic Application Sizing Max](https://www.nomadproject.io/docs/autoscaling/plugins/strategy#dynamic-application-sizing-max-strategy-plugin), and the [Dynamic Application Sizing Percentile](https://www.nomadproject.io/docs/autoscaling/plugins/strategy#dynamic-application-sizing-percentile-strategy-plugin) strategy plugins for use with Dynamic Application Sizing.
 
 ???
 * The default strategy plugins
@@ -71,7 +72,9 @@ name: autoscaling-target-plugins
 # Nomad Autoscaler Target Plugins
 * The Nomad Autoscaler provides the following target  plugins out of the box.
  * The [Nomad Task Group Target](https://www.nomadproject.io/docs/autoscaling/plugins/target#nomad-task-group-target) plugin targets Nomad task groups.
- * The [AWS AutoScaling Group Target](https://www.nomadproject.io/docs/autoscaling/plugins/target#aws-autoscaling-group-target) plugin targets AWS AutoScaling Groups (ASGs) controlling a set of Nomad clients in a Nomad region.
+ * The [Dynamic Application Sizing Nomad Task Target](https://www.nomadproject.io/docs/autoscaling/plugins/target#dynamic-application-sizing-nomad-task-target) plugin targets cpu and memory resource allocations of specific tasks.
+ * The [AWS AutoScaling Group Target](https://www.nomadproject.io/docs/autoscaling/plugins/target#aws-autoscaling-group-target) plugin targets AWS AutoScaling Groups (ASGs) controlling a set of Nomad clients.
+ * The [Azure Virtual Machine Scale Set Target](https://www.nomadproject.io/docs/autoscaling/plugins/target#azure-virtual-machine-scale-set-target) plugin targets Azure Load Balancers controlling a set of Nomad clients.
 
 ???
 * The default target plugins
@@ -80,8 +83,8 @@ name: autoscaling-target-plugins
 name: autoscaling-policies
 # Nomad Autoscaler Policies
 * Nomad autoscaling is driven by [Policies](https://www.nomadproject.io/docs/autoscaling/policy) defined in the `scaling` stanza of a task group in a Nomad job specification file or in the autoscaler agent's own configuration files.
-* The `scaling` stanza uses the [Nomad Task Group Target](https://www.nomadproject.io/docs/autoscaling/plugins/target#nomad-task-group-target) plugin by default to scale the task group's count up and down.
-* An autoscaler configuration file would be used with other targets such as the AWS AutoScaling Group Target plugin.
+* The `scaling` stanza uses the [Nomad Task Group Target](https://www.nomadproject.io/docs/autoscaling/plugins/target#nomad-task-group-target) plugin to scale the task group's count up and down or the [Dynamic Application Sizing Nomad Task Target](https://www.nomadproject.io/docs/autoscaling/plugins/target#dynamic-application-sizing-nomad-task-target) plugin to make sizing recommendations for the resources used by tasks.
+* An autoscaler configuration file would be used with other targets such as the AWS AutoScaling Group Target and the Azure Virtual Machine Scale Set Target plugins.
 
 ???
 * Nomad autoscaling is driven by policies.
@@ -128,9 +131,10 @@ scaling {
 ---
 name: autoscaling-demos
 # Autoscaler Demos
-* There are two Nomad Autoscaler demos that you can run yourself:
-  * The [Vagrant](https://github.com/hashicorp/nomad-autoscaler/tree/master/demo/vagrant) demo demonstrates horizontal application autoscaling by scaling the task group count of a web application in Nomad job. It runs in a Vagrant environment.
-  * The [Remote](https://github.com/hashicorp/nomad-autoscaler/tree/master/demo/remote) demo demonstrates both horizontal application and horizontal cluster autoscaling. It scales both the task group count of a web application and the number of Nomad clients behind an AWS Auto Scaling Group (ASG). It runs in AWS.
+* There are several Nomad Autoscaler demos that you can run yourself:
+  * The [Horizontal App Scaling](https://github.com/hashicorp/nomad-autoscaler/tree/master/demo/vagrant) demo demonstrates horizontal application autoscaling by scaling the task group count of a web application in Nomad job. It runs in a Vagrant environment.
+  * The [Dynamic Application Sizing](https://github.com/hashicorp/nomad-autoscaler/tree/master/demo/vagrant/dynamic-app-sizing) demo also runs in Vagrant.
+  * The [Remote](https://github.com/hashicorp/nomad-autoscaler/tree/master/demo/remote) demo demonstrates both horizontal application and horizontal cluster autoscaling. It scales both the task group count of a web application and the number of Nomad clients behind an AWS Auto Scaling Group or an Azure Virtual Machine Scale Set.
 
 ???
 * Two Nomad Autoscaler demos
@@ -141,7 +145,7 @@ name: chapter-Summary
   * The types of autoscaling it can do.
   * The types of plugins (APM, Strategy, and Target) plugins it supports and includes out of the box.
   * How autoscaling policies determine what scaling actions to take.
-* You also learned about two Nomad Autoscaler demos you can run on your own.
+* You also learned about several Nomad Autoscaler demos you can run on your own.
 
 
 ???
