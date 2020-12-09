@@ -28,6 +28,8 @@ name: chapter-governance-topics
 * Sentinel Policies
 * Cross-Namespace Queries
 
+Since Nomad 1.0.0, Namespaces are actually an open source feature, but since they are required by resource quotas, we discuss them in this chapter.
+
 ???
 * The Nomad Enterprise Governance and Policy module includes Audit Logging, Namespaces, Resource Quotas, Sentinel Policies, and Cross-Namespace Queries.
 
@@ -43,7 +45,7 @@ name: nomad-enterprise-audit-logging
 
 ---
 name: nomad-namespaces
-# Nomad Enterprise Namespaces
+# Nomad Namespaces
 * [Namespaces](https://learn.hashicorp.com/tutorials/nomad/namespaces) allow multiple teams to safely share a Nomad cluster.
 * The jobs and tasks of one namespace are isolated from those of others.
 * The namespace of a job is specified by the job's `namespace` stanza.

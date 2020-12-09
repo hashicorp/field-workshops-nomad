@@ -25,9 +25,7 @@ name: more-nomad-labs
 * There are more Nomad Instruqt tracks available if you finished the other tracks early:
   * [Nomad Access Control Lists (ACLs)](https://play.instruqt.com/hashicorp/invite/shnoqbxokwuj)
   * [Run Nomad Jobs on Windows](https://play.instruqt.com/hashicorp/invite/qu5rqvzck4uo)
-* You might also wish to explore the [Nomad Horizontal Autoscaling Demo](https://github.com/hashicorp/nomad-autoscaler/tree/master/demo/remote) in AWS.
-  * This requires you to have an AWS account.
-  * We hope to have an Instruqt-based version of the demo in the near future.
+* You might also wish to explore the [Nomad Horizontal Autoscaling Demo](https://github.com/hashicorp/nomad-autoscaler/tree/master/demo/remote) in AWS or Azure (which requires you to have an AWS or Azure account) or the [Dynamic Application Sizing Demo](https://github.com/hashicorp/nomad-autoscaler/tree/master/demo/vagrant/dynamic-app-sizing) with Vagrant.
 
 ---
 name: thank-you

@@ -57,7 +57,7 @@ name: nomad-storage-volume-options
 * The first and third can be used with several Nomad task drivers, but the second can only be used with the Docker task driver.
 
 ???
-* Nomad 0.12 offers three choices for mounting persistent data volumes: Host Volumes, Docker Volume Drivers, and CSI plugins.
+* Nomad 1.0 offers three choices for mounting persistent data volumes: Host Volumes, Docker Volume Drivers, and CSI plugins.
 
 ---
 name: nomad-host-volumes
