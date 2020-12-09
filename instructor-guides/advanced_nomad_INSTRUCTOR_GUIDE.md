@@ -129,7 +129,7 @@ https://play.instruqt.com/hashicorp/tracks/nomad-on-windows
 Go through this track start to finish and make sure you understand all the challenges. This track guides students through the process of running Nomad jobs with 3 different drivers (Docker, Java, and Raw Exec) on Windows.
 
 ### Configuring the Instruqt Pools
-We recommend that you configure Instruqt pools for each Instruqt track used in this workshop 1-2 hours before your workshop begins. Please see this Confluence [doc](https://hashicorp.atlassian.net/wiki/spaces/SE/pages/511574174/Instruqt+and+Remark+Contributor+Guide#InstruqtandRemarkContributorGuide-ConfiguringInstruqtPools) for instructions.
+We recommend that you configure Instruqt pools for each Instruqt track used in this workshop 1 hour before you plan to use the track. Please see this Confluence [doc](https://hashicorp.atlassian.net/wiki/spaces/SE/pages/511574174/Instruqt+and+Remark+Contributor+Guide#InstruqtandRemarkContributorGuide-ConfiguringInstruqtPools) for instructions.
 
 ### Timing
 You should budget about 5.5 hours for this workshop including two short breaks. This is meant as a guideline, you can adjust as needed.
