@@ -16,4 +16,7 @@ nomad server members
 # Check the Nomad nodes
 nomad node status
 
+# Sleep
+sleep 30
+
 exit 0
