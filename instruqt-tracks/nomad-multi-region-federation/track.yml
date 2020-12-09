@@ -34,7 +34,7 @@ challenges:
   teaser: |
     Nomad 0.12 introduced a breakthrough Multi-Cluster Deployment feature, which makes Nomad the first and only orchestrator on the market with complete and fully-supported federation capabilities for production.
   assignment: |-
-    The setup scripts of this track have already deployed two Nomad clusters for you in GCP. One is designated as the "west" region/cluster while the other is designated as the "east" region/cluster. They each have one server and two clients running Nomad 0.12.4 and Consul 1.8.3.
+    The setup scripts of this track have already deployed two Nomad clusters for you in GCP. One is designated as the "west" region/cluster while the other is designated as the "east" region/cluster. They each have one server and two clients running Nomad 1.0.0 and Consul 1.9.0.
 
     You'll have a total of 5 tabs in all 3 challenges of this track:
       * The "Config Files" tab will let you view the Nomad and Consul configuration files and edit a job specification file.
