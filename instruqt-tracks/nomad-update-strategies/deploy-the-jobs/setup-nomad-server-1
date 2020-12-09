@@ -201,8 +201,8 @@ job "chat-app" {
       }
 
       env {
-        "MONGODB_SERVER" = "127.0.0.1"
-        "MONGODB_PORT" = "27017"
+        MONGODB_SERVER = "127.0.0.1"
+        MONGODB_PORT = "27017"
       }
 
       resources {

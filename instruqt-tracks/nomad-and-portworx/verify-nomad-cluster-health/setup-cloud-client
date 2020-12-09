@@ -166,6 +166,11 @@ consul {
 plugin "docker" {
   config {
     allow_privileged = true
+
+    volumes {
+      enabled      = true
+      selinuxlabel = "z"
+    }
   }
 }
 EOF
@@ -241,6 +246,11 @@ consul {
 plugin "docker" {
   config {
     allow_privileged = true
+
+    volumes {
+      enabled      = true
+      selinuxlabel = "z"
+    }
   }
 }
 EOF
@@ -316,6 +326,11 @@ consul {
 plugin "docker" {
   config {
     allow_privileged = true
+
+    volumes {
+      enabled      = true
+      selinuxlabel = "z"
+    }
   }
 }
 EOF

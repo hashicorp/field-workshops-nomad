@@ -53,8 +53,8 @@ job "portworx" {
 
       # setup environment variables for px-nodes
       env {
-        "AUTO_NODE_RECOVERY_TIMEOUT_IN_SECS" = "1500"
-        "PX_TEMPLATE_VERSION"                = "V4"
+        AUTO_NODE_RECOVERY_TIMEOUT_IN_SECS = "1500"
+        PX_TEMPLATE_VERSION                = "V4"
        }
 
       # container config
@@ -70,7 +70,7 @@ job "portworx" {
             "-c", "px-cluster-nomad",
             "-a",
             "-k", "consul://127.0.0.1:8500",
-            "--endpoint", "0.0.0.0:9015"
+            "--endpoint", "0.0.0.0:9015",
         ]
 
         volumes = [
