@@ -33,7 +33,7 @@ job "mysql-server" {
       }
 
       env {
-        "MYSQL_ROOT_PASSWORD" = "password"
+        MYSQL_ROOT_PASSWORD = "password"
       }
 
       config {
