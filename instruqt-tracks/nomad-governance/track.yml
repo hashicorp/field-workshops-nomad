@@ -36,7 +36,7 @@ challenges:
 
     The cluster is running 1 Nomad/Consul server and 3 Nomad/Consul clients. Each of these has 3.75GB of memory and 1 virtual CPU with 2,300MHz of CPU capacity. This means that the total capacity of the 3 Nomad clients is 11.25GB of memory and 6,900MHz of CPU capacity.
 
-    The cluster is using Nomad 0.12.4 and Consul 1.8.3.
+    The cluster is using Nomad 1.0.0 and Consul 1.9.0.
 
     First, verify that all 4 Consul agents are running and connected to the cluster by running this command on the "Server" tab:
     ```

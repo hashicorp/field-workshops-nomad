@@ -36,7 +36,7 @@ challenges:
 
     You can see the VMs that were created for you by clicking the icon with 3 horizontal bars in the upper left corner of the console, selecting the "Compute Engine" menu, and then selecting "VM Instances".
 
-    The cluster is running 1 Nomad/Consul server and 3 Nomad/Consul clients with Nomad 0.12.3 and Consul 1.8.3. These VMs have been created in a GCP project within this Instruqt track.
+    The cluster is running 1 Nomad/Consul server and 3 Nomad/Consul clients with Nomad 1.0.0 and Consul 1.9.0. These VMs have been created in a GCP project within this Instruqt track.
 
     Additionally, OpenJDK 11 has been installed for you so that you can use Nomad's Java driver if desired.
 

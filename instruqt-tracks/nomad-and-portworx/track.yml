@@ -41,7 +41,7 @@ challenges:
   assignment: |-
     In this challenge, you will verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
 
-    The cluster is running 1 Nomad/Consul server and 3 Nomad/Consul clients with Nomad 0.12.4 and Consul 1.8.3. These VMs have been created in a GCP project within this Instruqt track. The Nomad client VMs each were created with an extra empty 20GB [Google Persistent Disk](https://cloud.google.com/persistent-disk) for use by Portworx.
+    The cluster is running 1 Nomad/Consul server and 3 Nomad/Consul clients with Nomad 1.0.0 and Consul 1.9.0. These VMs have been created in a GCP project within this Instruqt track. The Nomad client VMs each were created with an extra empty 20GB [Google Persistent Disk](https://cloud.google.com/persistent-disk) for use by Portworx.
 
     You can visit the Google Cloud Console for the GCP project of your instance of the Instruqt track by selecting the "Cloud Links" tab, right-clicking the Project ID for the "nomad" Google cloud project, and then opening the console in a new tab or window. If you already have your own GCP account, it will be easier to use an incognito window. Either way, you will have to paste the Email and then the Password from the Cloud Links tab into the dialog screens that will be displayed. You will then have to click an "Accept" button. Finally, after the Google Cloud Console is displayed, you will have to click a checkbox and agree to the terms of service by clicking the "Agree and Continue" button.
 
@@ -441,4 +441,4 @@ challenges:
     port: 80
   difficulty: basic
   timelimit: 600
-checksum: "4333919420325185160"
+checksum: "6852385657607390552"
