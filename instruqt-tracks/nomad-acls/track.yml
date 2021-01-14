@@ -360,7 +360,7 @@ challenges:
     contents: |-
       In this challenge, you will bootstrap the cluster to use ACLs.
 
-      The ACL system uses a whitelist or default-deny model. This means no permissions are initially granted.
+      The ACL system uses a allow list or default-deny model. This means no permissions are initially granted.
 
       For clients making requests without ACL tokens, we might want to grant some basic level of access. So, we will create an anonymous ACL policy.
 

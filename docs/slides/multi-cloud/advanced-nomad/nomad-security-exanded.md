@@ -213,7 +213,7 @@ class: col-2
 # ACL Policies
 
 .small[
-* Default = Deny/Whitelist.
+* Default = Deny/Allowlist.
 * No permissions by default.
 * Policies allow a set of capabilities or actions.
 ]
