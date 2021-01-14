@@ -11,10 +11,10 @@ Additionally, field workshops focused on more than one HashiCorp solution can be
 ## Slides
 
 The following Nomad workshop presentation have been completed:
-* https://hashicorp.github.io/field-workshops-nomad/slides/multi-cloud/nomad-oss
+* https://hashicorp.github.io/field-workshops-nomad/slides/multi-cloud/nomad-oss/#1
 
 You can also see the current version of the Advanced Nomad Workshop slides that cover advanced OSS and Nomad Enterprise features here:
-* https://hashicorp.github.io/field-workshops-nomad/slides/multi-cloud/advanced-nomad
+* https://hashicorp.github.io/field-workshops-nomad/slides/multi-cloud/advanced-nomad/#1
 
 Other presentations are just placeholders for future content.
 
