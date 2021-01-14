@@ -120,7 +120,7 @@ name:  Nomad Cluster Leader Election and Viability
     * Server 2 announced first, asked for vote
 * Server 1 heard server 2 first
     * Votes for server 2
-* Server 3 loses vote, becomes follower, Server 1 wins and becomes Leader
+* Server 3 loses vote, becomes follower, Server 2 wins and becomes Leader
 ]
 
 .smaller.center[3 Servers can sustain 1 Failure, 5 servers can sustain 2 failures]
@@ -375,7 +375,7 @@ layout: false
 * Here we have a Nomad cluster with a few allocations in an analytics solution.
 * All allocations are all happy, and now we have a new job added to the system for System Alerting.
 * We have enough CPU, and plenty of Hard Drive, but we are at the memory limit.
-* There's no room at the inn for our System Alerting process.  
+* There's no room at the inn for our System Alerting process.
 * Without Preemption, that's where we would stop.
 * But we have preemption, so we'll continue
 
