@@ -635,97 +635,97 @@ workflows:
       - instruqt-validate:
           filters:
             branches:
-              only: master
+              only: main
       - instruqt-test-nomad-basics:
           requires:
             - instruqt-validate
           filters:
             branches:
-              only: master
+              only: main
       - instruqt-test-nomad-simple-cluster:
           requires:
             - instruqt-validate
           filters:
             branches:
-              only: master
+              only: main
       - instruqt-test-nomad-multi-server-cluster:
           requires:
             - instruqt-validate
           filters:
             branches:
-              only: master
+              only: main
       - instruqt-test-nomad-consul-connect:
           requires:
             - instruqt-validate
           filters:
             branches:
-              only: master
+              only: main
       - instruqt-test-nomad-acls:
           requires:
             - instruqt-validate
           filters:
             branches:
-              only: master
+              only: main
       - instruqt-test-nomad-monitoring:
           requires:
             - instruqt-validate
           filters:
             branches:
-              only: master
+              only: main
       - instruqt-test-nomad-update-strategies:
           requires:
             - instruqt-validate
           filters:
             branches:
-              only: master
+              only: main
       - instruqt-test-nomad-job-placement:
           requires:
             - instruqt-validate
           filters:
             branches:
-              only: master
+              only: main
       - instruqt-test-nomad-integration-with-vault:
           requires:
             - instruqt-validate
           filters:
             branches:
-              only: master
+              only: main
       - instruqt-test-nomad-host-volumes:
           requires:
             - instruqt-validate
           filters:
             branches:
-              only: master
+              only: main
       - instruqt-test-nomad-and-portworx:
           requires:
             - instruqt-validate
           filters:
             branches:
-              only: master
+              only: main
       - instruqt-test-nomad-csi-plugins-gcp:
           requires:
             - instruqt-validate
           filters:
             branches:
-              only: master
+              only: main
       - instruqt-test-nomad-governance:
           requires:
             - instruqt-validate
           filters:
             branches:
-              only: master
+              only: main
       - instruqt-test-nomad-on-windows:
           requires:
             - instruqt-validate
           filters:
             branches:
-              only: master
+              only: main
       - instruqt-test-nomad-federation:
           requires:
             - instruqt-validate
           filters:
             branches:
-              only: master
+              only: main
   nightly-build:
     triggers:
       - schedule:
@@ -733,7 +733,7 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - main
     jobs:
       - instruqt-validate
       - instruqt-test-nomad-basics:
