@@ -44,6 +44,15 @@ job "catalogue" {
   group "catalogue" {
     count = 1
 
+    network {
+      port "http" {
+        to = 8080
+      }
+      port "db" {
+        to = 3306
+      }
+    }
+
     restart {
       attempts = 10
       interval = "5m"
@@ -61,9 +70,7 @@ job "catalogue" {
         args = ["-port", "8080", "-DSN", "catalogue_user:default_password@tcp(127.0.0.1:3306)/socksdb"]
         hostname = "catalogue.service.consul"
         network_mode = "host"
-        port_map {
-          http = 8080
-        }
+        ports = ["http"]
       }
 
       service {
@@ -75,12 +82,6 @@ job "catalogue" {
       resources {
         cpu = 100 # Mhz
         memory = 128 # MB
-        network {
-          mbits = 10
-          port "http" {
-            static = 8080
-          }
-        }
       }
     } # - end app - #
 
@@ -94,9 +95,7 @@ job "catalogue" {
         command = "docker-entrypoint.sh"
         args = ["mysqld", "--bind-address", "127.0.0.1"]
         network_mode = "host"
-        port_map {
-          http = 3306
-        }
+        ports = ["db"]
       }
 
       env {
@@ -107,18 +106,12 @@ job "catalogue" {
       service {
         name = "catalogue-db"
         tags = ["db", "catalogue", "catalogue-db"]
-        port = "http"
+        port = "db"
       }
 
       resources {
         cpu = 100 # Mhz
         memory = 256 # MB
-        network {
-          mbits = 10
-          port "http" {
-            static = 3306
-          }
-        }
       }
 
     } # - end db - #
@@ -147,6 +140,12 @@ job "webserver-test" {
   group "webserver" {
     count = 2
 
+    network {
+      port "http" {
+        to = 80
+      }
+    }
+
     restart {
       attempts = 10
       interval = "5m"
@@ -161,9 +160,7 @@ job "webserver-test" {
       config {
         # "httpd" is not an allowed image
         image = "httpd"
-        port_map {
-          http = 80
-        }
+        ports = ["http"]
       }
 
       service {
@@ -175,10 +172,6 @@ job "webserver-test" {
       resources {
         cpu = 250 # Mhz
         memory = 512 # MB
-        network {
-          mbits = 10
-          port "http" {}
-        }
       }
     } # - end task - #
   } # - end group - #
@@ -205,6 +198,12 @@ job "website" {
   group "nginx" {
     count = 2
 
+    network {
+      port "http" {
+        to = 80
+      }
+    }
+
     restart {
       attempts = 10
       interval = "5m"
@@ -218,9 +217,7 @@ job "website" {
 
       config {
         image = "nginx:1.15.6"
-        port_map {
-          http = 80
-        }
+        ports = ["http"]
       }
 
       service {
@@ -232,16 +229,18 @@ job "website" {
       resources {
         cpu = 250 # Mhz
         memory = 512 # MB
-        network {
-          mbits = 10
-          port "http" {}
-        }
       }
     } # - end task - #
   } # - end group - #
 
   group "mongodb" {
     count = 2
+
+    network {
+      port "db" {
+        to = 27017
+      }
+    }
 
     restart {
       attempts = 10
@@ -256,24 +255,18 @@ job "website" {
 
       config {
         image = "mongo:3.4.3"
-        port_map {
-          http = 27017
-        }
+        ports = ["db"]
       }
 
       service {
         name = "mongodb-dev"
         tags = ["db", "mongodb", "dev"]
-        port = "http"
+        port = "db"
       }
 
       resources {
         cpu = 250 # Mhz
         memory = 512 # MB
-        network {
-          mbits = 10
-          port "http" {}
-        }
       }
     } # - end task - #
   } # - end group - #
@@ -301,6 +294,12 @@ job "website" {
   group "nginx" {
     count = 2
 
+    network {
+      port "http" {
+        to = 80
+      }
+    }
+
     restart {
       attempts = 10
       interval = "5m"
@@ -308,15 +307,13 @@ job "website" {
       mode = "delay"
     }
 
-    # - db - #
+    # - web - #
     task "nginx" {
       driver = "docker"
 
       config {
         image = "nginx:1.15.6"
-        port_map {
-          http = 80
-        }
+        ports = ["http"]
       }
 
       service {
@@ -328,16 +325,19 @@ job "website" {
       resources {
         cpu = 250 # Mhz
         memory = 1024 # MB
-        network {
-          mbits = 10
-          port "http" {}
-        }
+
       }
     } # - end task - #
   } # - end group - #
 
   group "mongodb" {
     count = 2
+
+    network {
+      port "db" {
+        to = 27017
+      }
+    }
 
     restart {
       attempts = 10
@@ -352,29 +352,25 @@ job "website" {
 
       config {
         image = "mongo:3.4.3"
-        port_map {
-          http = 27017
-        }
+        ports = ["db"]
       }
 
       service {
         name = "mongodb-qa"
         tags = ["db", "mongodb", "qa"]
-        port = "http"
+        port = "db"
       }
 
       resources {
         cpu = 250 # Mhz
         memory = 1024 # MB
-        network {
-          mbits = 10
-          port "http" {}
-        }
       }
     } # - end task - #
   } # - end group - #
 
 }
 EOF
+
+set-workdir /root/nomad/jobs
 
 exit 0
