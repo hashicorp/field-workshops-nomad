@@ -44,4 +44,6 @@ limit {
 }
 EOF
 
+set-workdir /root/nomad/quotas
+
 exit 0

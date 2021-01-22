@@ -5,9 +5,9 @@ title: Nomad Enterprise Governance
 teaser: |
   Learn how to use Nomad Enterprise's governance capabilities including namespaces, resource quotas, and Sentinel policies.
 description: |-
-  This track will show you how to use Nomad Enterprise's governance capabilities including [Audit Logging](https://www.nomadproject.io/docs/enterprise#audit-logging), [Namespaces](https://learn.hashicorp.com/tutorials/nomad/namespaces), [Resource Quotas](https://learn.hashicorp.com/tutorials/nomad/quotas), [Sentinel Policies](https://learn.hashicorp.com/tutorials/nomad/sentinel), and [Cross-Namespace Queries](https://www.nomadproject.io/docs/enterprise#cross-namespace-queries).
+  This track will show you how to use Nomad Enterprise's governance capabilities including [Audit Logging](https://www.nomadproject.io/docs/enterprise#audit-logging), [Resource Quotas](https://learn.hashicorp.com/tutorials/nomad/quotas), [Sentinel Policies](https://learn.hashicorp.com/tutorials/nomad/sentinel), and [Cross-Namespace Queries](https://www.nomadproject.io/docs/enterprise#cross-namespace-queries).
 
-  You will also configure and use [Nomad ACLs](https://learn.hashicorp.com/tutorials/nomad/access-control) which are applicable to namespaces and resource quotas and required by Nomad Sentinel policies.
+  You will also configure and use [Namespaces](https://learn.hashicorp.com/tutorials/nomad/namespaces) and [Nomad ACLs](https://learn.hashicorp.com/tutorials/nomad/access-control). Namespaces are required when using resource quotas. ACLs are applicable to namespaces and resource quotas and are required by Nomad Sentinel policies.
 
   Before running this track, we suggest you run the [Nomad Basics](https://instruqt.com/hashicorp/tracks/nomad-basics) and [Nomad Simple Cluster](https://instruqt.com/hashicorp/tracks/nomad-simple-cluster) tracks.
 icon: https://storage.googleapis.com/instruqt-hashicorp-tracks/logo/nomad.png
@@ -229,7 +229,7 @@ challenges:
 
     Feel free throughout this track to inspect the audit logs on the server or any of the clients after running any Nomad commands on them. Or just inspect the audit logs after completing the track.
 
-    In the next challenge, you will configure Nomad Enterprise namespaces and resource quotas.
+    In the next challenge, you will configure Nomad namespaces and resource quotas.
   notes:
   - type: text
     contents: |-
@@ -237,7 +237,7 @@ challenges:
 
       With Nomad audit logging, enterprises can proactively identify access anomalies, ensure enforcement of their security policies, and diagnose cluster behavior by viewing preceding user operations.
 
-      In the next challenge, you will configure Nomad Enterprise namespaces and resource quotas.
+      In the next challenge, you will configure Nomad namespaces and resource quotas.
   tabs:
   - title: Config Files
     type: code
@@ -979,4 +979,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 900
-checksum: "9490140127686699643"
+checksum: "15715815439375908135"

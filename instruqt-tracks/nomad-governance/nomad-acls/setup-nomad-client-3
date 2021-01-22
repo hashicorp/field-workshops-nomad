@@ -9,4 +9,6 @@ acl {
 }
 EOF
 
+set-workdir /root/nomad/acls
+
 exit 0

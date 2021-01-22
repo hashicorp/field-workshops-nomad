@@ -66,4 +66,6 @@ main = rule {
 }
 EOF
 
+set-workdir /root/nomad/sentinel
+
 exit 0
