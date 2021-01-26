@@ -77,30 +77,8 @@ complete -C /usr/local/bin/nomad nomad
 cd nomad
 
 #Create demo Job
-cat <<-EOF > /root/nomad/redis.nomad
-job "redis" {
-  datacenters = ["dc1"]
-  group "cache" {
-    task "redis" {
-      driver = "docker"
-      config {
-        image = "redis:3.2"
-        port_map {
-          db = 6379
-        }
-      }
-      resources {
-        cpu    = 500
-        memory = 256
-        network {
-          mbits = 10
-          port  "db"  {}
-        }
-      }
-    }
-  }
-}
-EOF
+nomad init --short
+mv example.nomad redis.nomad
 
 sleep 15
 
