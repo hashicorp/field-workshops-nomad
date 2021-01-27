@@ -79,6 +79,7 @@ cd nomad
 #Create demo Job
 nomad init --short
 mv example.nomad redis.nomad
+sed -i "s/example/redis/g" redis.nomad
 
 sleep 15
 

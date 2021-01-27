@@ -14,8 +14,8 @@ tags:
 - basics
 owner: hashicorp
 developers:
-- rjackson@hashicorp.com
 - roger@hashicorp.com
+- rjackson@hashicorp.com
 private: false
 published: true
 show_timer: true
@@ -254,4 +254,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 900
-checksum: "14512621176357453077"
+checksum: "8075692714081613461"
