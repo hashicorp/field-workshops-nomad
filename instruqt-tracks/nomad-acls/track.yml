@@ -352,7 +352,7 @@ challenges:
     ```
     nomad node status
     ```
-    You should see the 2 client servers.
+    You should see the 2 client nodes.
 
     In the next challenge, you will see how the Nomad ACLs restrict what different users can do in Nomad.
   notes:
@@ -491,7 +491,7 @@ challenges:
     ```
     nomad acl token list
     ```
-    you should see a list with the two new tokens. You will also see the main bootstrap token we are using.
+    you should see a list with the two new tokens. You will also see the bootstrap token that we are using.
 
     We can now test the access of the team with their tokens.
 
@@ -499,7 +499,7 @@ challenges:
     `export NOMAD_TOKEN=<dev_token>`<br>
     replacing <dev_token/> with the value of `Secret ID` in the devro_token.txt file on the "Config Files" tab.
 
-    If you now run `nomad job status`, you should see the `redis` job listed again.  But, if you try to run `nomad job stop redis`, you should get a "Permission denied" error.
+    If you now run `nomad job status` on the "Server 2" tab, you should see the `redis` job listed again.  But, if you try to run `nomad job stop redis`, you should get a "Permission denied" error.
 
     Now let's test the access of the ops team:
 
@@ -507,13 +507,13 @@ challenges:
     `export NOMAD_TOKEN=<ops_token>`<br>
     replacing <ops_token/> with the value of `Secret ID` in the opsrw_token.txt file on the "Config Files" tab.
 
-    If you now run `nomad job status`, you should see the `redis` job listed again.
+    If you now run `nomad job status` on the "Server 3" tab, you should see the `redis` job listed again.
 
     If you try to run `nomad job stop redis`, the job should be stopped.
 
     If you try to run `cd nomad` followed by `nomad job run redis.nomad`, the job should be started again.
 
-    As you can see, the ACL permissions can be adjusted in many ways.  We recommended that you read up further about the policies in the [Nomad Access Control](https://www.nomadproject.io/guides/security/acl.html) guide.
+    As you can see, the ACL permissions can be adjusted in many ways.  We recommend that you read up further about the policies in the [Nomad Access Control](https://www.nomadproject.io/guides/security/acl.html) guide.
 
     Congratulations on finishing the Nomad ACLs track!
   notes:
@@ -547,4 +547,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 1800
-checksum: "9318739303332376960"
+checksum: "13581595256840021460"

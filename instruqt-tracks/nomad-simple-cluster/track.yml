@@ -255,11 +255,11 @@ challenges:
   assignment: |-
     Since your Redis database has been getting a lot of traffic, you've decided to run more instances of it to handle the load.
 
-    Let's edit the example.nomad file on the "Job Spec" tab to update the `count` of the job's task group, setting it to 3. Do this  between the `group` and `task` stanzas so that you end up with:
+    Let's edit the example.nomad file on the "Job Spec" tab to set the `count` of the job's task group to 3. Do this immediately under the `group` stanza header and add a blank line after the new line so that you end up with:
     ```
     group "cache" {
       count = 3
-      task "redis" {
+
     ```
     Once you have finished modifying the job specification, click the disk icon above the file to save it.
 
@@ -323,4 +323,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 1200
-checksum: "9840622058738458333"
+checksum: "16704014845656351954"
