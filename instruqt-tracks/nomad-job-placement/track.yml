@@ -143,8 +143,8 @@ challenges:
     `
     constraints = ["tag==service"]
     `<br>
-    
-    If you look back at the "webapp.nomad" job specification, on line 32 you will see that the same service tag was specified in the tags section of the registration of the web app with Consul.
+
+    If you look back at the "webapp.nomad" job specification, on line 35 you will see that the same service tag was specified in the tags section of the registration of the web app with Consul.
     <br>
     `
     tags = [
