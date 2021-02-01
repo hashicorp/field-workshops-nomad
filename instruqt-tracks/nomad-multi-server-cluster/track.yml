@@ -159,7 +159,7 @@ challenges:
     ```
     You should see a single line like `[1] 3194`, which gives the PID of the Consul server.
 
-    Now,look at the `consul-server2.json` configuration file on the "Config Files" tab on the left. This file is very similar to `consul-server1.json` but will make the the second Consul server repeatedly try to join to the Consul servers running on the `nomad-server-1` and `nomad-server-3` VMs.
+    Now look at the `consul-server2.json` configuration file on the "Config Files" tab on the left. This file is very similar to `consul-server1.json` but will make the the second Consul server repeatedly try to join to the Consul servers running on the `nomad-server-1` and `nomad-server-3` VMs.
 
     Next, start the `server2` Consul server in the background on the "Server 2" tab by running:
     ```
@@ -168,7 +168,7 @@ challenges:
     ```
     You should see a single line like `[1] 3196`, which gives the PID of the Consul server.
 
-    Now,look at the `consul-server3.json` configuration file on the "Config Files" tab on the left. This file is very similar to `consul-server1.json` but will make the the third Consul server repeatedly try to join to the Consul servers running on the `nomad-server-1` and `nomad-server-2` VMs.
+    Now look at the `consul-server3.json` configuration file on the "Config Files" tab on the left. This file is very similar to `consul-server1.json` but will make the the third Consul server repeatedly try to join to the Consul servers running on the `nomad-server-1` and `nomad-server-2` VMs.
 
     Next, start the `server3` Consul server in the background on the "Server 3" tab by running:
     ```
@@ -177,7 +177,7 @@ challenges:
     ```
     You should see a single line like `[1] 3198`, which gives the PID of the Consul server.
 
-    Now,look at the `consul-client1.json` configuration file on the "Config Files" tab on the left. This file is very similar to `consul-server1.json` but does not include the `server` stanza and will make the the Consul client repeatedly try to join to all 3 Consul servers.
+    Now look at the `consul-client1.json` configuration file on the "Config Files" tab on the left. This file is very similar to `consul-server1.json` but does not include the `server` stanza and will make the the Consul client repeatedly try to join to all 3 Consul servers.
 
     Next, start the `client1` Consul client in the background on the "Client 1" tab by running:
     ```
@@ -211,9 +211,9 @@ challenges:
     ```
     You should see a single line like `[1] 2174`, which gives the PID of the Nomad server.
 
-    We suggest you also tail the nomad.log file by running `tail -f nomad.log`. This will show many messages including one that says "Nomad agent started!". It will also show some error messages saying "No cluster leader". That is expected at this point because we have not yet strated 3 servers.
+    We suggest you also tail the nomad.log file by running `tail -f nomad.log`. This will show many messages including one that says "Nomad agent started!". It will also show some error messages saying "No cluster leader". That is expected at this point because we have not yet strated 3 servers.  Note that depending on how quickly this command was run, the "Noamd agent started" entry may have already scrolled.
 
-    Now, look at the `nomad-server2.hcl` configuration file on the "Config Files" tab. Note that it no longer has the `server_join` stanza that it had in the last challenge; it is no longer needed since the Nomad agents will automatically register themselves with Consul and discover each other.
+    Now look at the `nomad-server2.hcl` configuration file on the "Config Files" tab. Note that it no longer has the `server_join` stanza that it had in the last challenge; it is no longer needed since the Nomad agents will automatically register themselves with Consul and discover each other.
 
     Start the second Nomad server on the "Server 2" tab, specifing `nomad-server2.hcl` as the configuration file:
     ```
@@ -235,11 +235,11 @@ challenges:
     ```
     nomad server members
     ```
-    You should see output listing all 3 server nodes, all 3 of which should be considered "alive". server1 should be considered the leader of the cluster.
+    You should see output listing all 3 server nodes, all 3 of which should be considered "alive", and server1 should be considered the leader of the cluster.
 
     If clicking the Check button at the end of the challenge says you have not done this, you might have run it on one of the other tabs. Please run it again on the "Server 3" tab so that it will end up in your .bash_history file on the nomad-server-3 VM.
 
-    Now, look at the `nomad-client1.hcl` configuration file on the "Config Files" tab. This file indicates that the agent will run as a client node and connect to the `nomad-server-1` server.
+    Now look at the `nomad-client1.hcl` configuration file on the "Config Files" tab. This file indicates that the agent will run as a client node. Similar to the server nodes, the connection to the servers is facilitated by Consul.
 
     Next, run the first Nomad client on the "Client 1" tab:
     ```
@@ -247,7 +247,7 @@ challenges:
     ```
     You should see a single line like `[1] 2241`, which gives the PID of the first client. You can inspect the nomad.log file by running `cat nomad.log`. This will show many messages including one that says "Nomad agent started!"
 
-    Now, look at the `nomad-client2.hcl` configuration file on the "Config Files" tab. It is very similar to the `nomad-client1.hcl` file.
+    Now look at the `nomad-client2.hcl` configuration file on the "Config Files" tab. It is very similar to the `nomad-client1.hcl` file.
 
     Start the second Nomad client on the "Client 2" tab, but specify `nomad-client2.hcl` as the configuration file:
     ```
@@ -319,6 +319,7 @@ challenges:
     First, examine the Nomad job specification file, connect.nomad that we have placed in the /root/nomad directory. You can use the code editor on the "Config Files" tab.
 
     This job specification file defines two task groups:
+
       1. The `api` task group runs a counting service API in a container running the `hashicorpnomad/counter-api` Docker image on port 9001 on the bridge network.
       2. The `dashboard` task group runs a web dashboard  in a container running the `hashicorpnomad/counter-dashboard` Docker image on port 9002 on the bridge network.
 
@@ -326,7 +327,7 @@ challenges:
 
     The `dashboard` task group registers itself with Consul as the `count-dashboard` service. It runs on the bridge network and uses the static forwarded port, 9002, which asks Nomad to use external port 9002 for the service and to forward requests to the same port inside the task group's own network namespace.
 
-    So, a web browser can connect to the dashboard using `http://<host_ip>:9002`. The dashboard uses Consul Connect to make calls to the api service through a sidecar proxy. The `upstreams` stanza in the `proxy` stanza indicates that the sidecar proxy will listen on port 8080 inside the dashboard task group's network namespace. This means that requests to the dashboard on port 9002 will be forwarded to the sidecar proxy on port 8080.
+    With this job, a web browser can connect to the dashboard using `http://<host_ip>:9002`. The dashboard uses Consul Connect to make calls to the api service through a sidecar proxy. The `upstreams` stanza in the `proxy` stanza indicates that the sidecar proxy will listen on port 8080 inside the dashboard task group's network namespace. This means that requests to the dashboard on port 9002 will be forwarded to the sidecar proxy on port 8080.
 
     The `dashboard` task within the `dashboard` task group uses the `COUNTING_SERVICE_URL` environment variable set to `http://${NOMAD_UPSTREAM_ADDR_count_api}`. This uses Nomad's interpolation to tell the dashboard application inside the Docker container what dynamic IP and port to use to talk to the sidecar proxy.
 
@@ -377,12 +378,6 @@ challenges:
   - title: Server 3
     type: terminal
     hostname: nomad-server-3
-  - title: Client 1
-    type: terminal
-    hostname: nomad-client-1
-  - title: Client 2
-    type: terminal
-    hostname: nomad-client-2
   - title: Nomad UI
     type: service
     hostname: nomad-server-1

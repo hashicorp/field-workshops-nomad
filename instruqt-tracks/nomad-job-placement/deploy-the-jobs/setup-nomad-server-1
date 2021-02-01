@@ -12,6 +12,10 @@ job "webapp" {
   group "webapp" {
     count = 6
 
+    network {
+      port  "http" {}
+    }
+
     task "server" {
       env {
         PORT    = "\${NOMAD_PORT_http}"
@@ -22,16 +26,12 @@ job "webapp" {
 
       config {
         image = "hashicorp/demo-webapp-lb-guide"
+        ports = ["http"]
       }
 
       resources {
         cpu    = 20
         memory = 678
-
-        network {
-          mbits = 10
-          port  "http"{}
-        }
       }
 
       service {
@@ -64,6 +64,17 @@ job "traefik" {
 
   group "traefik" {
     count = 1
+
+    network {
+
+      port "http" {
+        static = 8080
+      }
+
+      port "api" {
+        static = 8081
+      }
+    }
 
     task "traefik" {
 
@@ -107,18 +118,6 @@ EOD
       resources {
         cpu    = 250
         memory = 128
-
-        network {
-          mbits = 10
-
-          port "http" {
-            static = 8080
-          }
-
-          port "api" {
-            static = 8081
-          }
-        }
       }
 
       service {
