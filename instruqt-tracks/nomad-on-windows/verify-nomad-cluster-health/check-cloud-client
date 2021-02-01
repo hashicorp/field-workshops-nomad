@@ -3,7 +3,7 @@
 set -e
 
 # Check that consul members was run
-grep -q "sshpass -e ssh hashistack@\$nomad_server_ip" /root/.bash_history || fail-message "You have not SSHed to the Nomad server yet."
+grep -q "sshpass\s\+-e\s\+ssh\s\+hashistack@\$nomad_server_ip" /root/.bash_history || fail-message "You have not SSHed to the Nomad server yet."
 
 sshpass -e ssh hashistack@$nomad_server_ip 'consul members' > consul_members.txt
 consul_members=$(cat consul_members.txt | grep alive | wc -l)
@@ -25,6 +25,5 @@ nomad_clients=$(cat nomad_clients.txt | grep ready | wc -l)
 if [ $nomad_clients -ne 3 ]; then
   fail-message "'nomad node status' does not show 3 running Nomad clients."
 fi
-
 
 exit 0

@@ -2,12 +2,12 @@
 
 set -e
 
-grep -q "nomad job status" /root/.bash_history || fail-message "You haven't run 'nomad job status' on Server 3 yet."
+grep -q "nomad\s\+job\s\+status" /root/.bash_history || fail-message "You haven't run 'nomad job status' on Server 3 yet."
 
-grep -q "export NOMAD_TOKEN" /root/.bash_history || fail-message "You haven't exported the admin token on Server 3 yet."
+grep -q "export\s\+NOMAD_TOKEN" /root/.bash_history || fail-message "You haven't exported the admin token on Server 3 yet."
 
-grep -q "nomad job stop redis" /root/.bash_history || fail-message "You haven't run 'nomad job stop' on Server 3 yet."
+grep -q "nomad\s\+job\s\+stop\s\+redis" /root/.bash_history || fail-message "You haven't run 'nomad job stop' on Server 3 yet."
 
-grep -q "nomad job run redis.nomad" /root/.bash_history || fail-message "You haven't run 'nomad job stop' on Server 3 yet."
+grep -q "nomad\s\+job\s\+run\s\+redis.nomad" /root/.bash_history || fail-message "You haven't run 'nomad job stop' on Server 3 yet."
 
 exit 0

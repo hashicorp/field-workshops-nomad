@@ -10,6 +10,7 @@ count: false
 
 ???
 * In this chapter, we'll provide an overview of Nomad
+* The current release is 0.12.x
 
 ---
 layout: true
@@ -27,8 +28,11 @@ name: chapter-1-topics
 1. Nomad's Business Value
 1. What is Nomad?
 1. Nomad Use Cases
+1. Nomad Autoscaling
+1. Nomad Federation
 1. Nomad OSS Features
-1. Nomad Enterprise Features
+1. Nomad Enterprise Platform Features
+1. Nomad Enterprise Modules
 
 
 ???
@@ -103,55 +107,96 @@ name: chapter-1-nomad-workload-types
 * Nomad can run these 3 types of workloads
 
 ---
+name: chapter-1-nomad-autoscaling
+class: compact
+# Nomad Autoscaling
+* Nomad supports two types of autoscaling:
+  * **Horizontal Application Autoscaling** allows the counts of task groups to dynamically scale up and back down.
+  * **Horizontal Cluster Autoscaling** allows the size of a Nomad cluster to dynamically scale out and back in.
+* The latter is currently only supported in AWS using Auto Scaling Groups (ASGs).
+* Both types of autoscaling are driven by APM metrics.
+* The Nomad Autoscaler agent can be deployed as a Nomad job.
+
+???
+* Nomad supports two types of autoscaling:
+  * Horizontal application autoscaling
+  * Horizontal cluster autoscaling
+* The latter is currently only supported in AWS.
+* Both types of autoscaling are driven by APM metrics.
+* The Nomad Autoscaler agent can be deployed as a Nomad job.
+
+---
+name: chapter-1-nomad-federation
+# Federation Made Real
+.center[![:scale 100%](images/Nomad-Federation.png)]
+
+???
+* Nomad can deploy applications seamlessly to federated clusters across multiple clouds.
+* It is the first and only orchestrator on the market with complete and fully-supported federation capabilities for production.
+---
 name: chapter-1-nomad-oss-features
+class: smaller
 # Nomad Open Source Features
-.smaller[
+* Service/Batch Schedulers
 * Flexible Task Drivers
 * Device Plugins
-* Apache Spark Integration
-* NVIDIA GPU Support
-* Service/Batch Schedulers
+* Multi-Update Strategies
+* Multi-Region Federation
+* Autoscaling
+* Container Storage Interface Plugins
+* Container Network Interface Plugins
 * Access Control System
 * Web UI
 * Consul & Vault Integration
-* Multi-Upgrade Strategies
-* Multi-Region Federation
-]
 
 ???
-* Task drivers like docker, java, exec
-* Device Plugins allow community members to extend Nomad functionality to other drivers and devices
-* Direct Apache Spark Integration for big data processing
-* NVIDIA GPU Support enables compute-intensive workloads employing accelerators like GPUs or TPUs
 * Service and Batch Schedulers enable both short and long-lived workloads
+* Task drivers like docker, podman, java, exec
+* Device Plugins allow community members to extend Nomad functionality to other drivers and devices including NVIDIA GPUs for compute-intensive workloads
+* Enables various update strategies such as rolling, blue-green and canary
+* Nomad Clusters can be federated across multiple cloud regions and on-prem datacenters
+* Autoscaling supports horizontal scaling of both applications (changing task group count) and of clusters (changing # of Nomad clients)
+* Supports CSI and CNI plugins for maximum flexibility of storage and networking.
 * ACLs to control access to data and APIs
 * Web UI included out-of-the-box
 * Native integration with other HashiCorp products Consul and Vault
-* Enables upgrade strategies such as blue-green and canary
-* Nomad Clusters can be extended across multiple cloud regions and on-prem datacenters
+*
 
 ---
-name: chapter-1-nomad-enterprise-features
-class: compact, smaller
-# Nomad Enterprise Features
-.smaller[
+name: chapter-1-nomad-enterprise-platform-features
+# Nomad Enterprise Platform Features
 * All Open Source Features
-* Automated Upgrades
+* Automated Upgrades with Autopilot
+* Automated Backups with Snapshot Agent
 * Enhanced Read Scalability
 * Redundancy Zones
-* Namespaces
-* Resource Quotas
-* Preemption
-* Sentinel Policies
-]
+* Multiple Vault Namespaces
 
 ???
 * All Open Source Features are included in Enterprise
 * Autopilot Upgrades
+* Automated backups with Nomad's Snapshot agent
 * Servers can act as a non-voting member of the cluster to help provide read scalability
 * Nomad attempts to parition servers according to specified redundancy zone, and will aim to keep one voting server per zone
-* Segregate workloads using Namespaces
-* Quotas limit resource consumption across teams or projects to reduce waste and align budgets
+* A single Nomad cluster can access multiple namespaces of a Vault cluster.
+
+---
+name: chapter-1-nomad-enterprise-modules
+class: compact
+# Nomad Enterprise Modules
+* Nomad Enterprise Governance & Policy Module
+  * Namespaces
+  * Resource Quotas
+  * Sentinel Policies
+  * Cross-Namespace Queries
+  * Audit Logging
+* Nomad Multi-Cluster & Efficiency Module
+  * Multi-Region Job Deployments
+
+???
 * A shared cluster can be partitioned into multiple namespaces which allow jobs and their associated objects to be isolated from each other and other users of the cluster
-* Preemption enables Nomad's scheduler to automatically evict lower priority allocations of service and batch jobs so that allocations from higher priority jobs can be placed.
+* Resource quotas limit resource consumption across teams or projects to reduce waste and align budgets
 * Sentinel defines policies such as disallowing jobs to be submitted to production on Fridays or only allowing users to run jobs that use pre-authorized Docker images
+* Cross-Namespace Queries allow the Nomad HTTP API and CLI to retrieve data from multiple namespaces.
+* Audit Logging allows enterprises to proactively identify access anomalies.
+* Multi-region Deployments can deploy allocations across multiple Nomad clusters/regions and roll back if deployments fail in remote clusters.

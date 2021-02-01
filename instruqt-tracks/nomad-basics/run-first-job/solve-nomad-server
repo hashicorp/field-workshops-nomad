@@ -1,22 +1,22 @@
 #!/bin/bash -l
 
+#Enable bash history
+HISTFILE=~/.bash_history
+set -o history
+
 # Inspect the job specification file
-echo -e "cat redis.nomad" >> /root/.bash_history
 cat redis.nomad
 
 # Run the Job
-echo -e "nomad job run redis.nomad" >> /root/.bash_history
 nomad job run redis.nomad
 
 # Sleep
 sleep 30
 
 # Check the job status with the CLI
-echo -e "nomad status" >> /root/.bash_history
 nomad status
 
 # Stop the job with the CLI
-echo -e "nomad job stop redis" >> /root/.bash_history
 nomad job stop redis
 
 # Sleep

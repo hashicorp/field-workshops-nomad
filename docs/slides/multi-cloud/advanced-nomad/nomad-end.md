@@ -22,9 +22,10 @@ layout: true
 ---
 name: more-nomad-labs
 # More Nomad Labs
-* There are more Nomad Instruqt tracks available if you finished the other tracks early.
-* The following labs explore other options for running stateful workloads in Nomad:
-  * [Nomad Integration with Portworx](https://play.instruqt.com/hashicorp/invite/nrfcdqrghxiq)
+* There are more Nomad Instruqt tracks available if you finished the other tracks early:
+  * [Nomad Access Control Lists (ACLs)](https://play.instruqt.com/hashicorp/invite/shnoqbxokwuj)
+  * [Run Nomad Jobs on Windows](https://play.instruqt.com/hashicorp/invite/qu5rqvzck4uo)
+* You might also wish to explore the [Nomad Horizontal Autoscaling Demo](https://github.com/hashicorp/nomad-autoscaler/tree/master/demo/remote) in AWS or Azure (which requires you to have an AWS or Azure account) or the [Dynamic Application Sizing Demo](https://github.com/hashicorp/nomad-autoscaler/tree/master/demo/vagrant/dynamic-app-sizing) with Vagrant.
 
 ---
 name: thank-you
@@ -52,3 +53,17 @@ name: Feedback-Survey
 
 ???
 * Ask them to fill out the online survey
+
+---
+name: credits
+# Credits
+* This workshop was created by the following HashiCorp SEs:
+  * Roger Berlind
+  * Chris Dunlop
+  * Patrick Gryzan
+  * Lance Haig
+  * Tom Harris
+  * Rob Jackson
+
+???
+* Credits for the workshop

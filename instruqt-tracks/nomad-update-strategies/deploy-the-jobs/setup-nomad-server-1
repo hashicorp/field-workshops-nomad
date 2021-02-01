@@ -82,7 +82,7 @@ job "nginx" {
         data = <<EOT
 upstream chat {
   # enable sticky session based on IP
-  ip_hash;
+  #ip_hash;
 {{ range service "chat-app" }}
   server {{ .Address }}:{{ .Port }};
 {{ else }}server 127.0.0.1:65535; # force a 502
@@ -201,8 +201,8 @@ job "chat-app" {
       }
 
       env {
-        "MONGODB_SERVER" = "127.0.0.1"
-        "MONGODB_PORT" = "27017"
+        MONGODB_SERVER = "127.0.0.1"
+        MONGODB_PORT = "27017"
       }
 
       resources {

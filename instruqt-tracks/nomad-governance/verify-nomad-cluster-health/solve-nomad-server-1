@@ -1,12 +1,8 @@
 #!/bin/bash -l
 
 #Enable bash history
-HISTFILE=/home/nomad/.bash_history
+HISTFILE=/root/.bash_history
 set -o history
-
-# Change owner to nomad
-touch /home/nomad/.bash_history
-chown nomad:nomad /home/nomad/.bash_history
 
 # Run consul members
 consul members

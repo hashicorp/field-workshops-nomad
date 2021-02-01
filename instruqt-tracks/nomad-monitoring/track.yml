@@ -2,11 +2,12 @@ slug: nomad-monitoring
 id: mxfbvvo8n5l2
 type: track
 title: Nomad Monitoring
-teaser: Monitor a Nomad cluster and jobs with Prometheus.
+teaser: |
+  Monitor a Nomad cluster and jobs with Prometheus.
 description: |-
   The Nomad client and server agents collect runtime [telemetry](https://www.nomadproject.io/docs/telemetry/index.html). Operators can use this data to gain real-time visibility into their Nomad clusters and improve performance. Additionally, Nomad operators can set up monitoring and alerting against these metrics and export the metrics to tools like Prometheus, Grafana, Graphite, DataDog, and Circonus.
 
-  This track will guide you through implementing the [Using Prometheus to Monitor Nomad Metrics](https://learn.hashicorp.com/nomad/operating-nomad/prometheus-metrics) guide.
+  This track will guide you through implementing the [Using Prometheus to Monitor Nomad Metrics](https://learn.hashicorp.com/tutorials/nomad/prometheus-metrics) guide.
 
   Before running this track, we suggest you run the [Nomad Basics](https://instruqt.com/hashicorp/tracks/nomad-basics), [Nomad Simple Cluster](https://instruqt.com/hashicorp/tracks/nomad-simple-cluster), and the [Nomad Multi-Server Cluster](https://instruqt.com/hashicorp/tracks/nomad-multi-server-cluster) tracks.
 icon: https://storage.googleapis.com/instruqt-hashicorp-tracks/logo/nomad.png
@@ -21,12 +22,14 @@ developers:
 - pphan@hashicorp.com
 private: false
 published: true
+show_timer: true
 challenges:
 - slug: fabio-and-prometheus-jobs
   id: m4ly1zb0xyjh
   type: challenge
   title: Deploy Fabio and Prometheus
-  teaser: Run Nomad jobs that deploy Fabio and Prometheus to the Nomad cluster.
+  teaser: |
+    Run Nomad jobs that deploy Fabio and Prometheus to the Nomad cluster.
   assignment: |-
     In this challenge, you will run jobs that deploy Fabio and Prometheus to the Nomad cluster.
 
@@ -143,7 +146,7 @@ challenges:
 
       Additionally, Nomad operators can set up monitoring and alerting against these metrics and export the metrics to tools like Prometheus, Grafana, Graphite, DataDog, and Circonus.
 
-      This track will guide you through implementing the [Using Prometheus to Monitor Nomad Metrics](https://learn.hashicorp.com/nomad/operating-nomad/prometheus-metrics) guide.
+      This track will guide you through implementing the [Using Prometheus to Monitor Nomad Metrics](https://learn.hashicorp.com/tutorials/nomad/prometheus-metrics) guide.
   - type: text
     contents: |-
       The setup scripts for this track have configured 4 VMs running Nomad and Consul agents. One is functioning as a server while the other 3 are functioning as clients, both with regard to Nomad and to Consul.
@@ -188,7 +191,8 @@ challenges:
   id: aaqomh65hrcz
   type: challenge
   title: Deploy Alertmanager
-  teaser: Run a Nomad job that deploys Alertmanager to the Nomad cluster.
+  teaser: |
+    Run a Nomad job that deploys Alertmanager to the Nomad cluster.
   assignment: |-
     In this challenge, you will deploy the Prometheus Alertmanager to the Nomad cluster and modify the `prometheus` job to integrate the Prometheus server with Alertmanager.
 
@@ -284,8 +288,8 @@ challenges:
   id: wzwlz6v21qqr
   type: challenge
   title: Run and Stop a Web Server and See Alerts
-  teaser: Deploy a web server to the Nomad cluster, stop it, and see alerts in Prometheus
-    and Alertmanager.
+  teaser: |
+    Deploy a web server to the Nomad cluster, stop it, and see alerts in Prometheus and Alertmanager.
   assignment: |-
     In this challenge, you will deploy a web server to the Nomad cluster by running the `webserver.nomad` job. You will then stop and restart it to see alerts show up and be cleared in Prometheus.
 
@@ -389,5 +393,4 @@ challenges:
     port: 9999
   difficulty: basic
   timelimit: 1200
-checksum: "17022340633911175166"
-show_timer: true
+checksum: "12737186309720817064"

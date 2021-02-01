@@ -34,7 +34,7 @@ challenges:
   teaser: |
     Nomad 0.12 introduced a breakthrough Multi-Cluster Deployment feature, which makes Nomad the first and only orchestrator on the market with complete and fully-supported federation capabilities for production.
   assignment: |-
-    The setup scripts of this track have already deployed two Nomad clusters for you in GCP. One is designated as the "west" region/cluster while the other is designated as the "east" region/cluster. They each have one server and two clients running Nomad 0.12.4 and Consul 1.8.3.
+    The setup scripts of this track have already deployed two Nomad clusters for you in GCP. One is designated as the "west" region/cluster while the other is designated as the "east" region/cluster. They each have one server and two clients running Nomad 1.0.0 and Consul 1.9.0.
 
     You'll have a total of 5 tabs in all 3 challenges of this track:
       * The "Config Files" tab will let you view the Nomad and Consul configuration files and edit a job specification file.
@@ -99,7 +99,7 @@ challenges:
     hostname: nomad-server-1-east
     port: 4646
   difficulty: basic
-  timelimit: 600
+  timelimit: 1200
 - slug: multi-region-deployments
   id: 5fau0q6nqev7
   type: challenge
@@ -109,7 +109,7 @@ challenges:
   assignment: |-
     In this challenge you will deploy a multi-region job. Please read the notes screens that were displayed at the beginning of this challenge for an explanation of multi-region concepts.
 
-    Inspect the "/root/nomad/multi-redis.nomad" job file in the file editor on the "Config Files" tab.
+    Inspect the "/root/nomad/jobs/multi-redis.nomad" job file in the file editor on the "Config Files" tab.
 
     The job will be deployed to both regions. The `max_parallel` field of the `strategy` block of the `multiregion` block restricts Nomad to deploy to the regions one at a time since it is set to `1`. If either of the region deployments fail, both regions will be marked as `failed` since `on_failure` is set to `fail_all`.
 
@@ -209,7 +209,7 @@ challenges:
     hostname: nomad-server-1-east
     port: 4646
   difficulty: basic
-  timelimit: 900
+  timelimit: 1200
 - slug: simulate-failed-deployment
   id: xymwi5jnxnya
   type: challenge
@@ -279,7 +279,7 @@ challenges:
     ```
     The west region should now have the `successful` status.
 
-    Finally, you can stop the multi-region job by using the `-global` and `-purge` options with the `nomad job stop` command. Do that now on the "Nomad_Server_West" tab:
+    Finally, you can stop the multi-region job by using the `-global`option with the `nomad job stop` command. Do that now on the "Nomad_Server_West" tab:
     ```
     nomad job stop -global example
     ```
@@ -318,5 +318,5 @@ challenges:
     hostname: nomad-server-1-east
     port: 4646
   difficulty: basic
-  timelimit: 900
-checksum: "10138998402574897496"
+  timelimit: 1200
+checksum: "6189967619573833377"

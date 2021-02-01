@@ -14,8 +14,8 @@ job "mysql-server" {
     task "mysql-server" {
       driver = "docker"
 
-      env = {
-        "MYSQL_ROOT_PASSWORD" = "password"
+      env {
+        MYSQL_ROOT_PASSWORD = "password"
       }
 
       config {

@@ -10,7 +10,7 @@ acl {
 EOF
 
 # Add ACL stanza to copy of nomad.hcl config
-cat <<-EOF >> /home/nomad/nomad/nomad-server1.hcl
+cat <<-EOF >> /root/nomad/nomad-server1.hcl
 
 # Enable ACLs
 acl {
@@ -19,7 +19,7 @@ acl {
 EOF
 
 # Add ACL stanza to copy of nomad-client1.hcl config
-cat <<-EOF >> /home/nomad/nomad/nomad-client1.hcl
+cat <<-EOF >> /root/nomad/nomad-client1.hcl
 
 # Enable ACLs
 acl {
@@ -28,7 +28,7 @@ acl {
 EOF
 
 # Add ACL stanza to copy of nomad-client2.hcl config
-cat <<-EOF >> /home/nomad/nomad/nomad-client2.hcl
+cat <<-EOF >> /root/nomad/nomad-client2.hcl
 
 # Enable ACLs
 acl {
@@ -37,7 +37,7 @@ acl {
 EOF
 
 # Add ACL stanza to copy of nomad-client3.hcl config
-cat <<-EOF >> /home/nomad/nomad/nomad-client3.hcl
+cat <<-EOF >> /root/nomad/nomad-client3.hcl
 
 # Enable ACLs
 acl {
@@ -46,11 +46,10 @@ acl {
 EOF
 
 # Make acls directory
-mkdir /home/nomad/nomad/acls
-chown -R nomad:nomad /home/nomad/nomad/acls
+mkdir /root/nomad/acls
 
 # Write Anonymous ACL
-cat <<-EOF > /home/nomad/nomad/acls/acl-anonymous.hcl
+cat <<-EOF > /root/nomad/acls/acl-anonymous.hcl
 namespace "default" {
   capabilities = ["list-jobs"]
 }
@@ -65,7 +64,7 @@ node {
 EOF
 
 # Write Dev ACL
-cat <<-EOF > /home/nomad/nomad/acls/acl-dev.hcl
+cat <<-EOF > /root/nomad/acls/acl-dev.hcl
 namespace "default" {
   capabilities = ["list-jobs"]
 }
@@ -85,7 +84,7 @@ EOF
 
 
 # Write QA ACL
-cat <<-EOF > /home/nomad/nomad/acls/acl-qa.hcl
+cat <<-EOF > /root/nomad/acls/acl-qa.hcl
 namespace "default" {
   capabilities = ["list-jobs"]
 }
@@ -104,7 +103,7 @@ node {
 EOF
 
 # Write override ACL
-cat <<-EOF > /home/nomad/nomad/acls/acl-override.hcl
+cat <<-EOF > /root/nomad/acls/acl-override.hcl
 namespace "default" {
   policy = "write"
   capabilities = ["sentinel-override"]
@@ -128,5 +127,7 @@ node {
   policy = "read"
 }
 EOF
+
+set-workdir /root/nomad/acls
 
 exit 0

@@ -1,3 +1,5 @@
 #!/bin/bash -l
 
+set-workdir /root/nomad/jobs
+
 exit 0

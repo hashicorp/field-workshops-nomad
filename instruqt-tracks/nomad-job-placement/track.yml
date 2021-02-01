@@ -23,6 +23,7 @@ developers:
 - roger@hashicorp.com
 private: false
 published: true
+show_timer: true
 challenges:
 - slug: verify-nomad-cluster-health
   id: s04zptitbxqu
@@ -33,7 +34,7 @@ challenges:
   assignment: |-
     In this challenge, you will verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
 
-    The cluster is running 1 Nomad/Consul server and 3 Nomad/Consul clients. They are using Nomad 0.11.0 and Consul 1.7.2.
+    The cluster is running 1 Nomad/Consul server and 3 Nomad/Consul clients. They are using Nomad 1.0.0 and Consul 1.9.0.
 
     First, verify that all 4 Consul agents are running and connected to the cluster by running this command on the "Server" tab:
     ```
@@ -75,7 +76,7 @@ challenges:
     hostname: nomad-server-1
     port: 4646
   difficulty: basic
-  timelimit: 300
+  timelimit: 600
 - slug: deploy-the-jobs
   id: ak0ehohkwlsk
   type: challenge
@@ -142,7 +143,7 @@ challenges:
     `
     constraints = ["tag==service"]
     `<br>
-
+    
     If you look back at the "webapp.nomad" job specification, on line 32 you will see that the same service tag was specified in the tags section of the registration of the web app with Consul.
     <br>
     `
@@ -183,8 +184,6 @@ challenges:
     contents: |-
       In this challenge, you will run Nomad jobs that deploy a web application and [Traefik](https://containo.us/traefik/), which will serve as a load balancer in front of multiple instances of the web app.
 
-      ![alt text](https://containo.us/assets/img/traefik-logo.svg)
-
       In later challenges, you will learn about Nomad Spread, Constraints, and Affinities.
   tabs:
   - title: Jobs
@@ -203,7 +202,7 @@ challenges:
     hostname: nomad-server-1
     port: 4646
   difficulty: basic
-  timelimit: 600
+  timelimit: 900
 - slug: use-constraint
   id: uowivhtikmoz
   type: challenge
@@ -308,7 +307,7 @@ challenges:
     path: /myapp
     port: 8080
   difficulty: basic
-  timelimit: 600
+  timelimit: 900
 - slug: use-spread
   id: sovmjupmykql
   type: challenge
@@ -498,5 +497,4 @@ challenges:
     port: 8080
   difficulty: basic
   timelimit: 600
-checksum: "7314739801127714236"
-show_timer: true
+checksum: "6077355159864770265"

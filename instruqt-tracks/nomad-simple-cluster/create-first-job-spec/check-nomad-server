@@ -2,6 +2,6 @@
 
 set -e
 
-grep -q "nomad job init -short" /root/.bash_history || fail-message "You have not created the sample Nomad job specification file yet."
+grep -q "nomad\s\+job\s\+init\s\+-short" /root/.bash_history || fail-message "You have not created the sample Nomad job specification file yet."
 
 exit 0

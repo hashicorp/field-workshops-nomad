@@ -3,7 +3,7 @@
 set -e
 
 #
-grep -q "cd /root/nomad/jobs" /root/.bash_history || fail-message "You have not navigated to /root/nomad/jobs on the Nomad server yet."
+grep -q "cd\s\+/root/nomad/jobs" /root/.bash_history || fail-message "You have not navigated to /root/nomad/jobs on the Nomad server yet."
 
 grep -qL "spread" /root/nomad/jobs/webapp.nomad && fail-message "You have not removed the spread stanza from the webapp.nomad job on the Nomad server yet."
 
@@ -15,12 +15,12 @@ fgrep -q "n1-standard-2" /root/nomad/jobs/webapp.nomad || fail-message "You have
 
 fgrep -q "weight" /root/nomad/jobs/webapp.nomad || fail-message "You have not added 'weight' to the affinity stanza yet."
 
-grep -q "nomad job stop -purge webapp" /root/.bash_history || fail-message "You have not stopped and purged the webapp job on the Nomad server yet."
+grep -q "nomad\s\+job\s\+stop\s\+-purge\s\+webapp" /root/.bash_history || fail-message "You have not stopped and purged the webapp job on the Nomad server yet."
 
-grep -q "nomad job run webapp.nomad" /root/.bash_history || fail-message "You have not re-run the webapp.nomad job on the Nomad server yet."
+grep -q "nomad\s\+job\s\+run\s\+webapp.nomad" /root/.bash_history || fail-message "You have not re-run the webapp.nomad job on the Nomad server yet."
 
-grep -q "nomad job status webapp" /root/.bash_history || fail-message "You have not checked the status of the webapp job with the CLI on the Nomad server yet."
+grep -q "nomad\s\+job\s\+status\s\+webapp" /root/.bash_history || fail-message "You have not checked the status of the webapp job with the CLI on the Nomad server yet."
 
-grep -q "nomad alloc status -verbose" /root/.bash_history || fail-message "You have not checked the verbose status of one of the allocations of the webapp job with the CLI on the Nomad server yet."
+grep -q "nomad\s\+alloc\s\+status\s\+-verbose" /root/.bash_history || fail-message "You have not checked the verbose status of one of the allocations of the webapp job with the CLI on the Nomad server yet."
 
 exit 0

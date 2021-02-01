@@ -29,7 +29,7 @@ challenges:
   assignment: |-
     In this challenge, you will verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
 
-    The cluster is running 1 Nomad/Consul server and 2 Nomad/Consul clients. They are using Nomad 0.12.3 and Consul 1.8.3.
+    The cluster is running 1 Nomad/Consul server and 2 Nomad/Consul clients. They are using Nomad 1.0.0 and Consul 1.9.0.
 
     First, verify that all 3 Consul agents are running and connected to the cluster by running this command on the "Server" tab:
     ```
@@ -129,7 +129,7 @@ challenges:
 
       This challenge is based on the  Consul Connect](https://www.nomadproject.io/docs/integrations/consul-connect/) in the Nomad documentation.
 
-      There is also a [version](https://learn.hashicorp.com/nomad/consul-integration/nomad-connect-acl) of this guide that can be used with a Consul cluster that has Consul ACLs enabled.
+      There is also a [version](https://learn.hashicorp.com/tutorials/nomad/consul-service-mesh) of this guide that can be used with a Consul cluster that has Consul ACLs enabled.
   tabs:
   - title: Config Files
     type: code
@@ -156,4 +156,4 @@ challenges:
     port: 9002
   difficulty: basic
   timelimit: 2700
-checksum: "9256521405146445216"
+checksum: "13132293051674240295"

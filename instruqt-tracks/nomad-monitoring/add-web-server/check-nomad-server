@@ -3,13 +3,13 @@
 set -e
 
 # Check that Nomad job was run for alertmanager
-grep -q "nomad job run webserver.nomad" /root/.bash_history || fail-message "You haven't run the webserver.nomad job yet."
+grep -q "nomad\s\+job\s\+run\s\+webserver.nomad" /root/.bash_history || fail-message "You haven't run the webserver.nomad job yet."
 
 # Check that the status of the webserver job was checked
-grep -q "nomad job status webserver" /root/.bash_history || fail-message "You haven't checked the status of the webserver job yet."
+grep -q "nomad\s\+job\s\+status\s\+webserver" /root/.bash_history || fail-message "You haven't checked the status of the webserver job yet."
 
 # Check that the webserver job was stopped
-grep -q "nomad job stop webserver" /root/.bash_history || fail-message "You haven't stopped the webserver job yet."
+grep -q "nomad\s\+job\s\+stop\s\+webserver" /root/.bash_history || fail-message "You haven't stopped the webserver job yet."
 
 # Check that the webserver job was re-run
 webserver_runs=$(grep -q "nomad job run webserver.nomad" /root/.bash_history | wc | cut -d " " -f 8)

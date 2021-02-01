@@ -1,5 +1,9 @@
 #!/bin/bash -l
 
+#Enable bash history
+HISTFILE=~/.bash_history
+set -o history
+
 # Check the ACL Enabled
 cat <<EOF >> /etc/nomad.d/client1.hcl
 
@@ -10,17 +14,14 @@ acl {
 EOF
 
 # Restart Nomad
-echo -e "systemctl restart nomad" >> /root/.bash_history
 systemctl restart nomad
 
 sleep 15
 
 # Run `nomad node status`
-echo -e "nomad node status" >> /root/.bash_history
 nomad node status
 
 # Check status with ps -ef
-echo -e "ps -ef | grep nomad" >> /root/.bash_history
 ps -ef | grep nomad
 
 exit 0

@@ -33,7 +33,6 @@ job "example" {
     auto_revert       = true
     auto_promote      = true
     canary            = 1
-    stagger           = "30s"
   }
 
 

@@ -2,8 +2,8 @@
 
 set -e
 
-grep -q "nomad version" /root/.bash_history || fail-message "You haven't run 'nomad version' yet."
+grep -q "nomad\s\+version" /root/.bash_history || fail-message "You haven't run 'nomad version' yet."
 
-grep -q "nomad job run -h" /root/.bash_history || grep -q "nomad job run -help" /root/.bash_history || grep -q "nomad job run --help" /root/.bash_history || fail-message "You haven't run 'nomad job run -h' yet."
+grep -q "nomad\s\+job\s\+run\s\+-h" /root/.bash_history || grep -q "nomad\s\+job\s\+run\s\+-help" /root/.bash_history || grep -q "nomad\s\+job\s\+run\s\+--help" /root/.bash_history || fail-message "You haven't run 'nomad job run -h' (or a variation of it) yet."
 
 exit 0

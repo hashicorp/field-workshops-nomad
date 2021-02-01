@@ -11,10 +11,10 @@ Additionally, field workshops focused on more than one HashiCorp solution can be
 ## Slides
 
 The following Nomad workshop presentation have been completed:
-* https://hashicorp.github.io/field-workshops-nomad/slides/multi-cloud/nomad-oss
+* https://hashicorp.github.io/field-workshops-nomad/slides/multi-cloud/nomad-oss/#1
 
 You can also see the current version of the Advanced Nomad Workshop slides that cover advanced OSS and Nomad Enterprise features here:
-* https://hashicorp.github.io/field-workshops-nomad/slides/multi-cloud/advanced-nomad
+* https://hashicorp.github.io/field-workshops-nomad/slides/multi-cloud/advanced-nomad/#1
 
 Other presentations are just placeholders for future content.
 
@@ -55,3 +55,5 @@ The instructor guides for these workshops should be created as Markdown files an
 
 ## Labs (Instruqt Tracks)
 The labs for these workshops should be created using [Instruqt Tracks](https://instruqt.com/hashicorp).  Each track should be placed in its own directory directly underneath the [instruqt-tracks](./instruqt-tracks) directory. Doing this allows each track to be used by multiple workshops within this repository.
+
+You can find the complete list of tracks for Nomad workshops under https://play.instruqt.com/hashicorp/topics/nomad-workshops.

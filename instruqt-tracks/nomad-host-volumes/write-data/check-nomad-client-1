@@ -2,7 +2,7 @@
 
 set -e
 
-grep -q "mysql -h mysql-server.service.consul -u web -ppassword -D itemcollection" /root/.bash_history || fail-message "You have not connected to the MySQL database on Nomad Client 1 yet."
+grep -q "mysql\s\+-h\s\+mysql-server.service.consul\s\+-u\s\+web\s\+-ppassword\s\+-D\s\+itemcollection" /root/.bash_history || fail-message "You have not connected to the MySQL database on Nomad Client 1 yet."
 
 glove_result=$(mysql -h mysql-server.service.consul -u web -ppassword -D itemcollection -s -N -e "select count(*) from items where name='glove';")
 

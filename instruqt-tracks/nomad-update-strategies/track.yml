@@ -7,7 +7,7 @@ teaser: |
 description: |-
   Most applications are long-lived and require updates over time. Whether you are deploying a new version of your web application or updating to a new version of a database, Nomad has built-in support for rolling, blue/green, and canary updates, which can be used with non-containerized and containerized applications or to containerize the former.
 
-  This track will guide you through implementing these update strategies based on the [Nomad Job Update Strategies](https://learn.hashicorp.com/nomad/update-strategies/) guide.
+  This track will guide you through implementing these update strategies based on the [Nomad Job Update Strategies](https://learn.hashicorp.com/tutorials/nomad/job-update-strategies) guide.
 
   You will run "mongodb", "chat-app", and "nginx" jobs and update the second using rolling, blue/green, and canary update strategies.
 
@@ -32,6 +32,7 @@ developers:
 - roger@hashicorp.com
 private: false
 published: true
+show_timer: true
 challenges:
 - slug: verify-nomad-cluster-health
   id: tklzqhaey58k
@@ -42,7 +43,7 @@ challenges:
   assignment: |-
     In this challenge, you will verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
 
-    The cluster is running 1 Nomad/Consul server and 3 Nomad/Consul clients running Nomad 0.11.1 and Consul 1.7.2.
+    The cluster is running 1 Nomad/Consul server and 3 Nomad/Consul clients running Nomad 1.0.0 and Consul 1.9.0.
 
     The [Consul Connect integration](https://www.nomadproject.io/docs/integrations/consul-connect/) has been enabled on the server and clients since the chatapp uses it to talk to the MongoDB database. Additionally, a Nomad [host volume](https://nomadproject.io/docs/configuration/client/#host_volume-stanza) called "mongodb_mount" has been configured on the clients under the /opt/mongodb/data directory so that MongoDB can persist its data.
 
@@ -97,7 +98,7 @@ challenges:
     hostname: nomad-server-1
     port: 4646
   difficulty: basic
-  timelimit: 300
+  timelimit: 600
 - slug: deploy-the-jobs
   id: wfbxeo0th19f
   type: challenge
@@ -300,7 +301,7 @@ challenges:
     hostname: nomad-client-3
     port: 8080
   difficulty: basic
-  timelimit: 600
+  timelimit: 900
 - slug: rolling-update
   id: s71yve1la3vm
   type: challenge
@@ -430,7 +431,7 @@ challenges:
     hostname: nomad-client-3
     port: 8080
   difficulty: basic
-  timelimit: 600
+  timelimit: 900
 - slug: blue-green-deployment
   id: vyyv312rchyo
   type: challenge
@@ -447,7 +448,7 @@ challenges:
     cd /root/nomad/jobs
     ```
 
-    Inspect the new "chat-app-light-binary.nomad" job specification file on the "Jobs" tab and note that the update stanza now has `canary = 3`:
+    Inspect the new "chat-app-light-docker.nomad" job specification file on the "Jobs" tab and note that the update stanza now has `canary = 3`:
 
     Additionally, note that the task now uses the Docker driver that runs a custom Docker image, "lhaig/anon-app:light-0.03" which another HashiCorp solutions engineer, Lance Haig, uploaded to Docker Hub for us:
     ```
@@ -709,5 +710,4 @@ challenges:
     port: 8080
   difficulty: basic
   timelimit: 600
-checksum: "4120221687258631541"
-show_timer: true
+checksum: "14061721018299607100"

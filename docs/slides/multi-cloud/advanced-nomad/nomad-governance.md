@@ -3,13 +3,13 @@ class: title, shelf, no-footer, fullbleed
 background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/bkgs/HashiCorp-Title-bkg.jpeg)
 count: false
 
-# Chapter 7
-## Nomad Enterprise Governance and Policy
+# Nomad Enterprise
+## Governance and Policy Module
 
 ![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
 
 ???
-* This chapter covers the Nomad Governance and Policy features.
+* This chapter covers the Nomad Enterprise Governance and Policy module.
 
 ---
 layout: true
@@ -20,21 +20,33 @@ layout: true
 ]
 
 ---
-name: chapter-7-topics
+name: chapter-governance-topics
 # Nomad Governance and Policy Features
+* Audit Logging
 * Namespaces
 * Resource Quotas
 * Sentinel Policies
-* Audit Logging
+* Cross-Namespace Queries
+
+Since Nomad 1.0.0, Namespaces are actually an open source feature, but since they are required by resource quotas, we discuss them in this chapter.
 
 ???
-* The Nomad Enterprise Governance and Policy module includes Namespaces, Resource Quotas, and Sentinel Policies.
-* It currently also includes Preemption of service and batch jobs, but that will probably be moved to Nomad OSS since preemption does not respect namespaces and does not work well with resource quotas.
+* The Nomad Enterprise Governance and Policy module includes Audit Logging, Namespaces, Resource Quotas, Sentinel Policies, and Cross-Namespace Queries.
+
+---
+name: nomad-enterprise-audit-logging
+# Nomad Enterprise Audit Logging
+* Nomad Enterprise's [Audit Logging](https://nomadproject.io/docs/enterprise/#audit-logging) provides Nomad administrators a complete set of records for all user-issued actions in Nomad.
+* Nomad Enterprise customers can proactively identify access anomalies, ensure enforcement of their security policies, and diagnose cluster behavior by viewing preceding user operations.
+* Each audit event is captured with relevant request and response information in a JSON format that is easily digestibile and familiar to operators.
+
+???
+* Let's start with Nomad Enterprise's audit logging that was added in Nomad 0.11.0.
 
 ---
 name: nomad-namespaces
-# Nomad Enterprise Namespaces
-* [Namespaces](https://learn.hashicorp.com/nomad/governance-and-policy/namespaces) allow multiple teams to safely share a Nomad cluster.
+# Nomad Namespaces
+* [Namespaces](https://learn.hashicorp.com/tutorials/nomad/namespaces) allow multiple teams to safely share a Nomad cluster.
 * The jobs and tasks of one namespace are isolated from those of others.
 * The namespace of a job is specified by the job's `namespace` stanza.
   * Jobs are run in the `default` namespace if none is specified.
@@ -73,7 +85,7 @@ class: compact
 ---
 name: nomad-resource-quotas
 # Nomad Enterprise Resource Quotas
-* [Resource Quotas](https://learn.hashicorp.com/nomad/governance-and-policy/quotas) allow Nomad operators to restrict the aggregate resource consumption of namespaces.
+* [Resource Quotas](https://learn.hashicorp.com/tutorials/nomad/quotas) allow Nomad operators to restrict the aggregate resource consumption of namespaces.
 * The most common resources restricted are CPU and Memory.
 * But it is also possible to restrict network usage
 
@@ -121,8 +133,8 @@ limit {
 ---
 name: nomad-sentinel-policies
 # Nomad Enterprise Sentinel Policies
-* [Sentinel Policies](https://learn.hashicorp.com/nomad/governance-and-policy/sentinel) in Nomad restrict the characteristics of jobs submitted to Nomad.
-* Sentinel policies extend and require the Nomad [ACL system](https://learn.hashicorp.com/nomad/acls/fundamentals).
+* [Sentinel Policies](https://learn.hashicorp.com/tutorials/nomad/sentinel) in Nomad restrict the characteristics of jobs submitted to Nomad.
+* Sentinel policies extend and require the Nomad [ACL system](https://learn.hashicorp.com/tutorials/nomad/access-control).
 * Nomad Sentinel policies can do things like:
   * Restrict which drivers are allowed.
   * Restrict which Docker images can be used.
@@ -156,33 +168,32 @@ main = rule {
 * This is a Nomad Sentinel policy that only allows the Docker and Java task drivers to be used.
 
 ---
-name: nomad-enterprise-audit-logging
-# Nomad Enterprise Audit Logging
-* Nomad Enterprise's [Audit Logging](https://nomadproject.io/docs/enterprise/#audit-logging) provides Nomad administrators a complete set of records for all user-issued actions in Nomad.
-* Nomad Enteprise customers can proactively identify access anomalies, ensure enforcement of their security policies, and diagnose cluster behavior by viewing preceding user operations.
-* Each audit event is captured with relevant request and response information in a JSON format that is easily digestibile and familiar to operators
+name: nomad-cross-namespace-queries
+# Nomad Cross-Namespace Queries
+* Nomad Enterprise's [Cross-Namespace Queries](https://www.nomadproject.io/docs/enterprise#cross-namespace-queries) allow Nomad operators to query jobs and allocations across all namespaces for faster operator debugging and visibility in multi-tenant clusters.
+* This enterprise feature accelerates and simplifies the debugging process by allowing operators to easily locate faulty jobs and allocations from developers.
 
 ???
-* Finally, we want to talk about Nomad Enterprise's audit logging that was added in Nomad 0.11.0.
+* Finally, let's talk about Nomad Enterprise's cross-namespace queries that were added in Nomad 0.12.0.
 
 ---
 name: lab-nomad-governance
 # 👩‍💻 Nomad Enterprise Governance Lab
-* In this lab, you'll learn how to use Nomad Enterprise's governance capabilities including namespaces, resource quotas, and Sentinel policies.
+* In this lab, you'll learn how to use Nomad Enterprise's governance capabilities including audit logging, namespaces, resource quotas, Sentinel policies, and cross-namespace queries.
 * You'll also enable and use Nomad ACLs since these are required in order to use Sentinel in Nomad.
 * You'll do this using the Instruqt track [Nomad Enterprise Governance](https://play.instruqt.com/hashicorp/invite/yvqyiphxoc0e).
 
 ???
-* Now, you can explore Nomad namespaces, resource quotas, and Sentinel policies hands-on
+* Now, you can explore Nomad audit logging, namespaces, resource quotas, Sentinel policies, and cross-namespace queries hands-on
 * You'll be running the Instruqt track "Nomad Enterprise Governance"
 
 ---
 name: chapter-Summary
-# 📝 Chapter 7 Summary
+# 📝 Chapter Summary
 
 In this chapter you did the following:
-* Learned about Nomad Enterprise's governance features including namespaces, resource quotas, Sentinel policies, and audit logging.
-* Actually worked with the first 3 of these constructs and Nomad ACLs in an Instruqt lab.
+* Learned about Nomad Enterprise's governance features including audit logging, namespaces, resource quotas, Sentinel policies, and cross-namespace queries.
+* Actually worked with these Nomad features and Nomad ACLs in an Instruqt lab.
 
 ???
 * You now know a lot more about Nomad Enterprise's governance features than you did yesterday.

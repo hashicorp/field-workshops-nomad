@@ -12,6 +12,6 @@ if [ "$token_replaced" -ne "0" ]; then
   fail-message "You have not added your Vault token to Nomad's server.hcl configuration file yet."
 fi
 
-grep -q "systemctl restart nomad" /root/.bash_history || fail-message "You haven't restarted the Nomad agent yet."
+grep -q "systemctl\s\+restart\s\+nomad" /root/.bash_history || fail-message "You haven't restarted the Nomad agent yet."
 
 exit 0

@@ -3,8 +3,7 @@ class: title, shelf, no-footer, fullbleed
 background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/bkgs/HashiCorp-Title-bkg.jpeg)
 count: false
 
-# Chapter 6
-## Nomad Enterprise Platform
+# Nomad Enterprise Platform
 
 ![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
 
@@ -27,7 +26,7 @@ layout: true
 name: Nomad Enterprise Features - Autopilot
 # Nomad Enterprise - Autopilot
 
-* [Autopilot](https://learn.hashicorp.com/nomad/operating-nomad/autopilot) is a function that enables multiple features:
+* [Autopilot](https://learn.hashicorp.com/tutorials/nomad/autopilot) is a function that enables multiple features:
     * [Automated Upgrades](https://nomadproject.io/docs/enterprise/#automated-upgrades)
     * [Enhanced Read Scalability](https://nomadproject.io/docs/enterprise/#enhanced-read-scalability)
     * [Redundancy Zones](https://nomadproject.io/docs/enterprise/#redundancy-zones)
@@ -42,7 +41,7 @@ name: Automated Upgrade Overview
 
 * Add new servers to a cluster with updated versions.
 * Autopilot won't promote new servers until a quorum is achieved.
-* Once a quorum is achieved, Autopilot pomotes new servers and demotes old ones.
+* Once a quorum is achieved, Autopilot promotes new servers and demotes old ones.
 * Autopilot can remove old servers from the cluster automatically.
 * Your upgrade is complete!
 
@@ -133,7 +132,7 @@ name: Nomad Redundancy Zones
 
 ---
 name: chapter-Summary
-# 📝 Chapter 6 Summary
+# 📝 Chapter Summary
 
 In this chapter you did the following:
 * Learned about the features of the Nomad Enterprise Platform:

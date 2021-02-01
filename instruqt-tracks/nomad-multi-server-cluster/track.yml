@@ -2,7 +2,8 @@ slug: nomad-multi-server-cluster
 id: ygythoighyka
 type: track
 title: Nomad Multi-Server Cluster
-teaser: Learn how to bootstrap multi-server Nomad clusters in two different ways.
+teaser: |
+  Learn how to bootstrap multi-server Nomad clusters in two different ways.
 description: |-
   This track will show you how to bootstrap a Nomad cluster that has three servers and two clients in two different ways. You'll first use Nomad's manual clustering and then use automatic clustering with Consul.
 
@@ -22,6 +23,7 @@ developers:
 - roger@hashicorp.com
 private: false
 published: true
+show_timer: true
 challenges:
 - slug: manual-clustering
   id: 7kmuc2a1yqge
@@ -396,5 +398,4 @@ challenges:
     port: 9002
   difficulty: basic
   timelimit: 1200
-checksum: "4220087062195477192"
-show_timer: true
+checksum: "10711246043662458330"

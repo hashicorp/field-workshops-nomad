@@ -32,8 +32,8 @@ job "mysql-server" {
         read_only   = false
       }
 
-      env = {
-        "MYSQL_ROOT_PASSWORD" = "password"
+      env {
+        MYSQL_ROOT_PASSWORD = "password"
       }
 
       config {

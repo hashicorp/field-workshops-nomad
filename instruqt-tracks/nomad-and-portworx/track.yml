@@ -12,7 +12,7 @@ description: |-
     * [Docker Volume Drivers](https://docs.docker.com/engine/extend/plugins_volume/#create-a-volumedriver) such as Portworx that are externally managed and can only be used with the Docker task driver
     * [CSI Plugins](https://github.com/container-storage-interface/spec/blob/master/spec.md) that are also externally managed but can be used with many Nomad task drivers including Docker, Exec, and Java
 
-  This track will guide you through using a [Docker Volume Driver](https://nomadproject.io/docs/drivers/docker/#inlinecode-volumes-16) and [Portworx](https://docs.portworx.com/install-with-other/nomad) to persist data for an HA MySQL database deployed by Nomad. It is based on the [Stateful Workloads with Portworx](https://learn.hashicorp.com/nomad/stateful-workloads/portworx) guide.
+  This track will guide you through using a [Docker Volume Driver](https://nomadproject.io/docs/drivers/docker/#inlinecode-volumes-16) and [Portworx](https://docs.portworx.com/install-with-other/nomad) to persist data for an HA MySQL database deployed by Nomad. It is based on the [Stateful Workloads with Portworx](https://learn.hashicorp.com/tutorials/nomad/stateful-workloads-portworx) guide.
 
   Before running this track, we suggest you run the [Nomad Basics](https://play.instruqt.com/hashicorp/tracks/nomad-basics) track.
 
@@ -30,6 +30,7 @@ developers:
 - roger@hashicorp.com
 private: false
 published: true
+show_timer: true
 challenges:
 - slug: verify-nomad-cluster-health
   id: ap4o4x7mtxn9
@@ -40,7 +41,7 @@ challenges:
   assignment: |-
     In this challenge, you will verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
 
-    The cluster is running 1 Nomad/Consul server and 3 Nomad/Consul clients with Nomad 0.11.0 and Consul 1.7.2. These VMs have been created in a GCP project within this Instruqt track. The Nomad client VMs each were created with an extra empty 20GB [Google Persistent Disk](https://cloud.google.com/persistent-disk) for use by Portworx.
+    The cluster is running 1 Nomad/Consul server and 3 Nomad/Consul clients with Nomad 1.0.0 and Consul 1.9.0. These VMs have been created in a GCP project within this Instruqt track. The Nomad client VMs each were created with an extra empty 20GB [Google Persistent Disk](https://cloud.google.com/persistent-disk) for use by Portworx.
 
     You can visit the Google Cloud Console for the GCP project of your instance of the Instruqt track by selecting the "Cloud Links" tab, right-clicking the Project ID for the "nomad" Google cloud project, and then opening the console in a new tab or window. If you already have your own GCP account, it will be easier to use an incognito window. Either way, you will have to paste the Email and then the Password from the Cloud Links tab into the dialog screens that will be displayed. You will then have to click an "Accept" button. Finally, after the Google Cloud Console is displayed, you will have to click a checkbox and agree to the terms of service by clicking the "Agree and Continue" button.
 
@@ -105,7 +106,7 @@ challenges:
     path: /
     port: 80
   difficulty: basic
-  timelimit: 300
+  timelimit: 600
 - slug: install-portworx
   id: jndu9wxvuyj6
   type: challenge
@@ -278,7 +279,7 @@ challenges:
     path: /
     port: 80
   difficulty: basic
-  timelimit: 600
+  timelimit: 900
 - slug: write-data
   id: 8bnlvcgnijnb
   type: challenge
@@ -440,5 +441,4 @@ challenges:
     port: 80
   difficulty: basic
   timelimit: 600
-checksum: "10909137383693726871"
-show_timer: true
+checksum: "6852385657607390552"

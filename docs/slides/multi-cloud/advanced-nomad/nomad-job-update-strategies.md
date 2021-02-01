@@ -3,8 +3,7 @@ class: title, shelf, no-footer, fullbleed
 background-image: url(https://hashicorp.github.io/field-workshops-assets/assets/bkgs/HashiCorp-Title-bkg.jpeg)
 count: false
 
-# Chapter 3
-## Nomad Job Update Strategies
+# Nomad Job Update Strategies
 
 ![:scale 15%](https://hashicorp.github.io/field-workshops-assets/assets/logos/logo_nomad.png)
 
@@ -35,7 +34,7 @@ name: chapter-topics
 
 ---
 name: update-strategy-applicability
-# Updata Strategy Applicability
+# Update Strategy Applicability
 * Nomad's update strategies can be used for **all** applications orchestrated by Nomad, whether containerized or not.
 * They are configured with the `update` stanza in Nomad job specifications at the job level or at the task group level.
 * If done at the job level, the specified update strategy is applied to all of the job's task groups.
@@ -47,7 +46,7 @@ name: update-strategy-applicability
 ---
 name: rolling-updates
 # Rolling Updates
-* [Rolling Updates](https://learn.hashicorp.com/nomad/update-strategies/rolling-upgrades) are the default update strategy within Nomad.
+* [Rolling Updates](https://learn.hashicorp.com/tutorials/nomad/job-rolling-update) are the default update strategy within Nomad.
 * In a rolling update, new allocations of a task group gradually replace existing allocations in batches.
 * The `max_parallel` attribute of the `update` stanza specifies how many allocations should be replaced in parallel.
 * However, Nomad only advances from one batch of parallel allocations to the next batch if all tasks deployed in the previous batch are healthy.
@@ -89,7 +88,7 @@ group "api" {
 name: blue-green-deployments
 class: compact
 # Blue/Green Deployments
-* In a [Blue/Green Deployment](https://learn.hashicorp.com/nomad/update-strategies/blue-green-and-canary-deployments#bluegreen-deployments), two different versions of an application are run side-by-side so that they can be compared.
+* In a [Blue/Green Deployment](https://learn.hashicorp.com/tutorials/nomad/job-blue-green-and-canary-deployments#bluegreen-deployments), two different versions of an application are run side-by-side so that they can be compared.
 * In the Nomad context, a number of new allocations equal to the `count` of the task group are deployed while the same number of allocations that were previously deployed continue to run.
 * Blue/Green deployments in Nomad are configured by setting the `canary` attribute of the `update` stanza equal to the `count` of the task group.
 * The deployment has to be manually [promoted](https://nomadproject.io/docs/commands/deployment/promote/) before the old allocations are terminated.
@@ -127,7 +126,7 @@ group "api" {
 ---
 name: canary-deployments
 # Canary Deployments
-* In a [Canary Deployment](https://learn.hashicorp.com/nomad/update-strategies/blue-green-and-canary-deployments#deploy-with-canaries), a small number of new instances of an application are deployed alongside the existing one.
+* In a [Canary Deployment](https://learn.hashicorp.com/tutorials/nomad/job-blue-green-and-canary-deployments#deploy-with-canaries), a small number of new instances of an application are deployed alongside the existing one.
 * Coal miners used to take canaries into mines since the birds got sick from dangerous gas leaks before the miners did.
 * In the Nomad context, a number of new allocations equal to the `canary` attribute of the `update` stanza are deployed.
 * Note that a Blue/Green deployment in Nomad is a special case of a Canary deployment.
@@ -167,7 +166,7 @@ group "api" {
 ---
 name: lab-job-update-strategies
 class: compact
-# 👩‍💻 Job Update Strategies Lab
+# 👩‍💻 Nomad Job Update Strategies Lab
 * In this lab, you'll deploy Nomad jobs that run a MongoDB data base, a chat web app, and nginx (as a load balancer for the web app).
 * You'll then update the chat app job 3 times, first with a rolling update, then with a blue/green deployment, and finally with a canary deployment.
 * As you do this, the background color of the chat app will change from light to dark and back again.
@@ -179,7 +178,7 @@ class: compact
 
 ---
 name: chapter-Summary
-# 📝 Chapter 3 Summary
+# 📝 Chapter Summary
 
 In this chapter you did the following:
 * Learned about Nomad's job update strategies:

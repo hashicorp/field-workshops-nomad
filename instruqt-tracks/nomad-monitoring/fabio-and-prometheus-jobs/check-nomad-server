@@ -3,15 +3,15 @@
 set -e
 
 # Check that the fabio.nomad job was run
-grep -q "nomad job run fabio.nomad" /root/.bash_history || fail-message "You haven't run the fabio.nomad job yet."
+grep -q "nomad\s\+job\s\+run\s\+fabio.nomad" /root/.bash_history || fail-message "You haven't run the fabio.nomad job yet."
 
 # Check that the prometheus1.nomad job was run
-grep -q "nomad job run prometheus1.nomad" /root/.bash_history || fail-message "You haven't run the prometheus1.nomad job yet."
+grep -q "nomad\s\+job\s\+run\s\+prometheus1.nomad" /root/.bash_history || fail-message "You haven't run the prometheus1.nomad job yet."
 
 # Check that the status of the fabio job was checked
-grep -q "nomad job status fabio" /root/.bash_history || fail-message "You haven't checked the status of the fabio job yet."
+grep -q "nomad\s\+job\s\+status\s\+fabio" /root/.bash_history || fail-message "You haven't checked the status of the fabio job yet."
 
 # Check that the status of the prometheus job was checked
-grep -q "nomad job status prometheus" /root/.bash_history || fail-message "You haven't checked the status of the prometheus job yet."
+grep -q "nomad\s\+job\s\+status\s\+prometheus" /root/.bash_history || fail-message "You haven't checked the status of the prometheus job yet."
 
 exit 0

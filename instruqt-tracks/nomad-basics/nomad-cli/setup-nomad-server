@@ -1,33 +1,12 @@
 #!/bin/bash -l
 
-cat <<-EOF > /root/redis.nomad
-job "redis" {
-  datacenters = ["dc1"]
+# Generate short version of example job
+nomad job init --short
 
-  group "cache" {
-    task "redis" {
-      driver = "docker"
+# Change name to redis.nomad
+mv example.nomad redis.nomad
 
-      config {
-        image = "redis:3.2"
-
-        port_map {
-          db = 6379
-        }
-      }
-
-      resources {
-        cpu    = 500
-        memory = 256
-
-        network {
-          mbits = 10
-          port  "db"  {}
-        }
-      }
-    }
-  }
-}
-EOF
+# Change name of job
+sed -i "s/example/redis/g" redis.nomad
 
 exit 0

@@ -30,12 +30,14 @@ developers:
 - roger@hashicorp.com
 private: false
 published: true
+show_timer: true
 challenges:
 - slug: verify-agents
   id: 0fdcftdkxkon
   type: challenge
   title: Verify that the Agents are Running
-  teaser: Verify that all of the server and client agents are configured and running.
+  teaser: |
+    Verify that all of the server and client agents are configured and running.
   assignment: |-
     Before we begin, let's verify that our Nomad, Consul and Vault servers and both clients are running.
 
@@ -103,7 +105,8 @@ challenges:
   id: pupryaxbz98c
   type: challenge
   title: Create a Vault Policy and Token for the Nomad Server
-  teaser: Create a Vault policy and token for use by the Nomad server.
+  teaser: |
+    Create a Vault policy and token for use by the Nomad server.
   assignment: |-
     A policy named nomad-server-policy.hcl has been created for you in the vault directory of the "Files" tab. Click on the file to view how the policy has been setup.
 
@@ -164,7 +167,8 @@ challenges:
   id: nacbsj1g0w4q
   type: challenge
   title: Create a Vault Token Role
-  teaser: Create a Vault token role that Nomad can give to jobs.
+  teaser: |
+    Create a Vault token role that Nomad can give to jobs.
   assignment: |-
     If you did not read all 3 notes screens while this challenge was starting, please do that now by clicking the "notes" button in the upper right corner. After reading all of them, click the "X" button to hide the notes.
 
@@ -318,7 +322,8 @@ challenges:
   id: oqxicv3yeiqo
   type: challenge
   title: Deploy a Database
-  teaser: Deploy a PostgreSQL database with Nomad.
+  teaser: |
+    Deploy a PostgreSQL database with Nomad.
   assignment: |-
     A Nomad job has been created for you to deploy a PostgreSQL database. Click on the "Files" tab and navigate to the "/root/hashistack/nomad/db.nomad" file to see the details of the job.
 
@@ -370,7 +375,8 @@ challenges:
   id: pixcf2zd2fzd
   type: challenge
   title: Configure the Vault Database Secrets Engine
-  teaser: Allow Vault to generate dynamic credentials for the PostgreSQL database.
+  teaser: |
+    Allow Vault to generate dynamic credentials for the PostgreSQL database.
   assignment: |-
     If you did not read all 5 notes screens while this challenge was starting, please do that now by clicking the "notes" button in the upper right corner. After reading all of them, click the "X" button to hide the notes.
 
@@ -484,7 +490,8 @@ challenges:
   id: o6kmjfztauxg
   type: challenge
   title: Deploy a Web Application
-  teaser: Deploy a web application with the appropriate policy and templating.
+  teaser: |
+    Deploy a web application with the appropriate policy and templating.
   assignment: |-
     If you did not read all 4 notes screens while this challenge was starting, please do that now by clicking the "notes" button in the upper right corner. After reading all of them, click the "X" button to hide the notes.
 
@@ -579,5 +586,4 @@ challenges:
     port: 3000
   difficulty: basic
   timelimit: 600
-checksum: "18426580880948227176"
-show_timer: true
+checksum: "2892906142788089192"

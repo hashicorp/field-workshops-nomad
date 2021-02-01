@@ -32,7 +32,6 @@ job "portworx" {
       healthy_deadline = "5m"
       auto_revert      = true
       canary           = 0
-      stagger          = "30s"
     }
 
     task "px-node" {
@@ -54,13 +53,13 @@ job "portworx" {
 
       # setup environment variables for px-nodes
       env {
-        "AUTO_NODE_RECOVERY_TIMEOUT_IN_SECS" = "1500"
-        "PX_TEMPLATE_VERSION"                = "V4"
+        AUTO_NODE_RECOVERY_TIMEOUT_IN_SECS = "1500"
+        PX_TEMPLATE_VERSION                = "V4"
        }
 
       # container config
       config {
-        image        = "portworx/oci-monitor:2.4.0"
+        image        = "portworx/oci-monitor:2.6.2"
         network_mode = "host"
         ipc_mode = "host"
         privileged = true
@@ -71,7 +70,7 @@ job "portworx" {
             "-c", "px-cluster-nomad",
             "-a",
             "-k", "consul://127.0.0.1:8500",
-            "--endpoint", "0.0.0.0:9015"
+            "--endpoint", "0.0.0.0:9015",
         ]
 
         volumes = [

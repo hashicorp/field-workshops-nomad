@@ -14,8 +14,7 @@ namespace "default" {
 }
 EOF
 
-#Clear Bash History
-#rm -rf /root/.bash_history
+# Clear Bash History
 echo "Use ACLs" > /root/.bash_history
 
 exit 0

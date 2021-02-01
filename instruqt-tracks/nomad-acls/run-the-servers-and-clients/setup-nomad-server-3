@@ -1,8 +1,6 @@
 #!/bin/bash -l
 
-# Create config directory
-mkdir -p /etc/nomad.d
-chmod a+w /etc/nomad.d
+mkdir /root/nomad
 
 # Write Server main config file
 cat <<-EOF > /etc/nomad.d/server3.hcl
@@ -76,34 +74,12 @@ nomad -autocomplete-install
 complete -C /usr/local/bin/nomad nomad
 
 # Setup Nomad Track Environment Files
-mkdir nomad
 cd nomad
 
 #Create demo Job
-cat <<-EOF > /root/nomad/redis.nomad
-job "redis" {
-  datacenters = ["dc1"]
-  group "cache" {
-    task "redis" {
-      driver = "docker"
-      config {
-        image = "redis:3.2"
-        port_map {
-          db = 6379
-        }
-      }
-      resources {
-        cpu    = 500
-        memory = 256
-        network {
-          mbits = 10
-          port  "db"  {}
-        }
-      }
-    }
-  }
-}
-EOF
+nomad init --short
+mv example.nomad redis.nomad
+sed -i "s/example/redis/g" redis.nomad
 
 sleep 15
 

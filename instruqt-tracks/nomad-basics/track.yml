@@ -2,7 +2,8 @@ slug: nomad-basics
 id: zzdva5ydzqbv
 type: track
 title: Nomad Basics
-teaser: Learn how to run the Nomad agent, run basic commands, and run Nomad jobs.
+teaser: |
+  Learn how to run the Nomad agent, run basic commands, and run Nomad jobs.
 description: |-
   Nomad is a flexible workload orchestrator that enables an organization to easily deploy and manage any containerized or legacy application using a single, unified workflow.
 
@@ -17,12 +18,14 @@ developers:
 - rjackson@hashicorp.com
 private: false
 published: true
+show_timer: true
 challenges:
 - slug: nomad-cli
   id: atio81hiysfy
   type: challenge
   title: The Nomad CLI
-  teaser: Explore the Nomad Command Line Interface (CLI).
+  teaser: |
+    Explore the Nomad Command Line Interface (CLI).
   assignment: |-
     Let's start with some basic Nomad commands, running them in the "Nomad CLI" tab on the left.
     ```
@@ -59,12 +62,13 @@ challenges:
     type: terminal
     hostname: nomad-server
   difficulty: basic
-  timelimit: 300
+  timelimit: 900
 - slug: run-nomad-agent
   id: 2gvixlkq52un
   type: challenge
   title: Run a Dev Mode Nomad Agent
-  teaser: Run a Nomad server in development mode.
+  teaser: |
+    Run a Nomad server in development mode.
   assignment: |-
     Nomad relies on a long running agent on every machine in the cluster. The agent can run either in server or client mode.
 
@@ -97,7 +101,7 @@ challenges:
     contents: |-
       In this challenge, you will run your first Nomad agent in development mode and explore a few more Nomad CLI commands.
 
-      See https://learn.hashicorp.com/nomad/getting-started/running#starting-the-agent for more on Nomad's development mode.
+      See https://learn.hashicorp.com/tutorials/nomad/get-started-run#starting-the-agent for more on Nomad's development mode.
   tabs:
   - title: Nomad Dev Server
     type: terminal
@@ -115,7 +119,8 @@ challenges:
   id: xjjunqd5gsjz
   type: challenge
   title: Run Your First Nomad Job
-  teaser: Run your first Nomad job with the Nomad CLI and UI.
+  teaser: |
+    Run your first Nomad job with the Nomad CLI and UI.
   assignment: |-
     In this challenge, you'll run your first Nomad job using a Nomad job specification file that has been provided.
 
@@ -179,7 +184,7 @@ challenges:
     contents: |-
       In this challenge, you'll run your first Nomad job using a Nomad job specification file that has been provided.
 
-      See https://learn.hashicorp.com/nomad/getting-started/jobs for more on running Nomad jobs.
+      See https://learn.hashicorp.com/tutorials/nomad/get-started-jobs for more on running Nomad jobs.
   tabs:
   - title: Nomad CLI
     type: terminal
@@ -194,7 +199,8 @@ challenges:
   id: 4vobrui0upoe
   type: challenge
   title: Use Nomad's HTTP API
-  teaser: Run and stop a job with Nomad's HTTP API.
+  teaser: |
+    Run and stop a job with Nomad's HTTP API.
   assignment: |-
     In this challenge, you'll run the same Nomad job using Nomad's HTTP API.
 
@@ -248,5 +254,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 900
-checksum: "1758870900090342950"
-show_timer: true
+checksum: "8075692714081613461"

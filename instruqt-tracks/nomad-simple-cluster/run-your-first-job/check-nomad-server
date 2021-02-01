@@ -2,16 +2,16 @@
 
 set -e
 
-grep -q "cd nomad" /root/.bash_history || fail-message "You have not navigated to the nomad directory yet."
+grep -q "cd\s\+nomad" /root/.bash_history || fail-message "You have not navigated to the nomad directory yet."
 
-grep -q "nomad job run example.nomad" /root/.bash_history || fail-message "You have not run the Nomad job yet."
+grep -q "nomad\s\+job\s\+run\s\+example.nomad" /root/.bash_history || fail-message "You have not run the Nomad job yet."
 
-grep -q "nomad job status example" /root/.bash_history || fail-message "You have not checked the status of the Nomad job yet."
+grep -q "nomad\s\+job\s\+status\s\+example" /root/.bash_history || fail-message "You have not checked the status of the Nomad job yet."
 
-grep -q "nomad eval status .*" /root/.bash_history || fail-message "You have not checked the status of the Nomad job's evaluation yet."
+grep -q "nomad\s\+eval\s\+status\s\+.*" /root/.bash_history || fail-message "You have not checked the status of the Nomad job's evaluation yet."
 
-grep -q "nomad alloc status .*" /root/.bash_history || fail-message "You have not checked the status of the Nomad job's allocation yet."
+grep -q "nomad\s\+alloc\s\+status\s\+.*" /root/.bash_history || fail-message "You have not checked the status of the Nomad job's allocation yet."
 
-grep -q "nomad alloc logs .* redis" /root/.bash_history || fail-message "You have not inspected the logs of the redis task of the Nomad job yet."
+grep -q "nomad\s\+alloc\s\+logs\s\+.*\s\+redis" /root/.bash_history || fail-message "You have not inspected the logs of the redis task of the Nomad job yet."
 
 exit 0

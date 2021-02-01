@@ -173,6 +173,16 @@ job "fabio" {
   type = "system"
 
   group "fabio" {
+
+    network {
+      port "lb" {
+        to = 9999
+      }
+      port "ui" {
+        to = 9998
+      }
+    }
+
     task "fabio" {
       driver = "docker"
       config {
@@ -183,15 +193,6 @@ job "fabio" {
       resources {
         cpu    = 100
         memory = 64
-        network {
-          mbits = 20
-          port "lb" {
-            static = 9999
-          }
-          port "ui" {
-            static = 9998
-          }
-        }
       }
     }
   }
@@ -206,6 +207,13 @@ job "prometheus" {
 
   group "monitoring" {
     count = 1
+
+    network {
+      port "prometheus_ui" {
+        to = 9090
+      }
+    }
+
     restart {
       attempts = 2
       interval = "30m"
@@ -251,16 +259,9 @@ EOH
         volumes = [
           "local/prometheus.yml:/etc/prometheus/prometheus.yml"
         ]
-        port_map {
-          prometheus_ui = 9090
-        }
+        ports = ["prometheus_ui"]
       }
-      resources {
-        network {
-          mbits = 10
-          port "prometheus_ui" {}
-        }
-      }
+
       service {
         name = "prometheus"
         tags = ["urlprefix-/"]
@@ -286,6 +287,13 @@ job "alertmanager" {
 
   group "alerting" {
     count = 1
+
+    network {
+      port "alertmanager_ui" {
+        to = 9093
+      }
+    }
+
     restart {
       attempts = 2
       interval = "30m"
@@ -300,16 +308,9 @@ job "alertmanager" {
       driver = "docker"
       config {
         image = "prom/alertmanager:latest"
-        port_map {
-          alertmanager_ui = 9093
-        }
+        ports = ["alertmanager_ui"]
       }
-      resources {
-        network {
-          mbits = 10
-          port "alertmanager_ui" {}
-        }
-      }
+
       service {
         name = "alertmanager"
         tags = ["urlprefix-/alertmanager strip=/alertmanager"]
@@ -335,6 +336,13 @@ job "prometheus" {
 
   group "monitoring" {
     count = 1
+
+    network {
+      port "prometheus_ui" {
+        to = 9090
+      }
+    }
+
     restart {
       attempts = 2
       interval = "30m"
@@ -422,16 +430,9 @@ EOH
           "local/webserver_alert.yml:/etc/prometheus/webserver_alert.yml",
           "local/prometheus.yml:/etc/prometheus/prometheus.yml"
         ]
-        port_map {
-          prometheus_ui = 9090
-        }
+        ports = ["prometheus_ui"]
       }
-      resources {
-        network {
-          mbits = 10
-          port "prometheus_ui" {}
-        }
-      }
+
       service {
         name = "prometheus"
         tags = ["urlprefix-/"]
@@ -455,19 +456,20 @@ job "webserver" {
   datacenters = ["dc1"]
 
   group "webserver" {
+    network {
+      port "http" {}
+    }
+
     task "server" {
       driver = "docker"
       config {
         image = "hashicorp/demo-prometheus-instrumentation:latest"
+        ports = ["http"]
       }
 
       resources {
         cpu = 500
         memory = 256
-        network {
-          mbits = 10
-          port  "http"{}
-        }
       }
 
       service {
