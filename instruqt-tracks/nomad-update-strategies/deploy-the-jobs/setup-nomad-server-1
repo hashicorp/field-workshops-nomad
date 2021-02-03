@@ -63,15 +63,19 @@ job "nginx" {
 
   group "nginx" {
 
+    network {
+      port "http" {
+        static = 8080
+        to = 80
+      }
+    }
+
     task "nginx" {
       driver = "docker"
 
       config {
         image = "nginx"
-
-        port_map {
-          http = 80
-        }
+        ports = ["http"]
 
         volumes = [
           "local:/etc/nginx/conf.d",
@@ -130,16 +134,6 @@ EOT
         destination   = "local/load-balancer.conf"
         change_mode   = "signal"
         change_signal = "SIGHUP"
-      }
-
-      resources {
-        network {
-          mbits = 10
-
-          port "http" {
-            static = 8080
-          }
-        }
       }
 
       service {
