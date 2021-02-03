@@ -88,7 +88,7 @@ challenges:
       https://www.nomadproject.io/downloads.html
   - type: text
     contents: |-
-      We've put all the server and client configuration files on the server1 VM so that you can conveniently see them in a single Instruqt tab.
+      We've put all the server and client configuration files on the server VM so that you can conveniently see them in a single Instruqt tab.
 
       However, if you decide to edit either of the client configuration files for any reason, be sure to do so on the client tab that matches the file you change.
   tabs:
@@ -296,7 +296,7 @@ challenges:
     nomad status example
     ```
     <br>
-    Please do the following:
+    Within the output, confirm the following:
 
     1. Check that the Status attribute of the job is marked as "dead (stopped)".
     2. Under the Allocations section, verify that all three allocations have the "complete" status.

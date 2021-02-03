@@ -31,7 +31,7 @@ challenges:
     ```
     nomad version
     ```
-    You should see "Nomad v0.12.4".
+    You should see "Nomad v1.0.0".
 
     You can also see the list of all Nomad CLI commands:
     ```
@@ -173,7 +173,7 @@ challenges:
 
     Within the Nomad UI, validate that the job has stopped.  This is indicated by the fact that the number of running jobs is 0.
 
-    Return to the Nomad CLI tab, and confirm that the status of "dead (stopped)"" is also reflected in the CLI:
+    Return to the Nomad CLI tab, and confirm that the status of "dead (stopped)" is also reflected in the CLI:
     ```
     nomad status
     ```

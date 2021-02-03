@@ -144,7 +144,7 @@ challenges:
     constraints = ["tag==service"]
     `<br>
 
-    If you look back at the "webapp.nomad" job specification, on line 33 you will see that the same service tag was specified in the tags section of the registration of the web app with Consul.
+    If you look back at the "webapp.nomad" job specification, on line 34 you will see that the same service tag was specified in the tags section of the registration of the web app with Consul.
     <br>
     `
     tags = [
@@ -256,7 +256,7 @@ challenges:
 
     Now, you can visit the Traefik dashboard on the "Traefik UI" tab and see the URLs for the 6 instances of the web app that it has registered. This tab was pre-configured to point to the nomad-client-1 tab since we knew in advance the constraint you would use. It accesses that node on port 8081 which is Traefik's admin port.
 
-    Right-click any of those URLs and select "Copy Link Address". Then run a command like this on the "Server" tab:<br>
+    Right-click any of those URLs in the "backend-webapp" table and select "Copy Link Address". Then run a command like this on the "Server" tab:<br>
     `
     curl <your_url>
     `<br>
@@ -272,7 +272,7 @@ challenges:
     ```
     This will return a similar message. In this case, you are actually hitting Traefik on Nomad client 1 and it is load balancing your request to one of the 6 webapp instances. If you repeat the command a few times, you will see that the IP and port returned are different each time.
 
-    You can also visit the web app on the "Web App UI" tab. This tab also points to the nomad-client-1 node but listens on port 8080 which is what Traefik is using to load balance requests to the web app. You will see the same message that the `curl` command gave. If you click the Instruqt refresh button to the right of the "Web App UI" tab, the IP and port displayed will also change.
+    You can also visit the web app on the "Web App UI" tab. This tab also points to the nomad-client-1 node but listens on port 8080 which is what Traefik is using to load balance requests to the web app. You will see the same message that the `curl` command gave. If you click the Instruqt refresh button (clockwise arrow) to the right of the "Web App UI" tab, the IP and port displayed will also change.
 
     In the next challenge, you will use Nomad's spread stanza to distribute the allocations of your "webapp.nomad" job evenly across your 3 Nomad clients.
   notes:
