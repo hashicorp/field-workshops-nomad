@@ -171,20 +171,22 @@ challenges:
     `<br>
     Later, when we do a blue-green deployment, we will see that the new "green" deployments will also be spread evenly across the 3 Nomad clients.
 
-    The "chat-app" task runs on a dynamic port selected by Nomad; that port is mapped to port 5000 inside the task group's "network" stanza:<br>
-    `
+    The "chat-app" task runs on a dynamic port selected by Nomad; that port is mapped to port 5000 inside the task group's "network" stanza:
+
+    ```
     network {
       mode = "bridge"
       port "http" {
         to = 5000
       }
     }
-    `<br>
+    ```
 
     The NGINX load balancer that you will deploy after the "chat-app" job will automatically add a route for each instance of the chat app because of the "template" stanza within the "nginx.nomad" job specification file.
 
-    Finally, the "chat-app" task group uses Consul Connect [sidecar proxies](https://www.consul.io/docs/connect/proxies.html) to talk to the MongoDB database using mutual Transport Layer Security (mTLS) certificates. This is implemented by this stanza:<br>
-    `
+    Finally, the "chat-app" task group uses Consul Connect [sidecar proxies](https://www.consul.io/docs/connect/proxies.html) to talk to the MongoDB database using mutual Transport Layer Security (mTLS) certificates. This is implemented by this stanza:
+
+    ```
     connect {
       sidecar_service {
         tags = ["chat-app-proxy"]
@@ -196,7 +198,8 @@ challenges:
         }
       }
     }
-    `<br>
+    ````
+
     The exact same stanza will be used in versions of the job that run the containerized versions of the application with the [Docker](https://www.nomadproject.io/docs/drivers/docker/) task driver. Nomad and Consul Connect work equally well with non-containerized and containerized applications.
 
     Run the "chat-app-light-binary.nomad" job on the "Server" tab with this command:
@@ -710,4 +713,4 @@ challenges:
     port: 8080
   difficulty: basic
   timelimit: 600
-checksum: "14061721018299607100"
+checksum: "482772090237461827"
