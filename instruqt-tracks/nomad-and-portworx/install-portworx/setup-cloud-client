@@ -11,6 +11,12 @@ job "portworx" {
   group "portworx" {
     count = 2
 
+    network {
+      port "portworx" {
+        static = 9015
+      }
+    }
+
     constraint {
       operator  = "distinct_hosts"
       value     = "true"
@@ -60,7 +66,7 @@ job "portworx" {
       # container config
       config {
         image        = "portworx/oci-monitor:2.6.2"
-        network_mode = "host"
+        ports = ["portworx"]
         ipc_mode = "host"
         privileged = true
 
@@ -91,13 +97,6 @@ job "portworx" {
       resources {
         cpu    = 1024
         memory = 2048
-
-        network {
-          mbits = 100
-          port "portworx" {
-            static = "9015"
-          }
-        }
       }
     }
   }
