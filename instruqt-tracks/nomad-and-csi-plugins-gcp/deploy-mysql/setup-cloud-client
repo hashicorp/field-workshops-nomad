@@ -10,6 +10,12 @@ job "mysql-server" {
   group "mysql-server" {
     count = 1
 
+    network {
+      port "db" {
+        static = 3306
+      }
+    }
+
     volume "mysql" {
       type      = "csi"
       read_only = false
@@ -39,21 +45,12 @@ job "mysql-server" {
       config {
         image = "rberlind/mysql-demo:latest"
         args = ["--datadir", "/srv/mysql"]
-
-        port_map {
-          db = 3306
-        }
+        ports = ["db"]
       }
 
       resources {
         cpu    = 500
         memory = 1024
-
-        network {
-          port "db" {
-            static = 3306
-          }
-        }
       }
 
       service {

@@ -257,7 +257,7 @@ challenges:
     type = "csi"
     id = "mysql"
     name = "mysql"
-    external_id = "projects/p-win27zef7iuixs40ujimrnpitdbj/zones/europe-west"
+    external_id = "projects/p-win27zef7iuixs40ujimrnpitdbj/zones/europe-west/disks/mysql"
     access_mode = "single-node-writer"
     attachment_mode = "file-system"
     plugin_id = "gcepd"
@@ -416,14 +416,14 @@ challenges:
 
     You are now ready to destroy the database. Please run the following command on the "Nomad Server" tab to stop and purge the job from the Nomad cluster:
     ```
-    nomad stop -purge mysql-server
+    nomad job stop -purge mysql-server
     ```
 
     Verify the `mysql` job is no longer running in the cluster:
     ```
     nomad job status mysql
     ```
-    You should not see the `mysql` job.
+    You should not see the `mysql-server` job.
 
     Using the same "mysql.nomad" job file that you used in the last challenge, redeploy the database:
     ```
@@ -487,4 +487,4 @@ challenges:
     port: 80
   difficulty: basic
   timelimit: 1200
-checksum: "7175045922606233527"
+checksum: "2373513194976113665"
