@@ -285,10 +285,13 @@ challenges:
     ```
     This should return something like this:
     ```
-    1c73f405-8867-7b04-ada1-102cb0d8cfbb
-    4a63576f-a8aa-6d74-f5a4-5145d091d194
+    ==> Monitoring evaluation "ffd6ba9d"
+    Evaluation triggered by job "example"
+    ==> Monitoring evaluation "ffd6ba9d"
+    Evaluation within deployment: "03b4bb7f"
+    Evaluation status changed: "pending" -> "complete"
+    ==> Evaluation "ffd6ba9d" finished with status "complete"
     ```
-    These IDs represent the evaluations run in the two regions to stop the job in them. If you also wanted to purge the job, you could add the `-purge` option after the `-global` option.
 
     Congratulations on completing the Nomad Multi-Region Federation track!
   notes:
@@ -319,4 +322,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 1200
-checksum: "6189967619573833377"
+checksum: "18136035432570857446"
