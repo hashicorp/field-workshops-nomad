@@ -39,25 +39,23 @@ job "example" {
 
     count = 0
 
+    network {
+      port "db" {
+        to = 6379
+      }
+    }
+
     task "redis" {
       driver = "docker"
 
       config {
         image = "redis:6.0"
-
-        port_map {
-          db = 6379
-        }
+        ports = ["db"]
       }
 
       resources {
         cpu    = 256
         memory = 128
-
-        network {
-          mbits = 10
-          port "db" {}
-        }
       }
     }
   }
