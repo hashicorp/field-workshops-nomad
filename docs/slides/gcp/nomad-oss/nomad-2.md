@@ -30,7 +30,7 @@ This slide has the Nomad logo.
 layout: true
 
 .footer[
-- Copyright © 2019 HashiCorp
+- Copyright © 2021 HashiCorp
 - ![:scale 100%](https://hashicorp.github.io/field-workshops-assets/assets/logos/HashiCorp_Icon_Black.svg)
 ]
 
