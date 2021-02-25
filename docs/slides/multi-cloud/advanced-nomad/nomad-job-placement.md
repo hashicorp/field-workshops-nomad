@@ -14,7 +14,7 @@ This is a title slide for the Job Placement and Variable Interpolation chapter.
 layout: true
 
 .footer[
-- Copyright © 2020 HashiCorp
+- Copyright © 2021 HashiCorp
 - ![:scale 100%](https://hashicorp.github.io/field-workshops-assets/assets/logos/HashiCorp_Icon_Black.svg)
 ]
 

@@ -14,7 +14,7 @@ This is a title slide for the Nomad Federatio and Multi-Region Job Deployments c
 layout: true
 
 .footer[
-- Copyright © 2020 HashiCorp
+- Copyright © 2021 HashiCorp
 - ![:scale 100%](https://hashicorp.github.io/field-workshops-assets/assets/logos/HashiCorp_Icon_Black.svg)
 ]
 

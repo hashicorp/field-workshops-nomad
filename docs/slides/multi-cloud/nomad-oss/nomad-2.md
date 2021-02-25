@@ -15,7 +15,7 @@ Nomad is a highly advanced service scheduler and manager.  Within this slide dec
 layout: true
 
 .footer[
-- Copyright © 2020 HashiCorp
+- Copyright © 2021 HashiCorp
 - ![:scale 100%](https://hashicorp.github.io/field-workshops-assets/assets/logos/HashiCorp_Icon_Black.svg)
 ]
 
@@ -427,7 +427,7 @@ Nomad integrates well with other HashiCorp products.  We're just going to touch 
 layout: true
 
 .footer[
-- Copyright © 2020 HashiCorp
+- Copyright © 2021 HashiCorp
 - ![:scale 100%](https://hashicorp.github.io/field-workshops-assets/assets/logos/HashiCorp_Icon_Black.svg)
 ]
 
