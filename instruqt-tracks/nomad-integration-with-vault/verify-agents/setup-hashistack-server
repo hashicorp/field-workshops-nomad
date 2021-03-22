@@ -264,12 +264,53 @@ EOF
 systemctl enable nomad
 systemctl start nomad
 
+# Check host connections
+declare -i i=0
+declare -i Port=22
+declare -a HostArray=("hashistack-client-1" "hashistack-client-2")
+for Host in ${HostArray[@]}; do
+  while [ $i -lt 5 ]; do
+    $(nc -z -w3 $Host $Port) && break || echo "Port $Port is unreachable on $Host"
+    ((i++)) || true
+    if [ $i -eq 5 ]; then
+      exit 1
+    fi
+    sleep 6
+  done
+done
+
 ssh -o StrictHostKeyChecking=no hashistack-client-1 << ENDSSH
 systemctl restart systemd-resolved
 ENDSSH
 
+ssh -o StrictHostKeyChecking=no hashistack-client-1 << ENDSSH
+for i in 1 2 3 4 5 6
+do
+  vault_status=$(vault status | grep Sealed | grep false | wc -l)
+  if [ \$vault_status -eq 1 ]
+  then
+    break
+  fi
+  sleep 10
+  systemctl restart systemd-resolved
+done
+ENDSSH
+
 ssh -o StrictHostKeyChecking=no hashistack-client-2 << ENDSSH
 systemctl restart systemd-resolved
+ENDSSH
+
+ssh -o StrictHostKeyChecking=no hashistack-client-2 << ENDSSH
+for i in 1 2 3 4 5 6
+do
+  vault_status=$(vault status | grep Sealed | grep false | wc -l)
+  if [ \$vault_status -eq 1 ]
+  then
+    break
+  fi
+  sleep 10
+  systemctl restart systemd-resolved
+done
 ENDSSH
 
 exit 0

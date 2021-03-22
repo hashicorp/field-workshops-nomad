@@ -8,22 +8,20 @@ job "database" {
   datacenters = ["instruqt"]
 
   group "db" {
+
+    network {
+      port "db" {
+        static = 5432
+        to     = 5432
+      }
+    }
+
     task "server" {
       driver = "docker"
 
       config {
         image = "pgryzan/demo-db:latest"
-        port_map {
-          db = 5432
-        }
-      }
-
-      resources {
-        network {
-          port "db" {
-            static = 5432
-          }
-        }
+        ports = ["db"]
       }
 
       service {

@@ -2,33 +2,32 @@
 
 set -e
 
-# Write the Nomad Application Job 
+# Write the Nomad Application Job
 cat <<-EOF > /root/hashistack/nomad/web.nomad
 job "web" {
   datacenters = ["instruqt"]
-
   group "demo" {
+
+    network {
+      port "http" {
+        static = 3000
+        to     = 3000
+      }
+    }
 
     task "server" {
       driver = "docker"
-
-      affinity {
-        attribute = "<<node.unique.name>>"
+      constraint {
+        attribute = "\${node.unique.name}"
         value     = "hashistack-client-1"
-        weight    = 100
       }
-
       vault {
         policies = ["access-tables"]
       }
-
       config {
         image = "pgryzan/demo-web:latest"
-        port_map {
-          http = 3000
-        }
+        ports = ["http"]
       }
-
       template {
         data = <<EOT
 {{ with service "database" }}
@@ -41,17 +40,9 @@ job "web" {
   DB_USERNAME="{{ .Data.username }}"
   DB_PASSWORD="{{ .Data.password }}"
 {{ end }}
-        EOT
+EOT
         destination = "secrets/file.env"
         env         = true
-      }
-
-      resources {
-        network {
-          port "http" {
-            static = 3000
-          }
-        }
       }
 
       service {
@@ -70,7 +61,5 @@ job "web" {
   }
 }
 EOF
-
-sed -i 's|<<node.unique.name>>|${node.unique.name}|g' /root/hashistack/nomad/web.nomad
 
 exit 0
