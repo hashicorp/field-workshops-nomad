@@ -32,7 +32,7 @@ owner: hashicorp
 developers:
 - roger@hashicorp.com
 - tharris@hashicorp.com
-private: false
+private: true
 published: true
 show_timer: true
 challenges:
