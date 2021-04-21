@@ -51,12 +51,15 @@ challenges:
       * That task group includes a single task, `fabio` that uses the Docker task driver to run the image `fabiolb/fabio`.
 
     Please run the Fabio job on the "Server" tab.
+
     ```
     cd nomad
     nomad job run fabio.nomad
     ```
-    This should return something like this:<br>
-    `
+
+    This should return something like this:
+
+    ```
     ==> Monitoring evaluation "69d46d05"
     Evaluation triggered by job "fabio"
     Allocation "119ebcfe" created: node "ce92fbb1", group "fabio"
@@ -64,24 +67,26 @@ challenges:
     Allocation "4febc9ef" created: node "da58f06c", group "fabio"
     Evaluation status changed: "pending" -> "complete"
     ==> Evaluation "69d46d05" finished with status "complete"
-    `
+    ```
 
     Verify that the `fabio` job is running on 3 nodes:
     ```
     nomad job status fabio | grep -A 5 Allocations
     ```
-    This should return something like this:<br>
-    `
+
+    This should return something like this:
+    ```
     Allocations
     ID        Node ID   Task Group  Version  Desired  Status   Created     Modified
     119ebcfe  ce92fbb1  fabio       0        run      running  19m23s ago  19m20s ago
     4fae262f  3800d575  fabio       0        run      running  19m23s ago  19m20s ago
     4febc9ef  da58f06c  fabio       0        run      running  19m23s ago  19m20s ago
-    `<br>
+    ```
+
     If you would like to see the full job status, you can leave off the `grep` command.
 
     ## Visit the Fabio UI
-    * Click on the "Fabio" tab. This connects to the first Nomad client on port `9998` and shows the fabio UI.
+    * Click on the "**Fabio**" tab. This connects to the first Nomad client on port `9998` and shows the fabio UI.
     * The Fabio UI is available on all the Nomad clients, but we only exposed a tab for the first one.
     * The Fabio routing table will be empty. We have not deployed anything that fabio can route to yet.
 
@@ -99,26 +104,29 @@ challenges:
     ```
     nomad job run prometheus1.nomad
     ```
-    This should return something like this:<br>
-    `
+
+    This should return something like this:
+    ```
     ==> Monitoring evaluation "bdef8e9d"
     Evaluation triggered by job "prometheus"
     Evaluation within deployment: "4d2a259d"
     Allocation "02ef03c9" created: node "da58f06c", group "monitoring"
     Evaluation status changed: "pending" -> "complete"
     ==> Evaluation "bdef8e9d" finished with status "complete"
-    `
+    ```
 
     Verify that the `prometheus` job is running on 1 node:
     ```
     nomad job status prometheus | grep -A 5 Allocations
     ```
-    This should return something like this:<br>
-    `
+
+    This should return something like this:
+    ```
     Allocations
     ID        Node ID   Task Group  Version  Desired  Status   Created     Modified
     02ef03c9  da58f06c  monitoring  0        run      running  12m54s ago  12m34s ago
-    `<br>
+    ```
+
     If you would like to see the full job status, you can leave off the `grep` command.
 
     ## Visit the Prometheus UI
@@ -213,26 +221,30 @@ challenges:
     cd nomad
     nomad job run alertmanager.nomad
     ```
-    You should see something like this:<br>
-    `
+
+    You should see something like this:
+
+    ```
     ==> Monitoring evaluation "a988ec2e"
     Evaluation triggered by job "alertmanager"
     Evaluation within deployment: "feb7f088"
     Allocation "bd0b5024" created: node "72635e92", group "alerting"
     Evaluation status changed: "pending" -> "complete"
     ==> Evaluation "a988ec2e" finished with status "complete"
-    `
+    ```
 
     Check the status of the `alertmanager` job on the "Server" tab:
     ```
     nomad job status alertmanager | grep -A 5 Allocations
     ```
-    You should see something like this:<br>
-    `
+
+    You should see something like this:
+    ```
     Allocations
     ID        Node ID   Task Group  Version  Desired  Status   Created   Modified
     bd0b5024  72635e92  alerting    0        run      running  3m8s ago  2m51s ago
-    `<br>
+    ```
+
     If you would like to see the full job status, you can leave off the `grep` command.
 
     ## Modify and Re-run the Prometheus Job
@@ -393,4 +405,4 @@ challenges:
     port: 9999
   difficulty: basic
   timelimit: 1200
-checksum: "12737186309720817064"
+checksum: "12266872651893029601"
