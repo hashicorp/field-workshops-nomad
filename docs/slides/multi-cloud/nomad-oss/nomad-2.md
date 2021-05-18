@@ -273,7 +273,7 @@ All Servers run Scheduling Workers
 ---
 name:  Scheduler Function Part 2
 # Scheduler Processing
-Now that the Scheduler has the job, let's look at what the it does...
+Now that the Scheduler has the job, let's look at what it does...
 .smaller[
 1.  Identify available resources/nodes to run the job
 2.  Rank nodes based on bin packing and existing tasks/jobs
