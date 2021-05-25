@@ -68,8 +68,8 @@ name: nomad-consul-config
 # Configuring Nomad to Use Consul
 * Installing the Nomad agent does not install the Consul agent.
 * But, if the Consul agent is present and using the standard port, 8500, the Nomad agent will automatically find and connect to it.
-* Additionally, the Nomad agent wil advertise its services to Consul.
-* However, if you have enabled Nomad's ACLs and TLS, you will have to do some additional of each agent's `consul` stanza.
+* Additionally, the Nomad agent will advertise its services to Consul.
+* However, if you have enabled Nomad's ACLs and TLS, you will have to do some additional config of each agent's `consul` stanza.
   * See https://www.nomadproject.io/docs/configuration/consul.html for details.
 
 ???

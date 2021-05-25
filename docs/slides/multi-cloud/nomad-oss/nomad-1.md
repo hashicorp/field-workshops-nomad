@@ -138,6 +138,7 @@ name: chapter-1-nomad-federation
 name: chapter-1-nomad-oss-features
 class: smaller
 # Nomad Open Source Features
+* Namespaces
 * Service/Batch Schedulers
 * Flexible Task Drivers
 * Device Plugins
@@ -186,7 +187,6 @@ name: chapter-1-nomad-enterprise-modules
 class: compact
 # Nomad Enterprise Modules
 * Nomad Enterprise Governance & Policy Module
-  * Namespaces
   * Resource Quotas
   * Sentinel Policies
   * Cross-Namespace Queries
