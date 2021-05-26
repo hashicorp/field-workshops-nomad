@@ -8,7 +8,7 @@ cat <<-EOF > /root/nomad/server.hcl
 data_dir = "/tmp/nomad/server1"
 
 # Give the agent a unique name. Defaults to hostname
-name = "server"
+name = "nomad-server"
 
 # Enable the server
 server {
