@@ -349,7 +349,7 @@ challenges:
     nomad job run webserver.nomad
     ```
 
-    Then, go to the "Prometheus" tab and click the "Alerts" menu (even if it is already selected). Note that the "Webserver down" alert is no longer active. (You might have to click the "Aerts" menu a few times.)
+    Then, go to the "Prometheus" tab and click the "Alerts" menu (even if it is already selected). Note that the "Webserver down" alert is no longer active. (You might have to click the "Alerts" menu a few times.)
 
     Finally, go to the "Alertmanager" tab, click the "Alerts" tab, and verify that Alertmanager has removed the "Webserver down" alert.
 
