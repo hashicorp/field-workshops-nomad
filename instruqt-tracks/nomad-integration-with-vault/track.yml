@@ -12,9 +12,9 @@ description: |-
   The setup scripts for this track have deployed a VM running Nomad, Consul, and Vault servers and two VMs running Nomad and Consul clients. We are not going to discuss the installation and configuration of Nomad, Consul or Vault apart from the integration of Nomad and Vault.
 
   If you are not familiar with all 3 products, We recommend that you explore the basic Instruqt tracks for each of these products:
-    * [Nomad Basics](https://play.instruqt.com/hashicorp/tracks/nomad-basics)
-    * [Consul Basics](https://play.instruqt.com/hashicorp/tracks/consul-basics)
-    * [Vault Basics](https://play.instruqt.com/hashicorp/tracks/vault-basics)
+    * **Nomad Basics**
+    * **Consul Basics**
+    * **Vault Basics**
 icon: https://storage.googleapis.com/instruqt-hashicorp-tracks/logo/nomad.png
 tags:
 - nomad
@@ -28,7 +28,7 @@ owner: hashicorp
 developers:
 - pgryzan@hashicorp.com
 - roger@hashicorp.com
-private: false
+private: true
 published: true
 show_timer: true
 challenges:

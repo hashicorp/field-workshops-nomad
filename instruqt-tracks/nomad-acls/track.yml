@@ -18,7 +18,7 @@ owner: hashicorp
 developers:
 - lhaig@hashicorp.com
 - roger@hashicorp.com
-private: false
+private: true
 published: true
 show_timer: true
 challenges:

@@ -141,7 +141,7 @@ job "redis" {
 name: lab-nomad-simple-cluster-track
 # 👩‍💻 Lab 5: Nomad Simple Cluster
 * 이제 첫 번째 Nomad 클러스터를 구성하고 실행할 수 있습니다.
-* [Nomad Simple Cluster](https://play.instruqt.com/hashicorp/invite/vcqexnx8ency) Instruqt 트랙에서 서버 1 개와 클라이언트 2 개로 구성된 간단한 Nomad 클러스터를 실행합니다.
+* **Nomad Simple Cluster** Instruqt 트랙에서 서버 1 개와 클라이언트 2 개로 구성된 간단한 Nomad 클러스터를 실행합니다.
 * 첫 번째 도전에서는 클러스터를 구성하고 실행합니다.
 * 추가 챌린지에서는 클러스터에서 간단한 작업을 생성, 실행, 중지, 수정 한 다음 다시 실행합니다.
 * 트랙의 "Run the Nomad Server and 2 Clients"챌린지를 클릭하여 "Nomad Simple Cluster"트랙을 시작합니다.

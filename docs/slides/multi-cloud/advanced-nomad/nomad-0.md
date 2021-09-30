@@ -55,15 +55,17 @@ class: compact
 * This workshop uses [Instruqt](https://instruqt.com) for hands-on labs.
 * Instruqt labs are run in "tracks" that are divided into "challenges".
 * Here are some of the tracks you will use:
-  * [Nomad Advanced Job Placement](https://play.instruqt.com/hashicorp/invite/rbexlxuhgqgd)
-  * [Nomad Job Update Strategies](https://play.instruqt.com/hashicorp/invite/1a910sszvvpe)
-  * [Nomad Multi-Region Federation](https://play.instruqt.com/hashicorp/invite/dgpya4wz0c2z)
-  * [Nomad Integration with Vault](https://play.instruqt.com/hashicorp/invite/lf9lvmtfpson)
-  * [Nomad Enterprise Governance](https://play.instruqt.com/hashicorp/invite/yvqyiphxoc0e)
+  * **Nomad Advanced Job Placement**
+  * **Nomad Job Update Strategies**
+  * **Nomad Multi-Region Federation**
+  * **Nomad Integration with Vault**
+  * **Nomad Enterprise Governance**
 * If you're fast, you'll also be able to run one of three stateful workload tracks.
+* Your instructor will provide links to the above tracks.
 
 ???
 * This workshop uses labs run in Instruqt
+* Links to tracks will be provided by the instructor
 
 ---
 name: nomad-overview

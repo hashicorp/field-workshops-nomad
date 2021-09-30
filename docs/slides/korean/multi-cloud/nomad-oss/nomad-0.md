@@ -37,8 +37,8 @@ https://www.lucidchart.com/documents/edit/6cf954c6-16e9-4827-9d74-98417ba74444/0
 name: Introductions
 # 참여자 소개 시간
 
-* 이름 : 
-* 직책 : 
+* 이름 :
+* 직책 :
 * 경험 공유 :
 
 ???
@@ -66,10 +66,10 @@ name: instruqt-tracks
 * 해당 워크샵은 실습을 위한 [Instruqt](https://instruqt.com) 환경을 활용합니다.
 * Instruqt 랩은 "challenges"으로 구분 된 "tracks"에서 실행됩니다.
 * 이 워크숍에서는 다음 트랙을 사용합니다.
-    1. [Nomad Basics](https://play.instruqt.com/hashicorp/invite/vyjfryiw8pgx)
-    1. [Nomad Simple Cluster](https://play.instruqt.com/hashicorp/invite/vcqexnx8ency)
-    1. [Nomad Multi-Server Cluster](https://play.instruqt.com/hashicorp/invite/igeavsouomb2)
-    1. [Nomad Monitoring](https://play.instruqt.com/hashicorp/invite/f7v0fg7ewyzu)
+    1. **Nomad Basics**
+    1. **Nomad Simple Cluster**
+    1. **Nomad Multi-Server Cluster**
+    1. **Nomad Monitoring**
 * Instruqt에 등록되어있어야 합니다.
   https://play.instruqt.com/signup
 

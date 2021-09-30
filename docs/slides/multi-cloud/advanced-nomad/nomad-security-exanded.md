@@ -544,7 +544,8 @@ name: lab-nomad-acls
 # 👩‍💻 Nomad ACLs Lab
 * In this lab, you'll configure a Nomad cluster to use ACLs.
 * You'll also see how ACLs allow some users to do things like running jobs while only allowing other users to monitor them.
-* You'll do this in the first challenge, "Run the Nomad Servers and Clients", of the [Nomad Access Control Lists (ACLs)](https://play.instruqt.com/hashicorp/invite/shnoqbxokwuj) Instruqt track.
+* You'll do this in the first challenge, "Run the Nomad Servers and Clients", of the **Nomad Access Control Lists (ACLs)** Instruqt track.
+* Your instructor will provide a link to it.
 
 ???
 * Now, you can configure ACLs for a Nomad cluster in another Instruqt track.

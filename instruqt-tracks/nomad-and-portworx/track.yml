@@ -14,11 +14,11 @@ description: |-
 
   This track will guide you through using a [Docker Volume Driver](https://nomadproject.io/docs/drivers/docker/#inlinecode-volumes-16) and [Portworx](https://docs.portworx.com/install-with-other/nomad) to persist data for an HA MySQL database deployed by Nomad. It is based on the [Stateful Workloads with Portworx](https://learn.hashicorp.com/tutorials/nomad/stateful-workloads-portworx) guide.
 
-  Before running this track, we suggest you run the [Nomad Basics](https://play.instruqt.com/hashicorp/tracks/nomad-basics) track.
+  Before running this track, we suggest you run the **Nomad Basics** track.
 
   You might also want to explore these tracks related to the other Nomad storage options:
-    * [Nomad Host Volumes](https://play.instruqt.com/hashicorp/tracks/nomad-host-volumes)
-    * [Nomad CSI Plugins (GCP)](https://play.instruqt.com/hashicorp/tracks/nomad-and-csi-plugins-gcp)
+    * **Nomad Host Volumes**
+    * **Nomad CSI Plugins (GCP)**
 icon: https://storage.googleapis.com/instruqt-hashicorp-tracks/logo/nomad.png
 tags:
 - Nomad
