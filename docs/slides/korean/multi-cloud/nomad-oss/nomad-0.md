@@ -24,9 +24,9 @@ layout: true
 name: Link-to-Slide-Deck
 # The Slide Deck
 <br><br>
-### Follow along on your own computer at this link:
+### 링크를 클릭하여 각 환경에서 슬라이드를 확인할 수 있습니다.:
 
-https://hashicorp.github.io/field-workshops-nomad/slides/multi-cloud/nomad-oss/#1
+https://hashicorp.github.io/field-workshops-nomad/slides/korean/multi-cloud/nomad-oss/#1
 
 ???
 * Here is a link to the slides so you can follow along, but please don't look ahead!
@@ -35,12 +35,11 @@ https://www.lucidchart.com/documents/edit/6cf954c6-16e9-4827-9d74-98417ba74444/0
 
 ---
 name: Introductions
-# Introductions
+# 참여자 소개 시간
 
-* Your Name
-* Job Title
-* Orchestration Experience
-* Favorite Text Editor
+* 이름 : 
+* 직책 : 
+* 경험 공유 :
 
 ???
 * Use this slide to introduce yourself, give a little bit of your background story, then go around the room and have all your participants introduce themselves.
@@ -49,30 +48,29 @@ name: Introductions
 
 ---
 name: workshop-topics
-# Workshop Topics
-
+# 목차
 1. HashiCorp Nomad Overview
-1. Nomad Concepts and Architecture
-1. Interacting with Nomad
-1. Nomad Jobs and Drivers
-1. Running Nomad Clusters and Jobs
-1. Running Multi-Server Nomad/Consul Clusters
-1. Monitoring Nomad Jobs
+1. Nomad 컨셉과 구조
+1. Nomad와의 상호작용
+1. Nomad Jobs & Drivers
+1. Nomad 클러스터와 Job 실행
+1. 다중 서버에 Nomad와 Consul 실행
+1. Job 모니터링
 
 ???
 The topics for the workshop
 
 ---
 name: instruqt-tracks
-# Lab Environment Used
-* This workshop uses [Instruqt](https://instruqt.com) for hands-on labs.
-* Instruqt labs are run in "tracks" that are divided into "challenges".
-* This workshop uses the following tracks:
+# 워크샵에서 사용할 환경 안내
+* 해당 워크샵은 실습을 위한 [Instruqt](https://instruqt.com) 환경을 활용합니다.
+* Instruqt 랩은 "challenges"으로 구분 된 "tracks"에서 실행됩니다.
+* 이 워크숍에서는 다음 트랙을 사용합니다.
     1. [Nomad Basics](https://play.instruqt.com/hashicorp/invite/vyjfryiw8pgx)
     1. [Nomad Simple Cluster](https://play.instruqt.com/hashicorp/invite/vcqexnx8ency)
     1. [Nomad Multi-Server Cluster](https://play.instruqt.com/hashicorp/invite/igeavsouomb2)
     1. [Nomad Monitoring](https://play.instruqt.com/hashicorp/invite/f7v0fg7ewyzu)
-* You'll need to register with Instruqt:
+* Instruqt에 등록되어있어야 합니다.
   https://play.instruqt.com/signup
 
 ???

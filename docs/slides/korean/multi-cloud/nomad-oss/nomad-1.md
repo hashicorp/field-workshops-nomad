@@ -24,15 +24,15 @@ layout: true
 name: chapter-1-topics
 # Chapter 1 Topics
 
-1. Nomad's Place in the HashiStack
-1. Nomad's Business Value
-1. What is Nomad?
-1. Nomad Use Cases
+1. HashiStack에서의 Nomad 포지션
+1. Nomad의 비즈니스적 가치
+1. Nomad란 무엇일까요?
+1. Nomad 사용 사례
 1. Nomad Autoscaling
 1. Nomad Federation
-1. Nomad OSS Features
-1. Nomad Enterprise Platform Features
-1. Nomad Enterprise Modules
+1. Nomad OSS 기능
+1. Nomad Enterprise 기능
+1. Nomad Enterprise 모듈
 
 
 ???
@@ -40,8 +40,8 @@ name: chapter-1-topics
 
 ---
 name: chapter-1-nomad-place-in-hashistack
-# Nomad's Place in the HashiStack
-.center[![:scale 80%](images/Nomad_HashiStack_Velocity.png)]
+# HashiStack에서의 Nomad 포지션
+.center[![:scale 80%](https://hashicorp.github.io/field-workshops-nomad/slides/multi-cloud/nomad-oss/images/Nomad_HashiStack_Velocity.png)]
 
 ???
 
@@ -49,8 +49,8 @@ name: chapter-1-nomad-place-in-hashistack
 
 ---
 name: chapter-1-shift-to-containers
-# The Shift to Containers
-.center[![:scale 70%](images/Nomad_Business_Value.png)]
+# Container 런타임 환경으로의 이동
+.center[![:scale 70%](https://hashicorp.github.io/field-workshops-nomad/slides/multi-cloud/nomad-oss/images/Nomad_Business_Value.png)]
 
 ???
 *  Lowers total cost of ownership (TCO) via bin packing
@@ -63,24 +63,24 @@ name: chapter-1-shift-to-containers
 
 ---
 name: chapter-1-nomad-business-value
-# Nomad's Business Value
-* Increase Hardware Utilization.
-  * Increase density of running applications through bin-packing.
-* Reduce Operational Overhead.
- * Empower developers to self-service their own applications with less or no assistance from operators.
+# Nomad의 비즈니스적 가치
+* 하드웨어 활용율 향상
+  * Bin-packing을 통해 실행되는 애플리케이션 밀도를 높임
+* 운영 오버헤드 감소
+   * 개발자가 운영자의 지원을 거의, 또는 전혀 받지 않고도 애플리케이션을 실행할 수 있는 플랫폼 환경을 구성
 * Accelerate Time To Market.
-  * Run containers and legacy applications together with the same workflow on the same infrastructure.
+  * 동일한 인프라에서 동일한 워크 플로우로 컨테이너와 레거시 애플리케이션을 함께 실행
 
 ???
 *  Let's discuss the business benefits of Nomad.
 
 ---
 name:  chapter1-what-is-nomad
-# What is Nomad?
-* A flexible, lightweight, high performing, easy to use orchestrator
-* Used to deploy and manage containers and legacy applications simultaneously
-* Works across data centers and cloud platforms, providing universal scheduling
-* Manages services, batch functions, as well as global system services
+# Nomad란 무엇일까요?
+* 유연하고 가볍운 고성능의 사용하기 쉬운 오케스트레이터
+* 컨테이너와 레거시 애플리케이션을 동시에 배포하고 관리하는 데 사용
+* 데이터 센터 및 클라우드 플랫폼에서 작동하고 범용 스케줄링 제공
+* 서비스, 배치 기능과 글로벌 시스템 서비스 형태의 배포 관리
 
 ???
 * Nomad runs as a single binary in just about any environment * one of the easiest and lightweight service scheduler and manager available.
@@ -90,8 +90,8 @@ name:  chapter1-what-is-nomad
 
 ---
 name: chapter-1-nomad-use-cases
-# Nomad Use Cases
-.center[![:scale 70%](images/Nomad_Use_Cases.png)]
+# Nomad 사용 사례
+.center[![:scale 70%](https://hashicorp.github.io/field-workshops-nomad/slides/multi-cloud/nomad-oss/images/Nomad_Use_Cases.png)]
 
 ???
 * Container Workloads
@@ -101,7 +101,7 @@ name: chapter-1-nomad-use-cases
 ---
 name: chapter-1-nomad-workload-types
 # Run All Types of Workloads
-.center[![:scale 100%](images/Nomad-Workload-Types.png)]
+.center[![:scale 100%](https://hashicorp.github.io/field-workshops-nomad/slides/multi-cloud/nomad-oss/images/Nomad-Workload-Types.png)]
 
 ???
 * Nomad can run these 3 types of workloads
@@ -110,13 +110,13 @@ name: chapter-1-nomad-workload-types
 name: chapter-1-nomad-autoscaling
 class: compact
 # Nomad Autoscaling
-* Nomad supports two types of autoscaling:
-  * **Horizontal Application Autoscaling** allows the counts of task groups to dynamically scale up and back down.
-  * **Horizontal Cluster Autoscaling** allows the size of a Nomad cluster to dynamically scale out and back in.
-      * Official Supported Plugins for AWS GCP and Azure
-      * Community plugins for Digital Ocean, Openstack Senlin, Hetzner Cloud
-* Both types of autoscaling are driven by APM metrics.
-* The Nomad Autoscaler agent can be deployed as a Nomad job.
+* 다음 두가지 형태의 Autoscaling을 지원 합니다. :
+  * **Horizontal Application Autoscaling** 을 사용하여 동작하는 작업(배포) 그룹의 수를 동적으로 확장하고 축소합니다.
+  * **Horizontal Cluster Autoscaling** 을 사용하여 Nomad 클러스터의 크기를 동적으로 확장하고 축소합니다.
+      * AWS, Azure, GCP에 공식 플러그인이 제공됩니다.
+      * Digital Ocean, Openstack Senlin, Hetzner Cloud에 커뮤니티 플러그인이 제공됩니다.
+* 두 유형 모두 APM 측정 항목에 의해 구동 됩니다.
+* Nomad Autoscaler 에이전트는 Nomad에 Job 으로 배포됩니다.
 
 ???
 * Nomad supports two types of autoscaling:
@@ -129,7 +129,7 @@ class: compact
 ---
 name: chapter-1-nomad-federation
 # Federation Made Real
-.center[![:scale 100%](images/Nomad-Federation.png)]
+.center[![:scale 100%](https://hashicorp.github.io/field-workshops-nomad/slides/multi-cloud/nomad-oss/images/Nomad-Federation.png)]
 
 ???
 * Nomad can deploy applications seamlessly to federated clusters across multiple clouds.
@@ -137,7 +137,7 @@ name: chapter-1-nomad-federation
 ---
 name: chapter-1-nomad-oss-features
 class: smaller
-# Nomad Open Source Features
+# Nomad OSS 기능
 * Namespaces
 * Service/Batch Schedulers
 * Flexible Task Drivers
@@ -166,12 +166,12 @@ class: smaller
 
 ---
 name: chapter-1-nomad-enterprise-platform-features
-# Nomad Enterprise Platform Features
+# Nomad Enterprise 기능
 * All Open Source Features
 * Automated Upgrades with Autopilot
 * Automated Backups with Snapshot Agent
 * Enhanced Read Scalability
-* Redundancy Zones
+* Redundancy Zones (Non-voting)
 * Multiple Vault Namespaces
 
 ???
@@ -185,7 +185,7 @@ name: chapter-1-nomad-enterprise-platform-features
 ---
 name: chapter-1-nomad-enterprise-modules
 class: compact
-# Nomad Enterprise Modules
+# Nomad Enterprise 모듈 (기본+)
 * Nomad Enterprise Governance & Policy Module
   * Resource Quotas
   * Sentinel Policies

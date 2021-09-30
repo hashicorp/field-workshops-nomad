@@ -4,7 +4,7 @@
 All HashiCorp field workshops focused on Nomad should be placed in this repository. Similar field workshop repositories exist for these HashiCorp solutions:
 * [field-workshops-consul](https://github.com/hashicorp/field-workshops-consul)
 * [field-workshops-terraform](https://github.com/hashicorp/field-workshops-terraform)
-* [field-workshops-vault](https://github.com/hashicorp/field-workshops-terraform)
+* [field-workshops-vault](https://github.com/hashicorp/field-workshops-vault)
 
 Additionally, field workshops focused on more than one HashiCorp solution can be found in the [field-workshops-hashistack](https://github.com/hashicorp/field-workshops-hashistack) repository.
 

@@ -271,7 +271,7 @@ task "redis" {
         db = 6379
       }
     }
-  }    
+  }
 }
 ```
 
@@ -400,7 +400,7 @@ task "virtual" {
 name: Specifying Required Resources
 class: compact, col-2
 # Specifying Required Resources
-- The [resources stanza](https://www.nomadproject.io/docs/job-specification/resources.html) describes the requirements a task requires.
+- The [resources stanza](https://www.nomadproject.io/docs/job-specification/resources.html) describes the resources a task requires.
   - Resource requirements include memory, CPU, and device.
   - Tasks will only be scheduled to client nodes that satisfy its resource requirements.
 
