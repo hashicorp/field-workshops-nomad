@@ -170,7 +170,8 @@ class: compact
 * In this lab, you'll deploy Nomad jobs that run a MongoDB data base, a chat web app, and nginx (as a load balancer for the web app).
 * You'll then update the chat app job 3 times, first with a rolling update, then with a blue/green deployment, and finally with a canary deployment.
 * As you do this, the background color of the chat app will change from light to dark and back again.
-* You'll do this using the Instruqt track [Nomad Job Update Strategies](https://play.instruqt.com/hashicorp/invite/1a910sszvvpe).
+* You'll do this using the Instruqt track **Nomad Job Update Strategies**.
+* Your instructor will provide a link to it.
 
 ???
 * Now, you can explore Nomad job update strategies hands-on

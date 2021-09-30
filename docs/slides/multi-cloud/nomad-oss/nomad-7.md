@@ -206,7 +206,8 @@ class: compact
   * Deploy [Fabio](https://fabiolb.net) and [Prometheus](https://prometheus.io/docs/introduction/overview) to a Nomad cluster.
   * Deploy the Prometheus [Alertmanager](https://prometheus.io/docs/alerting/alertmanager) to the cluster
   * Deploy a web server to the Nomad cluster, stop it, and see alerts generated in Prometheus and Alertmanager.
-* You'll do all this in the [Nomad Monitoring](https://play.instruqt.com/hashicorp/invite/f7v0fg7ewyzu) Instruqt track.
+* You'll do all this in the **Nomad Monitoring** Instruqt track.
+* Your instructor will provide a link to it.
 
 ???
 * Now, you can explore collecting metrics from Nomad into Prometheus hands-on.

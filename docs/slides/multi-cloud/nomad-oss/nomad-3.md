@@ -90,7 +90,8 @@ name: getting-started-with-instruqt
 name: lab-nomad-basics-challenge-1
 # 👩‍💻 Nomad Basics Lab
 * In this lab, you'll run some of the Nomad CLI commands.
-* You'll do this in the first challenge, "The Nomad CLI", of the [Nomad Basics](https://play.instruqt.com/hashicorp/invite/vyjfryiw8pgx) Instruqt track.
+* You'll do this in the first challenge, "The Nomad CLI", of the **Nomad Basics** Instruqt track.
+* Your instructor will provide a link to it.
 
 ???
 * Now, you can try running some Nomad CLI commands yourself in the first challenge of our first Instruqt track in this workshop.

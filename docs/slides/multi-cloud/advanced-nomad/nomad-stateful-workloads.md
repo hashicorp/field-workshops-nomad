@@ -173,11 +173,11 @@ name: lab-host-volumes
 # 👩‍💻 Nomad Stateful Workloads Lab
 * In this lab, you'll learn how to run stateful workloads in Nomad.
 * You can chose any of the following 3 Instruqt tracks:
-  * [Nomad Host Volumes](https://play.instruqt.com/hashicorp/invite/1cxyk78sgqja)
-  * [Nomad Integration with Portworx](https://play.instruqt.com/hashicorp/invite/nrfcdqrghxiq)
-  * [Nomad CSI Plugins (GCP)](https://play.instruqt.com/hashicorp/invite/x2ongtdbbbwe)
+  * **Nomad Host Volumes**
+  * **Nomad Integration with Portworx**
+  * **Nomad CSI Plugins (GCP)]**
+* Your instructor can provide links to the above tracks.
 * To explore using Nomad with the [AWS EBS CSI Driver](https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html), please see the [Stateful Workloads with Container Storage Interface](https://learn.hashicorp.com/tutorials/nomad/stateful-workloads-csi-volumes) learn track.
-* We hope to have an Instruqt track that implements that AWS learn track in the near future.
 
 ???
 * Now, you can explore running stateful workloads in Nomad hands-on.

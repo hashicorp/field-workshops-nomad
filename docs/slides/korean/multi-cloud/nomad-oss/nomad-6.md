@@ -72,7 +72,7 @@ name: nomad-consul-config
 * 하지만 Consul 에이전트가 있고 표준 포트 8500을 사용하는 경우 Nomad 에이전트가 자동으로 찾아 연결합니다.
 * 또한 Nomad 에이전트는 Consul에 서비스를 알립니다.
 * 그러나 Nomad의 ACL 및 TLS를 활성화 한 경우 각 에이전트의`consul` 스탠자에 대해 몇 가지 추가 구성을 수행해야합니다.
-  * https://www.nomadproject.io/docs/configuration/consul.html 
+  * https://www.nomadproject.io/docs/configuration/consul.html
 
 ???
 * Each Nomad agent will automatically connect to the local Consul agent if one is running.
@@ -148,7 +148,7 @@ name: lab-nomad-multi-server-cluster
 * 그런 다음 Consul을 사용하여 자동 클러스터링을 활성화합니다.
 * 그런 다음 작업을 Consul 서비스로 등록하고 Consul Connect를 사용하는 작업을 실행합니다.
 * Consul의 서비스 검색을 통해 작업이 서로를 찾는 방법을 볼 수 있습니다.
-* 이 모든 작업은 [Nomad Multi-Server Cluster](https://play.instruqt.com/hashicorp/invite/igeavsouomb2) Instruqt 트랙에서 수행됩니다.
+* 이 모든 작업은 **Nomad Multi-Server Cluster** Instruqt 트랙에서 수행됩니다.
 
 ???
 * Now, you will run the Instruqt lab "Nomad Multi-Server Cluster"

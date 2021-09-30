@@ -285,7 +285,8 @@ task "docs" {
 name: lab-job-update-strategies
 # 👩‍💻 Nomad Advanced Job Placement Lab
 * In this lab, you'll deploy Nomad jobs with different job placement configurations.
-* You'll do this using the Instruqt track [Nomad Advanced Job Placement](https://play.instruqt.com/hashicorp/invite/rbexlxuhgqgd).
+* You'll do this using the Instruqt track **Nomad Advanced Job Placement**.
+* Your instructor will provide a link to it.
 
 ???
 * Now, you can explore Nomad job update strategies hands-on

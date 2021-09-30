@@ -87,7 +87,7 @@ name: getting-started-with-instruqt
 name: lab-nomad-basics-challenge-1
 # 👩‍💻 Nomad Basics Lab
 * 이 실습에서는 일부 Nomad CLI 명령을 실행합니다.
-* [Nomad Basics](https://play.instruqt.com/hashicorp/invite/vyjfryiw8pgx) Instruqt 트랙의 첫 번째 도전 인 "The Nomad CLI"에서이 작업을 수행합니다.
+* **Nomad Basics** Instruqt 트랙의 첫 번째 도전 인 "The Nomad CLI"에서이 작업을 수행합니다.
 
 ???
 * Now, you can try running some Nomad CLI commands yourself in the first challenge of our first Instruqt track in this workshop.
@@ -131,7 +131,7 @@ name: lab-challenge-3.3
 
 * 이 챌린지에서는 첫 번째 Nomad Job을 실행합니다.
 * Nomad CLI 및 UI를 사용하면 ...
-   * redis Job을 시작하고 중지합니다. 
+   * redis Job을 시작하고 중지합니다.
    * Job 상태를 관찰하십시오.
 * 지침 :
    * "Nomad Basics"트랙의 "Run Your First Nomad Job"챌린지를 클릭합니다.

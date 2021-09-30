@@ -211,7 +211,7 @@ class: compact
    * [Fabio](https://fabiolb.net) 및 [Prometheus](https://prometheus.io/docs/introduction/overview)를 Nomad 클러스터에 배포
    * 클러스터에 Prometheus [Alertmanager](https://prometheus.io/docs/alerting/alertmanager) 배포
    * Nomad 클러스터에 웹 서버를 배포하고 중지 한 다음 Prometheus 및 Alertmanager에서 생성 된 경고를 확인
-* 이 모든 작업은 [Nomad Monitoring](https://play.instruqt.com/hashicorp/invite/f7v0fg7ewyzu) Instruqt 트랙에서 수행됩니다.
+* 이 모든 작업은 **Nomad Monitoring** Instruqt 트랙에서 수행됩니다.
 
 ???
 * Now, you can explore collecting metrics from Nomad into Prometheus hands-on.

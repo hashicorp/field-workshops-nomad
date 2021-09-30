@@ -14,11 +14,11 @@ description: |-
 
   This track will guide you through using Nomad Host Volumes to persist data for a MySQL database. It is based on the [Stateful Workloads with Nomad Host Volumes](https://learn.hashicorp.com/tutorials/nomad/stateful-workloads-host-volumes) guide.
 
-  Before running this track, we suggest you run the [Nomad Basics](https://play.instruqt.com/hashicorp/tracks/nomad-basics) track.
+  Before running this track, we suggest you run the **Nomad Basics** track.
 
   You might also want to explore these tracks related to the other Nomad storage options:
-    * [Nomad Integration with Portworx](https://play.instruqt.com/hashicorp/tracks/nomad-and-portworx)
-    * [Nomad CSI Plugins (GCP)](https://play.instruqt.com/hashicorp/tracks/nomad-and-csi-plugins-gcp)
+    * **Nomad Integration with Portworx**
+    * **Nomad CSI Plugins (GCP)**
 icon: https://storage.googleapis.com/instruqt-hashicorp-tracks/logo/nomad.png
 tags:
 - Nomad
@@ -28,7 +28,7 @@ tags:
 owner: hashicorp
 developers:
 - roger@hashicorp.com
-private: false
+private: true
 published: true
 show_timer: true
 challenges:

@@ -146,7 +146,8 @@ name: lab-nomad-multi-server-cluster
 * You'll then use Consul to enable automatic clustering.
 * You'll then run a job that registers its tasks as Consul sevices and uses Consul Connect.
 * You'll see how the tasks find each other with Consul's service discovery.
-* You'll do all this in the [Nomad Multi-Server Cluster](https://play.instruqt.com/hashicorp/invite/igeavsouomb2) Instruqt track.
+* You'll do all this in the **Nomad Multi-Server Cluster** Instruqt track.
+* Your instructor will provide a link to it.
 
 ???
 * Now, you will run the Instruqt lab "Nomad Multi-Server Cluster"

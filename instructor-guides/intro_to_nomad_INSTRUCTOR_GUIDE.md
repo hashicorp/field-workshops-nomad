@@ -67,7 +67,7 @@ The slide deck for this training is written completely in [Markdown](https://gui
 https://github.com/hashicorp/field-workshops-nomad/issues
 
 ### Hands-on Labs
-At certain points in the slide deck there are links to the lab exercises. [Instruqt](https://instruqt.com/hashicorp) is our lab platform. While all of the Nomad workshop tracks are actually public, the slides use links to permanent Instruqt invitations that require users to register with Instruqt. We do this so that HashiCorp Field Marketing can collect the emails of users who start tracks during public or private workshops or on their own after following the links from the slides.
+At certain points in the slide deck there are references to the lab exercises. [Instruqt](https://instruqt.com/hashicorp) is our lab platform. You will need to provide a link to an invite that includes these tracks as described below.
 
 Participants can register with Instruqt [here](https://play.instruqt.com/signup). Users only need to provide an email and a password. They can then login via email, Google, GitHub, and Twitter.
 
@@ -92,6 +92,17 @@ Go through this track start to finish and make sure you understand all the chall
 https://play.instruqt.com/hashicorp/tracks/nomad-monitoring
 
 Go through this track start to finish and make sure you understand all the challenges. In this track, students learn how to monitor a Nomad cluster and jobs using Prometheus. Fabio is used as a reverse proxy server. Both Prometheus and Fabio are themselves run as Nomad jobs. This lab builds on the knowledge about running jobs that students have learned in earlier tracks.
+
+#### Creating Instruqt Invites
+Once you've gotten an invite to the HashiCorp organization you can create temporary invite links for your students:
+
+1. Click on the **Invites** link at the top of the page.
+2. Click on the **New+** button to create a new invite.
+3. Create a descriptive title for internal use. Example: "Atlanta Intro to Nomad Workshop"
+4. Select the tracks you want to make available.
+5. Set the invite to expire in a month or two.
+6. Make the tracks available to your user for at least a week.
+7. Turn on the **Allow Anonymous** switch so you can hand the URL out on the day of training.
 
 ### Configuring the Instruqt Pools
 We recommend that you configure Instruqt pools for each Instruqt track used in this workshop 1 hour before you plan to use the track. Please see this Confluence [doc](https://hashicorp.atlassian.net/wiki/spaces/SE/pages/511574174/Instruqt+and+Remark+Contributor+Guide#InstruqtandRemarkContributorGuide-ConfiguringInstruqtPools) for instructions.

@@ -143,7 +143,8 @@ name: lab-multi-region-deployments
 * In this lab, you'll federate two Nomad regions (clusters).
 * Then, you'll deploy a Nomad job across the two regions.
 * You'll also see what happens when a multi-region job fails in one region and use the `nomad deployment unblock` command.
-* You'll do this using the Instruqt track [Nomad Multi-Region Federation](https://play.instruqt.com/hashicorp/invite/dgpya4wz0c2z).
+* You'll do this using the Instruqt track **Nomad Multi-Region Federation**.
+* Your instructor will provide a link to it.
 
 ???
 * Now, you can explore Nomad's federation and multi-region job deployments hands-on.

@@ -20,7 +20,7 @@ owner: hashicorp
 developers:
 - roger@hashicorp.com
 - pphan@hashicorp.com
-private: false
+private: true
 published: true
 show_timer: true
 challenges:

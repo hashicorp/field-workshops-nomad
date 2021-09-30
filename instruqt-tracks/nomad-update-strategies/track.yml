@@ -17,7 +17,7 @@ description: |-
 
   You will also learn how Nomad allows you to promote or fail blue/green and canary deployments.
 
-  Before running this track, we suggest you run the [Nomad Basics](https://play.instruqt.com/hashicorp/tracks/nomad-basics), [Nomad Simple Cluster](https://play.instruqt.com/hashicorp/tracks/nomad-simple-cluster), and [Nomad Multi-Server Cluster](https://play.instruqt.com/hashicorp/tracks/nomad-multi-server-cluster) tracks.
+  Before running this track, we suggest you run the **Nomad Basics**, **Nomad Simple Cluster**, and **Nomad Multi-Server Cluster** tracks.
 icon: https://storage.googleapis.com/instruqt-hashicorp-tracks/logo/nomad.png
 tags:
 - Nomad
@@ -30,7 +30,7 @@ tags:
 owner: hashicorp
 developers:
 - roger@hashicorp.com
-private: false
+private: true
 published: true
 show_timer: true
 challenges:

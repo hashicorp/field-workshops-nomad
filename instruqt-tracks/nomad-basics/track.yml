@@ -16,7 +16,7 @@ owner: hashicorp
 developers:
 - roger@hashicorp.com
 - rjackson@hashicorp.com
-private: false
+private: true
 published: true
 show_timer: true
 challenges:
@@ -143,7 +143,7 @@ challenges:
     ```
     nomad status
     ```
-    The command returns a high level view of the status of the redis job, most importantly it's status, "running", and date submitted.
+    The command returns a high level view of the status of the redis job, most importantly it's status, "running", and date submitted. As we only have one job running (redis), that is the only one listed.
 
     Now that the job is running, and you're able to view the status, stop the job:
     ```

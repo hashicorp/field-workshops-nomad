@@ -11,7 +11,7 @@ description: |-
 
   You will deploy a Nomad cluster and run Nomad jobs that deploy a web application and [Traefik](https://containo.us/traefik/), which will provide load balancing across multiple instances of the application.
 
-  Before running this track, we suggest you run the [Nomad Basics](https://play.instruqt.com/hashicorp/tracks/nomad-basics) and [Nomad Simple Cluster](https://play.instruqt.com/hashicorp/tracks/nomad-simple-cluster) tracks.
+  Before running this track, we suggest you run the **Nomad Basics** and **Nomad Simple Cluster** tracks.
 icon: https://storage.googleapis.com/instruqt-hashicorp-tracks/logo/nomad.png
 tags:
 - nomad
@@ -21,7 +21,7 @@ owner: hashicorp
 developers:
 - cdunlap@hashicorp.com
 - roger@hashicorp.com
-private: false
+private: true
 published: true
 show_timer: true
 challenges:

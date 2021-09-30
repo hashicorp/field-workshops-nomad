@@ -13,7 +13,7 @@ Prerequisites are minimal. All that is required to participate in the workshop i
 
 The Instruqt tracks include terminal tabs that can be used to execute Nomad CLI commands. They also include the Nomad UI and in some cases the Consul UI.
 
-All instructors and TAs from HashiCorp should be sure to register themselves with Instruqt and then post a message in our Slack channel, #proj-instruqt, asking to be added to the HashiCorp organization within Instruqt. This is important even if the tracks are public since only members of the HashiCorp organization can see the useful "Skip to Challenge" button on challenges of tracks within this organization.
+All instructors and TAs from HashiCorp should be sure to register themselves with Instruqt and then post a message in our Slack channel, #proj-instruqt, asking to be added to the HashiCorp organization within Instruqt. This is important since only members of the HashiCorp organization can see the useful "Skip to Challenge" button on challenges of tracks within this organization.
 
 ### Scheduling your workshop
 Please add all workshops, both public and private, to the shared instruqt-workshops Google calendar as follows:
@@ -69,7 +69,7 @@ The slide deck for this training is written completely in [Markdown](https://gui
 https://github.com/hashicorp/field-workshops-nomad/issues
 
 ### Hands-on Labs
-At certain points in the slide deck there are links to the lab exercises. [Instruqt](https://instruqt.com/hashicorp) is our lab platform. While all of the Nomad workshop tracks are actually public, the slides use links to permanent Instruqt invitations that require users to register with Instruqt. We do this so that HashiCorp Field Marketing can collect the emails of users who start tracks during public or private workshops or on their own after following the links from the slides.
+At certain points in the slide deck there are references to the lab exercises. [Instruqt](https://instruqt.com/hashicorp) is our lab platform. You will need to provide a link to an invite that includes these tracks as described below.
 
 Participants can register with Instruqt [here](https://play.instruqt.com/signup). They can then login via email, Google, GitHub, and Twitter.
 
@@ -127,6 +127,18 @@ Go through this track start to finish and make sure you understand all the chall
 https://play.instruqt.com/hashicorp/tracks/nomad-on-windows
 
 Go through this track start to finish and make sure you understand all the challenges. This track guides students through the process of running Nomad jobs with 3 different drivers (Docker, Java, and Raw Exec) on Windows.
+
+#### Creating Instruqt Invites
+Once you've gotten an invite to the HashiCorp organization you can create temporary invite links for your students:
+
+1. Click on the **Invites** link at the top of the page.
+2. Click on the **New+** button to create a new invite.
+3. Create a descriptive title for internal use. Example: "Atlanta Advanced Nomad Workshop"
+4. Select the tracks you want to make available.
+5. Set the invite to expire in a month or two.
+6. Make the tracks available to your user for at least a week.
+7. Turn on the **Allow Anonymous** switch so you can hand the URL out on the day of training.
+
 
 ### Configuring the Instruqt Pools
 We recommend that you configure Instruqt pools for each Instruqt track used in this workshop 1 hour before you plan to use the track. Please see this Confluence [doc](https://hashicorp.atlassian.net/wiki/spaces/SE/pages/511574174/Instruqt+and+Remark+Contributor+Guide#InstruqtandRemarkContributorGuide-ConfiguringInstruqtPools) for instructions.

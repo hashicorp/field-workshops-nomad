@@ -16,11 +16,11 @@ description: |-
 
   It is based on the [Stateful Workloads with Container Storage Interface](https://learn.hashicorp.com/tutorials/nomad/stateful-workloads-csi-volumes) guide, but runs in GCP instead of AWS.
 
-  Before running this track, we suggest you run the [Nomad Basics](https://play.instruqt.com/hashicorp/tracks/nomad-basics) track.
+  Before running this track, we suggest you run the **Nomad Basics** track.
 
   You might also want to explore these tracks related to the other Nomad storage options:
-    * [Nomad Host Volumes](https://play.instruqt.com/hashicorp/tracks/nomad-host-volumes)
-    * [Nomad Integration with Portworx](https://play.instruqt.com/hashicorp/tracks/nomad-and-portworx)
+    * **Nomad Host Volumes**
+    * **Nomad Integration with Portworx**
 icon: https://storage.googleapis.com/instruqt-hashicorp-tracks/logo/nomad.png
 tags:
 - Nomad
