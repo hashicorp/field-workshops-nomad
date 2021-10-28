@@ -31,6 +31,14 @@ challenges:
   title: Verify the Health of Your Nomad Enterprise Cluster
   teaser: |
     Verify the health of the Nomad Enterprise cluster that has been deployed for you.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will verify the health of the Nomad Enterprise cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
+
+      In later challenges, you will enable Nomad Enterprise's [Audit Logging](https://www.nomadproject.io/docs/enterprise#audit-logging) and define Nomad [Namespaces](https://learn.hashicorp.com/tutorials/nomad/namespaces), [Resource Quotas](https://learn.hashicorp.com/tutorials/nomad/quotas), [Nomad ACLs](https://learn.hashicorp.com/tutorials/nomad/access-control), and [Sentinel Policies](https://learn.hashicorp.com/tutorials/nomad/sentinel).
+
+      You will then run jobs and learn how Sentinel policies and resource quotas restrict them. You'll also run a [Cross-Namespace Query](https://www.nomadproject.io/docs/enterprise#cross-namespace-queries)
   assignment: |-
     In this challenge, you will verify the health of the Nomad Enterprise cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
 
@@ -57,14 +65,6 @@ challenges:
     You should see 3 Nomad clients.
 
     In the next challenge, you will enable Nomad Enterprise's audit logging.
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you will verify the health of the Nomad Enterprise cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
-
-      In later challenges, you will enable Nomad Enterprise's [Audit Logging](https://www.nomadproject.io/docs/enterprise#audit-logging) and define Nomad [Namespaces](https://learn.hashicorp.com/tutorials/nomad/namespaces), [Resource Quotas](https://learn.hashicorp.com/tutorials/nomad/quotas), [Nomad ACLs](https://learn.hashicorp.com/tutorials/nomad/access-control), and [Sentinel Policies](https://learn.hashicorp.com/tutorials/nomad/sentinel).
-
-      You will then run jobs and learn how Sentinel policies and resource quotas restrict them. You'll also run a [Cross-Namespace Query](https://www.nomadproject.io/docs/enterprise#cross-namespace-queries)
   tabs:
   - title: Config Files
     type: code
@@ -94,6 +94,14 @@ challenges:
   title: Enable Nomad Enterprise Audit Logging
   teaser: |
     Learn how to enable Nomad Enterprise audit logging.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will enable Nomad Enterprise's [Audit Logging](https://www.nomadproject.io/docs/enterprise#audit-logging) on your server and clients, giving Nomad operators complete records about all user-issued actions in Nomad.
+
+      With Nomad audit logging, enterprises can proactively identify access anomalies, ensure enforcement of their security policies, and diagnose cluster behavior by viewing preceding user operations.
+
+      In the next challenge, you will configure Nomad namespaces and resource quotas.
   assignment: |-
     In this challenge, you will enable Nomad Enterprise's audit logging on your server and clients, giving Nomad operators complete records about all user-issued actions in Nomad.
 
@@ -230,14 +238,6 @@ challenges:
     Feel free throughout this track to inspect the audit logs on the server or any of the clients after running any Nomad commands on them. Or just inspect the audit logs after completing the track.
 
     In the next challenge, you will configure Nomad namespaces and resource quotas.
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you will enable Nomad Enterprise's [Audit Logging](https://www.nomadproject.io/docs/enterprise#audit-logging) on your server and clients, giving Nomad operators complete records about all user-issued actions in Nomad.
-
-      With Nomad audit logging, enterprises can proactively identify access anomalies, ensure enforcement of their security policies, and diagnose cluster behavior by viewing preceding user operations.
-
-      In the next challenge, you will configure Nomad namespaces and resource quotas.
   tabs:
   - title: Config Files
     type: code
@@ -267,6 +267,12 @@ challenges:
   title: Configure Nomad Namespaces and Resource Quotas
   teaser: |
     Configure Default, Dev, and QA Nomad namespaces and resource quotas
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will create "default", "dev", and "qa" resource quotas.
+
+      You will then apply the "default" resource quota to the pre-existing "default" namespace, and create the "dev" and "qa" namespaces. You will apply the "dev" and "qa" resource quotas to the corresponding namespaces when creating them.
   assignment: |-
     In this challenge, you will configure Default, Dev, and QA Nomad namespaces and resource quotas.
 
@@ -340,12 +346,6 @@ challenges:
     The last command should show a JSON document with information about the resource quota's limits and current usage. There is also a `nomad quota status` command that gives back streamlined information more like what the `nomad namespace status` command gives.
 
     In the next challenge, you will enable Nomad's ACL system and define ACL policies and tokens which are applicable to Nomad namespaces and resource quotas and required by Nomad Sentinel policies.
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you will create "default", "dev", and "qa" resource quotas.
-
-      You will then apply the "default" resource quota to the pre-existing "default" namespace, and create the "dev" and "qa" namespaces. You will apply the "dev" and "qa" resource quotas to the corresponding namespaces when creating them.
   tabs:
   - title: Config Files
     type: code
@@ -366,6 +366,12 @@ challenges:
   title: Create Nomad ACL Policies and Tokens
   teaser: |
     Enable Nomad's ACL system and create ACL policies and tokens for the Dev and QA teams.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will enable Nomad's ACL system and define ACL policies and tokens for the Dev and QA teams that will be using the "dev" and "qa" namespaces.
+
+      Nomad ACLs are also required by Nomad Sentinel policies.
   assignment: |-
     In this challenge, you will enable Nomad's ACL system and define ACL policies and tokens for the Dev and QA teams that will be using the "dev" and "qa" namespaces.
 
@@ -531,12 +537,6 @@ challenges:
     replacing <accessor_id\> with Alice's or Bob's Accessor ID. You will see complete information for their token including the actual token itself (the "Secret ID" field).
 
     In the next challenge, you will define and enable some Sentinel policies to place restrictions on jobs that can be run in your Nomad cluster.
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you will enable Nomad's ACL system and define ACL policies and tokens for the Dev and QA teams that will be using the "dev" and "qa" namespaces.
-
-      Nomad ACLs are also required by Nomad Sentinel policies.
   tabs:
   - title: Config Files
     type: code
@@ -566,6 +566,13 @@ challenges:
   title: Create Nomad Sentinel Policies
   teaser: |
     Create 3 Nomad Sentinel policies to restrict drivers, Docker images, and Docker networks.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will create 3 Nomad Sentinel policies:
+        * allow-docker-and-java-drivers.sentinel restricts which Nomad drivers can be used.
+        * restrict-docker-images.sentinel limits the Docker images that can be used by the Docker driver.
+        * prevent-docker-host-network.sentinel prevents Docker containers from using the host network of the Nomad clients they run on.
   assignment: |-
     In this challenge, you will create 3 Nomad Sentinel policies that will restrict which Nomad drivers can be used, which Docker images can be used by the Docker driver, and prevent Docker containers from using the host network of the Nomad clients they run on.
 
@@ -611,13 +618,6 @@ challenges:
     The first will list the 3 Sentinel policies you created while the second will show the "restrict-docker-images" policy including its name, scope, enforcement level, description, and its actual policy (rules).
 
     In the next challenge, you will run jobs in the 3 namespaces and see how the resource quotas and Sentinel policies restrict what they can do.
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you will create 3 Nomad Sentinel policies:
-        * allow-docker-and-java-drivers.sentinel restricts which Nomad drivers can be used.
-        * restrict-docker-images.sentinel limits the Docker images that can be used by the Docker driver.
-        * prevent-docker-host-network.sentinel prevents Docker containers from using the host network of the Nomad clients they run on.
   tabs:
   - title: Config Files
     type: code
@@ -638,6 +638,14 @@ challenges:
   title: Run Nomad Jobs Restricted by ACLs and Sentinel Policies
   teaser: |
     Run Nomad jobs and learn how Nomad ACL and Sentinel policies restrict them.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will run Nomad jobs and learn how Nomad ACL and Sentinel policies restrict them.
+
+      You will see that some jobs cannot be run at all because they violate Sentinel policies and that other jobs cannot be run by certain users because their ACL tokens do not allow them to run jobs in the target namespaces.
+
+      In the next challenge, you will see how resource quotas can also prevent certain jobs from running that would not be blocked by Nomad ACL or Sentinel policies.
   assignment: |-
     In this challenge, you will run Nomad jobs and learn how Nomad ACL and Sentinel policies restrict them.
 
@@ -787,14 +795,6 @@ challenges:
     In this challenge, you saw how Nomad ACL and Sentinel policies restricted which jobs could be run and who could run them.
 
     In the next challenge, you will run some more jobs and see how they are affected by resource quotas.
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you will run Nomad jobs and learn how Nomad ACL and Sentinel policies restrict them.
-
-      You will see that some jobs cannot be run at all because they violate Sentinel policies and that other jobs cannot be run by certain users because their ACL tokens do not allow them to run jobs in the target namespaces.
-
-      In the next challenge, you will see how resource quotas can also prevent certain jobs from running that would not be blocked by Nomad ACL or Sentinel policies.
   tabs:
   - title: Config Files
     type: code
@@ -815,6 +815,14 @@ challenges:
   title: Run Nomad Jobs Restricted by Resource Quotas
   teaser: |
     Learn how Nomad Resource Quotas can prevent some jobs from running all of their desired allocations.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will run some more Nomad jobs and learn how Resource Quotas can prevent some of their allocations from running.
+
+      These are jobs that Nomad ACLs and Sentinel policies would allow to run if the namespaces they target were not already overloaded.
+
+      You will also see that stopping a job in a namespace can allow a queued allocation to be deployed.
   assignment: |-
     In this challenge, you will run some more Nomad jobs and learn how Resource Quotas can prevent some of them from running all of their desired allocations.
 
@@ -957,14 +965,6 @@ challenges:
     In this challenge, you saw how resource quotas can prevent jobs that violate them from running all of their desired allocations. You also saw that stopping a job in a namespace can allow a queued allocation to be deployed.
 
     Congratulatons on completing the Nomad Enterprise Governance track!
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you will run some more Nomad jobs and learn how Resource Quotas can prevent some of their allocations from running.
-
-      These are jobs that Nomad ACLs and Sentinel policies would allow to run if the namespaces they target were not already overloaded.
-
-      You will also see that stopping a job in a namespace can allow a queued allocation to be deployed.
   tabs:
   - title: Config Files
     type: code
@@ -979,4 +979,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 900
-checksum: "15715815439375908135"
+checksum: "10478344320025986821"

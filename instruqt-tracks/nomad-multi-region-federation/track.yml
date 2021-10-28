@@ -33,6 +33,12 @@ challenges:
   title: Federate Two Nomad Clusters
   teaser: |
     Nomad 0.12 introduced a breakthrough Multi-Cluster Deployment feature, which makes Nomad the first and only orchestrator on the market with complete and fully-supported federation capabilities for production.
+  notes:
+  - type: text
+    contents: |-
+      Nomad 0.12 introduced a breakthrough Multi-Cluster Deployment feature, which makes Nomad the first and only orchestrator on the market with complete and fully-supported federation capabilities for production.
+
+      In this challenge you will federate two Nomad Clusters which will enable you to submit jobs or interact with the Nomad API, targeting any region, from any server, even if that server resides in a different region.
   assignment: |-
     The setup scripts of this track have already deployed two Nomad clusters for you in GCP. One is designated as the "west" region/cluster while the other is designated as the "east" region/cluster. They each have one server and two clients running Nomad 1.0.0 and Consul 1.9.0.
 
@@ -73,12 +79,6 @@ challenges:
     You can also check the status of the servers and clients in the Nomad UI for both clusters.
 
     In the next challenge, you will run a multi-region job.
-  notes:
-  - type: text
-    contents: |-
-      Nomad 0.12 introduced a breakthrough Multi-Cluster Deployment feature, which makes Nomad the first and only orchestrator on the market with complete and fully-supported federation capabilities for production.
-
-      In this challenge you will federate two Nomad Clusters which will enable you to submit jobs or interact with the Nomad API, targeting any region, from any server, even if that server resides in a different region.
   tabs:
   - title: Config Files
     type: code
@@ -106,6 +106,24 @@ challenges:
   title: Multi-Region Nomad Deployments
   teaser: |
     Deploy a Nomad Job Across Two Nomad Regions
+  notes:
+  - type: text
+    contents: |-
+      Federated Nomad clusters are members of the same gossip cluster but not of the same raft/consensus cluster; they don't share their data stores.
+
+      Each `region` in a multi-region deployment gets an independent copy of the job, parameterized with the values of the `region` block. Nomad regions coordinate to rollout each region's deployment using rules determined by the `strategy` block.
+  - type: text
+    contents: |-
+      A single region deployment using one of the various update strategies begins in the `running` state and ends in either the `successful` state if it succeeds, the `canceled` state if another deployment supersedes it before it is `complete`, or the `failed` state if it fails for any other reason.
+
+      A `failed` single region deployment may automatically revert to the previous version of the job if its `update` block has the `auto_revert` setting set to `true`.
+  - type: text
+    contents: |-
+      In a multi-region deployment, regions begin in the `pending` state. This allows Nomad to determine that all regions have accepted the job before continuing.
+
+      At this point, up to `max_parallel` regions will enter into the `running` state. When each region completes its local deployment, it enters a `blocked` state where it waits until the last region has completed the deployment.
+
+      The final region will unblock the regions to mark them as successful.
   assignment: |-
     In this challenge you will deploy a multi-region job. Please read the notes screens that were displayed at the beginning of this challenge for an explanation of multi-region concepts.
 
@@ -171,24 +189,6 @@ challenges:
     You can also check the status of the job and its allocations in the Nomad UI for both clusters. Note that each UI can show all federated Nomad regions, but that it only shows data for one region at a time.
 
     In the next challenge, you will redeploy the multi-region job with some modifications and simulate the failure of one region's deployment.
-  notes:
-  - type: text
-    contents: |-
-      Federated Nomad clusters are members of the same gossip cluster but not of the same raft/consensus cluster; they don't share their data stores.
-
-      Each `region` in a multi-region deployment gets an independent copy of the job, parameterized with the values of the `region` block. Nomad regions coordinate to rollout each region's deployment using rules determined by the `strategy` block.
-  - type: text
-    contents: |-
-      A single region deployment using one of the various update strategies begins in the `running` state and ends in either the `successful` state if it succeeds, the `canceled` state if another deployment supersedes it before it is `complete`, or the `failed` state if it fails for any other reason.
-
-      A `failed` single region deployment may automatically revert to the previous version of the job if its `update` block has the `auto_revert` setting set to `true`.
-  - type: text
-    contents: |-
-      In a multi-region deployment, regions begin in the `pending` state. This allows Nomad to determine that all regions have accepted the job before continuing.
-
-      At this point, up to `max_parallel` regions will enter into the `running` state. When each region completes its local deployment, it enters a `blocked` state where it waits until the last region has completed the deployment.
-
-      The final region will unblock the regions to mark them as successful.
   tabs:
   - title: Config Files
     type: code
@@ -216,6 +216,13 @@ challenges:
   title: Simulate a Failed Deployment in One Region
   teaser: |
     Deploy a multi-region job which will simulate a failed deployment in one region.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge you will simulate a failed deployment when deploying a multi-region job.
+
+      For further information, please check out the HashiCorp
+      [Learn Guide](https://learn.hashicorp.com/tutorials/nomad/multiregion-deployments) on which this lab was based.
   assignment: |-
     In this challenge you will redeploy the multi-region job with some modifications and simulate the failure of one region's deployment.
 
@@ -294,13 +301,6 @@ challenges:
     ```
 
     Congratulations on completing the Nomad Multi-Region Federation track!
-  notes:
-  - type: text
-    contents: |-
-      In this challenge you will simulate a failed deployment when deploying a multi-region job.
-
-      For further information, please check out the HashiCorp
-      [Learn Guide](https://learn.hashicorp.com/tutorials/nomad/multiregion-deployments) on which this lab was based.
   tabs:
   - title: Config Files
     type: code
@@ -322,4 +322,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 1200
-checksum: "18136035432570857446"
+checksum: "10926263264664002579"

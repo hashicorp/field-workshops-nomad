@@ -1,5 +1,8 @@
 #!/bin/bash -l
 
+HOSTNAME=$(hostname -s)
+sed -i "s/127\.0\.0\.1 ${HOSTNAME}/#127.0.0.1 ${HOSTNAME}/" /etc/hosts
+
 # Write Nomad Client 2 Config
 cat <<-EOF > /etc/nomad.d/nomad-client2.hcl
 region = "east"
