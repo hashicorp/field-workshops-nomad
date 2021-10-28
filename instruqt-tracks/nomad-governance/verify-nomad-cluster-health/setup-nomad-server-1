@@ -2,6 +2,9 @@
 
 mkdir -p /root/nomad
 
+HOSTNAME=$(hostname -s)
+sed -i "s/127\.0\.0\.1 ${HOSTNAME}/#127.0.0.1 ${HOSTNAME}/" /etc/hosts
+
 # Write Nomad Server 1 Config
 cat <<-EOF > /etc/nomad.d/nomad-server1.hcl
 # Setup data dir
