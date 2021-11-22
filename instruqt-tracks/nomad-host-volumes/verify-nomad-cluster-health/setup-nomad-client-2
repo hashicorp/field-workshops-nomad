@@ -44,7 +44,7 @@ cat <<-EOF > /etc/consul.d/consul-client2.json
     "nomad-server-1"
   ],
   "recursors": [
-    "10.64.0.254"
+    "10.64.1.254"
   ]
 }
 EOF
@@ -59,6 +59,7 @@ sleep 15
 cat <<-EOF > /etc/systemd/resolved.conf.d/consul.conf
 [Resolve]
 DNS=127.0.0.1
+DNSSEC=false
 Domains=~consul
 EOF
 iptables -t nat -A OUTPUT -d localhost -p udp -m udp --dport 53 -j REDIRECT --to-ports 8600

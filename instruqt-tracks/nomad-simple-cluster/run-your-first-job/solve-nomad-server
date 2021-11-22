@@ -10,6 +10,9 @@ cd nomad
 # Run the job
 nomad job run example.nomad > runjob.log
 
+# Sleep
+sleep 60
+
 # Extract evaluation and allocation IDs
 eval_id=$(sed -n 1p runjob.log | cut -d'"' -f2)
 alloc_id=$(sed -n 3p runjob.log | cut -d'"' -f2)

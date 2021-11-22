@@ -10,6 +10,9 @@ cd nomad
 # Run the Nomad server
 nomad agent -config server.hcl > nomad.log 2>&1 &
 
+# Sleep
+sleep 30
+
 # Check the Nomad cluster members
 nomad server members
 

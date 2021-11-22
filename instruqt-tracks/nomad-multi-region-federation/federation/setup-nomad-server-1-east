@@ -39,7 +39,7 @@ cat <<-EOF > /etc/consul.d/consul-server1.json
   "client_addr": "0.0.0.0",
   "bootstrap_expect": 1,
   "recursors": [
-    "10.64.0.254"
+    "10.64.1.254"
   ]
 }
 EOF
