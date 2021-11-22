@@ -14,4 +14,10 @@ grep -q "nomad\s\+alloc\s\+status\s\+.*" /root/.bash_history || fail-message "Yo
 
 grep -q "nomad\s\+alloc\s\+logs\s\+.*\s\+redis" /root/.bash_history || fail-message "You have not inspected the logs of the redis task of the Nomad job yet."
 
+# Check that countdash job is running correctly
+nomad_allocations=$(nomad job status example | grep Healthy -A3 | grep "1        1       1" | wc -l)
+if [ $nomad_allocations -ne 1 ]; then
+  fail-message "The example job does not have 1 healthy allocation."
+fi
+
 exit 0

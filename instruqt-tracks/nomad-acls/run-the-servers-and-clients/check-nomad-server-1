@@ -8,4 +8,14 @@ grep -q "nomad\s\+node\s\+status" /root/.bash_history || fail-message "You haven
 
 grep -q "nomad\s\+status" /root/.bash_history || fail-message "You haven't checked the status of your Nomad jobs yet."
 
+nomad_servers=$(nomad server members | grep alive | wc -l)
+if [ $nomad_servers -ne 3 ]; then
+  fail-message "There are not 3 running Nomad servers."
+fi
+
+nomad_clients=$(nomad node status | grep ready | wc -l)
+if [ $nomad_clients -ne 2 ]; then
+  fail-message "There are not 2 running Nomad clients."
+fi
+
 exit 0

@@ -4,4 +4,15 @@ set -e
 
 grep -q "nomad\s\+agent\s\+-config\s\+nomad-server1.hcl\s\+>\s\+nomad.log\s\+2>&1\s\+&" /root/.bash_history || fail-message "You haven't run your first Nomad server yet."
 
+nomad_servers=$(nomad server members | grep alive | wc -l)
+if [ $nomad_servers -ne 3 ]; then
+  fail-message "There are not 3 running Nomad servers."
+fi
+
+nomad_clients=$(nomad node status | grep ready | wc -l)
+if [ $nomad_clients -ne 2 ]; then
+  fail-message "There are not 2 running Nomad clients."
+fi
+
+
 exit 0

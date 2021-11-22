@@ -26,6 +26,12 @@ challenges:
   title: Verify the Health of Your Nomad Cluster
   teaser: |
     Verify the health of the Nomad cluster that has been deployed for you.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts.
+
+      This will include checking the health of a Consul cluster that has been set up on the same VMs.
   assignment: |-
     In this challenge, you will verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
 
@@ -52,12 +58,6 @@ challenges:
     You can also check the status of the Nomad server and clients in the Nomad and Consul UIs.
 
     In the next challenge, you will run a job that uses Nomad's native integrations with Consul and Consul Connect.
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you will verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts.
-
-      This will include checking the health of a Consul cluster that has been set up on the same VMs.
   tabs:
   - title: Server
     type: terminal
@@ -78,6 +78,14 @@ challenges:
   title: Nomad's Integration with Consul Connect
   teaser: |
     Run a Nomad job with tasks that communicate securely using Consul Connect.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will run a job that uses Nomad's native integration with Consul. The job's tasks will use Consul's service registration, service discovery, and secure service-to-service communication (using Consul Connect).
+
+      This challenge is based on the  Consul Connect](https://www.nomadproject.io/docs/integrations/consul-connect/) in the Nomad documentation.
+
+      There is also a [version](https://learn.hashicorp.com/tutorials/nomad/consul-service-mesh) of this guide that can be used with a Consul cluster that has Consul ACLs enabled.
   assignment: |-
     In this challenge, you will run a job that uses Nomad's native integrations with Consul and Consul Connect. The job's tasks will use Consul's service registration, service discovery, and secure service-to-service communication (using Consul Connect).
 
@@ -122,14 +130,6 @@ challenges:
     You can also look at the tasks associated proxies in both the Nomad and the Consul UIs.
 
     Congratulations on completing the Nomad Integration with Consul Connect track!
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you will run a job that uses Nomad's native integration with Consul. The job's tasks will use Consul's service registration, service discovery, and secure service-to-service communication (using Consul Connect).
-
-      This challenge is based on the  Consul Connect](https://www.nomadproject.io/docs/integrations/consul-connect/) in the Nomad documentation.
-
-      There is also a [version](https://learn.hashicorp.com/tutorials/nomad/consul-service-mesh) of this guide that can be used with a Consul cluster that has Consul ACLs enabled.
   tabs:
   - title: Config Files
     type: code
@@ -156,4 +156,4 @@ challenges:
     port: 9002
   difficulty: basic
   timelimit: 2700
-checksum: "13132293051674240295"
+checksum: "13817559568933083282"

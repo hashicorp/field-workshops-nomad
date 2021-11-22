@@ -1,5 +1,17 @@
 #!/bin/bash -l
 
+# Wait for Instruqt to finish booting the VM
+# This is better than doing sleep
+while [ ! -f /opt/instruqt/bootstrap/host-bootstrap-completed ]
+do
+    echo "Waiting for Instruqt to finish booting the VM"
+    sleep 1
+done
+
+# Comment out mapping of 127.0.0.1 to hostname in /etc/hosts
+HOSTNAME=$(hostname -s)
+sed -i "s/127\.0\.0\.1 ${HOSTNAME}/#127.0.0.1 ${HOSTNAME}/" /etc/hosts
+
 mkdir /root/nomad
 
 # Write Nomad Server 1 Config
@@ -63,6 +75,6 @@ apt-get -y update
 apt install -y --fix-missing mysql-client-core-5.7
 
 # Sleep
-sleep 30
+sleep 60
 
 exit 0

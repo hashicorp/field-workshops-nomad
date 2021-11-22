@@ -27,6 +27,16 @@ challenges:
   type: challenge
   title: Confirm the Agents are running.
   teaser: Confirm that the agents are configured and running.
+  notes:
+  - type: text
+    contents: |-
+      In this track, you'll learn how to control access to Nomad with Access Control Lists (ACLs).
+
+      The first challenge will run 3 Nomad servers and 2 Nomad clients for you. All you'll need to do is check that they are running.
+
+      In the following challenges, you will configure and then use Nomad ACLs.
+
+      We have run a job called `redis` which we will be using as part of our challenges as we move on.
   assignment: |-
     Before we begin securing our Nomad cluster, lets verify that all 3 servers and both clients are running.
 
@@ -53,16 +63,6 @@ challenges:
     You should see a job with the id of `redis`.
 
     In the next challenge, you will configure ACLs for the Nomad cluster.
-  notes:
-  - type: text
-    contents: |-
-      In this track, you'll learn how to control access to Nomad with Access Control Lists (ACLs).
-
-      The first challenge will run 3 Nomad servers and 2 Nomad clients for you. All you'll need to do is check that they are running.
-
-      In the following challenges, you will configure and then use Nomad ACLs.
-
-      We have run a job called `redis` which we will be using as part of our challenges as we move on.
   tabs:
   - title: Server 1
     type: terminal
@@ -90,6 +90,12 @@ challenges:
   type: challenge
   title: Configure Nomad Server ACLs
   teaser: Configure Nomad server ACLs.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will configure the Nomad servers to use ACLs.
+
+      In the next challenge, you will configure the Nomad clients to use ACLs.
   assignment: |-
     We need to enable the ACL system for our cluster.
 
@@ -141,12 +147,6 @@ challenges:
     If you see two lines for all 3 servers, it confirms that the Nomad servers are all running.
 
     In the next challenge, you will configure the Nomad clients for utilizing ACLs.
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you will configure the Nomad servers to use ACLs.
-
-      In the next challenge, you will configure the Nomad clients to use ACLs.
   tabs:
   - title: Server 1 Config
     type: code
@@ -180,6 +180,12 @@ challenges:
   type: challenge
   title: Configure Nomad Client ACLs
   teaser: Configure Nomad client ACLs.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will configure the Nomad clients to use ACLs.
+
+      In the next challenge, you will bootstrap the Nomad cluster's ACL system.
   assignment: |-
     Now that we have the servers using ACLs, we need to configure the Clients to use them as well.
 
@@ -222,12 +228,6 @@ challenges:
     If you do see at least one Nomad process on each client (other than the `grep` command), that confirms that the agents are running.
 
     In the next challenge, we will bootstrap the cluster ACL system and create our first management token.
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you will configure the Nomad clients to use ACLs.
-
-      In the next challenge, you will bootstrap the Nomad cluster's ACL system.
   tabs:
   - title: Client 1 Config
     type: code
@@ -254,6 +254,16 @@ challenges:
   type: challenge
   title: Bootstrap Nomad ACLs
   teaser: Bootstrap Nomad ACLs.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will bootstrap the cluster to use ACLs.
+
+      The ACL system uses a allow list or default-deny model. This means no permissions are initially granted.
+
+      For clients making requests without ACL tokens, we might want to grant some basic level of access. So, we will create an anonymous ACL policy.
+
+      In the final challenge, you will see how the ACLs restrict what different users can do in Nomad.
   assignment: |-
     Now that we have the servers and clients using ACLs, we need to bootstrap the ACL system.
 
@@ -355,16 +365,6 @@ challenges:
     You should see the 2 client nodes.
 
     In the next challenge, you will see how the Nomad ACLs restrict what different users can do in Nomad.
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you will bootstrap the cluster to use ACLs.
-
-      The ACL system uses a allow list or default-deny model. This means no permissions are initially granted.
-
-      For clients making requests without ACL tokens, we might want to grant some basic level of access. So, we will create an anonymous ACL policy.
-
-      In the final challenge, you will see how the ACLs restrict what different users can do in Nomad.
   tabs:
   - title: Files
     type: code
@@ -396,6 +396,17 @@ challenges:
   type: challenge
   title: Using Nomad ACLs
   teaser: See how Nomad ACLs restrict what different users can do in Nomad.
+  notes:
+  - type: text
+    contents: |-
+      In this final challenge, you will see how the ACLs restrict what different users can do in Nomad.
+
+      We will apply a Developer policy and also an Operations policy to the cluster using the Nomad CLI.
+  - type: text
+    contents: |-
+      We will create two client tokens, one for a Developer role and one for an Operations role. We will also assign these to the corresponding policies.
+
+      We will then use these tokens to perform some basic actions on the cluster and see that only members of the Operations role can start and stop jobs.
   assignment: |-
     Now, let's see the Nomad ACLs in action.
 
@@ -516,17 +527,6 @@ challenges:
     As you can see, the ACL permissions can be adjusted in many ways.  We recommend that you read up further about the policies in the [Nomad Access Control](https://www.nomadproject.io/guides/security/acl.html) guide.
 
     Congratulations on finishing the Nomad ACLs track!
-  notes:
-  - type: text
-    contents: |-
-      In this final challenge, you will see how the ACLs restrict what different users can do in Nomad.
-
-      We will apply a Developer policy and also an Operations policy to the cluster using the Nomad CLI.
-  - type: text
-    contents: |-
-      We will create two client tokens, one for a Developer role and one for an Operations role. We will also assign these to the corresponding policies.
-
-      We will then use these tokens to perform some basic actions on the cluster and see that only members of the Operations role can start and stop jobs.
   tabs:
   - title: Config Files
     type: code
@@ -547,4 +547,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 1800
-checksum: "13581595256840021460"
+checksum: "12849487355938753729"

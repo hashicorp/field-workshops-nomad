@@ -31,6 +31,19 @@ challenges:
   title: Bootstrap a Nomad Cluster Manually
   teaser: |
     Bootstrap a Nomad cluster with 3 servers and 2 Nomad clients using manual clustering.
+  notes:
+  - type: text
+    contents: |-
+      This track will show you how to bootstrap a Nomad cluster that has three servers and two clients in two different ways. You will also learn how easy it is to register Nomad tasks as Consul services and secure them with Nomad's native integration with [Consul Connect](https://www.nomadproject.io/docs/integrations/consul-connect/).
+
+      In this first challenge, you will bootstrap the Nomad cluster using manual clustering.
+
+      In the next challenge, you will use automatic clustering with Consul.
+  - type: text
+    contents: |-
+      We've put all the server and client configuration files on the server1 VM so that you can conveniently see them in a single Instruqt tab.
+
+      However, if you decide to edit any of the configuration files for any reason, be sure to do so on the tab that matches the file you change.
   assignment: |-
     In this challenge, you will bootstrap a Nomad cluster with 3 servers and 2 Nomad clients using manual clustering.
 
@@ -102,19 +115,6 @@ challenges:
     You can now inspect the servers and clients in the Nomad UI. You might initially see a "Server Error" message in the UI saying that "A server error prevented data from being sent to the client".  Just click on the "Go to Clients" button. You should then see the UI and can inspect the servers and clients that you started.
 
     Of course, you won't see any jobs yet.
-  notes:
-  - type: text
-    contents: |-
-      This track will show you how to bootstrap a Nomad cluster that has three servers and two clients in two different ways. You will also learn how easy it is to register Nomad tasks as Consul services and secure them with Nomad's native integration with [Consul Connect](https://www.nomadproject.io/docs/integrations/consul-connect/).
-
-      In this first challenge, you will bootstrap the Nomad cluster using manual clustering.
-
-      In the next challenge, you will use automatic clustering with Consul.
-  - type: text
-    contents: |-
-      We've put all the server and client configuration files on the server1 VM so that you can conveniently see them in a single Instruqt tab.
-
-      However, if you decide to edit any of the configuration files for any reason, be sure to do so on the tab that matches the file you change.
   tabs:
   - title: Config Files
     type: code
@@ -147,6 +147,19 @@ challenges:
   title: Bootstrap a Nomad Cluster with Consul
   teaser: Bootstrap a Nomad Cluster with 3 servers and 2 Nomad clients using automated
     clustering with Consul.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will bootstrap the Nomad cluster using automatic clustering with Consul.
+
+      The setup scripts for this challenge have stopped the Nomad processes that were running in the first challenge, deleted their data, updated the Nomad configuration files, and added Consul configuration files.
+
+      We are running the Consul servers on the same VMs as the Nomad servers.
+  - type: text
+    contents: |-
+      We've put all the Consul and Nomad server and client configuration files on the server1 VM so that you can conveniently see them in a single Instruqt tab.
+
+      However, if you decide to edit any of the configuration files for any reason, be sure to do so on the tab that matches the file you change.
   assignment: |-
     In this challenge, you will configure and run a Nomad cluster using automated clustering with Consul.
 
@@ -268,19 +281,6 @@ challenges:
     You can now inspect the servers and clients in the Nomad UI. You might initially see a "Server Error" message in the UI saying that "A server error prevented data from being sent to the client".  Just click on the "Go to Clients" button. You should then see the UI and can inspect the servers and clients that you started.
 
     Of course, you won't see any jobs yet. You will start one that uses Consul for service discovery and secure communication in the next challenge.
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you will bootstrap the Nomad cluster using automatic clustering with Consul.
-
-      The setup scripts for this challenge have stopped the Nomad processes that were running in the first challenge, deleted their data, updated the Nomad configuration files, and added Consul configuration files.
-
-      We are running the Consul servers on the same VMs as the Nomad servers.
-  - type: text
-    contents: |-
-      We've put all the Consul and Nomad server and client configuration files on the server1 VM so that you can conveniently see them in a single Instruqt tab.
-
-      However, if you decide to edit any of the configuration files for any reason, be sure to do so on the tab that matches the file you change.
   tabs:
   - title: Config Files
     type: code
@@ -313,6 +313,14 @@ challenges:
   title: Nomad's Integration with Consul and Consul Connect
   teaser: Run a Nomad job with tasks that find each other using Consul's service discovery
     and communicate securely using Consul Connect.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will run a job that uses Nomad's native integration with Consul. The job's tasks will use Consul's service registration, service discovery, and secure service-to-service communication (using Consul Connect).
+
+      This challenge is based on the [Nomad Consul Connect Example](https://www.nomadproject.io/docs/integrations/consul-connect/) in the Nomad documentation.
+
+      For additional information about Consul Connect, see the [Consul Connect](https://www.consul.io/docs/connect/index.html) documentation.
   assignment: |-
     In this challenge, you will run a job that uses Nomad's native integrations with Consul and Consul Connect. The job's tasks will use Consul's service registration, service discovery, and secure service-to-service communication (using Consul Connect).
 
@@ -358,14 +366,6 @@ challenges:
     You can also look at the tasks associated with proxies in both the Nomad and the Consul UIs.
 
     Congratulations on completing the Nomad Multi-Server Cluster track!
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you will run a job that uses Nomad's native integration with Consul. The job's tasks will use Consul's service registration, service discovery, and secure service-to-service communication (using Consul Connect).
-
-      This challenge is based on the [Nomad Consul Connect Example](https://www.nomadproject.io/docs/integrations/consul-connect/) in the Nomad documentation.
-
-      For additional information about Consul Connect, see the [Consul Connect](https://www.consul.io/docs/connect/index.html) documentation.
   tabs:
   - title: Config Files
     type: code
@@ -398,4 +398,4 @@ challenges:
     port: 9002
   difficulty: basic
   timelimit: 1200
-checksum: "10711246043662458330"
+checksum: "12513351244456023591"

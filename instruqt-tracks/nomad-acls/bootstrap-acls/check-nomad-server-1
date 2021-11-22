@@ -12,4 +12,14 @@ grep -q "nomad\s\+server\s\+members" /root/.bash_history || fail-message "You ha
 
 grep -q "nomad\s\+node\s\+status" /root/.bash_history || fail-message "You haven't checked the status of your Nomad client nodes yet."
 
+nomad_servers=$(nomad server members | grep alive | wc -l)
+if [ $nomad_servers -ne 3 ]; then
+  fail-message "There are not 3 running Nomad servers, or the annoymous policy is not configured after enabling Nomad ACLs."
+fi
+
+nomad_clients=$(nomad node status | grep ready | wc -l)
+if [ $nomad_clients -ne 2 ]; then
+  fail-message "There are not 2 running Nomad clients, or the annoymous policy is not configured after enabling Nomad ACLs."
+fi
+
 exit 0
