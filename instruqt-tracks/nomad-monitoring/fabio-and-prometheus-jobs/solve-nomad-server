@@ -19,5 +19,7 @@ nomad job status fabio
 # Check status of the prometheus job
 nomad job status prometheus
 
+# sleep
+sleep 60
 
 exit 0

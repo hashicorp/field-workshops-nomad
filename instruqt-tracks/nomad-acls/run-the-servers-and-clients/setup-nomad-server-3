@@ -73,6 +73,9 @@ EOF
 systemctl enable nomad
 systemctl start nomad
 
+# Sleep
+sleep 60
+
 # Configure Nomad Autocomplete
 nomad -autocomplete-install
 complete -C /usr/local/bin/nomad nomad

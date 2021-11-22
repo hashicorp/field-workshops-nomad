@@ -9,4 +9,7 @@ cd nomad
 # Run the connect.nomad Job
 nomad job run connect.nomad
 
+# sleep
+sleep 60
+
 exit 0

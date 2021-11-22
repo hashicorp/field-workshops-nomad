@@ -63,7 +63,7 @@ cat <<-EOF > /etc/consul.d/consul-server1.json
   "client_addr": "0.0.0.0",
   "bootstrap_expect": 1,
   "recursors": [
-    "10.64.0.254"
+    "10.64.1.254"
   ]
 }
 EOF
@@ -80,7 +80,7 @@ cat <<-EOF > root/nomad/config/consul-server1-west.json
   "client_addr": "0.0.0.0",
   "bootstrap_expect": 1,
   "recursors": [
-    "10.64.0.254"
+    "10.64.1.254"
   ]
 }
 EOF
@@ -119,7 +119,7 @@ cat <<-EOF > root/nomad/config/consul-server1-east.json
   "client_addr": "0.0.0.0",
   "bootstrap_expect": 1,
   "recursors": [
-    "10.64.0.254"
+    "10.64.1.254"
   ]
 }
 EOF
@@ -159,7 +159,7 @@ cat <<-EOF > root/nomad/config/consul-client1-west.json
     "nomad-server-1-west"
   ],
   "recursors": [
-    "10.64.0.254"
+    "10.64.1.254"
   ]
 }
 EOF
@@ -199,7 +199,7 @@ cat <<-EOF > root/nomad/config/consul-client1.json
     "nomad-server-1-east"
   ],
   "recursors": [
-    "10.64.0.254"
+    "10.64.1.254"
   ]
 }
 EOF
@@ -238,7 +238,7 @@ cat <<-EOF > root/nomad/config/consul-client2.json
     "nomad-server-1-west"
   ],
   "recursors": [
-    "10.64.0.254"
+    "10.64.1.254"
   ]
 }
 EOF
@@ -277,7 +277,7 @@ cat <<-EOF > root/nomad/config/consul-client2.json
     "nomad-server-1-east"
   ],
   "recursors": [
-    "10.64.0.254"
+    "10.64.1.254"
   ]
 }
 EOF

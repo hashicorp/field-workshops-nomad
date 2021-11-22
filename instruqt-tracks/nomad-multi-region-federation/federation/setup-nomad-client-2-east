@@ -37,7 +37,7 @@ cat <<-EOF > /etc/consul.d/consul-client2.json
     "nomad-server-1-east"
   ],
   "recursors": [
-    "10.64.0.254"
+    "10.64.1.254"
   ]
 }
 EOF

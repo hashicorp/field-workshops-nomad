@@ -32,7 +32,7 @@ cat <<-EOF > /root/hashistack/consul/server.json
     "client_addr": "0.0.0.0",
     "bootstrap_expect": 1,
     "recursors": [
-      "10.64.0.254"
+      "10.64.1.254"
     ]
 }
 EOF
@@ -51,7 +51,7 @@ cat <<-EOF > /root/hashistack/consul/client.json
         "hashistack-server:8301"
     ],
     "recursors": [
-      "10.64.0.254"
+      "10.64.1.254"
     ]
 }
 EOF
