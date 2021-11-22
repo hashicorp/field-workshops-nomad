@@ -15,7 +15,7 @@ fi
 
 nomad_servers=$(nomad server members | grep alive | wc -l)
 if [ $nomad_servers -ne 1 ]; then
-  fail-message "The Nomad servers is not running."
+  fail-message "The Nomad server is not running."
 fi
 
 nomad_clients=$(nomad node status | grep ready | wc -l)

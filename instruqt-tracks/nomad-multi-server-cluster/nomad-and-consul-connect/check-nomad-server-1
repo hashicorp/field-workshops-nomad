@@ -4,4 +4,10 @@ set -e
 
 grep -q "nomad\s\+job\s\+run\s\+connect.nomad" /root/.bash_history || fail-message "You haven't run the connect.nomad job yet."
 
+# Check that countdash job is running correctly
+nomad_allocations=$(nomad job status countdash | grep Healthy -A3 | grep "1        1       1" | wc -l)
+if [ $nomad_allocations -ne 2 ]; then
+  fail-message "The countdash job does not have 2 healthy allocations."
+fi
+
 exit 0

@@ -1,5 +1,9 @@
 #!/bin/bash -l
 
+# Uncomment out mapping of 127.0.0.1 to hostname in /etc/hosts
+HOSTNAME=$(hostname -s)
+sed -i "s/127\.0\.0\.1 ${HOSTNAME}/#127.0.0.1 ${HOSTNAME}/" /etc/hosts
+
 # Write Server main config file
 cat <<-EOF > /etc/nomad.d/client2.hcl
 # Setup data dir

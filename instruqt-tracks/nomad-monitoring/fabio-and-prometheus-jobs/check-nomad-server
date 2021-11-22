@@ -14,4 +14,19 @@ grep -q "nomad\s\+job\s\+status\s\+fabio" /root/.bash_history || fail-message "Y
 # Check that the status of the prometheus job was checked
 grep -q "nomad\s\+job\s\+status\s\+prometheus" /root/.bash_history || fail-message "You haven't checked the status of the prometheus job yet."
 
+consul_clients=$(consul members | grep alive |wc -l)
+if [ $consul_clients -ne 4 ]; then
+  fail-message "There are not 4 running Consul clients."
+fi
+
+nomad_servers=$(nomad server members | grep alive | wc -l)
+if [ $nomad_servers -ne 1 ]; then
+  fail-message "There is not 1 running Nomad server."
+fi
+
+nomad_clients=$(nomad node status | grep ready | wc -l)
+if [ $nomad_clients -ne 3 ]; then
+  fail-message "There are not 3 running Nomad clients."
+fi
+
 exit 0

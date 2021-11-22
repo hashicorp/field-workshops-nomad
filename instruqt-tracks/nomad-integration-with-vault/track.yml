@@ -38,6 +38,15 @@ challenges:
   title: Verify that the Agents are Running
   teaser: |
     Verify that all of the server and client agents are configured and running.
+  notes:
+  - type: text
+    contents: |-
+      <b>Nomad Integration with Vault</b>
+      <hr />
+
+      In this track, you are going to explore how [Nomad](https://nomadproject.io) integrates seamlessly with [Vault](https://www.vaultproject.io) and allows your application to retrieve dynamic credentials for a database.
+
+      You will deploy a web application that needs to authenticate against a [PostgreSQL](https://www.postgresql.org/docs) database and display data from a table to the user.
   assignment: |-
     Before we begin, let's verify that our Nomad, Consul and Vault servers and both clients are running.
 
@@ -70,15 +79,6 @@ challenges:
     Our next challenge will be to create the Nomad token policy for Vault.
 
     Click the "Check" button in the lower right to complete the challenge.
-  notes:
-  - type: text
-    contents: |-
-      <b>Nomad Integration with Vault</b>
-      <hr />
-
-      In this track, you are going to explore how [Nomad](https://nomadproject.io) integrates seamlessly with [Vault](https://www.vaultproject.io) and allows your application to retrieve dynamic credentials for a database.
-
-      You will deploy a web application that needs to authenticate against a [PostgreSQL](https://www.postgresql.org/docs) database and display data from a table to the user.
   tabs:
   - title: Files
     type: code
@@ -107,6 +107,17 @@ challenges:
   title: Create a Vault Policy and Token for the Nomad Server
   teaser: |
     Create a Vault policy and token for use by the Nomad server.
+  notes:
+  - type: text
+    contents: |-
+      <b>Create the Nomad Server's Policy and Token</b>
+      <hr />
+
+      To use Nomad's [Vault integration](https://nomadproject.io/docs/vault-integration), you must provide a [Vault token](https://www.vaultproject.io/docs/concepts/tokens) to your Nomad server.
+
+      The recommended approach is to give the Nomad server a periodic token with the ability to create tokens for Nomad jobs that are derived from a token role. This approach limits the Vault secrets that applications orchestrated by Nomad can read.
+
+      In this challenge, you will create a policy and token that give the Nomad server the Vault permissions it needs.
   assignment: |-
     A policy named nomad-server-policy.hcl has been created for you in the vault directory of the "Files" tab. Click on the file to view how the policy has been setup.
 
@@ -130,17 +141,6 @@ challenges:
     Our next challenge will be to create a Vault token role that the Nomad server will use when creating Vault tokens for jobs that it runs.
 
     Click the "Check" button in the lower right to complete the challenge.
-  notes:
-  - type: text
-    contents: |-
-      <b>Create the Nomad Server's Policy and Token</b>
-      <hr />
-
-      To use Nomad's [Vault integration](https://nomadproject.io/docs/vault-integration), you must provide a [Vault token](https://www.vaultproject.io/docs/concepts/tokens) to your Nomad server.
-
-      The recommended approach is to give the Nomad server a periodic token with the ability to create tokens for Nomad jobs that are derived from a token role. This approach limits the Vault secrets that applications orchestrated by Nomad can read.
-
-      In this challenge, you will create a policy and token that give the Nomad server the Vault permissions it needs.
   tabs:
   - title: Files
     type: code
@@ -169,18 +169,6 @@ challenges:
   title: Create a Vault Token Role
   teaser: |
     Create a Vault token role that Nomad can give to jobs.
-  assignment: |-
-    If you did not read all 3 notes screens while this challenge was starting, please do that now by clicking the "notes" button in the upper right corner. After reading all of them, click the "X" button to hide the notes.
-
-    Click on the "Files" tab and take a look at the "/root/hashistack/vault/nomad-cluster-role.json" policy. Create the token role named "nomad-cluster" by running the following command on the "Server" tab:
-    ```
-    vault write auth/token/roles/nomad-cluster @nomad-cluster-role.json
-    ```
-    You should now see a message telling you that you succeeded.
-
-    Our next challenge will be to reconfigure Nomad to enable the Vault integration.
-
-    Click the "Check" button in the lower right to complete the challenge.
   notes:
   - type: text
     contents: |-
@@ -216,6 +204,18 @@ challenges:
         "renewable": true
       }
       ```
+  assignment: |-
+    If you did not read all 3 notes screens while this challenge was starting, please do that now by clicking the "notes" button in the upper right corner. After reading all of them, click the "X" button to hide the notes.
+
+    Click on the "Files" tab and take a look at the "/root/hashistack/vault/nomad-cluster-role.json" policy. Create the token role named "nomad-cluster" by running the following command on the "Server" tab:
+    ```
+    vault write auth/token/roles/nomad-cluster @nomad-cluster-role.json
+    ```
+    You should now see a message telling you that you succeeded.
+
+    Our next challenge will be to reconfigure Nomad to enable the Vault integration.
+
+    Click the "Check" button in the lower right to complete the challenge.
   tabs:
   - title: Files
     type: code
@@ -244,26 +244,6 @@ challenges:
   title: Reconfigure the Nomad Server
   teaser: |
     Enable the Vault integration on the Nomad server.
-  assignment: |-
-    If you did not read all 3 notes screens while this challenge was starting, please do that now by clicking the "notes" button in the upper right corner. After reading all of them, click the "X" button to hide the notes.
-
-    Click on the "Files" tab and navigate to the "/root/hashistack/nomad/nomad-token.txt" file. Copy the value of the `token` field from the file. Click on the "server.hcl" file in the same directory. Find the "vault" stanza at the bottom and replace <b><your nomad server token\></b> with your token. Also, change <b>enabled = false</b> to <b>enabled = true</b> within the "vault" stanza.
-
-    <b>Remember to save the file by clicking the save icon on the "Files" tab!</b>
-
-    Note that token could also have been provided as an environment variable called VAULT_TOKEN instead of including it in the "vault" stanza.
-
-    Note that the `create_from_role` key in the "vault" stanza is set to the "nomad-cluster" token role that you created in the last challenge. So, we are using both the token you created two challenges ago and the token role you created in the last challenge.
-
-    Next, restart the Nomad server by running;
-    ```
-    systemctl restart nomad
-    ```
-    The Nomad server is now integrated with Vault and its Vault token will be renewed automatically.
-
-    Our next challenge will be to deploy a PostgeSQL database with a Nomad job.
-
-    Click the "Check" button in the lower right to complete the challenge.
   notes:
   - type: text
     contents: |-
@@ -296,6 +276,26 @@ challenges:
       ```
 
       Note that the Nomad clients are not given a Vault token.
+  assignment: |-
+    If you did not read all 3 notes screens while this challenge was starting, please do that now by clicking the "notes" button in the upper right corner. After reading all of them, click the "X" button to hide the notes.
+
+    Click on the "Files" tab and navigate to the "/root/hashistack/nomad/nomad-token.txt" file. Copy the value of the `token` field from the file. Click on the "server.hcl" file in the same directory. Find the "vault" stanza at the bottom and replace <b><your nomad server token\></b> with your token. Also, change <b>enabled = false</b> to <b>enabled = true</b> within the "vault" stanza.
+
+    <b>Remember to save the file by clicking the save icon on the "Files" tab!</b>
+
+    Note that token could also have been provided as an environment variable called VAULT_TOKEN instead of including it in the "vault" stanza.
+
+    Note that the `create_from_role` key in the "vault" stanza is set to the "nomad-cluster" token role that you created in the last challenge. So, we are using both the token you created two challenges ago and the token role you created in the last challenge.
+
+    Next, restart the Nomad server by running;
+    ```
+    systemctl restart nomad
+    ```
+    The Nomad server is now integrated with Vault and its Vault token will be renewed automatically.
+
+    Our next challenge will be to deploy a PostgeSQL database with a Nomad job.
+
+    Click the "Check" button in the lower right to complete the challenge.
   tabs:
   - title: Files
     type: code
@@ -324,6 +324,13 @@ challenges:
   title: Deploy a Database
   teaser: |
     Deploy a PostgreSQL database with Nomad.
+  notes:
+  - type: text
+    contents: |-
+      <b>Deploy a Database with Nomad</b>
+      <hr />
+
+      The next few steps will involve configuring a connection between Vault and our database, so let's deploy one that we can connect to.
   assignment: |-
     A Nomad job has been created for you to deploy a PostgreSQL database. Click on the "Files" tab and navigate to the "/root/hashistack/nomad/db.nomad" file to see the details of the job.
 
@@ -342,13 +349,6 @@ challenges:
     Our next challenge will be to configure the Vault Database Secrets Engine.
 
     Click the "Check" button in the lower right to complete the challenge.
-  notes:
-  - type: text
-    contents: |-
-      <b>Deploy a Database with Nomad</b>
-      <hr />
-
-      The next few steps will involve configuring a connection between Vault and our database, so let's deploy one that we can connect to.
   tabs:
   - title: Files
     type: code
@@ -377,48 +377,6 @@ challenges:
   title: Configure the Vault Database Secrets Engine
   teaser: |
     Allow Vault to generate dynamic credentials for the PostgreSQL database.
-  assignment: |-
-    If you did not read all 5 notes screens while this challenge was starting, please do that now by clicking the "notes" button in the upper right corner. After reading all of them, click the "X" button to hide the notes.
-
-    Let's start off by enabling the Database Secrets Engine by running the following command on the "Server" tab;
-    ```
-    vault secrets enable database
-    ```
-    You should see a message indicating success.
-
-    A database connection file has been created for you. Take a look at it by clicking on the "Files" tab and navigating to the "/root/hashistack/vault/connection.json" file.
-
-    Run the following command to configure the connection between the database secrets engine and our database:
-    ```
-    vault write database/config/postgresql @connection.json
-    ```
-    If the operation is successful, there will be no output.
-
-    Click on the "Files" tab and navigate to the "/root/hashistack/vault/accessdb.sql" file. Recall from the previous step that we specified accessdb in the allowed_roles key of our connection information.
-
-    Run the following command to create the role:
-    ```
-    vault write database/roles/accessdb db_name=postgresql creation_statements=@accessdb.sql default_ttl=1h max_ttl=24h
-    ```
-    You should see a message indicating success.
-
-    Finally, let's verify that we can generate PostgreSQL credentials from the database secrets engine by running the following command:
-    ```
-    vault read database/creds/accessdb
-    ```
-    You should see a table listing a username and password.
-
-    A policy file that allows retrieval of PostgreSQL credentials from the database secrets engine has been created for you. Take a look at it by clicking on the "Files" tab and navigating to the "/root/hashistack/vault/access-tables-policy.hcl" file. We need to create this policy to restrict who can request dynamic credentials from the database secrets engine.
-
-    Create the access-tables policy with the following command:
-    ```
-    vault policy write access-tables access-tables-policy.hcl
-    ```
-    You should see a success message as confirmation.
-
-    Our next challenge will be to deploy the web application with Nomad.
-
-    Click the "Check" button in the lower right to complete the challenge.
   notes:
   - type: text
     contents: |-
@@ -464,6 +422,48 @@ challenges:
       ```
 
       The Nomad "web" job will be assigned this policy.
+  assignment: |-
+    If you did not read all 5 notes screens while this challenge was starting, please do that now by clicking the "notes" button in the upper right corner. After reading all of them, click the "X" button to hide the notes.
+
+    Let's start off by enabling the Database Secrets Engine by running the following command on the "Server" tab;
+    ```
+    vault secrets enable database
+    ```
+    You should see a message indicating success.
+
+    A database connection file has been created for you. Take a look at it by clicking on the "Files" tab and navigating to the "/root/hashistack/vault/connection.json" file.
+
+    Run the following command to configure the connection between the database secrets engine and our database:
+    ```
+    vault write database/config/postgresql @connection.json
+    ```
+    If the operation is successful, there will be no output.
+
+    Click on the "Files" tab and navigate to the "/root/hashistack/vault/accessdb.sql" file. Recall from the previous step that we specified accessdb in the allowed_roles key of our connection information.
+
+    Run the following command to create the role:
+    ```
+    vault write database/roles/accessdb db_name=postgresql creation_statements=@accessdb.sql default_ttl=1h max_ttl=24h
+    ```
+    You should see a message indicating success.
+
+    Finally, let's verify that we can generate PostgreSQL credentials from the database secrets engine by running the following command:
+    ```
+    vault read database/creds/accessdb
+    ```
+    You should see a table listing a username and password.
+
+    A policy file that allows retrieval of PostgreSQL credentials from the database secrets engine has been created for you. Take a look at it by clicking on the "Files" tab and navigating to the "/root/hashistack/vault/access-tables-policy.hcl" file. We need to create this policy to restrict who can request dynamic credentials from the database secrets engine.
+
+    Create the access-tables policy with the following command:
+    ```
+    vault policy write access-tables access-tables-policy.hcl
+    ```
+    You should see a success message as confirmation.
+
+    Our next challenge will be to deploy the web application with Nomad.
+
+    Click the "Check" button in the lower right to complete the challenge.
   tabs:
   - title: Files
     type: code
@@ -492,6 +492,39 @@ challenges:
   title: Deploy a Web Application
   teaser: |
     Deploy a web application with the appropriate policy and templating.
+  notes:
+  - type: text
+    contents: |-
+      <b>Deploy a Web Application with Nomad</b>
+      <hr />
+
+      Now we are ready to deploy our web application and give it the necessary Vault policy and configuration to communicate with our database.
+  - type: text
+    contents: |-
+      When you look at the job specification for the web job, you will see the following "vault" stanza:
+      ```
+      vault {
+        policies = ["access-tables"]
+      }
+      ```
+
+      This assigns the job the "access-tables" policy so that it can request database credentials from Vault.
+  - type: text
+    contents: |-
+      We are using the "template" stanza's vault integration to populate a configuration file that our application needs.
+
+      The underlying tool being used is [Consul Template](https://learn.hashicorp.com/consul/developer-configuration/consul-template), which is built into Nomad and can populate files with data from Consul's key/value store and from Vault secrets.
+  - type: text
+    contents: |-
+      The "template" stanza of the job specification for the web job includes the following:
+      ```
+      {{ with secret "database/creds/accessdb" }}
+        DB_USERNAME="{{ .Data.username }}"
+        DB_PASSWORD="{{ .Data.password }}"
+      {{ end }}
+      ```
+
+      This tells the Consul Template sub-system of Nomad to retrive the dynamically generated username and password for the database from the "database/creds/accessdb" path on the Vault server and to store the "username" and "password" keys of that secret in the given variables within the task.
   assignment: |-
     If you did not read all 4 notes screens while this challenge was starting, please do that now by clicking the "notes" button in the upper right corner. After reading all of them, click the "X" button to hide the notes.
 
@@ -527,39 +560,6 @@ challenges:
     Click the "Check" button in the lower right to complete the challenge.
 
     Congratulations on finishing the Nomad Integration with Vault track!
-  notes:
-  - type: text
-    contents: |-
-      <b>Deploy a Web Application with Nomad</b>
-      <hr />
-
-      Now we are ready to deploy our web application and give it the necessary Vault policy and configuration to communicate with our database.
-  - type: text
-    contents: |-
-      When you look at the job specification for the web job, you will see the following "vault" stanza:
-      ```
-      vault {
-        policies = ["access-tables"]
-      }
-      ```
-
-      This assigns the job the "access-tables" policy so that it can request database credentials from Vault.
-  - type: text
-    contents: |-
-      We are using the "template" stanza's vault integration to populate a configuration file that our application needs.
-
-      The underlying tool being used is [Consul Template](https://learn.hashicorp.com/consul/developer-configuration/consul-template), which is built into Nomad and can populate files with data from Consul's key/value store and from Vault secrets.
-  - type: text
-    contents: |-
-      The "template" stanza of the job specification for the web job includes the following:
-      ```
-      {{ with secret "database/creds/accessdb" }}
-        DB_USERNAME="{{ .Data.username }}"
-        DB_PASSWORD="{{ .Data.password }}"
-      {{ end }}
-      ```
-
-      This tells the Consul Template sub-system of Nomad to retrive the dynamically generated username and password for the database from the "database/creds/accessdb" path on the Vault server and to store the "username" and "password" keys of that secret in the given variables within the task.
   tabs:
   - title: Files
     type: code
@@ -586,4 +586,4 @@ challenges:
     port: 3000
   difficulty: basic
   timelimit: 600
-checksum: "1695810649082817421"
+checksum: "11242485081765392298"

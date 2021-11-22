@@ -1,5 +1,9 @@
 #!/bin/bash -l
 
+# Uncomment out mapping of 127.0.0.1 to hostname in /etc/hosts
+HOSTNAME=$(hostname -s)
+sed -i "s/127\.0\.0\.1 ${HOSTNAME}/#127.0.0.1 ${HOSTNAME}/" /etc/hosts
+
 # Make directory for mongodb mount
 mkdir -p /opt/mongodb/data
 

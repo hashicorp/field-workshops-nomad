@@ -40,6 +40,23 @@ challenges:
   title: Verify the Health of Your Nomad Cluster
   teaser: |
     Verify the health of the Nomad cluster that has been deployed for you.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
+
+      In later challenges, you will run "mongodb", "chat-app", and "nginx" jobs and update the second using rolling, blue/green, and canary update strategies. NGINX will be used as a load balancer that will forward requests to instances of the "chat" application which will store its messages in a single MongoDB database.
+  - type: text
+    contents: |-
+      You will start with a non-containerized version of the "chat-app" application that uses Nomad's [exec](https://www.nomadproject.io/docs/drivers/exec/) task driver to run a binary compiled from a node.js application that uses a light background.
+
+      You will then use a rolling update to convert to a version of the binary that uses a dark background.
+
+      You will then do a blue/green deployment to convert to a Docker version of the app that uses the light background.
+
+      Finally, you will do a canary deployment that converts the Docker version of the app to the dark background.
+
+      You will also learn how Nomad allows you to promote or fail blue/green and canary deployments.
   assignment: |-
     In this challenge, you will verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
 
@@ -68,23 +85,6 @@ challenges:
     You can also check the status of the Nomad server and clients in the Nomad and Consul UIs.
 
     In the next challenge, you will will run "mongodb", "chat-app", and "nginx" jobs.
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you will verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
-
-      In later challenges, you will run "mongodb", "chat-app", and "nginx" jobs and update the second using rolling, blue/green, and canary update strategies. NGINX will be used as a load balancer that will forward requests to instances of the "chat" application which will store its messages in a single MongoDB database.
-  - type: text
-    contents: |-
-      You will start with a non-containerized version of the "chat-app" application that uses Nomad's [exec](https://www.nomadproject.io/docs/drivers/exec/) task driver to run a binary compiled from a node.js application that uses a light background.
-
-      You will then use a rolling update to convert to a version of the binary that uses a dark background.
-
-      You will then do a blue/green deployment to convert to a Docker version of the app that uses the light background.
-
-      Finally, you will do a canary deployment that converts the Docker version of the app to the dark background.
-
-      You will also learn how Nomad allows you to promote or fail blue/green and canary deployments.
   tabs:
   - title: Server
     type: terminal
@@ -105,6 +105,14 @@ challenges:
   title: Deploy the MongoDB, NGINX, and Chat-App Jobs
   teaser: |
     Deploy the MongoDB, NGINX, and Chat-App jobs.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will deploy the "mongodb", "chat-app", and "nginx" jobs.
+
+      The first version of the "chat-app" job uses Nomad's [exec](https://www.nomadproject.io/docs/drivers/exec/) task driver to run a binary compiled from a node.js application. This version of the app has a light background.
+
+      In the next challenge, you will update the Chat app to a different binary that uses a dark background using the rolling update strategy.
   assignment: |-
     In this challenge, you will deploy the "mongodb", "chat-app", and "nginx" jobs.
 
@@ -267,14 +275,6 @@ challenges:
     If you type messages in the Chat tabs, they will usually show up in the other tab. However, you might sometimes need to click the Instruqt refresh button to the right of all the tabs while one of the Chat tabs is selected in order to force it to reconnect to the database. This is an issue with the chat app itself rather than with Nomad.
 
     In the next challenge, you will update the Chat app to use a dark background using Nomad's rolling update strategy.
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you will deploy the "mongodb", "chat-app", and "nginx" jobs.
-
-      The first version of the "chat-app" job uses Nomad's [exec](https://www.nomadproject.io/docs/drivers/exec/) task driver to run a binary compiled from a node.js application. This version of the app has a light background.
-
-      In the next challenge, you will update the Chat app to a different binary that uses a dark background using the rolling update strategy.
   tabs:
   - title: Jobs
     type: code
@@ -311,6 +311,14 @@ challenges:
   title: Do a Rolling Update of the Chat Job
   teaser: |
     Do a rolling update of the Chat job in which you replace one instance at a time.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will do a rolling update of the Chat job to make it use a dark background instead of the current light background.
+
+      The new version of the app is a different node.js binary that is also run by Nomad's exec driver.
+
+      In the next challenge, you will update the Chat app to a Docker-based version that uses the original light background using a "blue/green" deployment strategy.
   assignment: |-
     In this challenge, you will do a rolling update of the "chat-app" job.  You will be replacing the chatapp-light-linux binary with a chatapp-dark-linux binary that uses a dark background. This binary is also run with Nomad's exec task driver.
 
@@ -397,14 +405,6 @@ challenges:
     You will now see 6 allocations, 3 of which are marked "complete" while 3 are "running".
 
     In the next challenge, you will update the Chat app to a Docker-based version that uses the original light background using a "blue/green" deployment strategy.
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you will do a rolling update of the Chat job to make it use a dark background instead of the current light background.
-
-      The new version of the app is a different node.js binary that is also run by Nomad's exec driver.
-
-      In the next challenge, you will update the Chat app to a Docker-based version that uses the original light background using a "blue/green" deployment strategy.
   tabs:
   - title: Jobs
     type: code
@@ -441,6 +441,12 @@ challenges:
   title: Do a Blue/Green Deployment of the Chat Job
   teaser: |
     Do a blue/green deployment of the Chat job.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will do a "blue/green" deployment of the Chat job for which Nomad will deploy 3 new Docker-based instances of the chat app with the original light background but keep the 3 binary-based instances with the dark background running.
+
+      When you are satisfied with the new version of the app, you will promote the deployment, causing Nomad to stop the old instances.
   assignment: |-
     In this challenge, you will do a blue/green deployment of the Chat job in which you deploy 3 new instances alongside the current ones and then promote the deployment when satisfied.
 
@@ -542,12 +548,6 @@ challenges:
     If you had been unhappy with the new version of the chat app, you could have rolled back to the old version by running `nomad deployment fail <deployment_id>`, replacing <deployment_id\> with the deployment ID returned by the job status command. Nomad would then have stopped the new allocations leaving the app in the state it had been in before you re-ran the job.
 
     In the next challenge, you will update the Chat job using a "canary" deployment, but you will rollback the deployment instead of promoting it. You will be changing to a Docker-based version of the app that uses the dark background.
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you will do a "blue/green" deployment of the Chat job for which Nomad will deploy 3 new Docker-based instances of the chat app with the original light background but keep the 3 binary-based instances with the dark background running.
-
-      When you are satisfied with the new version of the app, you will promote the deployment, causing Nomad to stop the old instances.
   tabs:
   - title: Jobs
     type: code
@@ -584,6 +584,12 @@ challenges:
   title: Do a Canary Deployment of the Chat Job
   teaser: |
     Do a canary deployment of the Chat job in which you deploy and evaluate 1 new instance but decide to roll back the deployment.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will do a "canary" deployment of the Chat job for which Nomad will deploy 1 new "canary" instance of a Docker-based version of the chat app with the dark background but keep the 3 instances with the light background that you deployed in the last challenge running.
+
+      However, instead of promoting the deployment, you will roll it back.
   assignment: |-
     In this challenge, you will do a "canary" deployment of the chat-app job, but you will rollback the deployment instead of promoting it.
 
@@ -677,12 +683,6 @@ challenges:
     Together, this challenge and the previous one show that you can test out changes to an application with Nomad and then either promote the changes or roll them back. The choice is yours.
 
     Congratulations on completing the Nomad Job Update Strategies track!
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you will do a "canary" deployment of the Chat job for which Nomad will deploy 1 new "canary" instance of a Docker-based version of the chat app with the dark background but keep the 3 instances with the light background that you deployed in the last challenge running.
-
-      However, instead of promoting the deployment, you will roll it back.
   tabs:
   - title: Jobs
     type: code
@@ -713,4 +713,4 @@ challenges:
     port: 8080
   difficulty: basic
   timelimit: 600
-checksum: "482772090237461827"
+checksum: "11751966276259963252"

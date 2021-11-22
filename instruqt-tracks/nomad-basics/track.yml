@@ -26,6 +26,20 @@ challenges:
   title: The Nomad CLI
   teaser: |
     Explore the Nomad Command Line Interface (CLI).
+  notes:
+  - type: text
+    contents: |-
+      The open source version of Nomad (Nomad OSS) is a single binary that you can download and run on your laptop or virtual workstation.
+
+      It is written in Go and runs on macOS, Windows, and Linux.
+
+      You can always download the latest version of Nomad OSS here:
+      https://www.nomadproject.io/downloads.html
+  - type: text
+    contents: |-
+      Installing Nomad on your laptop or workstation is easy. You simply download the zip file, unpack it, and place it somewhere in your PATH.
+
+      We've included Nomad in a VM in your Instruqt environment so that you don't need to download or install it.
   assignment: |-
     Let's start with some basic Nomad commands, running them in the "Nomad CLI" tab on the left.
     ```
@@ -43,20 +57,6 @@ challenges:
     ```
     nomad job run -h
     ```
-  notes:
-  - type: text
-    contents: |-
-      The open source version of Nomad (Nomad OSS) is a single binary that you can download and run on your laptop or virtual workstation.
-
-      It is written in Go and runs on macOS, Windows, and Linux.
-
-      You can always download the latest version of Nomad OSS here:
-      https://www.nomadproject.io/downloads.html
-  - type: text
-    contents: |-
-      Installing Nomad on your laptop or workstation is easy. You simply download the zip file, unpack it, and place it somewhere in your PATH.
-
-      We've included Nomad in a VM in your Instruqt environment so that you don't need to download or install it.
   tabs:
   - title: Nomad CLI
     type: terminal
@@ -69,6 +69,12 @@ challenges:
   title: Run a Dev Mode Nomad Agent
   teaser: |
     Run a Nomad server in development mode.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will run your first Nomad agent in development mode and explore a few more Nomad CLI commands.
+
+      See https://learn.hashicorp.com/tutorials/nomad/get-started-run#starting-the-agent for more on Nomad's development mode.
   assignment: |-
     Nomad relies on a long running agent on every machine in the cluster. The agent can run either in server or client mode.
 
@@ -96,12 +102,6 @@ challenges:
     You'll see that the nomad-server node is a member of and actually the leader of the cluster and is alive.
 
     In the next challenge, you will run your first Nomad job.
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you will run your first Nomad agent in development mode and explore a few more Nomad CLI commands.
-
-      See https://learn.hashicorp.com/tutorials/nomad/get-started-run#starting-the-agent for more on Nomad's development mode.
   tabs:
   - title: Nomad Dev Server
     type: terminal
@@ -121,6 +121,12 @@ challenges:
   title: Run Your First Nomad Job
   teaser: |
     Run your first Nomad job with the Nomad CLI and UI.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you'll run your first Nomad job using a Nomad job specification file that has been provided.
+
+      See https://learn.hashicorp.com/tutorials/nomad/get-started-jobs for more on running Nomad jobs.
   assignment: |-
     In this challenge, you'll run your first Nomad job using a Nomad job specification file that has been provided.
 
@@ -179,12 +185,6 @@ challenges:
     ```
 
     In the next challenge, you will run the same job and check its status using the Nomad HTTP API.
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you'll run your first Nomad job using a Nomad job specification file that has been provided.
-
-      See https://learn.hashicorp.com/tutorials/nomad/get-started-jobs for more on running Nomad jobs.
   tabs:
   - title: Nomad CLI
     type: terminal
@@ -201,6 +201,12 @@ challenges:
   title: Use Nomad's HTTP API
   teaser: |
     Run and stop a job with Nomad's HTTP API.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you'll run the same Nomad job using Nomad's HTTP API.
+
+      See https://www.nomadproject.io/api/jobs.html for more on running Nomad jobs with Nomad's HTTP API.
   assignment: |-
     In this challenge, you'll run the same Nomad job using Nomad's HTTP API.
 
@@ -238,12 +244,6 @@ challenges:
     curl http://localhost:4646/v1/job/redis/summary | jq
     ```
     The JSON response should show that no allocations are currently running and that the number of complete allocations has increased by 1.
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you'll run the same Nomad job using Nomad's HTTP API.
-
-      See https://www.nomadproject.io/api/jobs.html for more on running Nomad jobs with Nomad's HTTP API.
   tabs:
   - title: Nomad CLI
     type: terminal
@@ -254,4 +254,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 900
-checksum: "8075692714081613461"
+checksum: "11870987718632235996"

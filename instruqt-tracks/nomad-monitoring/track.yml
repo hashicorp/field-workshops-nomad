@@ -30,6 +30,24 @@ challenges:
   title: Deploy Fabio and Prometheus
   teaser: |
     Run Nomad jobs that deploy Fabio and Prometheus to the Nomad cluster.
+  notes:
+  - type: text
+    contents: |-
+      The Nomad client and server agents collect runtime [telemetry](https://www.nomadproject.io/docs/telemetry/index.html). Operators can use this data to gain real-time visibility into their Nomad clusters and improve performance.
+
+      Additionally, Nomad operators can set up monitoring and alerting against these metrics and export the metrics to tools like Prometheus, Grafana, Graphite, DataDog, and Circonus.
+
+      This track will guide you through implementing the [Using Prometheus to Monitor Nomad Metrics](https://learn.hashicorp.com/tutorials/nomad/prometheus-metrics) guide.
+  - type: text
+    contents: |-
+      The setup scripts for this track have configured 4 VMs running Nomad and Consul agents. One is functioning as a server while the other 3 are functioning as clients, both with regard to Nomad and to Consul.
+
+      We've put all the server and client configuration files and job specification files on the nomad-server VM so that you can conveniently see them in a single Instruqt tab.
+  - type: text
+    contents: |-
+      In this challenge, you will first run a job that deploys the reverse proxy server [Fabio](https://fabiolb.net) that uses [Consul](https://www.consul.io).
+
+      You will then run a job that deploys [Prometheus](https://prometheus.io/docs/introduction/overview), an open-source systems monitoring and alerting tool.
   assignment: |-
     In this challenge, you will run jobs that deploy Fabio and Prometheus to the Nomad cluster.
 
@@ -147,24 +165,6 @@ challenges:
     If you go back to the "Fabio" tab and click the Instruqt refresh icon, you will now see the "prometheus" service in the routing table.  (Note that you cannot visit it using the URL in the "Dest" column because Instruqt will not allow access to the Prometheus UI on the "Fabio" tab.)
 
     In the next challenge, you will deploy the Prometheus Alertmanager to the Nomad cluster and modify the `prometheus` job to integrate the Prometheus server with Alertmanager.
-  notes:
-  - type: text
-    contents: |-
-      The Nomad client and server agents collect runtime [telemetry](https://www.nomadproject.io/docs/telemetry/index.html). Operators can use this data to gain real-time visibility into their Nomad clusters and improve performance.
-
-      Additionally, Nomad operators can set up monitoring and alerting against these metrics and export the metrics to tools like Prometheus, Grafana, Graphite, DataDog, and Circonus.
-
-      This track will guide you through implementing the [Using Prometheus to Monitor Nomad Metrics](https://learn.hashicorp.com/tutorials/nomad/prometheus-metrics) guide.
-  - type: text
-    contents: |-
-      The setup scripts for this track have configured 4 VMs running Nomad and Consul agents. One is functioning as a server while the other 3 are functioning as clients, both with regard to Nomad and to Consul.
-
-      We've put all the server and client configuration files and job specification files on the nomad-server VM so that you can conveniently see them in a single Instruqt tab.
-  - type: text
-    contents: |-
-      In this challenge, you will first run a job that deploys the reverse proxy server [Fabio](https://fabiolb.net) that uses [Consul](https://www.consul.io).
-
-      You will then run a job that deploys [Prometheus](https://prometheus.io/docs/introduction/overview), an open-source systems monitoring and alerting tool.
   tabs:
   - title: Config
     type: code
@@ -201,6 +201,12 @@ challenges:
   title: Deploy Alertmanager
   teaser: |
     Run a Nomad job that deploys Alertmanager to the Nomad cluster.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will deploy the Prometheus [Alertmanager](https://prometheus.io/docs/alerting/alertmanager) to the Nomad cluster.
+
+      You will then modify the `prometheus` job to integrate the Prometheus server with Alertmanager and redeploy Prometheus.
   assignment: |-
     In this challenge, you will deploy the Prometheus Alertmanager to the Nomad cluster and modify the `prometheus` job to integrate the Prometheus server with Alertmanager.
 
@@ -264,12 +270,6 @@ challenges:
     nomad job status prometheus | grep -A 5 Allocations
     ```
     You should see one `running` allocation and one `complete` allocation. If you would like to see the full job status, you can leave off the `grep` command.
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you will deploy the Prometheus [Alertmanager](https://prometheus.io/docs/alerting/alertmanager) to the Nomad cluster.
-
-      You will then modify the `prometheus` job to integrate the Prometheus server with Alertmanager and redeploy Prometheus.
   tabs:
   - title: Config
     type: code
@@ -302,6 +302,14 @@ challenges:
   title: Run and Stop a Web Server and See Alerts
   teaser: |
     Deploy a web server to the Nomad cluster, stop it, and see alerts in Prometheus and Alertmanager.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will deploy a web server to the Nomad cluster.
+
+      You will then stop the web server and see alerts generated in Prometheus and Alertmanager from the metrics that Nomad is sending them.
+
+      You will also restart the web server and verify that the alerts are no longer active.
   assignment: |-
     In this challenge, you will deploy a web server to the Nomad cluster by running the `webserver.nomad` job. You will then stop and restart it to see alerts show up and be cleared in Prometheus.
 
@@ -366,14 +374,6 @@ challenges:
     Finally, go to the "Alertmanager" tab, click the "Alerts" tab, and verify that Alertmanager has removed the "Webserver down" alert.
 
     Congratulations on completing the Nomad Monitoring track. Well done!
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you will deploy a web server to the Nomad cluster.
-
-      You will then stop the web server and see alerts generated in Prometheus and Alertmanager from the metrics that Nomad is sending them.
-
-      You will also restart the web server and verify that the alerts are no longer active.
   tabs:
   - title: Config
     type: code
@@ -405,4 +405,4 @@ challenges:
     port: 9999
   difficulty: basic
   timelimit: 1200
-checksum: "12266872651893029601"
+checksum: "11609772223838907709"

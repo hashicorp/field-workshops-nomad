@@ -31,6 +31,12 @@ challenges:
   title: Verify the Health of Your Nomad Cluster
   teaser: |
     Verify the health of the Nomad cluster that has been deployed for you.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
+
+      In later challenges, you will run Nomad jobs that deploy a web application and the Traefik load balancer. You will then update them using Nomad's various options for controlling job placement.
   assignment: |-
     In this challenge, you will verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
 
@@ -57,12 +63,6 @@ challenges:
     You can also check the status of the Nomad server and clients in the Nomad and Consul UIs.
 
     In the next challenge, you will run jobs that deploy a web application and the Traefik load balancer.
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you will verify the health of the Nomad cluster that has been deployed for you by the track's setup scripts. This will include checking the health of a Consul cluster that has been set up on the same VMs.
-
-      In later challenges, you will run Nomad jobs that deploy a web application and the Traefik load balancer. You will then update them using Nomad's various options for controlling job placement.
   tabs:
   - title: Server
     type: terminal
@@ -83,6 +83,12 @@ challenges:
   title: Deploy a Web Application and Traefik with Nomad
   teaser: |
     Deploy a web application and Traefik with Nomad jobs.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will run Nomad jobs that deploy a web application and [Traefik](https://containo.us/traefik/), which will serve as a load balancer in front of multiple instances of the web app.
+
+      In later challenges, you will learn about Nomad Spread, Constraints, and Affinities.
   assignment: |-
     In this challenge, you will run two Nomad jobs:
       * The first will deploy 6 instances of a web app.
@@ -179,12 +185,6 @@ challenges:
     ```
 
     Unfortunately, you cannot load the web app or Traefik UIs yet because we have not exposed Instruqt tabs for them. In fact, we would have had to add tabs exposing port 8081 on all 3 Nomad clients in order to expose the Traefik dashboard since we could not predict in advance which Nomad client Traefik would be deployed to with the current "traefik.nomad" job specification. We will fix this in the next challenge.
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you will run Nomad jobs that deploy a web application and [Traefik](https://containo.us/traefik/), which will serve as a load balancer in front of multiple instances of the web app.
-
-      In later challenges, you will learn about Nomad Spread, Constraints, and Affinities.
   tabs:
   - title: Jobs
     type: code
@@ -209,6 +209,12 @@ challenges:
   title: Use Nomad's Constraint Stanza
   teaser: |
     Use Nomad's constraint stanza to tightly control the placement of the Traefik job.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will update the Traefik job to run on a specific Nomad client node so that you can visit the Traefik Dashboard on a new Instruqt tab.
+
+      You will do this by using Nomad's [constraint](https://www.nomadproject.io/docs/job-specification/constraint/) stanza that allows Nomad operators to tightly control the placement of a job's allocations.
   assignment: |-
     In this challenge, you will use Nomad's [constraint](https://www.nomadproject.io/docs/job-specification/constraint/) stanza to restrict Traefik to run on a specific Nomad client.
 
@@ -275,12 +281,6 @@ challenges:
     You can also visit the web app on the "Web App UI" tab. This tab also points to the nomad-client-1 node but listens on port 8080 which is what Traefik is using to load balance requests to the web app. You will see the same message that the `curl` command gave. If you click the Instruqt refresh button (clockwise arrow) to the right of the "Web App UI" tab, the IP and port displayed will also change.
 
     In the next challenge, you will use Nomad's spread stanza to distribute the allocations of your "webapp.nomad" job evenly across your 3 Nomad clients.
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you will update the Traefik job to run on a specific Nomad client node so that you can visit the Traefik Dashboard on a new Instruqt tab.
-
-      You will do this by using Nomad's [constraint](https://www.nomadproject.io/docs/job-specification/constraint/) stanza that allows Nomad operators to tightly control the placement of a job's allocations.
   tabs:
   - title: Jobs
     type: code
@@ -314,6 +314,12 @@ challenges:
   title: Use Nomad's Spread stanza
   teaser: |
     Use Nomad's spread stanza to distribute load evenly across your Nomad clients.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will update the logic that Nomad uses to distribute allocations of the web app to the 3 Nomad clients in your cluster.
+
+      Specifically, you will use the [spread](https://www.nomadproject.io/docs/job-specification/spread/) stanza to evenly distribute allocations of the web app across all 3 Nomad clients.
   assignment: |-
     In this challenge, you will use Nomad's [spread](https://www.nomadproject.io/docs/job-specification/spread/) stanza to spread the "webapp.nomad" job's allocations evenly across the 3 Nomad clients of your cluster.
 
@@ -354,12 +360,6 @@ challenges:
     This shows that the spread stanza caused Nomad to spread the allocations evenly as expected.
 
     In the next challenge, you will use the affinity stanza to express your preference on where Nomad should run the webapp allocations.
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you will update the logic that Nomad uses to distribute allocations of the web app to the 3 Nomad clients in your cluster.
-
-      Specifically, you will use the [spread](https://www.nomadproject.io/docs/job-specification/spread/) stanza to evenly distribute allocations of the web app across all 3 Nomad clients.
   tabs:
   - title: Jobs
     type: code
@@ -393,6 +393,12 @@ challenges:
   title: Use Nomad's Affinity Stanza
   teaser: |
     Use Nomad's affinity stanza to to loosely control the placement of jobs.
+  notes:
+  - type: text
+    contents: |-
+      In this challenge, you will use Nomad's [affinity](https://www.nomadproject.io/docs/job-specification/affinity/) stanza to loosely control the placement of the "webapp" job.
+
+      You will specify a preference on where Nomad should run the job's allocations but let Nomad make the final decision which will factor in your affinity preferences along with Nomad's default job anti-affinity and bin packing algorithms.
   assignment: |-
     In this challenge, you will use Nomad's [affinity](https://www.nomadproject.io/docs/job-specification/affinity/) stanza to loosely control the placement of the "webapp" job. You will specify a preference on where Nomad should run the job's allocations but let Nomad make the final decision.
 
@@ -464,12 +470,6 @@ challenges:
     You can read more about both of these concepts in Nomad's [Scheduling](https://www.nomadproject.io/docs/internals/scheduling/scheduling/) documentation.
 
     Congratulations on completing the Nomad Advanced Job Placement track!
-  notes:
-  - type: text
-    contents: |-
-      In this challenge, you will use Nomad's [affinity](https://www.nomadproject.io/docs/job-specification/affinity/) stanza to loosely control the placement of the "webapp" job.
-
-      You will specify a preference on where Nomad should run the job's allocations but let Nomad make the final decision which will factor in your affinity preferences along with Nomad's default job anti-affinity and bin packing algorithms.
   tabs:
   - title: Jobs
     type: code
@@ -497,4 +497,4 @@ challenges:
     port: 8080
   difficulty: basic
   timelimit: 600
-checksum: "6077355159864770265"
+checksum: "15546553694871483575"
