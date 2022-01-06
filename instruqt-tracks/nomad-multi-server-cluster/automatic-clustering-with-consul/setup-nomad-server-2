@@ -27,7 +27,6 @@ cat <<-EOF > /root/nomad/consul-server2.json
   "data_dir": "/tmp/consul/server2",
   "node_name": "server2",
   "bind_addr": "{{ GetInterfaceIP \"ens4\" }}",
-  "client_addr": "{{ GetInterfaceIP \"ens4\" }}",
   "bootstrap_expect": 3,
   "retry_join": [
     "nomad-server-1",
