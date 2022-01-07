@@ -4,7 +4,10 @@
 sed -i "/${HOSTNAME}/d" /etc/hosts
 sed -i '/options/d' /etc/resolv.conf
 
+# Some pings to estabish connectivity
 ping -c 1 nomad-server
+ping -c 1 nomad-client-1
+ping -c 1 nomad-client-2
 
 mkdir nomad
 
