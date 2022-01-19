@@ -1,6 +1,6 @@
 version: "2"
 virtualmachines:
 - name: nomad-server
-  image: instruqt-hashicorp/hashistack-0-9-1
+  image: instruqt-hashicorp/hashistack-0-13-0
   shell: /bin/bash -l
   machine_type: n1-standard-1
