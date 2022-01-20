@@ -14,13 +14,13 @@ export NOMAD_TOKEN=$(cat /root/nomad/acls/alice-token.txt | grep Secret | cut -d
 nomad quota status dev
 
 # Run the website-dev.nomad job
-nomad job run website-dev.nomad
+nomad job run -detach website-dev.nomad
 
 # Sleep
 sleep 30
 
 # Check the status of the website job in the dev namespace
-nomad job status -namespace=dev website
+# nomad job status -namespace=dev website
 
 # Check the dev resource quota again
 nomad quota status dev
@@ -32,7 +32,7 @@ export NOMAD_TOKEN=$(cat /root/nomad/acls/bob-token.txt | grep Secret | cut -d' 
 nomad quota status qa
 
 # Run the website-qa.nomad job
-nomad job run website-qa.nomad
+nomad job run -detach website-qa.nomad
 
 # Sleep
 sleep 30

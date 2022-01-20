@@ -8,9 +8,9 @@ grep -q "export NOMAD_TOKEN=\$(cat /root/nomad/acls/alice-token.txt | grep Secre
 
 grep -q "nomad quota status dev" /root/.bash_history || fail-message "You have not checked the status of the dev resoure quota on the Server yet."
 
-grep -q "nomad job run website-dev.nomad" /root/.bash_history || fail-message "You have not run the website-dev.nomad job on the Server yet."
+grep -q "nomad job run.*website-dev.nomad" /root/.bash_history || fail-message "You have not run the website-dev.nomad job on the Server yet."
 
-grep -q "nomad job status -namespace=dev website" /root/.bash_history || fail-message "You have not checked the status of the website job in the dev namespace on the Server yet."
+#grep -q "nomad job status -namespace=dev website" /root/.bash_history || fail-message "You have not checked the status of the website job in the dev namespace on the Server yet."
 
 dev_quota_checks=$(grep "nomad quota status dev" /root/.bash_history | wc -l)
 if [ $dev_quota_checks -lt 2 ]; then
@@ -21,7 +21,7 @@ grep -q "export NOMAD_TOKEN=\$(cat /root/nomad/acls/bob-token.txt | grep Secret 
 
 grep -q "nomad quota status qa" /root/.bash_history || fail-message "You have not checked the status of the qa resource quota on the Server yet."
 
-grep -q "nomad job run website-qa.nomad" /root/.bash_history || fail-message "You have not run the website-qa.nomad job on the Server yet."
+grep -q "nomad job run.*website-qa.nomad" /root/.bash_history || fail-message "You have not run the website-qa.nomad job on the Server yet."
 
 grep -q "nomad job stop -namespace=qa webserver-test" /root/.bash_history || fail-message "You have not stopped the webserver-test job on the Server yet."
 

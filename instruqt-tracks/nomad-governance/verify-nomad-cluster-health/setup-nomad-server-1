@@ -24,6 +24,7 @@ name = "server1"
 server {
   enabled = true
   bootstrap_expect = 1
+  license_path = "/var/nomad-license.hclic"
 }
 
 # Consul configuration
@@ -44,6 +45,7 @@ name = "server1"
 server {
   enabled = true
   bootstrap_expect = 1
+  license_path = "/var/nomad-license.hclic"
 }
 
 # Consul configuration
@@ -56,6 +58,7 @@ EOF
 cat <<-EOF > /etc/consul.d/consul-server1.json
 {
   "server": true,
+  "license_path": "/var/consul-license.hclic",
   "ui": true,
   "log_level": "INFO",
   "data_dir": "/tmp/consul/server1",
@@ -73,6 +76,7 @@ EOF
 cat <<-EOF > /root/nomad/consul-server1.json
 {
   "server": true,
+  "license_path": "/var/consul-license.hclic",
   "ui": true,
   "log_level": "INFO",
   "data_dir": "/tmp/consul/server1",
@@ -109,6 +113,7 @@ EOF
 cat <<-EOF > /root/nomad/consul-client1.json
 {
   "ui": true,
+  "license_path": "/var/consul-license.hclic",
   "log_level": "INFO",
   "data_dir": "/tmp/consul/client1",
   "node_name": "client1",
@@ -146,6 +151,7 @@ EOF
 cat <<-EOF > /root/nomad/consul-client2.json
 {
   "ui": true,
+  "license_path": "/var/consul-license.hclic",
   "log_level": "INFO",
   "data_dir": "/tmp/consul/client2",
   "node_name": "client2",
@@ -183,6 +189,7 @@ EOF
 cat <<-EOF > /root/nomad/consul-client3.json
 {
   "ui": true,
+  "license_path": "/var/consul-license.hclic",
   "log_level": "INFO",
   "data_dir": "/tmp/consul/client3",
   "node_name": "client3",

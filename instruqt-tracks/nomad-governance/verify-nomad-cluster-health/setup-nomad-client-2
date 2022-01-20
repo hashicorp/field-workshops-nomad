@@ -35,6 +35,7 @@ EOF
 cat <<-EOF > /etc/consul.d/consul-client2.json
 {
   "ui": true,
+  "license_path": "/var/consul-license.hclic",
   "log_level": "INFO",
   "data_dir": "/tmp/consul/client2",
   "node_name": "client2",

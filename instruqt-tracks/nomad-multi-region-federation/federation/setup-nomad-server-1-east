@@ -28,6 +28,7 @@ name = "server1-east"
 server {
   enabled = true
   bootstrap_expect = 1
+  license_path = "/var/nomad-license.hclic"
 }
 
 # Consul configuration
@@ -40,6 +41,7 @@ EOF
 cat <<-EOF > /etc/consul.d/consul-server1.json
 {
   "server": true,
+  "license_path": "/var/consul-license.hclic",
   "ui": true,
   "log_level": "INFO",
   "data_dir": "/tmp/consul/server1",
