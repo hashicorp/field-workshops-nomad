@@ -860,11 +860,7 @@ challenges:
     nomad job run website-dev.nomad
     ```
 
-    After waiting 30 seconds, check the status of the job with this command:
-    ```
-    nomad job status -namespace=dev website
-    ```
-    Note that you need to specify the namespace since job names are not unique across multiple namespaces.
+    After about 30 seconds, you should see status indicating that 2 healthy allocations were placed for both of the job's task groups.
 
     You should see 4 allocations running at the bottom. You can also check the status of the "website" job in the "dev" namespace in the Nomad UI after providing a suitable ACL token after selecting the "ACL Tokens" menu; we recommend using Charlie's token from the charlie-token.txt file in the /root/nomad/acls directory.
 
@@ -927,17 +923,31 @@ challenges:
           * Dimension "memory" exhausted on 1 nodes
           * Quota limit hit "memory exhausted (5120 needed > 4100 limit)"
         Evaluation "f94e7499" waiting for additional capacity to place remainder
+
+        Deployment "ecfe5ffc" in progress...
+
+        2022-01-20T18:25:02Z
+        ID          = ecfe5ffc
+        Job ID      = website
+        Job Version = 0
+        Status      = running
+        Description = Deployment is running
+
+        Deployed
+        Task Group  Desired  Placed  Healthy  Unhealthy  Progress Deadline
+        mongodb     2        1       1        0          2022-01-20T18:32:41Z
+        nginx       2        2       2        0          2022-01-20T18:32:40Z
     ```
 
     Note that the Nomad failed to place 2 allocations because the running job and the four allocations of the new job would need a total of 5,120MB which is greater than the 4,096MB limit of the "qa" resource quota. (Sometimes, the message might say Nomad failed to place 1 allocation; and if you inspect the job in the Nomad UI, you might actually see 3 allocations running.)
 
     You can also select the "qa" namespace in the Nomad UI, select the "website" in it, and confirm that only 3 of the 4 allocations of the "website" job are running while 1 of them is queued. The fact that the allocation is currently queued rather than failed is important; this means that it could still be deployed if extra memory became available within the "qa" namespace or if the memory limit of the "qa" resource quota were increased.
 
-    To see this actually happen, stop the "webserver-test" job by running this command on the "Server" tab:
+    To see this actually happen, type `<ctrl>-c` to exit the monitor that the `nomad job run` command started and stop the "webserver-test" job by running this command on the "Server" tab:
     ```
     nomad job stop -namespace=qa webserver-test
     ```
-    and quickly switch back to the Nomad UI. Over the next 15-30 seconds, you should see the "Placed" number and then the "Healthy" number both change to 4, showing that Nomad completed the deployment of the "website" job in the "qa" namespace after extra memory was made available by stopping the "webserver-test" job in the same namespace.
+    Then quickly switch back to the Nomad UI. Over the next 15-30 seconds, you should see the "Placed" number and then the "Healthy" number both change to 4, showing that Nomad completed the deployment of the "website" job in the "qa" namespace after extra memory was made available by stopping the "webserver-test" job in the same namespace.
 
     Recall from the first challenge that the total capacity of the 3 Nomad clients in your cluster is 11.25GB of memory and 6,900MHz of CPU capacity. So, your cluster ostensibly has enough memory on the 3 Nomad clients to run both the "website" and the "webserver-test" jobs in the "qa" namespace along with the "website" job in the "dev" namespace and the "catalogue" job in the "default" namespace.
 
@@ -979,4 +989,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 900
-checksum: "10769221864496727653"
+checksum: "10767316440491419938"

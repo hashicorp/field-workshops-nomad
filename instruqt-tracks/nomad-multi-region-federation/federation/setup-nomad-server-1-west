@@ -29,6 +29,7 @@ name = "server1-west"
 server {
   enabled = true
   bootstrap_expect = 1
+  license_path = "/var/nomad-license.hclic"
 }
 
 # Consul configuration
@@ -51,6 +52,7 @@ name = "server1-west"
 server {
   enabled = true
   bootstrap_expect = 1
+  license_path = "/var/nomad-license.hclic"
 }
 
 # Consul configuration
@@ -64,6 +66,7 @@ EOF
 cat <<-EOF > /etc/consul.d/consul-server1.json
 {
   "server": true,
+  "license_path": "/var/consul-license.hclic",
   "ui": true,
   "log_level": "INFO",
   "data_dir": "/tmp/consul/server1",
@@ -81,6 +84,7 @@ EOF
 cat <<-EOF > root/nomad/config/consul-server1-west.json
 {
   "server": true,
+  "license_path": "/var/consul-license.hclic",
   "ui": true,
   "log_level": "INFO",
   "data_dir": "/tmp/consul/server1",
@@ -108,6 +112,7 @@ name = "server1-east"
 server {
   enabled = true
   bootstrap_expect = 1
+  license_path = "/var/nomad-license.hclic"
 }
 
 # Consul configuration
@@ -120,6 +125,7 @@ EOF
 cat <<-EOF > root/nomad/config/consul-server1-east.json
 {
   "server": true,
+  "license_path": "/var/consul-license.hclic",
   "ui": true,
   "log_level": "INFO",
   "data_dir": "/tmp/consul/server1",
@@ -159,6 +165,7 @@ EOF
 cat <<-EOF > root/nomad/config/consul-client1-west.json
 {
   "ui": true,
+  "license_path": "/var/consul-license.hclic",
   "log_level": "INFO",
   "data_dir": "/tmp/consul/client1",
   "node_name": "client1-west",
@@ -199,6 +206,7 @@ EOF
 cat <<-EOF > root/nomad/config/consul-client1.json
 {
   "ui": true,
+  "license_path": "/var/consul-license.hclic",
   "log_level": "INFO",
   "data_dir": "/tmp/consul/client1",
   "node_name": "client1-east",
@@ -238,6 +246,7 @@ EOF
 cat <<-EOF > root/nomad/config/consul-client2.json
 {
   "ui": true,
+  "license_path": "/var/consul-license.hclic",
   "log_level": "INFO",
   "data_dir": "/tmp/consul/client2",
   "node_name": "client2-west",
@@ -277,6 +286,7 @@ EOF
 cat <<-EOF > root/nomad/config/consul-client2.json
 {
   "ui": true,
+  "license_path": "/var/consul-license.hclic",
   "log_level": "INFO",
   "data_dir": "/tmp/consul/client2",
   "node_name": "client2-east",
