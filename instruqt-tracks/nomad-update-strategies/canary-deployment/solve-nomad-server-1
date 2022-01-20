@@ -11,7 +11,7 @@ cd /root/nomad/jobs
 nomad job plan chat-app-dark-docker.nomad
 
 # Run the job
-nomad job run chat-app-dark-docker.nomad
+nomad job run -detach chat-app-dark-docker.nomad
 
 # Sleep
 sleep 120

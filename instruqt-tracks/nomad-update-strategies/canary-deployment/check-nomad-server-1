@@ -6,10 +6,11 @@ grep -q "cd\s\+/root/nomad/jobs" /root/.bash_history || fail-message "You have n
 
 grep -q "nomad\s\+job\s\+plan\s\+chat-app-dark-docker.nomad" /root/.bash_history || fail-message "You have not planned the canary deployment of the chat-app job on the Nomad server yet."
 
-grep -q "nomad\s\+job\s\+run\s\+chat-app-dark-docker.nomad" /root/.bash_history || fail-message "You have not run the canary deployment of the chat-app job on the Nomad server yet."
+grep -q "nomad\s\+job\s\+run.*chat-app-dark-docker.nomad" /root/.bash_history || fail-message "You have not run the canary deployment of the chat-app job on the Nomad server yet."
 
 grep -q "nomad\s\+job\s\+status\s\+chat-app" /root/.bash_history || fail-message "You have not checked the status of the canary deployment of the chat-app job on the Nomad server yet."
 
-grep -q "nomad\s\+deployment\s\+fail" /root/.bash_history || fail-message "You have not failed the canary deployment of the chat-app job on the Nomad server yet."
+# Comment out so Nomad UI can also be used.
+#grep -q "nomad\s\+deployment\s\+fail" /root/.bash_history || fail-message "You have not failed the canary deployment of the chat-app job on the Nomad server yet."
 
 exit 0

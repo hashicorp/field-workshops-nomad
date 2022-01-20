@@ -11,7 +11,7 @@ cd /root/nomad/jobs
 nomad job plan chat-app-dark-binary.nomad
 
 # Run chat-app.nomad Job
-nomad job run chat-app-dark-binary.nomad
+nomad job run -detach chat-app-dark-binary.nomad
 
 # Sleep
 sleep 120

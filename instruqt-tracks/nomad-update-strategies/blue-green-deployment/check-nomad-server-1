@@ -6,10 +6,11 @@ grep -q "cd\s\+/root/nomad/jobs" /root/.bash_history || fail-message "You have n
 
 grep -q "nomad\s\+job\s\+plan\s\+chat-app-light-docker.nomad" /root/.bash_history || fail-message "You have not planned the blue/green deployment of the chat-app job on the Nomad server yet."
 
-grep -q "nomad\s\+job\s\+run\s\+chat-app-light-docker.nomad" /root/.bash_history || fail-message "You have not run the blue/green deployment of the chat-app job on the Nomad server yet."
+grep -q "nomad\s\+job\s\+run.*chat-app-light-docker.nomad" /root/.bash_history || fail-message "You have not run the blue/green deployment of the chat-app job on the Nomad server yet."
 
 grep -q "nomad\s\+job\s\+status\s\+chat-app" /root/.bash_history || fail-message "You have not checked the status of the chat-app job on the Nomad server yet."
 
-grep -q "nomad\s\+deployment\s\+promote" /root/.bash_history || fail-message "You have not promoted the blue/green deployment of the chat-app job on the Nomad server yet."
+# Comment this out to allow Nomad UI to be used
+# grep -q "nomad\s\+deployment\s\+promote" /root/.bash_history || fail-message "You have not promoted the blue/green deployment of the chat-app job on the Nomad server yet."
 
 exit 0
