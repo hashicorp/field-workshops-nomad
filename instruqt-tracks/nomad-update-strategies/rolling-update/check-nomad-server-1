@@ -6,7 +6,7 @@ grep -q "cd\s\+/root/nomad/jobs" /root/.bash_history || fail-message "You have n
 
 grep -q "nomad\s\+job\s\+plan\s\+chat-app-dark-binary.nomad" /root/.bash_history || fail-message "You have not planned a new deployment of the chat-app job on the Nomad server yet."
 
-grep -q "nomad\s\+job\s\+run\s\+chat-app-dark-binary.nomad" /root/.bash_history || fail-message "You have not run the rolling update of the chat-app job on the Nomad server yet."
+grep -q "nomad\s\+job\s\+run.*chat-app-dark-binary.nomad" /root/.bash_history || fail-message "You have not run the rolling update of the chat-app job on the Nomad server yet."
 
 grep -q "nomad\s\+job\s\+status\s\+chat-app" /root/.bash_history || fail-message "You have not checked the status of the rolling update of the chat-app job on the Nomad server yet."
 
