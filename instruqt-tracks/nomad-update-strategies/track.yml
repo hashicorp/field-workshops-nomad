@@ -212,7 +212,7 @@ challenges:
 
     Run the "chat-app-light-binary.nomad" job on the "Server" tab with this command:
     ```
-    nomad job run -detach chat-app-light-binary.nomad
+    nomad job run chat-app-light-binary.nomad
     ```
     This should return something like this:<br>
     `
@@ -389,7 +389,7 @@ challenges:
 
     Go ahead and actually run a rolling update of the chat application:
     ```
-    nomad job run -detach chat-app-dark-binary.nomad
+    nomad job run chat-app-dark-binary.nomad
     ```
 
     In the Nomad UI, if you select the "chat-app" job, you will see that there is a new deployment running. Over the next two minutes, you will see the numbers of placed and healthy allocations for this deployment increase to 3.
@@ -510,7 +510,7 @@ challenges:
 
     Go ahead and re-run the "chat-app" job with this command:
     ```
-    nomad job run -detach chat-app-light-docker.nomad
+    nomad job run chat-app-light-docker.nomad
     ```
 
     This should return something like this:<br>
@@ -634,7 +634,7 @@ challenges:
 
     Go ahead and re-run the "chat-app" job with this command:
     ```
-    nomad job run -detach chat-app-dark-docker.nomad
+    nomad job run chat-app-dark-docker.nomad
     ```
 
     This should return something like this:<br>
