@@ -299,6 +299,7 @@ challenges:
     Evaluation status changed: "pending" -> "complete"
     ==> Evaluation "ffd6ba9d" finished with status "complete"
     ```
+    followed by some extra text about the monitoring of the job being stopped.
 
     Congratulations on completing the Nomad Multi-Region Federation track!
   tabs:
@@ -322,4 +323,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 1200
-checksum: "7621008850869204499"
+checksum: "2448976099116780873"

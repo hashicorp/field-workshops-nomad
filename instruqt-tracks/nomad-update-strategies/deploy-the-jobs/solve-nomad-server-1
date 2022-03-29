@@ -8,7 +8,7 @@ set -o history
 cd /root/nomad/jobs
 
 # Run mongodb Job
-nomad job run mongodb.nomad
+nomad job run -detach mongodb.nomad
 
 # Sleep
 sleep 30
@@ -17,7 +17,7 @@ sleep 30
 nomad job status mongodb
 
 # Run chat-app Job
-nomad job run chat-app-light-binary.nomad
+nomad job run -detach chat-app-light-binary.nomad
 
 # Sleep
 sleep 120
@@ -26,7 +26,7 @@ sleep 120
 nomad job status chat-app
 
 # Run nginx Job
-nomad job run nginx.nomad
+nomad job run -detach nginx.nomad
 
 # Sleep
 sleep 30

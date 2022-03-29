@@ -140,16 +140,16 @@ challenges:
     ==> Evaluation "64754ee4" finished with status "complete"
     `<br>
 
-    You can check the job in the Nomad UI after waiting 15-30 seconds, clicking the Instruqt refresh button above the Nomad UI, and then selecting the "mongodb" job. You might need to make your browser window a bit wider to see the UI properly and so that the Instruqt buttons do not overlap the Nomad UI tab. You could also click the rectangular button next to the refresh button to hide this assignment. After no more than 1 minute, you should see that the job has 1 healthy allocation.
+    You can check the job in the Nomad UI tab, by clicking the Instruqt refresh button above the Nomad UI, and then selecting the "mongodb" job. You might need to make your browser window a bit wider to see the UI properly and so that the Instruqt buttons do not overlap the Nomad UI tab. You could also click the rectangular button next to the refresh button to hide this assignment. After no more than 1 minute, you should see that the job has 1 healthy allocation.
 
-    Alternatively, you can run the command:
+    Also run this command on the "Server" tab to check the status of the "mongodb" job and validate that the "db" task group is healthy:
     ```
     nomad job status mongodb
     ```
-    on the "Server" tab to check the status of the "mongodb" job and validate that the "db" task group is healthy.
+    
 
     ## Run the chat-app Job
-    Next, inspect the "chat-app-light-binary.nomad" job specification file on the "Jobs" tab. This job deploys 3 instances of a "chat-app" task group that runs the "chatapp-light-linux" binary compiled from a node.js application that was created by a HashiCorp solutions engineer, Guy Barrows.
+    Next, inspect the "chat-app-light-binary.nomad" job specification file on the "Jobs" tab. This job deploys 3 instances of a "chat-app" task group that runs the "chatapp-light-linux" binary compiled from a node.js application that was modified by a HashiCorp Solutions Engineer, Guy Barros.
 
     It runs the app using Nomad's [exec](https://www.nomadproject.io/docs/drivers/exec/) task driver. In the next challenge, we will update the app to a different binary that runs a dark version of the app. Here is the relevant portion of the job specification:
     ```
@@ -169,7 +169,7 @@ challenges:
     }
     ```
 
-    You can see that we are downloading the binary from a Google Cloud Platform storage bucket using Nomad's [artifact](https://www.nomadproject.io/docs/job-specification/artifact/) stanza.
+    You can see that we are downloading the binary from GitHub using Nomad's [artifact](https://www.nomadproject.io/docs/job-specification/artifact/) stanza.
 
     One instance of the chat-app task group will be deployed to each Nomad client because of the job's use of the "spread" stanza:<br>
     `
@@ -459,7 +459,7 @@ challenges:
 
     Inspect the new "chat-app-light-docker.nomad" job specification file on the "Jobs" tab and note that the update stanza now has `canary = 3`:
 
-    Additionally, note that the task now uses the Docker driver that runs a custom Docker image, "lhaig/anon-app:light-0.03" which another HashiCorp solutions engineer, Lance Haig, uploaded to Docker Hub for us:
+    Additionally, note that the task now uses the Docker driver that runs a custom Docker image, "lhaig/anon-app:light-0.03" which another HashiCorp Solutions Engineer, Lance Haig, uploaded to Docker Hub for us:
     ```
     task "chat-app" {
       driver = "docker"
@@ -527,6 +527,8 @@ challenges:
 
     If you look at the chat-app job in the Nomad UI, you will see that there are 6 allocations running. You will also see an orange "Promote Canary" button and a message saying "Deployment is running but requires manual promotion".
 
+    If your job run is monitoring the deployment you can press `ctrl-c` to carry on with the assignment.
+
     Check the status of the "chat-app" job by running this command:
     ```
     nomad job status chat-app
@@ -539,7 +541,7 @@ challenges:
     `
     nomad deployment promote <deployment_id>
     `<br>
-    replacing <deployment_id\> with the deployment ID of the active deployment returned by the job status command. Alternatively, you could click the orange "Promote Canary" button in the Nomad UI.
+    replacing <deployment_id\> with the `ID` of `Latest Deployment` returned by the job status command. Alternatively, you could click the orange "Promote Canary" button in the Nomad UI.
 
     After clicking the Instruqt refresh button for the Nomad UI and selecting the "chat-app" job, you should see that the number of running clients has changed to 3. If you run the job status command again, you will now see 3 running and 6 stopped allocations.
 
@@ -651,6 +653,8 @@ challenges:
 
     The fact that the active deployment only has 1 healthy allocation might worry you, but this is actually ok; it just means that Nomad still plans on deploying 2 more allocations with the new version of the app if you do promote the canary. In other words, since the "count" of the "chat-app" task group is 3, Nomad will always want to deploy 3 allocations as part of any deployment of the job. By specifying 1 canary, you forced Nomad to delay the other 2 allocations.
 
+    If your job run is monitoring the deployment you can press `ctrl-c` to carry on with the assignment.
+
     Check the status of the "chat-app" job by running this command:
     ```
     nomad job status chat-app
@@ -713,4 +717,4 @@ challenges:
     port: 8080
   difficulty: basic
   timelimit: 600
-checksum: "11751966276259963252"
+checksum: "6980574927668619047"

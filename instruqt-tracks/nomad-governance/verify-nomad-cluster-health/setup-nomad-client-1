@@ -2,8 +2,15 @@
 
 mkdir /root/nomad
 
-HOSTNAME=$(hostname -s)
-sed -i "s/127\.0\.0\.1 ${HOSTNAME}/#127.0.0.1 ${HOSTNAME}/" /etc/hosts
+# Uncomment out mapping of 127.0.0.1 to hostname in /etc/hosts and options in /etc/resolv.conf
+sed -i "/${HOSTNAME}/d" /etc/hosts
+sed -i '/options/d' /etc/resolv.conf
+
+# Some pings to estabish connectivity
+ping -c 1 nomad-server-1
+ping -c 1 nomad-client-1
+ping -c 1 nomad-client-2
+ping -c 1 nomad-client-3
 
 # Write Nomad Client 1 Config
 cat <<-EOF > /etc/nomad.d/nomad-client1.hcl
@@ -28,6 +35,7 @@ EOF
 cat <<-EOF > /etc/consul.d/consul-client1.json
 {
   "ui": true,
+  "license_path": "/var/consul-license.hclic",
   "log_level": "INFO",
   "data_dir": "/tmp/consul/client1",
   "node_name": "client1",

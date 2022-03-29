@@ -11,7 +11,7 @@ cd /root/nomad/jobs
 nomad job plan chat-app-light-docker.nomad
 
 # Run a blue/green deployment of the chat-app job
-nomad job run chat-app-light-docker.nomad
+nomad job run -detach chat-app-light-docker.nomad
 
 # Sleep
 sleep 180

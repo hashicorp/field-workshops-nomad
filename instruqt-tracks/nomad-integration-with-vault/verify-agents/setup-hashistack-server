@@ -1,8 +1,13 @@
 #!/bin/bash -l
 
-# Comment out mapping of 127.0.0.1 to hostname in /etc/hosts
-HOSTNAME=$(hostname -s)
-sed -i "s/127\.0\.0\.1 ${HOSTNAME}/#127.0.0.1 ${HOSTNAME}/" /etc/hosts
+# Uncomment out mapping of 127.0.0.1 to hostname in /etc/hosts and options in /etc/resolv.conf
+sed -i "/${HOSTNAME}/d" /etc/hosts
+sed -i '/options/d' /etc/resolv.conf
+
+# Some pings to estabish connectivity
+ping -c 1 hashistack-server
+ping -c 1 hashistack-client-1
+ping -c 1 hashistack-client-2
 
 # Hashistack
 

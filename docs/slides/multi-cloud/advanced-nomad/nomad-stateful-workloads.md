@@ -175,7 +175,7 @@ name: lab-host-volumes
 * You can chose any of the following 3 Instruqt tracks:
   * **Nomad Host Volumes**
   * **Nomad Integration with Portworx**
-  * **Nomad CSI Plugins (GCP)]**
+  * **Nomad CSI Plugins (GCP)**
 * Your instructor can provide links to the above tracks.
 * To explore using Nomad with the [AWS EBS CSI Driver](https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html), please see the [Stateful Workloads with Container Storage Interface](https://learn.hashicorp.com/tutorials/nomad/stateful-workloads-csi-volumes) learn track.
 
