@@ -39,7 +39,7 @@ consul {
 EOF
 
 # Copy of nomad-server1.hcl for West region
-cat <<-EOF > root/nomad/config/nomad-server1-west.hcl
+cat <<-EOF > /root/nomad/config/nomad-server1-west.hcl
 region = "west"
 datacenter = "west-1"
 # Setup data dir
@@ -81,7 +81,7 @@ cat <<-EOF > /etc/consul.d/consul-server1.json
 EOF
 
 # Copy of Consul Server 1 Config for west region
-cat <<-EOF > root/nomad/config/consul-server1-west.json
+cat <<-EOF > /root/nomad/config/consul-server1-west.json
 {
   "server": true,
   "license_path": "/var/consul-license.hclic",
@@ -99,7 +99,7 @@ cat <<-EOF > root/nomad/config/consul-server1-west.json
 EOF
 
 # Copy of Nomad Server 1 Config for east region
-cat <<-EOF > root/nomad/config/nomad-server1-east.hcl
+cat <<-EOF > /root/nomad/config/nomad-server1-east.hcl
 region = "east"
 datacenter = "east-1"
 # Setup data dir
@@ -122,7 +122,7 @@ consul {
 EOF
 
 # Copy of Consul Server 1 Config for east region
-cat <<-EOF > root/nomad/config/consul-server1-east.json
+cat <<-EOF > /root/nomad/config/consul-server1-east.json
 {
   "server": true,
   "license_path": "/var/consul-license.hclic",
@@ -140,7 +140,7 @@ cat <<-EOF > root/nomad/config/consul-server1-east.json
 EOF
 
 # Copy Nomad Client 1 Config for west region
-cat <<-EOF > root/nomad/config/nomad-client1-west.hcl
+cat <<-EOF > /root/nomad/config/nomad-client1-west.hcl
 region = "west"
 datacenter = "west-1"
 # Setup data dir
@@ -162,7 +162,7 @@ consul {
 EOF
 
 # Copy of Consul Client 1 Config for west region
-cat <<-EOF > root/nomad/config/consul-client1-west.json
+cat <<-EOF > /root/nomad/config/consul-client1-west.json
 {
   "ui": true,
   "license_path": "/var/consul-license.hclic",
@@ -181,7 +181,7 @@ cat <<-EOF > root/nomad/config/consul-client1-west.json
 EOF
 
 # Copy of Nomad Client 1 Config for east region
-cat <<-EOF > root/nomad/config/nomad-client1-east.hcl
+cat <<-EOF > /root/nomad/config/nomad-client1-east.hcl
 region = "east"
 datacenter = "east-1"
 # Setup data dir
@@ -203,7 +203,7 @@ consul {
 EOF
 
 # Copy of Consul Client 1 Config for east region
-cat <<-EOF > root/nomad/config/consul-client1.json
+cat <<-EOF > /root/nomad/config/consul-client1.json
 {
   "ui": true,
   "license_path": "/var/consul-license.hclic",
@@ -222,7 +222,7 @@ cat <<-EOF > root/nomad/config/consul-client1.json
 EOF
 
 # Copy of Nomad Client 2 Config for west region
-cat <<-EOF > root/nomad/config/nomad-client2.hcl
+cat <<-EOF > /root/nomad/config/nomad-client2.hcl
 region = "west"
 datacenter = "west-1"
 # Setup data dir
@@ -243,7 +243,7 @@ consul {
 EOF
 
 # Copy of Consul Client 2 Config for west region
-cat <<-EOF > root/nomad/config/consul-client2.json
+cat <<-EOF > /root/nomad/config/consul-client2.json
 {
   "ui": true,
   "license_path": "/var/consul-license.hclic",
@@ -262,7 +262,7 @@ cat <<-EOF > root/nomad/config/consul-client2.json
 EOF
 
 # Copy of Nomad Client 2 Config for east region
-cat <<-EOF > root/nomad/config/nomad-client2.hcl
+cat <<-EOF > /root/nomad/config/nomad-client2.hcl
 region = "east"
 datacenter = "east-1"
 # Setup data dir
@@ -283,7 +283,7 @@ consul {
 EOF
 
 # Copy of Consul Client 2 Config for east region
-cat <<-EOF > root/nomad/config/consul-client2.json
+cat <<-EOF > /root/nomad/config/consul-client2.json
 {
   "ui": true,
   "license_path": "/var/consul-license.hclic",
@@ -315,7 +315,7 @@ Domains=~consul
 EOF
 
 # Configure Resolved and iptables
-cat <<-EOF > root/nomad/config/resolved-consul.conf
+cat <<-EOF > /root/nomad/config/resolved-consul.conf
 [Resolve]
 DNS=127.0.0.1
 Domains=~consul

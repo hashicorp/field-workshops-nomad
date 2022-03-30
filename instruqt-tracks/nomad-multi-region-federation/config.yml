@@ -1,37 +1,37 @@
 version: "2"
 virtualmachines:
 - name: nomad-server-1-east
-  image: instruqt-hashicorp/hashistack-enterprise-0-13-1
+  image: instruqt-hashicorp/hashistack-2004-enterprise-0-13-1
   shell: /bin/bash -l
   environment:
     CONSUL_HTTP_ADDR: 127.0.0.1:8500
   machine_type: g1-small
 - name: nomad-client-1-east
-  image: instruqt-hashicorp/hashistack-enterprise-0-13-1
+  image: instruqt-hashicorp/hashistack-2004-enterprise-0-13-1
   shell: /bin/bash -l
   environment:
     CONSUL_HTTP_ADDR: 127.0.0.1:8500
   machine_type: g1-small
 - name: nomad-client-2-east
-  image: instruqt-hashicorp/hashistack-enterprise-0-13-1
+  image: instruqt-hashicorp/hashistack-2004-enterprise-0-13-1
   shell: /bin/bash -l
   environment:
     CONSUL_HTTP_ADDR: 127.0.0.1:8500
   machine_type: g1-small
 - name: nomad-server-1-west
-  image: instruqt-hashicorp/hashistack-enterprise-0-13-1
+  image: instruqt-hashicorp/hashistack-2004-enterprise-0-13-1
   shell: /bin/bash -l
   environment:
     CONSUL_HTTP_ADDR: 127.0.0.1:8500
   machine_type: g1-small
 - name: nomad-client-1-west
-  image: instruqt-hashicorp/hashistack-enterprise-0-13-1
+  image: instruqt-hashicorp/hashistack-2004-enterprise-0-13-1
   shell: /bin/bash -l
   environment:
     CONSUL_HTTP_ADDR: 127.0.0.1:8500
   machine_type: g1-small
 - name: nomad-client-2-west
-  image: instruqt-hashicorp/hashistack-enterprise-0-13-1
+  image: instruqt-hashicorp/hashistack-2004-enterprise-0-13-1
   shell: /bin/bash -l
   environment:
     CONSUL_HTTP_ADDR: 127.0.0.1:8500
