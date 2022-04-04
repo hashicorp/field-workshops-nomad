@@ -1,5 +1,10 @@
 #!/bin/bash -l
 
+until [ -f /opt/instruqt/bootstrap/host-bootstrap-completed ]; do
+    echo "Waiting for instruqt bootstrap to complete"
+    sleep 1
+done
+
 mkdir -p /root/nomad
 
 # Uncomment out mapping of 127.0.0.1 to hostname in /etc/hosts and options in /etc/resolv.conf
