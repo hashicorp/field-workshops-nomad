@@ -194,7 +194,7 @@ challenges:
     hostname: nomad-client-3
     port: 9999
   difficulty: basic
-  timelimit: 1200
+  timelimit: 1800
 - slug: add-alertmanager
   id: aaqomh65hrcz
   type: challenge
@@ -295,7 +295,7 @@ challenges:
     hostname: nomad-client-1
     port: 9999
   difficulty: basic
-  timelimit: 1200
+  timelimit: 1800
 - slug: add-web-server
   id: wzwlz6v21qqr
   type: challenge
@@ -404,5 +404,5 @@ challenges:
     path: /alertmanager
     port: 9999
   difficulty: basic
-  timelimit: 1200
+  timelimit: 1800
 checksum: "7909041288111252559"

@@ -100,7 +100,7 @@ challenges:
     hostname: hashistack-server
     port: 8200
   difficulty: basic
-  timelimit: 600
+  timelimit: 1200
 - slug: create-the-nomad-server-policy-and-token
   id: pupryaxbz98c
   type: challenge
@@ -162,7 +162,7 @@ challenges:
     hostname: hashistack-server
     port: 8200
   difficulty: basic
-  timelimit: 600
+  timelimit: 1200
 - slug: create-a-vault-token-role
   id: nacbsj1g0w4q
   type: challenge
@@ -237,7 +237,7 @@ challenges:
     hostname: hashistack-server
     port: 8200
   difficulty: basic
-  timelimit: 600
+  timelimit: 1200
 - slug: reconfigure-the-nomad-server
   id: xzhmzl5gyglp
   type: challenge
@@ -317,7 +317,7 @@ challenges:
     hostname: hashistack-server
     port: 8200
   difficulty: basic
-  timelimit: 600
+  timelimit: 1200
 - slug: deploy-a-database
   id: oqxicv3yeiqo
   type: challenge
@@ -370,7 +370,7 @@ challenges:
     hostname: hashistack-server
     port: 8200
   difficulty: basic
-  timelimit: 600
+  timelimit: 1200
 - slug: configure-the-vault-database-secrets-engine
   id: pixcf2zd2fzd
   type: challenge
@@ -485,7 +485,7 @@ challenges:
     hostname: hashistack-server
     port: 8200
   difficulty: basic
-  timelimit: 600
+  timelimit: 1200
 - slug: deploy-an-application
   id: o6kmjfztauxg
   type: challenge
@@ -585,5 +585,5 @@ challenges:
     hostname: hashistack-client-1
     port: 3000
   difficulty: basic
-  timelimit: 600
+  timelimit: 1200
 checksum: "11242485081765392298"

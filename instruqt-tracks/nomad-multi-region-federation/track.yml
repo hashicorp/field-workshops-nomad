@@ -100,7 +100,7 @@ challenges:
     hostname: nomad-server-1-east
     port: 4646
   difficulty: basic
-  timelimit: 1200
+  timelimit: 1800
 - slug: multi-region-deployments
   id: 5fau0q6nqev7
   type: challenge
@@ -210,7 +210,7 @@ challenges:
     hostname: nomad-server-1-east
     port: 4646
   difficulty: basic
-  timelimit: 1200
+  timelimit: 1800
 - slug: simulate-failed-deployment
   id: xymwi5jnxnya
   type: challenge
@@ -323,5 +323,5 @@ challenges:
     hostname: nomad-server-1-east
     port: 4646
   difficulty: basic
-  timelimit: 1200
+  timelimit: 1800
 checksum: "2448976099116780873"

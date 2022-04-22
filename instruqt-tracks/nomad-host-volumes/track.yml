@@ -87,7 +87,7 @@ challenges:
     hostname: nomad-server-1
     port: 4646
   difficulty: basic
-  timelimit: 600
+  timelimit: 1200
 - slug: configure-host-volume
   id: wllpfxtrtvqt
   type: challenge
@@ -339,7 +339,7 @@ challenges:
     hostname: nomad-server-1
     port: 4646
   difficulty: basic
-  timelimit: 600
+  timelimit: 1200
 - slug: stop-and-restart-job
   id: freg9t9uv8f6
   type: challenge
@@ -410,5 +410,5 @@ challenges:
     hostname: nomad-server-1
     port: 4646
   difficulty: basic
-  timelimit: 600
+  timelimit: 1200
 checksum: "11104282063969382731"
