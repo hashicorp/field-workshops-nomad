@@ -76,7 +76,7 @@ challenges:
     hostname: nomad-server-1
     port: 4646
   difficulty: basic
-  timelimit: 600
+  timelimit: 1200
 - slug: deploy-the-jobs
   id: ak0ehohkwlsk
   type: challenge
@@ -386,7 +386,7 @@ challenges:
     path: /myapp
     port: 8080
   difficulty: basic
-  timelimit: 600
+  timelimit: 1200
 - slug: use-affinity
   id: abyv4gnhdsia
   type: challenge
@@ -496,5 +496,5 @@ challenges:
     path: /myapp
     port: 8080
   difficulty: basic
-  timelimit: 600
+  timelimit: 1200
 checksum: "15546553694871483575"

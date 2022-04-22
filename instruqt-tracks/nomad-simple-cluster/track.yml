@@ -110,7 +110,7 @@ challenges:
     hostname: nomad-server
     port: 4646
   difficulty: basic
-  timelimit: 900
+  timelimit: 1800
 - slug: create-first-job-spec
   id: tfmp6ig1fzb1
   type: challenge
@@ -163,7 +163,7 @@ challenges:
     hostname: nomad-server
     port: 4646
   difficulty: basic
-  timelimit: 600
+  timelimit: 1200
 - slug: run-your-first-job
   id: zstyej0kzykz
   type: challenge
@@ -245,7 +245,7 @@ challenges:
     hostname: nomad-server
     port: 4646
   difficulty: basic
-  timelimit: 900
+  timelimit: 1800
 - slug: modifying-a-job
   id: qfn6u9nh1mrj
   type: challenge

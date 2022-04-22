@@ -98,7 +98,7 @@ challenges:
     hostname: nomad-server-1
     port: 4646
   difficulty: basic
-  timelimit: 600
+  timelimit: 1200
 - slug: deploy-the-jobs
   id: wfbxeo0th19f
   type: challenge
@@ -304,7 +304,7 @@ challenges:
     hostname: nomad-client-3
     port: 8080
   difficulty: basic
-  timelimit: 900
+  timelimit: 1800
 - slug: rolling-update
   id: s71yve1la3vm
   type: challenge
@@ -434,7 +434,7 @@ challenges:
     hostname: nomad-client-3
     port: 8080
   difficulty: basic
-  timelimit: 900
+  timelimit: 1800
 - slug: blue-green-deployment
   id: vyyv312rchyo
   type: challenge
@@ -579,7 +579,7 @@ challenges:
     hostname: nomad-client-3
     port: 8080
   difficulty: basic
-  timelimit: 600
+  timelimit: 1200
 - slug: canary-deployment
   id: xi4uaufnbg0y
   type: challenge
@@ -716,5 +716,5 @@ challenges:
     hostname: nomad-client-3
     port: 8080
   difficulty: basic
-  timelimit: 600
+  timelimit: 1200
 checksum: "6980574927668619047"

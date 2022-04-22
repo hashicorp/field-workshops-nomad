@@ -107,7 +107,7 @@ challenges:
     path: /
     port: 80
   difficulty: basic
-  timelimit: 1800
+  timelimit: 2400
 - slug: run-nomad-jobs
   id: bsm9lcovj1to
   type: challenge
@@ -202,5 +202,5 @@ challenges:
     path: /
     port: 80
   difficulty: basic
-  timelimit: 1800
+  timelimit: 2400
 checksum: "1639292460763758505"

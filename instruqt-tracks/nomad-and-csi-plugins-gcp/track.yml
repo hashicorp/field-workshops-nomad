@@ -111,7 +111,7 @@ challenges:
     path: /
     port: 80
   difficulty: basic
-  timelimit: 600
+  timelimit: 1200
 - slug: deploy-gcepd-driver
   id: rc0l8cyobbkw
   type: challenge
@@ -210,7 +210,7 @@ challenges:
     path: /
     port: 80
   difficulty: basic
-  timelimit: 600
+  timelimit: 1200
 - slug: create-persistent-disk
   id: lyhsmqlrnhgw
   type: challenge
@@ -313,7 +313,7 @@ challenges:
     path: /
     port: 80
   difficulty: basic
-  timelimit: 600
+  timelimit: 1200
 - slug: deploy-mysql
   id: u62alewqbkjf
   type: challenge
@@ -399,7 +399,7 @@ challenges:
     path: /
     port: 80
   difficulty: basic
-  timelimit: 600
+  timelimit: 1200
 - slug: destroy-rerun-mysql
   id: kx5bkx74hpb1
   type: challenge

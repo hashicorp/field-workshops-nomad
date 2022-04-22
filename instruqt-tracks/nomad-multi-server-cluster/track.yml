@@ -140,7 +140,7 @@ challenges:
     hostname: nomad-server-1
     port: 4646
   difficulty: basic
-  timelimit: 1200
+  timelimit: 1800
 - slug: automatic-clustering-with-consul
   id: oj8xnvwnobv0
   type: challenge
@@ -306,7 +306,7 @@ challenges:
     hostname: nomad-server-1
     port: 4646
   difficulty: basic
-  timelimit: 1200
+  timelimit: 1800
 - slug: nomad-and-consul-connect
   id: x4iw5kvgywyx
   type: challenge
@@ -397,5 +397,5 @@ challenges:
     hostname: nomad-client-2
     port: 9002
   difficulty: basic
-  timelimit: 1200
+  timelimit: 1800
 checksum: "8138496136975053298"

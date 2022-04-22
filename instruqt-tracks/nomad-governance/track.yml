@@ -88,7 +88,7 @@ challenges:
     hostname: nomad-server-1
     port: 4646
   difficulty: basic
-  timelimit: 300
+  timelimit: 1200
 - slug: nomad-auditing
   id: 6fiot8pxrty5
   type: challenge
@@ -261,7 +261,7 @@ challenges:
     hostname: nomad-server-1
     port: 4646
   difficulty: basic
-  timelimit: 300
+  timelimit: 1200
 - slug: namespaces-and-resource-quotas
   id: edtenqca7eaj
   type: challenge
@@ -360,7 +360,7 @@ challenges:
     hostname: nomad-server-1
     port: 4646
   difficulty: basic
-  timelimit: 600
+  timelimit: 1200
 - slug: nomad-acls
   id: lvcxijjtmsoy
   type: challenge
@@ -560,7 +560,7 @@ challenges:
     hostname: nomad-server-1
     port: 4646
   difficulty: basic
-  timelimit: 600
+  timelimit: 1200
 - slug: sentinel-policies
   id: s3crog1t2mdz
   type: challenge
@@ -632,7 +632,7 @@ challenges:
     hostname: nomad-server-1
     port: 4646
   difficulty: basic
-  timelimit: 600
+  timelimit: 1200
 - slug: run-nomad-jobs-1
   id: tiiro7dy0asi
   type: challenge
@@ -809,7 +809,7 @@ challenges:
     hostname: nomad-server-1
     port: 4646
   difficulty: basic
-  timelimit: 900
+  timelimit: 1800
 - slug: run-nomad-jobs-2
   id: d3xyecyjqxwc
   type: challenge
@@ -989,5 +989,5 @@ challenges:
     hostname: nomad-server-1
     port: 4646
   difficulty: basic
-  timelimit: 900
+  timelimit: 1800
 checksum: "10767316440491419938"
