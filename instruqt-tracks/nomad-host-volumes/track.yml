@@ -77,7 +77,7 @@ challenges:
 
     You can also check the status of the Nomad server and clients in the Nomad and Consul UIs.
 
-    In the next challenge, you will configure a Nomad host volumme on one of the Nomad clients.
+    In the next challenge, you will configure a Nomad host volume on one of the Nomad clients.
   tabs:
   - title: Server
     type: terminal
