@@ -86,7 +86,7 @@ job "example" {
       template {
         destination = "local/script.sh"
         data        = <<EOH
-if [[  \${NOMAD_REGION} == "east" ]]
+if [[ {{ env "NOMAD_REGION" }}  == "east" ]]
 then
 echo FAIL
 exit 1
