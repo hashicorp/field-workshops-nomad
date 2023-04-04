@@ -1,0 +1,212 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+name: hashicorp/field-workshops-nomad/nightly-test
+on:
+  workflow_dispatch:
+  schedule:
+  # This is UTC
+  - cron: 37 4 * * *
+permissions:
+  contents: read
+env:
+  # See IL-577 for information about the source of these
+  # secrets and variables
+  # You MUST encode any secret which is json as base64, and then
+  # decode it within the job, otherwise GHA in being zealous about
+  # redacting secrets will turn all the curly braces in the `needs`
+  # context json we require in the Slack notification steps into
+  # '***' and you will be sad
+  INSTRUQT_TOKEN: ${{ secrets.INSTRUQT_TOKEN }}
+jobs:
+  nomad-basics:
+    uses: ./.github/workflows/instruqt-track-test.yml
+    with:
+      working_directory: "instruqt-tracks/nomad-basics"
+    secrets:
+      INSTRUQT_TOKEN: ${{ secrets.INSTRUQT_TOKEN }}
+  nomad-simple-cluster:
+    uses: ./.github/workflows/instruqt-track-test.yml
+    with:
+      working_directory: "instruqt-tracks/nomad-simple-cluster"
+    secrets:
+      INSTRUQT_TOKEN: ${{ secrets.INSTRUQT_TOKEN }}
+  nomad-multi-server-cluster:
+    uses: ./.github/workflows/instruqt-track-test.yml
+    with:
+      working_directory: "instruqt-tracks/nomad-multi-server-cluster"
+    secrets:
+      INSTRUQT_TOKEN: ${{ secrets.INSTRUQT_TOKEN }}
+  nomad-consul-connect:
+    uses: ./.github/workflows/instruqt-track-test.yml
+    with:
+      working_directory: "instruqt-tracks/nomad-consul-connect"
+    secrets:
+      INSTRUQT_TOKEN: ${{ secrets.INSTRUQT_TOKEN }}
+  nomad-acls:
+    uses: ./.github/workflows/instruqt-track-test.yml
+    with:
+      working_directory: "instruqt-tracks/nomad-acls"
+    secrets:
+      INSTRUQT_TOKEN: ${{ secrets.INSTRUQT_TOKEN }}
+  nomad-monitoring:
+    uses: ./.github/workflows/instruqt-track-test.yml
+    with:
+      working_directory: "instruqt-tracks/nomad-monitoring"
+    secrets:
+      INSTRUQT_TOKEN: ${{ secrets.INSTRUQT_TOKEN }}
+  nomad-update-strategies:
+    uses: ./.github/workflows/instruqt-track-test.yml
+    with:
+      working_directory: "instruqt-tracks/nomad-update-strategies"
+    secrets:
+      INSTRUQT_TOKEN: ${{ secrets.INSTRUQT_TOKEN }}
+  nomad-job-placement:
+    uses: ./.github/workflows/instruqt-track-test.yml
+    with:
+      working_directory: "instruqt-tracks/nomad-job-placement"
+    secrets:
+      INSTRUQT_TOKEN: ${{ secrets.INSTRUQT_TOKEN }}
+  nomad-integration-with-vault:
+    uses: ./.github/workflows/instruqt-track-test.yml
+    with:
+      working_directory: "instruqt-tracks/nomad-integration-with-vault"
+    secrets:
+      INSTRUQT_TOKEN: ${{ secrets.INSTRUQT_TOKEN }}
+  nomad-host-volumes:
+    uses: ./.github/workflows/instruqt-track-test.yml
+    with:
+      working_directory: "instruqt-tracks/nomad-host-volumes"
+    secrets:
+      INSTRUQT_TOKEN: ${{ secrets.INSTRUQT_TOKEN }}
+  nomad-and-portworx:
+    uses: ./.github/workflows/instruqt-track-test.yml
+    with:
+      working_directory: "instruqt-tracks/nomad-and-portworx"
+    secrets:
+      INSTRUQT_TOKEN: ${{ secrets.INSTRUQT_TOKEN }}
+  nomad-and-csi-plugins-gcp:
+    uses: ./.github/workflows/instruqt-track-test.yml
+    with:
+      working_directory: "instruqt-tracks/nomad-and-csi-plugins-gcp"
+    secrets:
+      INSTRUQT_TOKEN: ${{ secrets.INSTRUQT_TOKEN }}
+  nomad-governance:
+    uses: ./.github/workflows/instruqt-track-test.yml
+    with:
+      working_directory: "instruqt-tracks/nomad-governance"
+    secrets:
+      INSTRUQT_TOKEN: ${{ secrets.INSTRUQT_TOKEN }}
+  nomad-multi-region-federation:
+    uses: ./.github/workflows/instruqt-track-test.yml
+    with:
+      working_directory: "instruqt-tracks/nomad-multi-region-federation"
+    secrets:
+      INSTRUQT_TOKEN: ${{ secrets.INSTRUQT_TOKEN }}
+  notify-slack:
+    needs:
+      - nomad-basics
+      - nomad-simple-cluster
+      - nomad-multi-server-cluster
+      - nomad-consul-connect
+      - nomad-acls
+      - nomad-monitoring
+      - nomad-update-strategies
+      - nomad-job-placement
+      - nomad-integration-with-vault
+      - nomad-host-volumes
+      - nomad-and-portworx
+      - nomad-and-csi-plugins-gcp
+      - nomad-governance
+      - nomad-multi-region-federation
+    if: ${{ always() }}   # Always run after needs, even if they failed, so we can notify
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      # https://github.com/actions/runner/issues/1656#issuecomment-1030077729
+      - name: Get Jobs State
+        id: get-jobs-state
+        run: |-
+          cat<<EOF >> job-state.json
+          ${{ toJSON(needs) }}
+          EOF
+          cat job-state.json
+      - name: Build Message
+        id: build-message
+        shell: python
+        run: |-
+          import json
+          import os
+          import secrets
+          msg = {"blocks": []}
+          # Parse 'needs' context
+          needs_f = open("job-state.json")
+          needs = json.load(needs_f)
+          # Header Section
+          WORKFLOW_ICON=":white_check_mark:"
+          WORKFLOW_STATUS="successful"
+          ANY_FAILURES=false
+          for job in needs.keys():
+            if needs[job]['result'] != "success":
+              WORKFLOW_ICON=":exclamation:"
+              WORKFLOW_STATUS="*FAILED*"
+              ANY_FAILURES=true
+              break
+          msg['blocks'].append({"type": "section", "text": { "type": "mrkdwn", "text": f'{WORKFLOW_ICON} Workflow <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ github.workflow }} #${{ github.run_number }}> {WORKFLOW_STATUS}'}})
+          msg['blocks'].append({"type": "divider"})
+
+          # Per-job section
+          for job in needs.keys():
+            if needs[job]['result'] == "success":
+              TEST_ICON=":white_check_mark:"
+              TEST_STATUS="succeeded"
+            else:
+              TEST_ICON=":exclamation:"
+              TEST_STATUS="*FAILED*"
+
+            TEST_RUNS=int(needs[job]['outputs']['test_runs'])
+            if TEST_RUNS == 1:
+              TEST_RUN_STRING="run"
+            else:
+              TEST_RUN_STRING="runs"
+
+            job_msg = {"type": "section", "text": { "type": "mrkdwn", "text": f'{TEST_ICON} {job}: {TEST_STATUS} in {TEST_RUNS} {TEST_RUN_STRING}'}}
+            msg['blocks'].append(job_msg)
+
+          # Output
+          # https://trstringer.com/github-actions-multiline-strings/ Option 2
+          # NOTE: Where we typically use 'EOF' as a heredoc delimiter, following
+          # the security advice in
+          # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings
+          # we generate a random delimiter every time
+          EOF = secrets.token_hex(24)
+          env = open('${{ github.env }}', mode='a')
+          env.writelines([f'SLACK_PAYLOAD<<{EOF}\n'])
+          json.dump(msg, env)
+          env.writelines([f'\n{EOF}\n'])
+          env.close()
+          # And output if there have been any failures - there doesn't
+          # seem to be an equivalent github context for this, so have to
+          # read GITHUB_OUTPUT out of os.environ
+          output = open(os.environ['GITHUB_OUTPUT'], mode='a')
+          if ANY_FAILURES:
+            output.writelines(['any_failures=true\n'])
+          else:
+            output.writelines(['any_failures=false\n'])
+          output.close()
+      - name: Post to Slack Channel
+        id: slack
+        uses: slackapi/slack-github-action@007b2c3c751a190b6f0f040e47ed024deaa72844 # v1.23.0
+        with:
+          channel-id: ${{ vars.SLACK_NOTIFICATION_CHANNELS }}
+          payload: ${{ env.SLACK_PAYLOAD }}
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      - name: Post to Slack Channel only on failures
+        id: slack-failures
+        if: ${{ steps.build-message.outputs.any_failures == true }}
+        uses: slackapi/slack-github-action@007b2c3c751a190b6f0f040e47ed024deaa72844 # v1.23.0
+        with:
+          channel-id: ${{ vars.SLACK_NOTIFICATION_CHANNELS_FAIL_ONLY }}
+          payload: ${{ env.SLACK_PAYLOAD }}
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
