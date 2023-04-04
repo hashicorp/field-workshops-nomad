@@ -51,6 +51,7 @@ jobs:
       - deploy-track
     #Always run so we can notify in the event of an issue
     if: ${{ always() }}
+    permissions: {}
     steps:
     - name: Get Jobs State
       id: get-jobs-state
