@@ -64,7 +64,6 @@ jobs:
       shell: python
       run: |-
         import json
-        import os
         import secrets
         msg = {"blocks": []}
         # Parse github context
