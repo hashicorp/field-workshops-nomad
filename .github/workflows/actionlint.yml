@@ -1,0 +1,8 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+on: workflow_dispatch
+jobs:
+  this-is-so-stupid:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Bogus workflow for testing in IL-577"
