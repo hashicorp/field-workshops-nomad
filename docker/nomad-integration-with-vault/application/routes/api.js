@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 const express = require('express');
 const router = express.Router();
 const Pool = require('pg').Pool;

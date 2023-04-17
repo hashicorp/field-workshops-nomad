@@ -1,3 +1,6 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
 FROM node:current-alpine
 LABEL author="Patrick Gryzan <pgryzan@hashicorp.io>"
 LABEL description="This the web client piece of an example node.js application"
