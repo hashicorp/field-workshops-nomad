@@ -1,3 +1,6 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
 slug: nomad-and-csi-plugins-gcp
 id: ganihbpgy38x
 type: track
