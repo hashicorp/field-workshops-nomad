@@ -23,18 +23,4 @@ echo "Restarting services"
 systemctl restart consul.service
 systemctl restart nomad.service
 
-# Wait until both services are healthy
-/bin/echo -n "Waiting for healthy Consul and Nomad"
-while /bin/true; do
-    /bin/echo -n "."
-    if consul members >/dev/null 2>&1; then
-	# Consul is healthy, check Nomad
-	if nomad members > /dev/null 2>&1; then
-	    # Nomad is healthy, exit
-	    echo "done"
-	    break
-	fi
-    fi
-done
-
 exit 0
