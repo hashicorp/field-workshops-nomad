@@ -1,0 +1,40 @@
+#!/bin/bash
+
+set -euvo pipefail
+
+while [ ! -f /opt/instruqt/bootstrap/host-bootstrap-completed ]
+do
+    echo "Waiting for Instruqt to finish booting the virtual machine"
+    sleep 1
+done
+
+# Ensure we always have fresh copies of the Consul 
+# Enterprise license, which we store as Instruqt secrets
+# We don't need a Nomad license on the clients, it fetches
+# from the Nomad server once it can join
+
+# This trick with awk keeps the contents of the secret
+# environment variables from being logged
+echo "Writing license files"
+awk 'BEGIN {print ENVIRON["HC_CONSUL_LICENSE"]}' > /var/consul-license.hclic < /dev/null
+
+# And restart services
+echo "Restarting services"
+systemctl restart consul.service
+systemctl restart nomad.service
+
+# Wait until both services are healthy
+/bin/echo -n "Waiting for healthy Consul and Nomad"
+while /bin/true; do
+    /bin/echo -n "."
+    if consul members >/dev/null 2>&1; then
+	# Consul is healthy, check Nomad
+	if nomad members > /dev/null 2>&1; then
+	    # Nomad is healthy, exit
+	    echo "done"
+	    break
+	fi
+    fi
+done
+
+exit 0
