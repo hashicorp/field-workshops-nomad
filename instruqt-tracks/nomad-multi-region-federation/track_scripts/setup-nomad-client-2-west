@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -euvo pipefail
+
+while [ ! -f /opt/instruqt/bootstrap/host-bootstrap-completed ]
+do
+    echo "Waiting for Instruqt to finish booting the virtual machine"
+    sleep 1
+done
+
+# Ensure we always have fresh copies of the Consul and Nomad
+# Enterprise licenses, which we store as Instruqt secrets
+
+# This trick with awk keeps the contents of the secret
+# environment variables from being logged
+echo "Writing license files"
+awk 'BEGIN {print ENVIRON["HC_CONSUL_LICENSE"]}' > /var/consul-license.hclic < /dev/null
+awk 'BEGIN {print ENVIRON["HC_NOMAD_LICENSE"]}' > /var/nomad-license.hclic < /dev/null
+
+exit 0

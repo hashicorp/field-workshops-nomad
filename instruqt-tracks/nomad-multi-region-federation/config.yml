@@ -1,7 +1,10 @@
 # Copyright (c) HashiCorp, Inc.
 # SPDX-License-Identifier: MPL-2.0
 
-version: "2"
+version: "3"
+secrets:
+  - name: HC_CONSUL_LICENSE
+  - name: HC_NOMAD_LICENSE
 virtualmachines:
 - name: nomad-server-1-east
   image: instruqt-hashicorp/hashistack-2004-enterprise-0-13-1
