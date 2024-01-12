@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MPL-2.0
 
 slug: nomad-acls
-id: vlqq3najdjpp
+id: 
 type: track
 title: Nomad Access Control Lists (ACLs)
 teaser: Learn how to control access to Nomad with Access Control Lists (ACLs).
@@ -17,10 +17,9 @@ tags:
 - nomad
 - security
 - acls
-owner: hashicorp
+owner: hashicorp-field-ops
 developers:
 - lhaig@hashicorp.com
-- roger@hashicorp.com
 private: true
 published: true
 show_timer: true
@@ -550,4 +549,4 @@ challenges:
     port: 4646
   difficulty: basic
   timelimit: 1800
-checksum: "4566838401586766975"
+checksum: 
