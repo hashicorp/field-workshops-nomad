@@ -1,5 +1,4 @@
-slug: wip-vcdl-93-nomad-host-volumes
-id: o9wugkyem2qj
+slug: nomad-host-volumes
 title: Nomad Host Volumes
 teaser: |
   Learn how Nomad host volumes support stateful workloads.
@@ -38,4 +37,3 @@ lab_config:
   sidebar_enabled: true
   feedback_recap_enabled: true
   loadingMessages: true
-checksum: "17055658909859954851"
