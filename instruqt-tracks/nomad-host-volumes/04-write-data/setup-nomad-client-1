@@ -1,0 +1,5 @@
+#!/bin/bash -l
+
+set -e
+apt install mysql-client-core-8.0
+exit 0
