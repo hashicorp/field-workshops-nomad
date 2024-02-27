@@ -1,5 +1,10 @@
 #!/bin/bash -l
 
+until [ -f /opt/instruqt/bootstrap/host-bootstrap-completed ]; do
+    echo "Waiting for instruqt bootstrap to complete"
+    sleep 1
+done
+
 # Uncomment out mapping of 127.0.0.1 to hostname in /etc/hosts and options in /etc/resolv.conf
 sed -i "/${HOSTNAME}/d" /etc/hosts
 sed -i '/options/d' /etc/resolv.conf
@@ -14,12 +19,12 @@ ping -c 1 nomad-client-2
 mkdir nomad
 
 # Write Nomad Server Config
-cat <<-EOF > /root/nomad/nomad-server3.hcl
+cat <<-EOF > /root/nomad/nomad-server2.hcl
 # Setup data dir
-data_dir = "/tmp/nomad/server3"
+data_dir = "/tmp/nomad/server2"
 
 # Give the agent a unique name.
-name = "server3"
+name = "server2"
 
 # Enable the server
 server {
