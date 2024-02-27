@@ -1,5 +1,6 @@
 #!/bin/bash -l
 
+
 pkill nomad
 rm -fr /tmp/nomad
 
