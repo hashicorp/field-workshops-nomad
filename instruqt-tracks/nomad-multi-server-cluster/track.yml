@@ -1,5 +1,4 @@
-slug: wip-vcdl-91-nomad-multi-server-cluster
-id: g5cxrighqe4j
+slug: nomad-multi-server-cluster
 title: Nomad Multi-Server Cluster
 teaser: |
   Learn how to bootstrap multi-server Nomad clusters in two different ways.
@@ -31,4 +30,3 @@ lab_config:
   sidebar_enabled: true
   feedback_recap_enabled: true
   loadingMessages: true
-checksum: "4164614732693924722"
