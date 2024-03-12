@@ -1,6 +1,5 @@
 ---
 slug: create-a-vault-token-role
-id: wdbsmnqndyul
 type: challenge
 title: Create a Vault Token Role
 teaser: |

@@ -1,6 +1,5 @@
 ---
 slug: deploy-a-database
-id: nn3yo7us8dpf
 type: challenge
 title: Deploy a Database
 teaser: |

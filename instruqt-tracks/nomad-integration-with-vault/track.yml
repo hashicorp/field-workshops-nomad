@@ -1,5 +1,4 @@
 slug: nomad-integration-with-vault
-id: uaxe2sfai7xn
 title: Nomad Integration with Vault
 teaser: |
   Integrate Nomad and Vault so that applications orchestrated by Nomad can retrieve secrets from Vault.

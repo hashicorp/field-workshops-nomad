@@ -1,6 +1,5 @@
 ---
 slug: configure-the-vault-database-secrets-engine
-id: pbrxi1ehqaqh
 type: challenge
 title: Configure the Vault Database Secrets Engine
 teaser: |

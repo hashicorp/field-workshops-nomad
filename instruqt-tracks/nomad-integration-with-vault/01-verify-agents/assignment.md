@@ -1,6 +1,5 @@
 ---
 slug: verify-agents
-id: g9nlkdgjr3lu
 type: challenge
 title: Verify that the Agents are Running
 teaser: |
