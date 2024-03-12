@@ -1,7 +1,4 @@
-# Copyright (c) HashiCorp, Inc.
-# SPDX-License-Identifier: MPL-2.0
-
-version: "2"
+version: "3"
 virtualmachines:
 - name: hashistack-server
   image: instruqt-hashicorp/hashistack-0-13-1
