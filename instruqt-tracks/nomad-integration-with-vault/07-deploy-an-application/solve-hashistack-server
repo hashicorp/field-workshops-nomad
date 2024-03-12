@@ -14,6 +14,6 @@ sleep 60
 dig +short SRV web.service.consul.
 
 # Curl the Application
-curl http://web.service.consul:3000/api | jq .
+curl -s http://web.service.consul:3000/api | tee /dev/fd/2 | jq .
 
 exit 0
