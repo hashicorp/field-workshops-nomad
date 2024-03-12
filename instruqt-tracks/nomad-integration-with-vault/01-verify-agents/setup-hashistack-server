@@ -1,10 +1,5 @@
 #!/bin/bash -l
 
-until [ -f /opt/instruqt/bootstrap/host-bootstrap-completed ]; do
-    echo "Waiting for instruqt bootstrap to complete"
-    sleep 1
-done
-
 # Uncomment out mapping of 127.0.0.1 to hostname in /etc/hosts and options in /etc/resolv.conf
 sed -i "/${HOSTNAME}/d" /etc/hosts
 sed -i '/options/d' /etc/resolv.conf
@@ -13,6 +8,17 @@ sed -i '/options/d' /etc/resolv.conf
 ping -c 1 hashistack-server
 ping -c 1 hashistack-client-1
 ping -c 1 hashistack-client-2
+
+# Configure Resolved and iptables
+cat <<-EOF > /etc/systemd/resolved.conf.d/consul.conf
+[Resolve]
+DNS=127.0.0.1
+DNSSEC=false
+Domains=~consul
+EOF
+iptables -t nat -A OUTPUT -d 127.0.0.1 -p udp -m udp --dport 53 -j REDIRECT --to-ports 8600
+iptables -t nat -A OUTPUT -d 127.0.0.1 -p tcp -m tcp --dport 53 -j REDIRECT --to-ports 8600
+systemctl restart systemd-resolved
 
 # Hashistack
 
@@ -88,20 +94,11 @@ EOF
 
 # Enable the service
 systemctl enable consul
-systemctl start consul
+systemctl restart consul
 
 # Sleep
 sleep 30
 
-# Configure Resolved and iptables
-cat <<-EOF > /etc/systemd/resolved.conf.d/consul.conf
-[Resolve]
-DNS=127.0.0.1
-Domains=~consul
-EOF
-iptables -t nat -A OUTPUT -d localhost -p udp -m udp --dport 53 -j REDIRECT --to-ports 8600
-iptables -t nat -A OUTPUT -d localhost -p tcp -m tcp --dport 53 -j REDIRECT --to-ports 8600
-systemctl restart systemd-resolved
 
 # Vault
 
@@ -149,7 +146,7 @@ EOF
 
 # Enable the service
 systemctl enable vault
-systemctl start vault
+systemctl restart vault
 
 # Sleep 10 seconds
 sleep 30
@@ -276,7 +273,7 @@ EOF
 
 # Enable the service
 systemctl enable nomad
-systemctl start nomad
+systemctl restart nomad
 
 # Check host connections
 declare -i i=0
@@ -294,10 +291,6 @@ for Host in ${HostArray[@]}; do
 done
 
 ssh -o StrictHostKeyChecking=no hashistack-client-1 << ENDSSH
-systemctl restart systemd-resolved
-ENDSSH
-
-ssh -o StrictHostKeyChecking=no hashistack-client-1 << ENDSSH
 for i in 1 2 3 4 5 6
 do
   vault_status=$(vault status | grep Sealed | grep false | wc -l)
@@ -306,15 +299,10 @@ do
     break
   fi
   sleep 10
-  systemctl restart systemd-resolved
 done
 ENDSSH
 
 ssh -o StrictHostKeyChecking=no hashistack-client-2 << ENDSSH
-systemctl restart systemd-resolved
-ENDSSH
-
-ssh -o StrictHostKeyChecking=no hashistack-client-2 << ENDSSH
 for i in 1 2 3 4 5 6
 do
   vault_status=$(vault status | grep Sealed | grep false | wc -l)
@@ -323,7 +311,6 @@ do
     break
   fi
   sleep 10
-  systemctl restart systemd-resolved
 done
 ENDSSH
 

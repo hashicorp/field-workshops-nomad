@@ -1,0 +1,16 @@
+#!/bin/bash -l
+
+until [ -f /opt/instruqt/bootstrap/host-bootstrap-completed ]; do
+    echo "Waiting for instruqt bootstrap to complete"
+    sleep 1
+done
+
+service boundary-controller stop
+service boundary-worker stop
+service waypoint stop
+systemctl disable boundary-controller
+systemctl disable boundary-worker
+systemctl disable waypoint
+
+rm /etc/systemd/resolved.conf.d/instruqt.conf
+

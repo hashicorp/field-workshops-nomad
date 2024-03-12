@@ -16,16 +16,26 @@ description: |-
     * **Vault Basics**
 icon: https://storage.googleapis.com/instruqt-hashicorp-tracks/logo/nomad.png
 tags:
-- nomad
 - vault
+- nomad
+- integration
+- secrets
+- orchestration
 - consul
 - hashistack
-- integration
-- orchestration
-- secrets
 owner: hashicorp
 developers:
 - pgryzan@hashicorp.com
 - roger@hashicorp.com
+- adam.sumner@hashicorp.com
 show_timer: true
-checksum: "11242485081765392298"
+idle_timeout: 300
+timelimit: 10800
+lab_config:
+  overlay: false
+  width: 33
+  position: right
+  sidebar_enabled: true
+  feedback_recap_enabled: true
+  loadingMessages: true
+checksum: "6550989954742791857"

@@ -1,6 +1,6 @@
 ---
 slug: deploy-an-application
-id: o6kmjfztauxg
+id: 9ptpevfwecvp
 type: challenge
 title: Deploy a Web Application
 teaser: |

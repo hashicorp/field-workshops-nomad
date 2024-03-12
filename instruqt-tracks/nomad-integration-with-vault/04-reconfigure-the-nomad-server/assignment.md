@@ -1,6 +1,6 @@
 ---
 slug: reconfigure-the-nomad-server
-id: xzhmzl5gyglp
+id: mkglllherhn1
 type: challenge
 title: Reconfigure the Nomad Server
 teaser: |

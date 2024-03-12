@@ -1,6 +1,6 @@
 ---
 slug: create-the-nomad-server-policy-and-token
-id: pupryaxbz98c
+id: 9ae3r87b3nl9
 type: challenge
 title: Create a Vault Policy and Token for the Nomad Server
 teaser: |
