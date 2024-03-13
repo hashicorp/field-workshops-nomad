@@ -78,12 +78,6 @@ jobs:
       working_directory: "instruqt-tracks/nomad-host-volumes"
     secrets:
       INSTRUQT_TOKEN: ${{ secrets.INSTRUQT_TOKEN }}
-  nomad-and-portworx:
-    uses: ./.github/workflows/instruqt-track-test.yml
-    with:
-      working_directory: "instruqt-tracks/nomad-and-portworx"
-    secrets:
-      INSTRUQT_TOKEN: ${{ secrets.INSTRUQT_TOKEN }}
   nomad-and-csi-plugins-gcp:
     uses: ./.github/workflows/instruqt-track-test.yml
     with:
@@ -114,7 +108,6 @@ jobs:
       - nomad-job-placement
       - nomad-integration-with-vault
       - nomad-host-volumes
-      - nomad-and-portworx
       - nomad-and-csi-plugins-gcp
       - nomad-governance
       - nomad-multi-region-federation
