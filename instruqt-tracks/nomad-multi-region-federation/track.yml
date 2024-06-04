@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: MPL-2.0
 
 slug: nomad-federation
-id: xc0sasoj8opb
 title: Nomad Multi-Region Federation
 teaser: |
   In this track you will learn how to federate two Nomad clusters and deploy a multi-region job.
@@ -33,4 +32,3 @@ lab_config:
   overlay: false
   width: 25
   position: right
-checksum: "67443664379613735"
