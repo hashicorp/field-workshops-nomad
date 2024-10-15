@@ -1,9 +1,0 @@
-#!/bin/bash -l
-
-#Enable bash history
-HISTFILE=/root/.bash_history
-set -o history
-
-echo $nomad_server_ip
-
-exit 0
