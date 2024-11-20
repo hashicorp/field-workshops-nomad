@@ -72,6 +72,7 @@ name: instruqt-tracks
     1. **Nomad Monitoring**
 * Instruqt에 등록되어있어야 합니다.
   https://play.instruqt.com/signup
+**워크샵을 진행하는 강사로부터 실습 링크를 받게 됩니다.**
 
 ???
 * Links to the Instruqt tracks used in this workshop
